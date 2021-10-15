@@ -1,0 +1,82 @@
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
+}
+
+android {
+    compileSdk 30
+
+    defaultConfig {
+        applicationId "yapp.android1.delibuddy"
+        minSdk 24
+        targetSdk 30
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildFeatures {
+        viewBinding true
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    compileSdkVersion 30
+}
+
+dependencies {
+    implementation project(':domain')
+    implementation project(':data')
+
+    implementation Kotlin.COROUTINES_CORE
+    implementation Kotlin.COROUTINES_ANDROID
+
+    implementation AndroidX.APP_COMPAT
+    implementation AndroidX.CONSTRAINT_LAYOUT
+    implementation AndroidX.LEGACY_SUPPORT
+    implementation AndroidX.VIEW_DATA_BINDING
+    implementation AndroidX.RECYCLERVIEW
+
+    implementation AndroidX.CORE_KTX
+    implementation AndroidX.ACTIVITY_KTX
+    implementation AndroidX.FRAGMENT_KTX
+
+    implementation AndroidX.LIFECYCLE_VIEWMODEL_KTX
+    implementation AndroidX.LIFECYCLE_EXTENSIONS
+    implementation AndroidX.LIFECYCLE_RUNTIME_KTX
+
+    implementation Google.HILT_ANDROID
+    kapt           Google.HILT_ANDROID_COMPILER
+    implementation Google.HILT_VIEWMODEL
+    kapt           Google.HILT_COMPILER
+    implementation Google.MATERIAL
+    implementation Google.GSON
+
+    implementation Libraries.RETROFIT
+    implementation Libraries.RETROFIT_CONVERTER_GSON
+    implementation Libraries.OKHTTP
+    implementation Libraries.OKHTTP_LOGGING_INTERCEPTOR
+    implementation Libraries.TIMBER
+    implementation Libraries.LOTTIE
+    implementation Libraries.GLIDE
+    kapt           Libraries.GLIDE_COMPILER
+
+    testImplementation UnitTest.JUNIT
+
+    androidTestImplementation AndroidTest.ANDROID_JUNIT
+    androidTestImplementation AndroidTest.ESPRESSO_CORE
+}
