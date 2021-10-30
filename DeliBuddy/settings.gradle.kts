@@ -3,10 +3,9 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        jcenter() // Warning: this repository is going to shut down soon
     }
 }
 rootProject.name = "DeliBuddy"
-include ':app'
-include ':data'
-include ':domain'
+include (":app")
+include (":data")
+include (":domain")

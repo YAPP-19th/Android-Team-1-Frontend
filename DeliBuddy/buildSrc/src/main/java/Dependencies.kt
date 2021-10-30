@@ -24,7 +24,6 @@ object Google {
     const val HILT_ANDROID               = "com.google.dagger:hilt-android:${Versions.HILT}"
     const val HILT_CORE                  = "com.google.dagger:hilt-core:${Versions.HILT}"
     const val HILT_ANDROID_COMPILER      = "com.google.dagger:hilt-android-compiler:${Versions.HILT}"
-    const val HILT_VIEWMODEL             = "androidx.hilt:hilt-lifecycle-viewmodel:${Versions.HILT_VIEWMODEL}"
     const val HILT_COMPILER              = "androidx.hilt:hilt-compiler:${Versions.HILT_COMPILER}"
 
     const val MATERIAL                   = "com.google.android.material:material:${Versions.MATERIAL}"

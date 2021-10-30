@@ -2,7 +2,9 @@ package yapp.android1.delibuddy
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.viewbinding.BuildConfig
 import dagger.hilt.android.AndroidEntryPoint
+import yapp.android1.delibuddy.BuildConfig.*
 import yapp.android1.delibuddy.databinding.ActivityMainBinding
 
 @AndroidEntryPoint
