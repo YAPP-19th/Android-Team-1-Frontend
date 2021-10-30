@@ -1,6 +1,8 @@
 object Versions {
+    const val GRADLE            = "4.1.1"
+
     /* [ Kotlin ] */
-    const val KOTLIN_VERSION   = "1.4.21"
+    const val KOTLIN_VERSION   = "1.5.21"
     const val KOTLIN_COROUTINE = "1.5.1"
 
     /* [ Android ] */
@@ -19,7 +21,6 @@ object Versions {
 
     /* [ Google ] */
     const val HILT           = "2.37"
-    const val HILT_VIEWMODEL = "1.0.0-alpha03"
     const val HILT_COMPILER  = "1.0.0"
     const val MATERIAL       = "1.4.0"
     const val GSON           = "2.8.6"
