@@ -1,4 +1,6 @@
 import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+import java.util.Properties
+import java.io.FileInputStream
 
 plugins {
     id(Configs.APPLICATION)
@@ -50,7 +52,10 @@ android {
 }
 
 fun getApiKey(type: String): String {
-    return gradleLocalProperties(rootDir).getProperty(type)
+    val propFile = rootProject.file("./local.properties")
+    val properties = Properties()
+    properties.load(FileInputStream(propFile))
+    return properties.getProperty(type)
 }
 
 dependencies {
