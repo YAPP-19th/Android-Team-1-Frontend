@@ -5,9 +5,9 @@
     <application
         android:name=".DeliBuddyApplication"
         android:allowBackup="false"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/icon_delibuddy"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/icon_delibuddy_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.DeliBuddy">
         <activity
