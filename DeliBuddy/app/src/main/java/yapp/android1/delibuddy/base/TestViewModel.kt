@@ -5,9 +5,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import yapp.android1.delibuddy.base.TestViewModel.TestEvent.*
 import yapp.android1.delibuddy.model.Event
+import javax.inject.Inject
 
 @HiltViewModel
-internal class TestViewModel : BaseViewModel<TestViewModel.TestEvent>() {
+internal class TestViewModel @Inject constructor() : BaseViewModel<TestViewModel.TestEvent>() {
 
     private val _number = MutableStateFlow<Int>(0)
     val number: StateFlow<Int> get() = _number
