@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.collect
 import yapp.android1.delibuddy.R
 import yapp.android1.delibuddy.base.TestViewModel
 import yapp.android1.delibuddy.databinding.ActivityMainBinding
+import yapp.android1.delibuddy.util.extensions.repeatOnStarted
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -32,7 +33,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun collectState() = with(viewModel) {
-        lifecycleScope.launchWhenStarted {
+        repeatOnStarted {
             number.collect { binding.tvNumber.text = it.toString() }
         }
     }

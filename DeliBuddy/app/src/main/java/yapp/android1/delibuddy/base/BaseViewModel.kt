@@ -8,6 +8,8 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import yapp.android1.delibuddy.model.Event
+import yapp.android1.delibuddy.util.EventFlow
+import yapp.android1.delibuddy.util.MutableEventFlow
 
 
 abstract class BaseViewModel<E : Event> : ViewModel() {
@@ -15,8 +17,8 @@ abstract class BaseViewModel<E : Event> : ViewModel() {
     private val _loading = MutableStateFlow<Boolean>(false)
     val loading: StateFlow<Boolean> = _loading
 
-    private val _showToast = MutableSharedFlow<String>()
-    val showToast: SharedFlow<String> = _showToast
+    private val _showToast = MutableEventFlow<String>()
+    val showToast: EventFlow<String> = _showToast
 
     protected abstract suspend fun handleEvent(event: E)
 
