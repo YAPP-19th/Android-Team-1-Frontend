@@ -1,6 +1,4 @@
 import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
-import java.util.Properties
-import java.io.FileInputStream
 
 plugins {
     id(Configs.APPLICATION)
@@ -10,18 +8,18 @@ plugins {
 }
 
 android {
-    compileSdkVersion(Configs.COMPILE_SDK)
+    compileSdk = Configs.COMPILE_SDK
 
     defaultConfig {
         applicationId = Configs.APPLICATION_ID
-        minSdkVersion(Configs.MIN_SDK)
-        targetSdkVersion(Configs.TARGET_SDK)
-        versionCode = Configs.VERSION_CODE
-        versionName = Configs.VERSION_NAME
+        minSdk        = Configs.MIN_SDK
+        targetSdk     = Configs.TARGET_SDK
+        versionCode   = Configs.VERSION_CODE
+        versionName   = Configs.VERSION_NAME
 
         buildConfigField("String", "NAVER_MAP_APIKEY_ID", getApiKey("NAVER_MAP_APIKEY_ID"))
         buildConfigField("String", "NAVER_MAP_APIKEY_SECRET", getApiKey("NAVER_MAP_APIKEY_SECRET"))
-        testInstrumentationRunner("androidx.test.runner.AndroidJUnitRunner")
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildFeatures {
@@ -31,13 +29,13 @@ android {
     buildTypes {
         getByName(Configs.DEBUG) {
             isMinifyEnabled = false
-            debuggable(true)
+            isDebuggable    = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
 
         getByName(Configs.RELEASE) {
             isMinifyEnabled = true
-            debuggable(false)
+            isDebuggable    = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
@@ -51,11 +49,8 @@ android {
     }
 }
 
-fun getApiKey(type: String): String {
-    val propFile = rootProject.file("./local.properties")
-    val properties = Properties()
-    properties.load(FileInputStream(propFile))
-    return properties.getProperty(type)
+fun getApiKey(propertyName: String): String {
+    return gradleLocalProperties(rootDir).getProperty(propertyName) ?: Configs.PROP_EMPTY
 }
 
 dependencies {

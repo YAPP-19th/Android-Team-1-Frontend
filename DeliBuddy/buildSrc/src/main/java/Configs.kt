@@ -20,4 +20,6 @@ object Configs {
     //BuildType
     const val RELEASE                   = "release"
     const val DEBUG                     = "debug"
+
+    const val PROP_EMPTY                = "\"PROP_EMPTY\""
 }

@@ -1,5 +1,5 @@
 object Versions {
-    const val GRADLE            = "4.1.1"
+    const val GRADLE            = "7.0.0"
 
     /* [ Kotlin ] */
     const val KOTLIN_VERSION   = "1.5.21"
