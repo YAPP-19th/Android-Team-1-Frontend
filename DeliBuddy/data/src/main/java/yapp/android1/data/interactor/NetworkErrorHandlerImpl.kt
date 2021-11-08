@@ -24,10 +24,10 @@ class NetworkErrorHandlerImpl @Inject constructor(
                         val message = extractErrorMessage(exception.response())
                         NetworkError.BadRequest(code, message)
                     }
-                    else -> NetworkError.Unknown(exception)
+                    else -> NetworkError.Unknown
                 }
             }
-            else -> NetworkError.Unknown(exception)
+            else -> NetworkError.Unknown
         }
     }
 
