@@ -3,13 +3,14 @@
     package="yapp.android1.delibuddy">
 
     <application
-        android:name=".DeliBuddyApplication"
         android:allowBackup="false"
         android:icon="@mipmap/icon_delibuddy"
         android:label="@string/app_name"
+        android:name=".DeliBuddyApplication"
         android:roundIcon="@mipmap/icon_delibuddy_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.DeliBuddy">
+
 
         <activity android:name=".ui.MainActivity" />
 
@@ -27,6 +28,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <meta-data
+            android:name="com.naver.maps.map.CLIENT_ID"
+            android:value="${NAVER_MAP_APIKEY_ID}" />
     </application>
 
 </manifest>
