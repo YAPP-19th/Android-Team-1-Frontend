@@ -10,8 +10,10 @@ import kotlinx.coroutines.launch
 import yapp.android1.delibuddy.model.Event
 import yapp.android1.delibuddy.util.EventFlow
 import yapp.android1.delibuddy.util.MutableEventFlow
+import yapp.android1.domain.NetworkResult
+import yapp.android1.domain.entity.NetworkError
 
-
+typealias RetryAction = () -> Unit
 abstract class BaseViewModel<E : Event> : ViewModel() {
 
     private val _loading = MutableStateFlow<Boolean>(false)
@@ -21,6 +23,8 @@ abstract class BaseViewModel<E : Event> : ViewModel() {
     val showToast: EventFlow<String> = _showToast
 
     protected abstract suspend fun handleEvent(event: E)
+
+    protected abstract suspend fun handleError(result: NetworkResult.Error, retryAction: RetryAction?)
 
     fun occurEvent(event: E) = viewModelScope.launch {
         handleEvent(event)
