@@ -19,6 +19,7 @@ android {
 
         buildConfigField("String", "NAVER_MAP_APIKEY_ID", getApiKey("NAVER_MAP_APIKEY_ID"))
         buildConfigField("String", "NAVER_MAP_APIKEY_SECRET", getApiKey("NAVER_MAP_APIKEY_SECRET"))
+        manifestPlaceholders["NAVER_MAP_APIKEY_ID"] = getApiKey("NAVER_MAP_APIKEY_ID")
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -39,6 +40,7 @@ android {
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
@@ -88,6 +90,8 @@ dependencies {
     implementation(Libraries.LOTTIE)
     implementation(Libraries.GLIDE)
     kapt(Libraries.GLIDE_COMPILER)
+
+    implementation ("com.naver.maps:map-sdk:3.12.0")
 
     testImplementation(UnitTest.JUNIT)
 
