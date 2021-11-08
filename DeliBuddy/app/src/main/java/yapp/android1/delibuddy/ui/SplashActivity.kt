@@ -19,11 +19,13 @@ class SplashActivity : AppCompatActivity() {
         binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(R.layout.activity_splash)
 
+        // TODO: 서버 개발이 끝나면 이곳에서 데이터 수신 후 intent 예정
+
         handler.postDelayed({
             val intent = Intent(this, PermissionActivity::class.java)
             startActivity(intent)
             finish()
-        }, 10000)
+        }, 2000)
 
 
     }

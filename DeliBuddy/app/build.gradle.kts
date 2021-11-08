@@ -90,6 +90,8 @@ dependencies {
     implementation(Libraries.LOTTIE)
     implementation(Libraries.GLIDE)
     kapt(Libraries.GLIDE_COMPILER)
+    implementation(Libraries.TED_PERMISSION)
+    implementation(Libraries.TED_PERMISSION_COROUTINE)
 
     implementation (Libraries.NAVER_MAP)
 
