@@ -41,6 +41,7 @@ object Libraries {
     const val TIMBER                     = "com.jakewharton.timber:timber:${Versions.TIMBER}"
 
     const val LOTTIE                     = "com.airbnb.android:lottie:${Versions.LOTTIE}"
+    const val NAVER_MAP                  = "com.naver.maps:map-sdk:{Versions.NAVER_MAP}"
 }
 
 object UnitTest {

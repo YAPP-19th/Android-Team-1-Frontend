@@ -91,7 +91,7 @@ dependencies {
     implementation(Libraries.GLIDE)
     kapt(Libraries.GLIDE_COMPILER)
 
-    implementation ("com.naver.maps:map-sdk:3.12.0")
+    implementation (Libraries.NAVER_MAP)
 
     testImplementation(UnitTest.JUNIT)
 

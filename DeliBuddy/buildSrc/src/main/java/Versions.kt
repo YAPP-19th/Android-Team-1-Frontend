@@ -26,11 +26,12 @@ object Versions {
     const val GSON           = "2.8.6"
 
     /* [ Libraries ] */
-    const val RETROFIT = "2.9.0"
-    const val OKHTTP   = "4.9.0"
-    const val TIMBER   = "5.0.1"
-    const val GLIDE    = "4.11.0"
-    const val LOTTIE   = "4.0.0"
+    const val RETROFIT  = "2.9.0"
+    const val OKHTTP    = "4.9.0"
+    const val TIMBER    = "5.0.1"
+    const val GLIDE     = "4.11.0"
+    const val LOTTIE    = "4.0.0"
+    const val NAVER_MAP = "3.12.0"
 
     /* [ UnitTest ] */
     const val JUNIT = "4.13.2"
