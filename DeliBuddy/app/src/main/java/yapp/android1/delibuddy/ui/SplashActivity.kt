@@ -12,8 +12,6 @@ import yapp.android1.delibuddy.databinding.ActivitySplashBinding
 class SplashActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySplashBinding
 
-    private var handler = Handler()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySplashBinding.inflate(layoutInflater)
@@ -21,7 +19,7 @@ class SplashActivity : AppCompatActivity() {
 
         // TODO: 서버 개발이 끝나면 이곳에서 데이터 수신 후 intent 예정
 
-        handler.postDelayed({
+        Handler().postDelayed({
             val intent = Intent(this, PermissionActivity::class.java)
             startActivity(intent)
             finish()

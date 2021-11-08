@@ -20,23 +20,10 @@ class PermissionActivity : AppCompatActivity() {
         binding = ActivityPermissionBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        initTextColor()
-
         binding.apply {
             btnPermission.setOnClickListener {
                 viewModel.checkPermissions()
             }
         }
-    }
-
-    private fun initTextColor() = with(binding) {
-        val color = resources.getColor(R.color.main_orange)
-        val foregroundColorSpan = ForegroundColorSpan(color)
-
-        val locationSpan = tvPermissionLocation.text.toSpannable()
-        locationSpan.setSpan(foregroundColorSpan, 3, 7, Spannable.SPAN_EXCLUSIVE_INCLUSIVE)
-
-        val foregroundSpan = tvPermissionForeground.text.toSpannable()
-        foregroundSpan.setSpan(foregroundColorSpan, 10, 14, Spannable.SPAN_EXCLUSIVE_INCLUSIVE)
     }
 }

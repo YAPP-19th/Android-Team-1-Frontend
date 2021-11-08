@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">DeliBuddy</string>
+
+    <string name="permission_location"><font color="#000000">위치</font>
+        <font color="#F15641">(필수)</font></string>
+
+    <string name="permission_foreground"><font color="#000000">포그라운드 서비스</font>
+        <font color="#F15641">(필수)</font></string>
 </resources>
