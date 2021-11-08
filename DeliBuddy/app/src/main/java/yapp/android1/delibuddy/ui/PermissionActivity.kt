@@ -1,16 +1,13 @@
 package yapp.android1.delibuddy.ui
 
-import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Spannable
 import android.text.style.ForegroundColorSpan
 import androidx.activity.viewModels
-import androidx.core.text.set
 import androidx.core.text.toSpannable
 import dagger.hilt.android.AndroidEntryPoint
 import yapp.android1.delibuddy.R
-import yapp.android1.delibuddy.databinding.ActivityMainBinding
 import yapp.android1.delibuddy.databinding.ActivityPermissionBinding
 
 @AndroidEntryPoint

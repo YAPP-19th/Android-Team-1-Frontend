@@ -12,7 +12,7 @@ import yapp.android1.delibuddy.databinding.ActivitySplashBinding
 class SplashActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySplashBinding
 
-    internal var handler = Handler()
+    private var handler = Handler()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,7 +26,5 @@ class SplashActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }, 2000)
-
-
     }
 }
