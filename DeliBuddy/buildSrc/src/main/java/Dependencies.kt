@@ -41,13 +41,11 @@ object Libraries {
     const val TIMBER                     = "com.jakewharton.timber:timber:${Versions.TIMBER}"
 
     const val LOTTIE                     = "com.airbnb.android:lottie:${Versions.LOTTIE}"
-<<<<<<< Updated upstream
+    
     const val NAVER_MAP                  = "com.naver.maps:map-sdk:${Versions.NAVER_MAP}"
-=======
 
     const val TED_PERMISSION             = "io.github.ParkSangGwon:tedpermission-normal:${Versions.TED_PERMISSION}"
     const val TED_PERMISSION_COROUTINE   = "io.github.ParkSangGwon:tedpermission-coroutine:${Versions.TED_PERMISSION}"
->>>>>>> Stashed changes
 }
 
 object UnitTest {
