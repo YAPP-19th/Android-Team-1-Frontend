@@ -32,7 +32,7 @@ class PermissionActivity : AppCompatActivity() {
         }
     }
 
-    fun initTextColor() = with(binding) {
+    private fun initTextColor() = with(binding) {
         val color = resources.getColor(R.color.main_orange)
         val foregroundColorSpan = ForegroundColorSpan(color)
 
