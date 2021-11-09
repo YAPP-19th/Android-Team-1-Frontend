@@ -32,6 +32,7 @@ object Versions {
     const val GLIDE     = "4.11.0"
     const val LOTTIE    = "4.0.0"
     const val NAVER_MAP = "3.12.0"
+    const val TED_PERMISSION = "3.3.0"
 
     /* [ UnitTest ] */
     const val JUNIT = "4.13.2"
