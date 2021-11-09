@@ -13,17 +13,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DeliBuddy">
 
-
-        <activity android:name=".ui.MainActivity" />
-
         <activity
-            android:name=".ui.PermissionActivity"
-            android:exported="false" />
-
-        <activity
-            android:name=".ui.SplashActivity"
             android:exported="true"
-            android:theme="@style/SplashTheme">
+            android:name=".ui.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
