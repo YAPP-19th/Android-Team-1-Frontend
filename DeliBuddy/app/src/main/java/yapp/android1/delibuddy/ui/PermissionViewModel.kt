@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.normal.TedPermission
+import dagger.hilt.android.lifecycle.HiltViewModel
 
 class PermissionViewModel : ViewModel() {
     private val TAG = "PermissionViewModel"
