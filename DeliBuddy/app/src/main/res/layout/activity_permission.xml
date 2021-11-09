@@ -120,7 +120,7 @@
         android:id="@+id/btn_permission"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="13dp"
+        android:layout_marginBottom="16dp"
         android:text="확인"
         android:textSize="14dp"
         app:layout_constraintBottom_toBottomOf="parent"
