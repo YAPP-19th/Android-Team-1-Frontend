@@ -1,12 +1,14 @@
 package yapp.android1.delibuddy.ui
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
+import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import yapp.android1.delibuddy.R
 import yapp.android1.delibuddy.databinding.ActivitySplashBinding
+import yapp.android1.delibuddy.util.intentTo
 
 @AndroidEntryPoint
 class SplashActivity : AppCompatActivity() {
@@ -18,11 +20,9 @@ class SplashActivity : AppCompatActivity() {
         setContentView(R.layout.activity_splash)
 
         // TODO: 서버 개발이 끝나면 이곳에서 데이터 수신 후 intent 예정
-
-        Handler().postDelayed({
-            val intent = Intent(this, PermissionActivity::class.java)
-            startActivity(intent)
-            finish()
-        }, 2000)
+        lifecycleScope.launch {
+            delay(2000L)
+            intentTo(PermissionActivity::class.java)
+        }
     }
 }

@@ -7,29 +7,29 @@ import androidx.lifecycle.ViewModel
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.normal.TedPermission
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import yapp.android1.delibuddy.base.BaseViewModel
+import yapp.android1.delibuddy.base.RetryAction
+import yapp.android1.delibuddy.model.Event
+import yapp.android1.domain.NetworkResult
 
-class PermissionViewModel : ViewModel() {
-    private val TAG = "PermissionViewModel"
+class PermissionViewModel : BaseViewModel<PermissionViewModel.PermissionActivityEvent>() {
 
-    val permissionListener: PermissionListener = object : PermissionListener {
-        override fun onPermissionGranted() {
-            Log.w(TAG, "Permission Granted!")
-        }
+    private val _isPermissionGranted =  MutableStateFlow<Boolean>(false)
+    val isPermissionGranted = _isPermissionGranted as StateFlow<Boolean>
 
-        override fun onPermissionDenied(deniedPermissions: MutableList<String>?) {
-            Log.w(TAG, "Permission Denied!")
+    override suspend fun handleEvent(event: PermissionActivityEvent) {
+        when(event) {
+            is PermissionActivityEvent.OnCheckPermission -> {
+                _isPermissionGranted.value = event.isGranted
+            }
         }
     }
 
-    fun checkPermissions() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            TedPermission.create()
-                .setPermissionListener(permissionListener)
-                .setDeniedMessage("편리한 딜리버디 이용을 위해 권한을 허용해 주세요.\n [설정] > [권한] 에서 사용으로 활성화해 주세요.")
-                .setPermissions(
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.FOREGROUND_SERVICE
-                ).check()
-        }
+    override suspend fun handleError(result: NetworkResult.Error, retryAction: RetryAction?) = Unit
+
+    sealed class PermissionActivityEvent : Event {
+        class OnCheckPermission(val isGranted: Boolean) : PermissionActivityEvent()
     }
 }
