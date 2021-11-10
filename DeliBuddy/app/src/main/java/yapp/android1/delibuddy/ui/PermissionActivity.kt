@@ -30,6 +30,7 @@ class PermissionActivity : AppCompatActivity() {
         binding = ActivityPermissionBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        checkPermission()
         initializeCollector()
     }
 
@@ -40,7 +41,7 @@ class PermissionActivity : AppCompatActivity() {
     }
 
     private fun initializeButtonListener(isGranted: Boolean): (View) -> Unit {
-        return if (isGranted) {
+        return if(isGranted) {
             { intentTo(MainActivity::class.java) }
         } else {
             { checkPermission() }
@@ -58,14 +59,15 @@ class PermissionActivity : AppCompatActivity() {
             }
         }
 
-        TedPermission.create()
-            .setPermissionListener(permissionListener)
-            .setDeniedMessage("편리한 딜리버디 이용을 위해 권한을 허용해 주세요.\n [설정] > [권한] 에서 사용으로 활성화해 주세요.")
-            .setPermissions(
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.FOREGROUND_SERVICE
-            ).check()
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            TedPermission.create()
+                .setPermissionListener(permissionListener)
+                .setDeniedMessage("편리한 딜리버디 이용을 위해 권한을 허용해 주세요.\n [설정] > [권한] 에서 사용으로 활성화해 주세요.")
+                .setPermissions(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.FOREGROUND_SERVICE
+                ).check()
+        }
     }
 
 }
