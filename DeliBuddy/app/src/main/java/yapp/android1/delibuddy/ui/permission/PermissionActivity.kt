@@ -11,7 +11,6 @@ import yapp.android1.delibuddy.util.intentTo
 import yapp.android1.delibuddy.util.permission.CheckPermission
 import yapp.android1.delibuddy.util.permission.PermissionType
 import yapp.android1.delibuddy.util.permission.getPermissionsFlag
-import java.util.jar.Manifest
 
 @AndroidEntryPoint
 class PermissionActivity : AppCompatActivity() {

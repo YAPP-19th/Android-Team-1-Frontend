@@ -12,10 +12,6 @@ import androidx.fragment.app.FragmentActivity
 
 class PermissionDialogFragment(private val fragmentActivity: FragmentActivity) : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-//        val builder: AlertDialog.Builder = activity?.let {
-//            AlertDialog.Builder(it)
-//        } ?: throw IllegalStateException("Activity cannot be null")
-
         val builder = AlertDialog.Builder(fragmentActivity)
 
         builder.apply {
