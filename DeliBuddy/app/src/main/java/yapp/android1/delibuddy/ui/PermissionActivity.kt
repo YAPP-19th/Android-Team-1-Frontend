@@ -1,23 +1,18 @@
 package yapp.android1.delibuddy.ui
 
 import android.Manifest
-import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.lifecycle.repeatOnLifecycle
+import androidx.appcompat.app.AppCompatActivity
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.normal.TedPermission
-import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import yapp.android1.delibuddy.databinding.ActivityPermissionBinding
 import yapp.android1.delibuddy.ui.PermissionViewModel.PermissionActivityEvent.OnCheckPermission
+import yapp.android1.delibuddy.ui.home.HomeActivity
 import yapp.android1.delibuddy.util.extensions.repeatOnStarted
 import yapp.android1.delibuddy.util.intentTo
-import java.util.*
 
 class PermissionActivity : AppCompatActivity() {
 
@@ -42,7 +37,7 @@ class PermissionActivity : AppCompatActivity() {
 
     private fun initializeButtonListener(isGranted: Boolean): (View) -> Unit {
         return if (isGranted) {
-            { intentTo(MainActivity::class.java) }
+            { intentTo(HomeActivity::class.java) }
         } else {
             { checkPermission() }
         }
