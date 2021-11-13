@@ -1,4 +1,4 @@
-package yapp.android1.delibuddy.ui
+package yapp.android1.delibuddy.ui.splash
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -8,6 +8,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import yapp.android1.delibuddy.R
 import yapp.android1.delibuddy.databinding.ActivitySplashBinding
+import yapp.android1.delibuddy.ui.permission.PermissionActivity
 import yapp.android1.delibuddy.util.intentTo
 
 @AndroidEntryPoint

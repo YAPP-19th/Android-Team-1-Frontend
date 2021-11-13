@@ -15,7 +15,7 @@
         android:theme="@style/Theme.DeliBuddy">
 
         <activity
-            android:name=".ui.SplashActivity"
+            android:name=".ui.splash.SplashActivity"
             android:exported="true"
             android:theme="@style/SplashTheme">
             <intent-filter>
@@ -27,7 +27,7 @@
         <activity android:name=".ui.MainActivity" />
 
         <activity
-            android:name=".ui.PermissionActivity"
+            android:name=".ui.permission.PermissionActivity"
             android:exported="false" />
 
         <meta-data
