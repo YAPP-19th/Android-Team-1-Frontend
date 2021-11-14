@@ -30,6 +30,11 @@
             android:name=".ui.permission.PermissionDescriptionActivity"
             android:exported="false" />
 
+        <activity
+            android:name=".ui.permission.PermissionDescriptionActivity"
+            android:exported="false"
+            android:theme="@style/SplashTheme"/>
+
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"
             android:value="${NAVER_MAP_APIKEY_ID}" />
