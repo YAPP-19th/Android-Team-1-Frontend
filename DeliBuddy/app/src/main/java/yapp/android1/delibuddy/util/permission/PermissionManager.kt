@@ -5,7 +5,6 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale
 import androidx.core.content.ContextCompat
-import yapp.android1.delibuddy.ui.dialog.PermissionDialogFragment
 
 object PermissionManager {
     fun checkPermission(
@@ -21,11 +20,11 @@ object PermissionManager {
             isPermissionGranted(context, requestedPermissions) ->
                 permissionCallback(true)
             isPermissionDenied(context, requestedPermissions) -> {
-                requestPermissionLauncher.launch(requestedPermissions.toTypedArray())
+                permissionCallback(false)
             }
             else -> {
-                val permissionDialog = PermissionDialogFragment(context)
-                permissionDialog.show(context.supportFragmentManager, null)
+                // 권한 요청을 한 번도 하지 않은 경우, 시스템 팝업으로 권한 요청
+                requestPermissionLauncher.launch(requestedPermissions.toTypedArray())
             }
         }
     }
@@ -49,9 +48,9 @@ object PermissionManager {
     ): Boolean {
         requestedPermissions.forEach {
             if(shouldShowRequestPermissionRationale(context, it)) {
-                return false
+                return true
             }
         }
-        return true
+        return false
     }
 }

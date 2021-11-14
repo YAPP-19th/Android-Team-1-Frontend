@@ -7,6 +7,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import dagger.hilt.android.AndroidEntryPoint
 import yapp.android1.delibuddy.databinding.ActivityPermissionBinding
 import yapp.android1.delibuddy.ui.MainActivity
+import yapp.android1.delibuddy.ui.dialog.PermissionDialogFragment
 import yapp.android1.delibuddy.util.intentTo
 import yapp.android1.delibuddy.util.permission.PermissionManager
 import yapp.android1.delibuddy.util.permission.PermissionType
@@ -64,6 +65,7 @@ class PermissionActivity : AppCompatActivity() {
     }
 
     private fun permissionDenied() {
-        // Dialog
+        val permissionDialog = PermissionDialogFragment(this)
+        permissionDialog.show(this.supportFragmentManager, null)
     }
 }
