@@ -1,8 +1,8 @@
 package yapp.android1.delibuddy.util.permission
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import yapp.android1.delibuddy.util.intentTo
 
 object PermissionManager {
     fun requestPermission(
@@ -29,14 +29,18 @@ object PermissionManager {
     ) {
         PermissionActivity.callback = permissionCallback
 
-        val bundle = Bundle().apply {
-            putParcelable(
-                "bundle", PermissionBundle(
-                    isRequestPermission = isRequestPermission,
-                    permissions = getPermissionsFlag(type)
-                )
+        val bundle = Bundle()
+        bundle.putParcelable(
+            "bundle", PermissionBundle(
+                isRequestPermission = isRequestPermission,
+                permissions = getPermissionsFlag(type)
             )
-        }
-        context.intentTo(PermissionActivity::class.java, bundle)
+        )
+        val intent = Intent(context, PermissionActivity::class.java)
+        intent.putExtra("bundle", PermissionBundle(
+            isRequestPermission = isRequestPermission,
+            permissions = getPermissionsFlag(type)
+        ))
+        context.startActivity(intent)
     }
 }

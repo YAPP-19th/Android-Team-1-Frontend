@@ -6,14 +6,12 @@ import android.os.Parcelable
 import android.view.WindowManager
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import kotlinx.parcelize.Parcelize
 
 enum class PermissionState {
     GRANTED,
     DENIED,
-    NEED_DESCRIPTION, // 딜리버디 권한 설정 화면이 필요한 상황
     NEED_PERMISSION
 }
 
@@ -32,7 +30,7 @@ class PermissionActivity : AppCompatActivity() {
         intent.getParcelableExtra("bundle")
     }
 
-    val requestPermissionLauncher = registerForActivityResult(
+    private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
     ) { permissions ->
         bundle?.let { it ->
@@ -48,7 +46,6 @@ class PermissionActivity : AppCompatActivity() {
         overridePendingTransition(0, 0)
         super.onCreate(savedInstanceState)
         window.addFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
-
         bundle?.let {
             launchPermission(it.permissions)
         }
@@ -56,16 +53,16 @@ class PermissionActivity : AppCompatActivity() {
 
     private fun launchPermission(permissions: List<String>) {
         if (permissions.isEmpty())
-            return
+            finish()
 
         when {
             isAllPermissionGranted(permissions) ->
                 permissionCallBack(PermissionState.GRANTED)
-            isUserDeniedPermission(permissions) -> {
-                permissionCallBack(PermissionState.NEED_DESCRIPTION)
+            bundle?.isRequestPermission == true -> {
+                requestPermissionLauncher.launch(permissions.toTypedArray())
             }
             else -> {
-                requestPermissionLauncher.launch(permissions.toTypedArray())
+                permissionCallBack(PermissionState.NEED_PERMISSION)
             }
         }
     }
@@ -74,23 +71,12 @@ class PermissionActivity : AppCompatActivity() {
         requestedPermissions: List<String>
     ): Boolean {
         requestedPermissions.forEach {
-            val isGranted = ContextCompat.checkSelfPermission(this, it)
-            if (isGranted != PackageManager.PERMISSION_GRANTED) {
+            val grantedState = ContextCompat.checkSelfPermission(this, it)
+            if (grantedState != PackageManager.PERMISSION_GRANTED) {
                 return false
             }
         }
         return true
-    }
-
-    private fun isUserDeniedPermission(
-        requestedPermissions: List<String>
-    ): Boolean {
-        requestedPermissions.forEach {
-            if(ActivityCompat.shouldShowRequestPermissionRationale(this, it)) {
-                return true
-            }
-        }
-        return false
     }
 
     private fun permissionCallBack(state: PermissionState) {

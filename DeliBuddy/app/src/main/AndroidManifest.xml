@@ -31,9 +31,9 @@
             android:exported="false" />
 
         <activity
-            android:name=".ui.permission.PermissionDescriptionActivity"
+            android:name=".util.permission.PermissionActivity"
             android:exported="false"
-            android:theme="@style/SplashTheme"/>
+            android:theme="@style/Theme.AppCompat.Transparent.NoActionBar"/>
 
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"
