@@ -14,7 +14,7 @@ import yapp.android1.delibuddy.util.permission.PermissionType
 import yapp.android1.delibuddy.util.permission.getPermissionsFlag
 
 @AndroidEntryPoint
-class PermissionActivity : AppCompatActivity() {
+class PermissionDescriptionActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPermissionBinding
     private lateinit var requestPermissionLauncher: ActivityResultLauncher<Array<String>>
@@ -47,7 +47,7 @@ class PermissionActivity : AppCompatActivity() {
     private fun init() = with(binding) {
         btnPermission.setOnClickListener {
             PermissionManager.checkPermission(
-                this@PermissionActivity,
+                this@PermissionDescriptionActivity,
                 requestPermissionLauncher,
                 {
                     when (it) {

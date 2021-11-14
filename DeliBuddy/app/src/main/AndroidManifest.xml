@@ -27,7 +27,7 @@
         <activity android:name=".ui.MainActivity" />
 
         <activity
-            android:name=".ui.permission.PermissionActivity"
+            android:name=".ui.permission.PermissionDescriptionActivity"
             android:exported="false" />
 
         <meta-data

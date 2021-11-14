@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/main_background"
     android:orientation="vertical"
-    tools:context=".ui.permission.PermissionActivity">
+    tools:context=".ui.permission.PermissionDescriptionActivity">
 
     <TextView
         android:id="@+id/tv_permission_title"

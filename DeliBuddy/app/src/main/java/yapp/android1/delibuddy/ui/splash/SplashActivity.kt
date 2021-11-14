@@ -8,7 +8,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import yapp.android1.delibuddy.R
 import yapp.android1.delibuddy.databinding.ActivitySplashBinding
-import yapp.android1.delibuddy.ui.permission.PermissionActivity
+import yapp.android1.delibuddy.ui.permission.PermissionDescriptionActivity
 import yapp.android1.delibuddy.util.intentTo
 
 @AndroidEntryPoint
@@ -23,7 +23,7 @@ class SplashActivity : AppCompatActivity() {
         // TODO: 서버 개발이 끝나면 이곳에서 데이터 수신 후 intent 예정
         lifecycleScope.launch {
             delay(2000L)
-            intentTo(PermissionActivity::class.java)
+            intentTo(PermissionDescriptionActivity::class.java)
         }
     }
 }
