@@ -7,7 +7,7 @@ import androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale
 import androidx.core.content.ContextCompat
 import yapp.android1.delibuddy.ui.dialog.PermissionDialogFragment
 
-object CheckPermission {
+object PermissionManager {
     fun checkPermission(
         context: AppCompatActivity,
         requestPermissionLauncher: ActivityResultLauncher<Array<String>>,
@@ -18,9 +18,9 @@ object CheckPermission {
             return
 
         when {
-            checkPermissionIsGranted(context, requestedPermissions) ->
+            isPermissionGranted(context, requestedPermissions) ->
                 permissionCallback(true)
-            checkAnyPermissionIsDenied(context, requestedPermissions) -> {
+            isPermissionDenied(context, requestedPermissions) -> {
                 requestPermissionLauncher.launch(requestedPermissions.toTypedArray())
             }
             else -> {
@@ -30,7 +30,7 @@ object CheckPermission {
         }
     }
 
-    private fun checkPermissionIsGranted(
+    private fun isPermissionGranted(
         context: AppCompatActivity,
         requestedPermissions: List<String>
     ): Boolean {
@@ -46,7 +46,7 @@ object CheckPermission {
         return true
     }
 
-    private fun checkAnyPermissionIsDenied(
+    private fun isPermissionDenied(
         context: AppCompatActivity,
         requestedPermissions: List<String>
     ): Boolean {

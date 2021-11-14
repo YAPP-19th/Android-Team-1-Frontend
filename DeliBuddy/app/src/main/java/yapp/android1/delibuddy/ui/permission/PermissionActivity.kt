@@ -8,7 +8,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import yapp.android1.delibuddy.databinding.ActivityPermissionBinding
 import yapp.android1.delibuddy.ui.MainActivity
 import yapp.android1.delibuddy.util.intentTo
-import yapp.android1.delibuddy.util.permission.CheckPermission
+import yapp.android1.delibuddy.util.permission.PermissionManager
 import yapp.android1.delibuddy.util.permission.PermissionType
 import yapp.android1.delibuddy.util.permission.getPermissionsFlag
 
@@ -45,7 +45,7 @@ class PermissionActivity : AppCompatActivity() {
 
     private fun init() = with(binding) {
         btnPermission.setOnClickListener {
-            CheckPermission.checkPermission(
+            PermissionManager.checkPermission(
                 this@PermissionActivity,
                 requestPermissionLauncher,
                 {

@@ -19,7 +19,7 @@ class PermissionDialogFragment(private val fragmentActivity: FragmentActivity) :
             setMessage("편리한 딜리버디 이용을 위해 권한을 허용해 주세요\n[설정] > [권한]에서 사용으로 활성화해 주세요")
 
             setPositiveButton("설정",
-                DialogInterface.OnClickListener() { dialog, which ->
+                DialogInterface.OnClickListener() { _, _ ->
                     val intent = Intent(
                         Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
                         Uri.parse("package:" + activity?.packageName)
@@ -30,7 +30,7 @@ class PermissionDialogFragment(private val fragmentActivity: FragmentActivity) :
                 })
 
             setNegativeButton("닫기",
-                DialogInterface.OnClickListener { dialog, which ->
+                DialogInterface.OnClickListener { _, _ ->
                     dismiss()
                 })
         }
