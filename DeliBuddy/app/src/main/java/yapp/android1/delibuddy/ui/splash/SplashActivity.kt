@@ -7,9 +7,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import yapp.android1.delibuddy.R
 import yapp.android1.delibuddy.databinding.ActivitySplashBinding
 import yapp.android1.delibuddy.ui.MainActivity
+import yapp.android1.delibuddy.ui.dialog.PermissionDialogFragment
 import yapp.android1.delibuddy.ui.permission.PermissionDescriptionActivity
 import yapp.android1.delibuddy.util.intentTo
 import yapp.android1.delibuddy.util.permission.PermissionManager
@@ -24,11 +24,12 @@ class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySplashBinding.inflate(layoutInflater)
-        setContentView(R.layout.activity_splash)
+        setContentView(binding.root)
 
         PermissionManager.checkPermission(this, PermissionType.LOCATION) {
-            when(it) {
-                PermissionState.NEED_DESCRIPTION -> intentPermissionDescription()
+            when (it) {
+                PermissionState.NEED_PERMISSION -> intentPermissionDescription()
+                PermissionState.DENIED -> showDeniedDialog()
                 PermissionState.GRANTED -> intentMain()
             }
         }
@@ -46,6 +47,15 @@ class SplashActivity : AppCompatActivity() {
             delay(2000L)
             intentTo(PermissionDescriptionActivity::class.java)
         }
+    }
+
+    private fun showDeniedDialog() {
+        val permissionDialog = PermissionDialogFragment(this).apply {
+            negativeCallback = {
+                finish()
+            }
+        }
+        permissionDialog.show(this.supportFragmentManager, null)
     }
 
     override fun onBackPressed() {
