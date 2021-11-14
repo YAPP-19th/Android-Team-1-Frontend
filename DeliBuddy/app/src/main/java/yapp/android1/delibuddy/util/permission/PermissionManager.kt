@@ -35,11 +35,8 @@ object PermissionManager {
         requestedPermissions: List<String>
     ): Boolean {
         requestedPermissions.forEach {
-            if (ContextCompat.checkSelfPermission(
-                    context,
-                    it
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
+            val isGranted = ContextCompat.checkSelfPermission(context, it)
+            if (isGranted != PackageManager.PERMISSION_GRANTED) {
                 return false
             }
         }
