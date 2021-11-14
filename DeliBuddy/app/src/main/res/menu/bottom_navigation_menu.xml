@@ -4,20 +4,20 @@
         android:id="@+id/home"
         android:enabled="true"
         android:icon="@drawable/selector_navigation_icon_home"
-        android:title="home" />
+        android:title="@string/navigation_home" />
     <item
         android:id="@+id/myparty"
         android:enabled="true"
         android:icon="@drawable/selector_navigation_icon_myparty"
-        android:title="myparty" />
+        android:title="@string/navigation_myparty" />
     <item
         android:id="@+id/alarm"
         android:enabled="true"
         android:icon="@drawable/selector_navigation_icon_alarm"
-        android:title="alarm" />
+        android:title="@string/navigation_alarm" />
     <item
         android:id="@+id/mypage"
         android:enabled="true"
         android:icon="@drawable/selector_navigation_icon_mypage"
-        android:title="mypage" />
+        android:title="@string/navigation_mypage" />
 </menu>

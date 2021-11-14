@@ -15,6 +15,10 @@
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.4194453423628242" />
         <entry key="app/src/main/res/layout/activity_permission.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_splash.xml" value="0.11979166666666667" />
+        <entry key="app/src/main/res/layout/fragment_alarm.xml" value="0.20625" />
+        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.178125" />
+        <entry key="app/src/main/res/layout/fragment_mypage.xml" value="0.20625" />
+        <entry key="app/src/main/res/layout/fragment_myparty.xml" value="0.20625" />
         <entry key="app/src/main/res/menu/bottom_navigation_menu.xml" value="0.20625" />
       </map>
     </option>
