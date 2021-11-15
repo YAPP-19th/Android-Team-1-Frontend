@@ -2,24 +2,10 @@ package yapp.android1.delibuddy.util.permission
 
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.os.Parcelable
 import android.view.WindowManager
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import kotlinx.parcelize.Parcelize
-
-enum class PermissionState {
-    GRANTED,
-    DENIED,
-    NEED_PERMISSION
-}
-
-@Parcelize
-data class PermissionBundle(
-    val isRequestPermission: Boolean,
-    val permissions: List<String>
-) : Parcelable
 
 class PermissionActivity : AppCompatActivity() {
     companion object {
