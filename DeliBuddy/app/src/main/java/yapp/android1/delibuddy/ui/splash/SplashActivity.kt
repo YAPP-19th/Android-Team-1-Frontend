@@ -29,7 +29,7 @@ class SplashActivity : AppCompatActivity() {
         PermissionManager.checkPermission(this, PermissionType.LOCATION) {
             when (it) {
                 PermissionState.NEED_PERMISSION -> intentPermissionDescription()
-                PermissionState.DENIED -> showDeniedDialog()
+                PermissionState.DENIED -> showPermissionDeniedDialog()
                 PermissionState.GRANTED -> intentMain()
             }
         }
@@ -49,7 +49,7 @@ class SplashActivity : AppCompatActivity() {
         }
     }
 
-    private fun showDeniedDialog() {
+    private fun showPermissionDeniedDialog() {
         val permissionDialog = PermissionDialogFragment(this).apply {
             negativeCallback = {
                 finish()

@@ -31,18 +31,18 @@ class PermissionDescriptionActivity : AppCompatActivity() {
                 PermissionType.LOCATION
             ) {
                 when (it) {
-                    PermissionState.GRANTED -> permissionGranted()
-                    PermissionState.DENIED -> permissionDenied()
+                    PermissionState.GRANTED -> intentMain()
+                    PermissionState.DENIED -> showPermissionDeniedDialog()
                 }
             }
         }
     }
 
-    private fun permissionGranted() {
+    private fun intentMain() {
         intentTo(MainActivity::class.java)
     }
 
-    private fun permissionDenied() {
+    private fun showPermissionDeniedDialog() {
         val permissionDialog = PermissionDialogFragment(this).apply {
             negativeCallback = {
                 finish()
