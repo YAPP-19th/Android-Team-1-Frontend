@@ -27,6 +27,8 @@ object Google {
     const val HILT_COMPILER              = "androidx.hilt:hilt-compiler:${Versions.HILT_COMPILER}"
     const val MATERIAL                   = "com.google.android.material:material:${Versions.MATERIAL}"
     const val GSON                       = "com.google.code.gson:gson:${Versions.GSON}"
+    const val FIREBASE_BOM               = "com.google.firebase:firebase-bom:${Versions.FIREBASE_BOM}"
+    const val FIREBASE_ANALYTICS         = "com.google.firebase:firebase-analytics"
 }
 
 object Libraries {

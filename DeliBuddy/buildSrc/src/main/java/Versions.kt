@@ -24,6 +24,7 @@ object Versions {
     const val HILT_COMPILER  = "1.0.0"
     const val MATERIAL       = "1.4.0"
     const val GSON           = "2.8.6"
+    const val FIREBASE_BOM   = "29.0.0"
 
     /* [ Libraries ] */
     const val RETROFIT  = "2.9.0"

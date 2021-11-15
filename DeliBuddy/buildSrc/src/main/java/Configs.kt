@@ -6,6 +6,8 @@ object Configs {
     const val KOTLIN_ANDROID            = "kotlin-android"
     const val KOTLIN_KAPT               = "kotlin-kapt"
     const val HILT_ANDROID_PLUGIN       = "dagger.hilt.android.plugin"
+    const val FIREBASE_DISTRIBUTION     = "com.google.firebase.appdistribution"
+    const val GOOGLE_SERVICE            = "com.google.gms.google-services"
 
     //Android Config
     const val COMPILE_SDK               = 30
@@ -20,6 +22,7 @@ object Configs {
     //BuildType
     const val RELEASE                   = "release"
     const val DEBUG                     = "debug"
+    const val QA                        = "qa"
 
     const val PROP_EMPTY                = "\"PROP_EMPTY\""
 }
