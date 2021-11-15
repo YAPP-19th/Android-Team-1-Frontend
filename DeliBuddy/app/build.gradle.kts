@@ -9,6 +9,8 @@ plugins {
     id(Configs.GOOGLE_SERVICE)
 }
 
+val appDistributionApkPath: String = System.getenv("BITRISE_SIGNED_APK_PATH") ?: ""
+
 android {
     compileSdk = Configs.COMPILE_SDK
 
@@ -41,6 +43,11 @@ android {
             isDebuggable    = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
 
+            firebaseAppDistribution {
+                groups = "DeliBuddy"
+                apkPath = appDistributionApkPath
+            }
+
             signingConfig = null
         }
 
@@ -48,6 +55,11 @@ android {
             isMinifyEnabled = true
             isDebuggable    = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+
+            firebaseAppDistribution {
+                groups = "DeliBuddy"
+                apkPath = appDistributionApkPath
+            }
 
             signingConfig = null
         }
@@ -66,6 +78,7 @@ android {
 fun getApiKey(propertyName: String): String {
     return gradleLocalProperties(rootDir).getProperty(propertyName) ?: Configs.PROP_EMPTY
 }
+
 
 dependencies {
     implementation(project(":domain"))
@@ -94,7 +107,6 @@ dependencies {
     implementation(Google.MATERIAL)
     implementation(Google.GSON)
     implementation(Google.FIREBASE_BOM)
-    implementation(Google.FIREBASE_ANALYTICS)
 
     implementation(Libraries.RETROFIT)
     implementation(Libraries.RETROFIT_CONVERTER_GSON)

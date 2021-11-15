@@ -20,7 +20,7 @@ object Versions {
     const val LIFECYCLE_EXTENSION   = "2.2.0"
 
     /* [ Google ] */
-    const val HILT           = "2.37"
+    const val HILT           = "2.40"
     const val HILT_COMPILER  = "1.0.0"
     const val MATERIAL       = "1.4.0"
     const val GSON           = "2.8.6"
