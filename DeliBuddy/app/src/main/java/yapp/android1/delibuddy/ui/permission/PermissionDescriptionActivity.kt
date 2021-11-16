@@ -3,9 +3,9 @@ package yapp.android1.delibuddy.ui.permission
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import dagger.hilt.android.AndroidEntryPoint
-import yapp.android1.delibuddy.databinding.ActivityPermissionBinding
-import yapp.android1.delibuddy.ui.MainActivity
+import yapp.android1.delibuddy.databinding.ActivityPermissionDescriptionBinding
 import yapp.android1.delibuddy.ui.dialog.PermissionDialogFragment
+import yapp.android1.delibuddy.ui.home.HomeActivity
 import yapp.android1.delibuddy.util.intentTo
 import yapp.android1.delibuddy.util.permission.PermissionManager
 import yapp.android1.delibuddy.util.permission.PermissionState
@@ -14,11 +14,11 @@ import yapp.android1.delibuddy.util.permission.PermissionType
 @AndroidEntryPoint
 class PermissionDescriptionActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityPermissionBinding
+    private lateinit var binding: ActivityPermissionDescriptionBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityPermissionBinding.inflate(layoutInflater)
+        binding = ActivityPermissionDescriptionBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         init()
@@ -39,7 +39,7 @@ class PermissionDescriptionActivity : AppCompatActivity() {
     }
 
     private fun intentMain() {
-        intentTo(MainActivity::class.java)
+        intentTo(HomeActivity::class.java)
     }
 
     private fun showPermissionDeniedDialog() {

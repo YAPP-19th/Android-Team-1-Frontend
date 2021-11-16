@@ -5,15 +5,26 @@
       <map>
         <entry key="app/src/main/res/drawable/ic_splash_logo.xml" value="0.146875" />
         <entry key="app/src/main/res/drawable/icon_delibuddy_foreground.xml" value="0.13541666666666666" />
+        <entry key="app/src/main/res/drawable/selector_navigation_icon_alarm.xml" value="0.21927083333333333" />
+        <entry key="app/src/main/res/drawable/selector_navigation_icon_home.xml" value="0.21927083333333333" />
+        <entry key="app/src/main/res/drawable/selector_navigation_icon_mypage.xml" value="0.21927083333333333" />
+        <entry key="app/src/main/res/drawable/selector_navigation_icon_myparty.xml" value="0.21927083333333333" />
         <entry key="app/src/main/res/drawable/splash_background.xml" value="0.13541666666666666" />
         <entry key="app/src/main/res/drawable/splash_background_gradient.xml" value="0.13645833333333332" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.11979166666666667" />
+        <entry key="app/src/main/res/layout/activity_home.xml" value="0.203125" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.4194453423628242" />
         <entry key="app/src/main/res/layout/activity_permission.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_splash.xml" value="0.11979166666666667" />
+        <entry key="app/src/main/res/layout/fragment_alarm.xml" value="0.20625" />
+        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.178125" />
+        <entry key="app/src/main/res/layout/fragment_mypage.xml" value="0.20625" />
+        <entry key="app/src/main/res/layout/fragment_myparty.xml" value="0.20625" />
+        <entry key="app/src/main/res/menu/bottom_navigation_menu.xml" value="0.20625" />
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" project-jdk-name="11" project-jdk-type="JavaSDK" />
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK" />
   <component name="VisualizationToolProject">
     <option name="state">
       <ProjectState>

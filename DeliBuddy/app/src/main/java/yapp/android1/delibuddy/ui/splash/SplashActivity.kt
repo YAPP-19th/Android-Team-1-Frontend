@@ -8,8 +8,8 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import yapp.android1.delibuddy.databinding.ActivitySplashBinding
-import yapp.android1.delibuddy.ui.MainActivity
 import yapp.android1.delibuddy.ui.dialog.PermissionDialogFragment
+import yapp.android1.delibuddy.ui.home.HomeActivity
 import yapp.android1.delibuddy.ui.permission.PermissionDescriptionActivity
 import yapp.android1.delibuddy.util.intentTo
 import yapp.android1.delibuddy.util.permission.PermissionManager
@@ -38,7 +38,7 @@ class SplashActivity : AppCompatActivity() {
     private fun intentMain() {
         intentJob = lifecycleScope.launch {
             delay(2000L)
-            intentTo(MainActivity::class.java)
+            intentTo(HomeActivity::class.java)
         }
     }
 

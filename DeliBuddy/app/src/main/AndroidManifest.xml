@@ -24,7 +24,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.MainActivity" />
+        <activity android:name=".ui.home.HomeActivity" />
 
         <activity
             android:name=".ui.permission.PermissionDescriptionActivity"
