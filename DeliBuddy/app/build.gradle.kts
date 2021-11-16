@@ -6,7 +6,11 @@ plugins {
     id(Configs.KOTLIN_KAPT)
     id(Configs.KOTLIN_PARCELIZE)
     id(Configs.HILT_ANDROID_PLUGIN)
+    id(Configs.FIREBASE_DISTRIBUTION)
+    id(Configs.GOOGLE_SERVICE)
 }
+
+val appDistributionApkPath: String = System.getenv("BITRISE_SIGNED_APK_PATH") ?: "EMPTY"
 
 android {
     compileSdk = Configs.COMPILE_SDK
@@ -39,6 +43,26 @@ android {
             isMinifyEnabled = true
             isDebuggable    = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+
+            firebaseAppDistribution {
+                groups = "DeliBuddy"
+                apkPath = appDistributionApkPath
+            }
+
+            signingConfig = null
+        }
+
+        create(Configs.QA) {
+            isMinifyEnabled = true
+            isDebuggable    = false
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+
+            firebaseAppDistribution {
+                groups = "DeliBuddy"
+                apkPath = appDistributionApkPath
+            }
+
+            signingConfig = null
         }
     }
 
@@ -82,6 +106,7 @@ dependencies {
     kapt(Google.HILT_COMPILER)
     implementation(Google.MATERIAL)
     implementation(Google.GSON)
+    implementation(Google.FIREBASE_BOM)
 
     implementation(Libraries.RETROFIT)
     implementation(Libraries.RETROFIT_CONVERTER_GSON)
