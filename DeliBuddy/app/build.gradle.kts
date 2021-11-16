@@ -9,7 +9,7 @@ plugins {
     id(Configs.GOOGLE_SERVICE)
 }
 
-val appDistributionApkPath: String = System.getenv("BITRISE_SIGNED_APK_PATH") ?: ""
+val appDistributionApkPath: String = System.getenv("BITRISE_SIGNED_APK_PATH") ?: "EMPTY"
 
 android {
     compileSdk = Configs.COMPILE_SDK
