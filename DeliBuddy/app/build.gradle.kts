@@ -4,6 +4,7 @@ plugins {
     id(Configs.APPLICATION)
     id(Configs.KOTLIN_ANDROID)
     id(Configs.KOTLIN_KAPT)
+    id(Configs.KOTLIN_PARCELIZE)
     id(Configs.HILT_ANDROID_PLUGIN)
     id(Configs.FIREBASE_DISTRIBUTION)
     id(Configs.GOOGLE_SERVICE)

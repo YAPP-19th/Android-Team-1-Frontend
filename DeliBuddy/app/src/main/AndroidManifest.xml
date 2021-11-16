@@ -14,8 +14,8 @@
             android:exported="false"
             android:name=".ui.partyDetail.PartyDetailActivity" />
         <activity
+            android:name=".ui.splash.SplashActivity"
             android:exported="true"
-            android:name=".ui.SplashActivity"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,10 +23,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.MainActivity" />
+        <activity android:name=".ui.home.HomeActivity" />
+
         <activity
+            android:name=".ui.permission.PermissionDescriptionActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".util.permission.PermissionActivity"
             android:exported="false"
-            android:name=".ui.PermissionActivity" />
+            android:theme="@style/Theme.AppCompat.Transparent.NoActionBar"/>
 
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"
