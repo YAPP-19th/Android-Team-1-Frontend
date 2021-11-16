@@ -15,7 +15,7 @@
         android:theme="@style/Theme.DeliBuddy">
 
         <activity
-            android:name=".ui.SplashActivity"
+            android:name=".ui.splash.SplashActivity"
             android:exported="true"
             android:theme="@style/SplashTheme">
             <intent-filter>
@@ -27,8 +27,13 @@
         <activity android:name=".ui.MainActivity" />
 
         <activity
-            android:name=".ui.PermissionActivity"
+            android:name=".ui.permission.PermissionDescriptionActivity"
             android:exported="false" />
+
+        <activity
+            android:name=".util.permission.PermissionActivity"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.Transparent.NoActionBar"/>
 
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"
