@@ -4,16 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/main_background"
     android:orientation="vertical"
-    android:paddingHorizontal="20dp"
-    tools:context=".ui.PermissionActivity">
+    tools:context=".ui.permission.PermissionDescriptionActivity">
 
     <TextView
         android:id="@+id/tv_permission_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="92dp"
-        android:layout_marginBottom="6dp"
         android:text="딜리버디 권한 설정"
         android:textColor="@color/text_black"
         android:textSize="20dp"
@@ -27,6 +26,7 @@
         android:id="@+id/tv_permission_body"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
         android:text="편리한 딜리버디 이용을 위해 아래 권한을 허용해 주세요."
         android:textColor="@color/text_grey"
         android:textSize="14dp"
@@ -39,10 +39,11 @@
         android:id="@+id/cv_permission_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
+        android:layout_marginHorizontal="36dp"
         android:layout_marginTop="20dp"
-        android:elevation="20dp"
+        android:outlineSpotShadowColor="@color/cv_shadow_grey"
         app:cardCornerRadius="10dp"
+        app:cardElevation="20dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_permission_body">
@@ -119,8 +120,11 @@
     <Button
         android:id="@+id/btn_permission"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="45dp"
+        android:layout_marginHorizontal="20dp"
         android:layout_marginBottom="16dp"
+        android:background="@drawable/delibuddy_btn_radius"
+        android:stateListAnimator="@null"
         android:text="확인"
         android:textSize="14dp"
         app:layout_constraintBottom_toBottomOf="parent"

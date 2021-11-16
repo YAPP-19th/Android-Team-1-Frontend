@@ -5,6 +5,7 @@ object Configs {
     const val KOTLIN                    = "kotlin"
     const val KOTLIN_ANDROID            = "kotlin-android"
     const val KOTLIN_KAPT               = "kotlin-kapt"
+    const val KOTLIN_PARCELIZE          = "kotlin-parcelize"
     const val HILT_ANDROID_PLUGIN       = "dagger.hilt.android.plugin"
     const val FIREBASE_DISTRIBUTION     = "com.google.firebase.appdistribution"
     const val GOOGLE_SERVICE            = "com.google.gms.google-services"
