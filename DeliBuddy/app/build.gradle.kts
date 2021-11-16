@@ -79,7 +79,6 @@ fun getApiKey(propertyName: String): String {
     return gradleLocalProperties(rootDir).getProperty(propertyName) ?: Configs.PROP_EMPTY
 }
 
-
 dependencies {
     implementation(project(":domain"))
     implementation(project(":data"))
