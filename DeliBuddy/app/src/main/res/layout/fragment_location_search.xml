@@ -4,19 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.location.search.LocationSearchFragment"
-    android:background="@color/main_background">
+    android:background="@color/main_background"
+    tools:context=".ui.location.search.LocationSearchFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_search_space"
         android:layout_width="match_parent"
         android:layout_height="120dp"
+        android:background="@color/white"
         android:elevation="30dp"
-        android:outlineSpotShadowColor="@color/cv_shadow_grey"
         android:orientation="vertical"
+        android:outlineSpotShadowColor="@color/cv_shadow_grey"
         app:layout_constraintBottom_toTopOf="@id/rv_search_result"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="@color/white">
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:id="@+id/iv_location_search_exit"
@@ -42,22 +42,26 @@
             app:layout_constraintLeft_toRightOf="@id/iv_location_search_exit"
             app:layout_constraintTop_toTopOf="@id/cl_search_space" />
 
-            <EditText
-                android:layout_width="0dp"
-                android:layout_height="40dp"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginBottom="15dp"
-                android:hint="건물명, 도로명 또는 지번으로 검색"
-                android:textColor="@color/text_black"
-                android:textColorHint="@color/text_grey"
-                android:textSize="14dp"
-                app:layout_constraintBottom_toBottomOf="@id/cl_search_space"
-                app:layout_constraintLeft_toLeftOf="@id/cl_search_space"
-                app:layout_constraintRight_toRightOf="@id/cl_search_space"
-                android:background="@drawable/delibuddy_text_field_radius"
-                android:drawableStart="@drawable/icon_search"
-                android:drawablePadding="8dp"
-                android:paddingStart="16dp"/>
+        <EditText
+            android:id="@+id/et_search_keyword"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginBottom="15dp"
+            android:background="@drawable/delibuddy_text_field_radius"
+            android:drawableStart="@drawable/icon_search"
+            android:drawablePadding="8dp"
+            android:hint="건물명, 도로명 또는 지번으로 검색"
+            android:imeOptions="actionSearch"
+            android:inputType="text"
+            android:maxLines="1"
+            android:paddingStart="16dp"
+            android:textColor="@color/text_black"
+            android:textColorHint="@color/text_grey"
+            android:textSize="14dp"
+            app:layout_constraintBottom_toBottomOf="@id/cl_search_space"
+            app:layout_constraintLeft_toLeftOf="@id/cl_search_space"
+            app:layout_constraintRight_toRightOf="@id/cl_search_space" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
