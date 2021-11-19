@@ -22,6 +22,7 @@ android {
         versionCode   = Configs.VERSION_CODE
         versionName   = Configs.VERSION_NAME
 
+        buildConfigField("String", "KAKAO_LOCAL_API_KEY", getApiKey("KAKAO_LOCAL_API_KEY"))
         buildConfigField("String", "NAVER_MAP_APIKEY_ID", getApiKey("NAVER_MAP_APIKEY_ID"))
         buildConfigField("String", "NAVER_MAP_APIKEY_SECRET", getApiKey("NAVER_MAP_APIKEY_SECRET"))
         manifestPlaceholders["NAVER_MAP_APIKEY_ID"] = getApiKey("NAVER_MAP_APIKEY_ID")
