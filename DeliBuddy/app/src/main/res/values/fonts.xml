@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="RobotoRegular" parent="android:TextAppearance">
+        <item name="android:textStyle">normal</item>
+        <item name="android:fontFamily">@font/roboto_regular</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="RobotoBold" parent="android:TextAppearance">
+        <item name="android:textStyle">normal</item>
+        <item name="android:fontFamily">@font/roboto_bold</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="RobotoRegular11" parent="RobotoRegular">
+        <item name="android:textSize">@dimen/font_size_11</item>
+    </style>
+
+    <style name="RobotoRegular12" parent="RobotoRegular">
+        <item name="android:textSize">@dimen/font_size_12</item>
+    </style>
+
+    <style name="RobotoRegular14" parent="RobotoRegular">
+        <item name="android:textSize">@dimen/font_size_14</item>
+    </style>
+
+    <style name="RobotoRegular16" parent="RobotoRegular">
+        <item name="android:textSize">@dimen/font_size_16</item>
+    </style>
+
+    <style name="RobotoRegular20" parent="RobotoRegular">
+        <item name="android:textSize">@dimen/font_size_20</item>
+    </style>
+
+    <style name="RobotoBold11" parent="RobotoBold">
+        <item name="android:textSize">@dimen/font_size_11</item>
+    </style>
+
+    <style name="RobotoBold12" parent="RobotoBold">
+        <item name="android:textSize">@dimen/font_size_12</item>
+    </style>
+
+    <style name="RobotoBold14" parent="RobotoBold">
+        <item name="android:textSize">@dimen/font_size_14</item>
+    </style>
+
+    <style name="RobotoBold16" parent="RobotoBold">
+        <item name="android:textSize">@dimen/font_size_16</item>
+    </style>
+
+    <style name="RobotoBold20" parent="RobotoBold">
+        <item name="android:textSize">@dimen/font_size_20</item>
+    </style>
+
+</resources>
