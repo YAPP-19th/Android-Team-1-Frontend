@@ -46,22 +46,6 @@ class AddressSearchViewHolder(
         } else {
             tvAddressName.text = item.addressName
         }
-        //when (item) {
-//            is LocationSearchType.KeywordType -> {
-//                binding.tvAddressName.text = item.data.place_name
-//                // binding.locAddrText.text = item.data.road_address_name
-//            }
-//
-//            is LocationSearchType.AddressType -> {
-//                binding.tvAddressName.text = item.data.address_name
-////                when (item.data.address_type) {
-////                    "REGION" -> binding.locAddrText.text = item.data.address.address_name
-////                    "REGION_ADDR" -> binding.locAddrText.text = item.data.address.address_name
-////                    "ROAD" -> binding.locAddrText.text = item.data.road_address.address_name
-////                    "ROAD_ADDR" -> binding.locAddrText.text = item.data.road_address.address_name
-////                }
-//            }
-        //}
     }
 
     // item certain view click listener

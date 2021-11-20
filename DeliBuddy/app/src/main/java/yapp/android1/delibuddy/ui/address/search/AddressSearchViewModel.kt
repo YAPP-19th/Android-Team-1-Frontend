@@ -18,6 +18,7 @@ class AddressSearchViewModel @Inject constructor(
     private val searchAddressUseCase: SearchAddressUseCase
 ) : BaseViewModel<AddressSearchEvent>() {
     private var job: Job? = null
+
     private val _addressList = MutableStateFlow<List<Address>>(emptyList())
     val addressList: StateFlow<List<Address>> = _addressList
 

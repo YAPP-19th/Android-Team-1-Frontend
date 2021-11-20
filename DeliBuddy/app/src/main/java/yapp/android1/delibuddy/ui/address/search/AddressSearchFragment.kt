@@ -7,6 +7,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
+import timber.log.Timber
 import yapp.android1.delibuddy.adapter.AddressSearchAdapter
 import yapp.android1.delibuddy.base.BaseFragment
 import yapp.android1.delibuddy.databinding.FragmentAddressSearchBinding
@@ -22,8 +23,6 @@ class AddressSearchFragment :
     private lateinit var addressAdapter: AddressSearchAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        //initView()
-        //initListener()
         initRecyclerView()
         initObserve()
 
@@ -54,8 +53,9 @@ class AddressSearchFragment :
         addressAdapter = AddressSearchAdapter().apply {
             listener = object : OnItemClickListener {
                 override fun onItemClick(position: Int) {
-//                    addressAdapter.getItem(position).lat
 //                    actViewModel.occure
+                    val address = addressAdapter.getItem(position)
+                    Timber.w(address.lat.toString() + ", " + address.lon.toString())
                 }
             }
         }
