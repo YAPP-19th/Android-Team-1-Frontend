@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DeliBuddy">
         <activity
-            android:name=".ui.location.LocationActivity"
+            android:name=".ui.address.AddressActivity"
             android:exported="false" />
         <activity
             android:name=".ui.partyDetail.PartyDetailActivity"

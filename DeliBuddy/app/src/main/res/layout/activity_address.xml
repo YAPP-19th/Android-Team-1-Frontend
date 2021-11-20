@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.location.LocationActivity">
+    tools:context=".ui.address.AddressActivity">
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fcv_location"
@@ -14,6 +14,6 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:name="yapp.android1.delibuddy.ui.location.search.LocationSearchFragment"/>
+        android:name="yapp.android1.delibuddy.ui.address.search.AddressSearchFragment"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

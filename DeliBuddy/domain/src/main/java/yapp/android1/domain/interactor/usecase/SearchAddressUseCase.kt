@@ -8,20 +8,20 @@ class SearchAddressUseCase(
     private val addressRepository: AddressRepository
 ) : BaseUseCase<List<Address>, String>() {
     override suspend fun run(params: String): List<Address> {
-        val response = addressRepository.fetchAddressByAddress(params)
-        val response2 = addressRepository.fetchAddressByKeyword(params)
+        val responseAddress = addressRepository.searchAddressByAddress(params)
+        val responseKeyword = addressRepository.searchAddressByKeyword(params)
 
         return when {
-            response is NetworkResult.Success &&
-                    response2 is NetworkResult.Success -> {
-                if (response.data.size > response2.data.size) {
-                    response.data + response2.data
+            responseAddress is NetworkResult.Success &&
+                    responseKeyword is NetworkResult.Success -> {
+                if (responseAddress.data.size > responseKeyword.data.size) {
+                    responseAddress.data + responseKeyword.data
                 } else {
-                    response2.data + response.data
+                    responseKeyword.data + responseAddress.data
                 }
             }
-            response is NetworkResult.Success -> response.data
-            response2 is NetworkResult.Success -> response2.data
+            responseAddress is NetworkResult.Success -> responseAddress.data
+            responseKeyword is NetworkResult.Success -> responseKeyword.data
             else -> emptyList()
         }
     }

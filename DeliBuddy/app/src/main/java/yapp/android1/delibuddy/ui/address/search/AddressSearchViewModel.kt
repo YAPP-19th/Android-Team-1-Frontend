@@ -1,4 +1,4 @@
-package yapp.android1.delibuddy.ui.location.search
+package yapp.android1.delibuddy.ui.address.search
 
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,9 +14,9 @@ import yapp.android1.domain.interactor.usecase.SearchAddressUseCase
 import javax.inject.Inject
 
 @HiltViewModel
-class LocationSearchViewModel @Inject constructor(
+class AddressSearchViewModel @Inject constructor(
     private val searchAddressUseCase: SearchAddressUseCase
-) : BaseViewModel<LocationSearchEvent>() {
+) : BaseViewModel<AddressSearchEvent>() {
     private var job: Job? = null
     private val _addressList = MutableStateFlow<List<Address>>(emptyList())
     val addressList: StateFlow<List<Address>> = _addressList
@@ -24,9 +24,9 @@ class LocationSearchViewModel @Inject constructor(
     private val _searchQuery = MutableStateFlow("")
     val searchQuery: StateFlow<String> = _searchQuery
 
-    override suspend fun handleEvent(event: LocationSearchEvent) {
+    override suspend fun handleEvent(event: AddressSearchEvent) {
         when (event) {
-            is LocationSearchEvent.SearchAddress -> {
+            is AddressSearchEvent.SearchAddress -> {
                 job?.cancel()
                 job = viewModelScope.launch {
                     _searchQuery.value = event.query

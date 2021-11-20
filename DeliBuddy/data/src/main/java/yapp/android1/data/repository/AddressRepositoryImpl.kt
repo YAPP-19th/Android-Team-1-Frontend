@@ -12,11 +12,11 @@ import yapp.android1.domain.repository.AddressRepository
 class AddressRepositoryImpl(
     private val api: KakaoLocalApi
 ) : AddressRepository {
-    override suspend fun fetchAddressByKeyword(
+    override suspend fun searchAddressByKeyword(
         keyword: String
     ): NetworkResult<List<Address>> = withContext(Dispatchers.IO) {
         return@withContext try {
-            val response = api.getSearchKeyword(keyword)
+            val response = api.searchByKeyword(keyword)
 
             NetworkResult.Success(
                 response.documents.map {
@@ -28,11 +28,11 @@ class AddressRepositoryImpl(
         }
     }
 
-    override suspend fun fetchAddressByAddress(
+    override suspend fun searchAddressByAddress(
         address: String
     ): NetworkResult<List<Address>> = withContext(Dispatchers.IO) {
         return@withContext try {
-            val response = api.getSearchAddress(address, "similar")
+            val response = api.searchByAddress(address, "similar")
 
             NetworkResult.Success(
                 response.documents.map {

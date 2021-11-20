@@ -3,8 +3,8 @@ package yapp.android1.data.entity
 import yapp.android1.domain.entity.Address
 
 object AddressMapper {
-    fun responseToAddress(keywordPlace: KeywordDocument): Address {
-        keywordPlace.apply {
+    fun responseToAddress(keywordDocument: KeywordDocument): Address {
+        keywordDocument.apply {
             return Address(
                 addressName = placeName,
                 roadAddress = roadAddressName,
@@ -15,8 +15,8 @@ object AddressMapper {
         }
     }
 
-    fun responseToAddress(addressPlace: AddressDocument): Address {
-        addressPlace.apply {
+    fun responseToAddress(addressDocument: AddressDocument): Address {
+        addressDocument.apply {
             return Address(
                 addressName = addressName,
                 roadAddress = roadAddress.addressName,
