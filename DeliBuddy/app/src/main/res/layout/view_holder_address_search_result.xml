@@ -22,7 +22,7 @@
         android:id="@+id/tv_address_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        style="@style/Bold14"
+        style="@style/RobotoBold14"
         android:text="검색 결과"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@id/iv_icon_location"
