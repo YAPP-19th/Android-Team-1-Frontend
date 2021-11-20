@@ -39,7 +39,7 @@ class AddressSearchFragment :
     private fun initObserve() {
         repeatOnStarted {
             viewModel.addressList.collect {
-                addressAdapter.addResult(it)
+                addressAdapter.updateResult(it)
             }
         }
         repeatOnStarted {

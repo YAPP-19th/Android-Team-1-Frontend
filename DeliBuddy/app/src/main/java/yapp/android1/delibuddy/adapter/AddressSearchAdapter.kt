@@ -36,7 +36,7 @@ class AddressSearchAdapter : RecyclerView.Adapter<AddressSearchViewHolder>() {
         return items.size
     }
 
-    fun addResult(newResultList: List<Address>) {
+    fun updateResult(newResultList: List<Address>) {
         items = newResultList
         dataChanged()
     }
