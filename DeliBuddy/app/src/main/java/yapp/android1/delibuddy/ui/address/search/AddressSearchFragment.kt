@@ -9,13 +9,13 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import yapp.android1.delibuddy.adapter.AddressSearchAdapter
 import yapp.android1.delibuddy.base.BaseFragment
-import yapp.android1.delibuddy.databinding.FragmentLocationSearchBinding
+import yapp.android1.delibuddy.databinding.FragmentAddressSearchBinding
 import yapp.android1.delibuddy.holder.OnItemClickListener
 import yapp.android1.delibuddy.util.extensions.repeatOnStarted
 
 @AndroidEntryPoint
 class AddressSearchFragment :
-    BaseFragment<FragmentLocationSearchBinding>(FragmentLocationSearchBinding::inflate) {
+    BaseFragment<FragmentAddressSearchBinding>(FragmentAddressSearchBinding::inflate) {
     private val viewModel: AddressSearchViewModel by viewModels()
 
     //    private val actViewModel: LocationViewModel by activityViewModels()
