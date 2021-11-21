@@ -13,6 +13,7 @@
     <color name="sub_purple">#7F1DC1</color>
     <color name="light_grey_background">#E5E5E5</color>
     <color name="main_background">#FDFDFD</color>
+    <color name="input_line_background">#F0F0F0</color>
 
     <color name="divider_grey">#E5E5E5</color>
 
