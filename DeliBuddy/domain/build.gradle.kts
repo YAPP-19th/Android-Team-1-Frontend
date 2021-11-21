@@ -1,7 +1,7 @@
 plugins{
     `java-library`
-    id(Configs.KOTLIN)
-    id(Configs.KOTLIN_KAPT)
+    id("kotlin")
+    id("kotlin-kapt")
 }
 
 java{

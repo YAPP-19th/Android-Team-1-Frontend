@@ -1,13 +1,13 @@
 import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 
 plugins {
-    id(Configs.APPLICATION)
-    id(Configs.KOTLIN_ANDROID)
-    id(Configs.KOTLIN_KAPT)
-    id(Configs.KOTLIN_PARCELIZE)
-    id(Configs.HILT_ANDROID_PLUGIN)
-    id(Configs.FIREBASE_DISTRIBUTION)
-    id(Configs.GOOGLE_SERVICE)
+    id("com.android.application")
+    id("kotlin-android")
+    id("kotlin-kapt")
+    id("kotlin-parcelize")
+    id("dagger.hilt.android.plugin")
+    id("com.google.firebase.appdistribution")
+    id("com.google.gms.google-services")
 }
 
 val appDistributionApkPath: String = System.getenv("BITRISE_SIGNED_APK_PATH") ?: "EMPTY"
