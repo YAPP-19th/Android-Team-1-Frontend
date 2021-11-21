@@ -23,4 +23,18 @@
     <color name="text_black">#000000</color>
 
     <color name="cv_shadow_grey">#0F202020</color>
+
+    <!-- Food Background Colors -->
+    <color name="bread_background">#FCDDBA</color>
+    <color name="burger_background">#FAF3CE</color>
+    <color name="cafe_background">#EDE4DA</color>
+    <color name="chicken_background">#FFEEDE</color>
+    <color name="chinese_background"></color>
+    <color name="japanese_background">#DBDCF3</color>
+    <color name="korean_background">#FFEEDE</color>
+    <color name="pizza_background">#FFE3D8</color>
+    <color name="seafood_background">#EDEDED</color>
+    <color name="snackbar_background">#F5DADC</color>
+    <color name="western_background">#D1F4CA</color>
+
 </resources>

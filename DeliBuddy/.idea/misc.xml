@@ -5,6 +5,7 @@
       <map>
         <entry key="app/src/main/res/drawable/ic_splash_logo.xml" value="0.146875" />
         <entry key="app/src/main/res/drawable/icon_delibuddy_foreground.xml" value="0.13541666666666666" />
+        <entry key="app/src/main/res/drawable/icon_user_profile_blue.xml" value="0.11574074074074074" />
         <entry key="app/src/main/res/drawable/selector_navigation_icon_alarm.xml" value="0.21927083333333333" />
         <entry key="app/src/main/res/drawable/selector_navigation_icon_home.xml" value="0.21927083333333333" />
         <entry key="app/src/main/res/drawable/selector_navigation_icon_mypage.xml" value="0.21927083333333333" />
