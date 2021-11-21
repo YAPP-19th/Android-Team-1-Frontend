@@ -12,7 +12,7 @@
         android:theme="@style/Theme.DeliBuddy">
         <activity
             android:exported="false"
-            android:name=".ui.partyDetail.PartyDetailActivity" />
+            android:name=".ui.partyDetail.PartyInformationActivity" />
         <activity
             android:name=".ui.splash.SplashActivity"
             android:exported="true"
