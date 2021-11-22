@@ -1,7 +1,5 @@
 package yapp.android1.data.repository
 
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import yapp.android1.data.entity.AddressMapper
 import yapp.android1.data.remote.KakaoLocalApi
 import yapp.android1.domain.NetworkResult
@@ -14,13 +12,13 @@ class AddressRepositoryImpl(
 ) : AddressRepository {
     override suspend fun searchAddressByKeyword(
         keyword: String
-    ): NetworkResult<List<Address>> = withContext(Dispatchers.IO) {
-        return@withContext try {
+    ): NetworkResult<List<Address>> {
+        return try {
             val response = api.searchByKeyword(keyword)
 
             NetworkResult.Success(
                 response.documents.map {
-                    AddressMapper.responseToAddress(it)
+                    AddressMapper.toAddress(it)
                 }
             )
         } catch (e: Exception) {
@@ -30,13 +28,13 @@ class AddressRepositoryImpl(
 
     override suspend fun searchAddressByAddress(
         address: String
-    ): NetworkResult<List<Address>> = withContext(Dispatchers.IO) {
-        return@withContext try {
+    ): NetworkResult<List<Address>> {
+        return try {
             val response = api.searchByAddress(address, "similar")
 
             NetworkResult.Success(
                 response.documents.map {
-                    AddressMapper.responseToAddress(it)
+                    AddressMapper.toAddress(it)
                 }
             )
         } catch (e: Exception) {
