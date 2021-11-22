@@ -19,19 +19,16 @@ class AddressSearchViewModel @Inject constructor(
 ) : BaseViewModel<AddressSearchEvent>() {
     private var job: Job? = null
 
-    private val _addressList = MutableStateFlow<List<Address>>(emptyList())
-    val addressList: StateFlow<List<Address>> = _addressList
-
-    private val _searchQuery = MutableStateFlow("")
-    val searchQuery: StateFlow<String> = _searchQuery
+    private val _searchResult = MutableStateFlow<Pair<String, List<Address>>>(Pair("", emptyList()))
+    val searchResult: StateFlow<Pair<String, List<Address>>> = _searchResult
 
     override suspend fun handleEvent(event: AddressSearchEvent) {
         when (event) {
             is AddressSearchEvent.SearchAddress -> {
                 job?.cancel()
                 job = viewModelScope.launch {
-                    _searchQuery.value = event.query
-                    _addressList.value = searchAddressUseCase(event.query)
+                    val addressList = searchAddressUseCase(event.query)
+                    _searchResult.value = Pair(event.query, addressList)
                 }
             }
         }

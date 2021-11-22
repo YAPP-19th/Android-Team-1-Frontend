@@ -28,7 +28,9 @@ class AddressSearchFragment :
 
         binding.etSearchKeyword.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                viewModel.occurEvent(AddressSearchEvent.SearchAddress(binding.etSearchKeyword.text.toString()))
+                viewModel.occurEvent(
+                    AddressSearchEvent.SearchAddress(binding.etSearchKeyword.text.toString())
+                )
                 return@setOnEditorActionListener true
             }
             return@setOnEditorActionListener false
@@ -37,14 +39,8 @@ class AddressSearchFragment :
 
     private fun initObserve() {
         repeatOnStarted {
-            viewModel.addressList.collect {
+            viewModel.searchResult.collect {
                 addressAdapter.updateResult(it)
-            }
-        }
-        repeatOnStarted {
-            viewModel.searchQuery.collect {
-                addressAdapter.searchQuery = it
-                addressAdapter.dataChanged()
             }
         }
     }

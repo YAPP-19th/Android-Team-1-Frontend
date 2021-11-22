@@ -9,8 +9,7 @@ import yapp.android1.delibuddy.holder.OnSearchResultClickListener
 import yapp.android1.domain.entity.Address
 
 class AddressSearchAdapter : RecyclerView.Adapter<AddressSearchViewHolder>() {
-    private var items: List<Address> = emptyList()
-    var searchQuery = ""
+    private var resultPair: Pair<String, List<Address>> = Pair("", emptyList())
     var listener: OnSearchResultClickListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AddressSearchViewHolder {
@@ -25,23 +24,23 @@ class AddressSearchAdapter : RecyclerView.Adapter<AddressSearchViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: AddressSearchViewHolder, position: Int) {
-        holder.bind(position, getItem(position), searchQuery)
+        holder.bind(position, getItem(position), resultPair.first)
     }
 
     fun getItem(position: Int): Address {
-        return items[position]
+        return resultPair.second[position]
     }
 
     override fun getItemCount(): Int {
-        return items.size
+        return resultPair.second.size
     }
 
-    fun updateResult(newResultList: List<Address>) {
-        items = newResultList
+    fun updateResult(result: Pair<String, List<Address>>) {
+        resultPair = result
         dataChanged()
     }
 
-    fun dataChanged() {
+    private fun dataChanged() {
         notifyDataSetChanged()
     }
 }
