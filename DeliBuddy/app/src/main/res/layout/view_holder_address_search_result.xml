@@ -24,6 +24,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="검색 결과"
+        android:textColor="@color/text_black"
         app:layout_constraintBottom_toTopOf="@id/view_divider"
         app:layout_constraintLeft_toRightOf="@id/iv_icon_location"
         app:layout_constraintTop_toTopOf="parent" />

@@ -14,7 +14,7 @@
         android:background="@color/white"
         android:elevation="30dp"
         android:orientation="vertical"
-        android:outlineSpotShadowColor="@color/cv_shadow_grey"
+        android:outlineSpotShadowColor="@color/shadow_grey"
         app:layout_constraintBottom_toTopOf="@id/rv_search_result"
         app:layout_constraintTop_toTopOf="parent">
 
