@@ -1,6 +1,6 @@
 package yapp.android1.data.repository
 
-import yapp.android1.data.entity.AddressMapper
+import yapp.android1.data.entity.AddressResponseMapper
 import yapp.android1.data.remote.KakaoLocalApi
 import yapp.android1.domain.NetworkResult
 import yapp.android1.domain.entity.Address
@@ -18,7 +18,7 @@ class AddressRepositoryImpl(
 
             NetworkResult.Success(
                 response.documents.map {
-                    AddressMapper.toAddress(it)
+                    AddressResponseMapper.toAddress(it)
                 }
             )
         } catch (e: Exception) {
@@ -34,7 +34,7 @@ class AddressRepositoryImpl(
 
             NetworkResult.Success(
                 response.documents.map {
-                    AddressMapper.toAddress(it)
+                    AddressResponseMapper.toAddress(it)
                 }
             )
         } catch (e: Exception) {

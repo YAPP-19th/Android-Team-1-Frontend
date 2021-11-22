@@ -2,7 +2,7 @@ package yapp.android1.data.entity
 
 import yapp.android1.domain.entity.Address
 
-object AddressMapper {
+object AddressResponseMapper {
     fun toAddress(keywordDocument: KeywordDocument): Address {
         keywordDocument.apply {
             return Address(
