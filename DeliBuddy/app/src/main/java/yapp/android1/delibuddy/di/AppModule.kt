@@ -29,13 +29,11 @@ object AppModule {
     }
 
     @Provides
-    @Singleton
     fun provideAddressRepository(kakaoLocalApi: KakaoLocalApi): AddressRepository {
         return AddressRepositoryImpl(kakaoLocalApi)
     }
 
     @Provides
-    @Singleton
     fun provideSearchAddressUseCase(addressRepository: AddressRepository): SearchAddressUseCase {
         return SearchAddressUseCase(addressRepository)
     }

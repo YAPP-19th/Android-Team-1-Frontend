@@ -22,7 +22,6 @@ object NetworkModule {
     private const val BASE_URL = "https://dapi.kakao.com/"
 
     @DeliBuddyRetrofit
-    @Singleton
     @Provides
     fun provideDeliBuddyApiRetrofit(@DeliBuddyOkHttpClient okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
@@ -34,7 +33,6 @@ object NetworkModule {
 
     @KakaoRetrofit
     @Provides
-    @Singleton
     fun provideKakaoApiRetrofit(@KakaoOkHttpClient okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
@@ -44,7 +42,6 @@ object NetworkModule {
     }
 
     @KakaoOkHttpClient
-    @Singleton
     @Provides
     fun provideKakaoOkHttpClient(): OkHttpClient {
         return OkHttpClient.Builder()
@@ -58,7 +55,6 @@ object NetworkModule {
     }
 
     @DeliBuddyOkHttpClient
-    @Singleton
     @Provides
     fun provideDeliBuddyOkHttpClient(): OkHttpClient {
         return OkHttpClient.Builder()
@@ -70,20 +66,17 @@ object NetworkModule {
             .build()
     }
 
-    @Singleton
     @Provides
     fun provideNetworkHandler(retrofit: Retrofit): NetworkErrorHandler {
         return NetworkErrorHandlerImpl(retrofit)
     }
 
-    @Singleton
     @Provides
     fun provideDeliBuddyApiService(@DeliBuddyRetrofit retrofit: Retrofit): DeliBuddyApi {
         return retrofit.create(DeliBuddyApi::class.java)
     }
 
     @Provides
-    @Singleton
     fun provideKakaoApiService(@KakaoRetrofit retrofit: Retrofit): KakaoLocalApi {
         return retrofit.create(KakaoLocalApi::class.java)
     }
