@@ -9,12 +9,13 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import yapp.android1.data.interactor.NetworkErrorHandlerImpl
+import yapp.android1.data.interactor.DeliBuddyNetworkErrorHandlerImpl
+import yapp.android1.data.interactor.KakaoNetworkErrorHandlerImpl
 import yapp.android1.data.remote.DeliBuddyApi
 import yapp.android1.data.remote.KakaoLocalApi
 import yapp.android1.delibuddy.BuildConfig
-import yapp.android1.domain.interactor.NetworkErrorHandler
-import javax.inject.Singleton
+import yapp.android1.domain.interactor.DeliBuddyNetworkErrorHandler
+import yapp.android1.domain.interactor.KakaoNetworkErrorHandler
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -23,7 +24,9 @@ object NetworkModule {
 
     @DeliBuddyRetrofit
     @Provides
-    fun provideDeliBuddyApiRetrofit(@DeliBuddyOkHttpClient okHttpClient: OkHttpClient): Retrofit {
+    fun provideDeliBuddyApiRetrofit(
+        @DeliBuddyOkHttpClient okHttpClient: OkHttpClient
+    ): Retrofit {
         return Retrofit.Builder()
             .baseUrl("BASE_URL")
             .client(okHttpClient)
@@ -33,7 +36,9 @@ object NetworkModule {
 
     @KakaoRetrofit
     @Provides
-    fun provideKakaoApiRetrofit(@KakaoOkHttpClient okHttpClient: OkHttpClient): Retrofit {
+    fun provideKakaoApiRetrofit(
+        @KakaoOkHttpClient okHttpClient: OkHttpClient
+    ): Retrofit {
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
             .client(okHttpClient)
@@ -67,8 +72,17 @@ object NetworkModule {
     }
 
     @Provides
-    fun provideNetworkHandler(retrofit: Retrofit): NetworkErrorHandler {
-        return NetworkErrorHandlerImpl(retrofit)
+    fun provideDeliBuddyNetworkHandler(
+        @DeliBuddyRetrofit retrofit: Retrofit
+    ): DeliBuddyNetworkErrorHandler {
+        return DeliBuddyNetworkErrorHandlerImpl(retrofit)
+    }
+
+    @Provides
+    fun provideKaKaoNetworkErrorHandler(
+        @KakaoRetrofit retrofit: Retrofit
+    ): KakaoNetworkErrorHandler {
+        return KakaoNetworkErrorHandlerImpl(retrofit)
     }
 
     @Provides

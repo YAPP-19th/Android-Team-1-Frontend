@@ -3,6 +3,7 @@ package yapp.android1.delibuddy.ui.address.search
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
@@ -40,6 +41,12 @@ class AddressSearchFragment :
         repeatOnStarted {
             viewModel.searchResult.collect {
                 addressAdapter.updateResult(it)
+            }
+        }
+
+        repeatOnStarted {
+            viewModel.showToast.collect {
+                Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
             }
         }
     }

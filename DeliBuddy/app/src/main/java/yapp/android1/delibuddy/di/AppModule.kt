@@ -6,12 +6,13 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import retrofit2.Retrofit
 import yapp.android1.data.remote.KakaoLocalApi
 import yapp.android1.data.repository.AddressRepositoryImpl
 import yapp.android1.delibuddy.util.DispatcherProvider
+import yapp.android1.domain.interactor.KakaoNetworkErrorHandler
 import yapp.android1.domain.interactor.usecase.SearchAddressUseCase
 import yapp.android1.domain.repository.AddressRepository
-import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -29,8 +30,11 @@ object AppModule {
     }
 
     @Provides
-    fun provideAddressRepository(kakaoLocalApi: KakaoLocalApi): AddressRepository {
-        return AddressRepositoryImpl(kakaoLocalApi)
+    fun provideAddressRepository(
+        kakaoLocalApi: KakaoLocalApi,
+        kakaoNetworkErrorHandler: KakaoNetworkErrorHandler
+    ): AddressRepository {
+        return AddressRepositoryImpl(kakaoLocalApi, kakaoNetworkErrorHandler)
     }
 
     @Provides

@@ -3,11 +3,12 @@ package yapp.android1.domain.interactor.usecase
 import yapp.android1.domain.NetworkResult
 import yapp.android1.domain.entity.Address
 import yapp.android1.domain.repository.AddressRepository
+import javax.inject.Inject
 
-class SearchAddressUseCase(
+class SearchAddressUseCase @Inject constructor(
     private val addressRepository: AddressRepository
-) : BaseUseCase<List<Address>, String>() {
-    override suspend fun run(params: String): List<Address> {
+) : BaseUseCase<NetworkResult<List<Address>>, String>() {
+    override suspend fun run(params: String): NetworkResult<List<Address>> {
         val responseAddress = addressRepository.searchAddressByAddress(params)
         val responseKeyword = addressRepository.searchAddressByKeyword(params)
 
@@ -15,14 +16,14 @@ class SearchAddressUseCase(
             responseAddress is NetworkResult.Success &&
                     responseKeyword is NetworkResult.Success -> {
                 if (responseAddress.data.size > responseKeyword.data.size) {
-                    responseAddress.data + responseKeyword.data
+                    NetworkResult.Success(responseAddress.data + responseKeyword.data)
                 } else {
-                    responseKeyword.data + responseAddress.data
+                    NetworkResult.Success(responseKeyword.data + responseAddress.data)
                 }
             }
-            responseAddress is NetworkResult.Success -> responseAddress.data
-            responseKeyword is NetworkResult.Success -> responseKeyword.data
-            else -> emptyList()
+            responseAddress is NetworkResult.Success -> responseAddress
+            responseKeyword is NetworkResult.Success -> responseKeyword
+            else -> responseAddress
         }
     }
 }
