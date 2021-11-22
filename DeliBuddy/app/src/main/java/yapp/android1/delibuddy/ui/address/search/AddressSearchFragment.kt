@@ -11,7 +11,7 @@ import timber.log.Timber
 import yapp.android1.delibuddy.adapter.AddressSearchAdapter
 import yapp.android1.delibuddy.base.BaseFragment
 import yapp.android1.delibuddy.databinding.FragmentAddressSearchBinding
-import yapp.android1.delibuddy.holder.OnItemClickListener
+import yapp.android1.delibuddy.holder.OnSearchResultClickListener
 import yapp.android1.delibuddy.util.extensions.repeatOnStarted
 
 @AndroidEntryPoint
@@ -51,8 +51,8 @@ class AddressSearchFragment :
 
     private fun initRecyclerView() {
         addressAdapter = AddressSearchAdapter().apply {
-            listener = object : OnItemClickListener {
-                override fun onItemClick(position: Int) {
+            listener = object : OnSearchResultClickListener {
+                override fun onSearchResultClick(position: Int) {
 //                    actViewModel.occure
                     val address = addressAdapter.getItem(position)
                     Timber.w(address.lat.toString() + ", " + address.lon.toString())

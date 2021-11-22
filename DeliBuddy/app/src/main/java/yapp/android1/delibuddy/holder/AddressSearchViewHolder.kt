@@ -9,19 +9,19 @@ import yapp.android1.delibuddy.R
 import yapp.android1.delibuddy.databinding.ViewHolderAddressSearchResultBinding
 import yapp.android1.domain.entity.Address
 
-interface OnItemClickListener {
-    fun onItemClick(position: Int)
+interface OnSearchResultClickListener {
+    fun onSearchResultClick(position: Int)
 }
 
 class AddressSearchViewHolder(
     private val binding: ViewHolderAddressSearchResultBinding,
-    private val listener: OnItemClickListener?
+    private val listener: OnSearchResultClickListener?
 ) : RecyclerView.ViewHolder(binding.root) {
     private val context = binding.root.context
 
     init {
         binding.root.setOnClickListener {
-            listener?.onItemClick(bindingAdapterPosition)
+            listener?.onSearchResultClick(bindingAdapterPosition)
         }
     }
 

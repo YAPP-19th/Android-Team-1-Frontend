@@ -5,13 +5,13 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import yapp.android1.delibuddy.databinding.ViewHolderAddressSearchResultBinding
 import yapp.android1.delibuddy.holder.AddressSearchViewHolder
-import yapp.android1.delibuddy.holder.OnItemClickListener
+import yapp.android1.delibuddy.holder.OnSearchResultClickListener
 import yapp.android1.domain.entity.Address
 
 class AddressSearchAdapter : RecyclerView.Adapter<AddressSearchViewHolder>() {
     private var items: List<Address> = emptyList()
     var searchQuery = ""
-    var listener: OnItemClickListener? = null
+    var listener: OnSearchResultClickListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AddressSearchViewHolder {
         return AddressSearchViewHolder(
