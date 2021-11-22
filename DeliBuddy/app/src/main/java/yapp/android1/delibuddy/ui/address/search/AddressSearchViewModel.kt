@@ -39,4 +39,8 @@ class AddressSearchViewModel @Inject constructor(
 
     override suspend fun handleError(result: NetworkResult.Error, retryAction: RetryAction?) {
     }
+
+    override fun onCleared() {
+        job = null
+    }
 }
