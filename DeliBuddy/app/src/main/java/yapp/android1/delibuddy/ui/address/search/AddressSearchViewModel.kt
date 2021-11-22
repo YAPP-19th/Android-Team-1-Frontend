@@ -27,18 +27,22 @@ class AddressSearchViewModel @Inject constructor(
     override suspend fun handleEvent(event: Event) {
         when (event) {
             is AddressSearchEvent.SearchAddress -> {
-                job?.cancel()
-                job = viewModelScope.launch {
-                    when(val result = searchAddressUseCase(event.query)) {
-                        is NetworkResult.Success -> {
-                            val addressList = result.data
-                            _searchResult.value = Pair(event.query, addressList)
-                        }
+                searchAddress(event.query)
+            }
+        }
+    }
 
-                        is NetworkResult.Error -> handleError(result) {
+    private fun searchAddress(query: String) {
+        job?.cancel()
+        job = viewModelScope.launch {
+            when(val result = searchAddressUseCase(query)) {
+                is NetworkResult.Success -> {
+                    val addressList = result.data
+                    _searchResult.value = Pair(query, addressList)
+                }
 
-                        }
-                    }
+                is NetworkResult.Error -> handleError(result) {
+
                 }
             }
         }
