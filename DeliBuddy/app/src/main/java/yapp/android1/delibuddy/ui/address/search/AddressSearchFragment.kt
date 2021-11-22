@@ -11,7 +11,6 @@ import timber.log.Timber
 import yapp.android1.delibuddy.adapter.AddressSearchAdapter
 import yapp.android1.delibuddy.base.BaseFragment
 import yapp.android1.delibuddy.databinding.FragmentAddressSearchBinding
-import yapp.android1.delibuddy.holder.OnSearchResultClickListener
 import yapp.android1.delibuddy.util.extensions.repeatOnStarted
 
 @AndroidEntryPoint
@@ -20,7 +19,7 @@ class AddressSearchFragment :
     private val viewModel: AddressSearchViewModel by viewModels()
 
     //    private val actViewModel: LocationViewModel by activityViewModels()
-    private lateinit var addressAdapter: AddressSearchAdapter
+    private var addressAdapter: AddressSearchAdapter = AddressSearchAdapter()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         initRecyclerView()
@@ -45,19 +44,12 @@ class AddressSearchFragment :
         }
     }
 
-    private fun initRecyclerView() {
-        addressAdapter = AddressSearchAdapter().apply {
-            listener = object : OnSearchResultClickListener {
-                override fun onSearchResultClick(position: Int) {
-//                    actViewModel.occure
-                    val address = addressAdapter.getItem(position)
-                    Timber.w(address.lat.toString() + ", " + address.lon.toString())
-                }
-            }
+    private fun initRecyclerView() = with(binding.rvSearchResult) {
+        adapter = addressAdapter
+        layoutManager = LinearLayoutManager(activity)
+        setHasFixedSize(true)
+        addressAdapter.setItemClickListener { address ->
+            Timber.w(address.lat.toString() + ", " + address.lon.toString())
         }
-
-        binding.rvSearchResult.setHasFixedSize(true)
-        binding.rvSearchResult.adapter = addressAdapter
-        binding.rvSearchResult.layoutManager = LinearLayoutManager(activity)
     }
 }

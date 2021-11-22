@@ -5,12 +5,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import yapp.android1.delibuddy.databinding.ViewHolderAddressSearchResultBinding
 import yapp.android1.delibuddy.holder.AddressSearchViewHolder
-import yapp.android1.delibuddy.holder.OnSearchResultClickListener
 import yapp.android1.domain.entity.Address
 
 class AddressSearchAdapter : RecyclerView.Adapter<AddressSearchViewHolder>() {
+    private var searchResultClickListener: ((Address) -> Unit)? = null
     private var resultPair: Pair<String, List<Address>> = Pair("", emptyList())
-    var listener: OnSearchResultClickListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AddressSearchViewHolder {
         return AddressSearchViewHolder(
@@ -18,16 +17,21 @@ class AddressSearchAdapter : RecyclerView.Adapter<AddressSearchViewHolder>() {
                 LayoutInflater.from(parent.context),
                 parent,
                 false
-            ),
-            listener = listener
+            )
         )
     }
 
     override fun onBindViewHolder(holder: AddressSearchViewHolder, position: Int) {
-        holder.bind(position, getItem(position), resultPair.first)
+        with(holder) {
+            bind(
+                getItem(position),
+                resultPair.first,
+                searchResultClickListener!!
+            )
+        }
     }
 
-    fun getItem(position: Int): Address {
+    private fun getItem(position: Int): Address {
         return resultPair.second[position]
     }
 
@@ -42,5 +46,9 @@ class AddressSearchAdapter : RecyclerView.Adapter<AddressSearchViewHolder>() {
 
     private fun dataChanged() {
         notifyDataSetChanged()
+    }
+
+    fun setItemClickListener(listener: ((Address) -> Unit)) {
+        this.searchResultClickListener = listener
     }
 }

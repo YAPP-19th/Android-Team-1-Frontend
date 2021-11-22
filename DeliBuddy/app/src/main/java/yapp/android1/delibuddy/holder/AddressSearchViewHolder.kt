@@ -9,23 +9,16 @@ import yapp.android1.delibuddy.R
 import yapp.android1.delibuddy.databinding.ViewHolderAddressSearchResultBinding
 import yapp.android1.domain.entity.Address
 
-interface OnSearchResultClickListener {
-    fun onSearchResultClick(position: Int)
-}
-
 class AddressSearchViewHolder(
-    private val binding: ViewHolderAddressSearchResultBinding,
-    private val listener: OnSearchResultClickListener?
+    private val binding: ViewHolderAddressSearchResultBinding
 ) : RecyclerView.ViewHolder(binding.root) {
     private val context = binding.root.context
 
-    init {
-        binding.root.setOnClickListener {
-            listener?.onSearchResultClick(bindingAdapterPosition)
-        }
-    }
-
-    fun bind(position: Int, item: Address, searchQuery: String) = with(binding) {
+    fun bind(
+        item: Address,
+        searchQuery: String,
+        searchResultClickListener: ((Address) -> Unit)
+    ) = with(binding) {
         if (searchQuery.isNotBlank()) {
             val builder = SpannableStringBuilder(item.addressName)
             val startIdx = item.addressName.indexOf(searchQuery)
@@ -45,6 +38,10 @@ class AddressSearchViewHolder(
             tvAddressName.text = builder
         } else {
             tvAddressName.text = item.addressName
+        }
+
+        itemView.setOnClickListener {
+            searchResultClickListener.invoke(item)
         }
     }
 
