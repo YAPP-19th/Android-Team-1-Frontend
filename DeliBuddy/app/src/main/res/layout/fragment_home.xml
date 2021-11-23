@@ -54,7 +54,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:maxImageSize="16dp"
-        app:srcCompat="@drawable/floating_button_icon"
+        app:srcCompat="@drawable/icon_floating_button"
         app:tint="@color/white" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

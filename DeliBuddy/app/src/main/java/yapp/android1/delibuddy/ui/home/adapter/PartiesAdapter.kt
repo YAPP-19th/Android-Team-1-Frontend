@@ -49,8 +49,8 @@ class PartiesAdapter(private val onClick: (PartyEntity) -> Unit) :
                 ViewGroup.LayoutParams.WRAP_CONTENT)
             params.setMargins(0, 0, context.dpToPx(8).toInt(), 0)
 
-            makeMemberIcon(context, params, R.drawable.party_member_presence, presenceMemberNumber)
-            makeMemberIcon(context, params, R.drawable.party_member_absence, totalMemberNumber - presenceMemberNumber)
+            makeMemberIcon(context, params, R.drawable.icon_party_member_presence, presenceMemberNumber)
+            makeMemberIcon(context, params, R.drawable.icon_party_member_absence, totalMemberNumber - presenceMemberNumber)
         }
 
         private fun makeMemberIcon(
@@ -69,7 +69,7 @@ class PartiesAdapter(private val onClick: (PartyEntity) -> Unit) :
 
         private fun setDisabledUI() {
             binding.partyItem.alpha = 0.4f
-            binding.partyItem.setBackgroundColor(ContextCompat.getColor(context, R.color.light_grey_background))
+            binding.partyItem.setBackgroundColor(ContextCompat.getColor(context, R.color.block_space_grey))
         }
     }
 

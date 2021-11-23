@@ -5,7 +5,7 @@
     android:layout_height="138dp"
     android:layout_marginHorizontal="20dp"
     android:layout_marginBottom="16dp"
-    android:outlineSpotShadowColor="@color/cv_shadow_grey"
+    android:outlineSpotShadowColor="@color/shadow_grey"
     app:cardCornerRadius="10dp"
     app:cardElevation="20dp">
 
@@ -28,7 +28,7 @@
             android:layout_height="18dp"
             android:layout_marginLeft="4dp"
             android:layout_marginTop="8dp"
-            android:src="@color/black"
+            android:src="@drawable/icon_location"
             app:layout_constraintStart_toEndOf="@id/food_category_image"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -103,7 +103,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="4dp"
-            android:textColor="@color/text_grey"
+            android:textColor="@color/text_light_grey"
             app:layout_constraintBottom_toBottomOf="@id/member_icon"
             app:layout_constraintStart_toEndOf="@id/member_icon"
             app:layout_constraintTop_toTopOf="@id/member_icon" />

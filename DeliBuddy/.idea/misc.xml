@@ -10,6 +10,8 @@
         <entry key="app/src/main/res/drawable/ic_splash_logo.xml" value="0.146875" />
         <entry key="app/src/main/res/drawable/icon_delibuddy_foreground.xml" value="0.13541666666666666" />
         <entry key="app/src/main/res/drawable/icon_down_arrow.xml" value="0.27685185185185185" />
+        <entry key="app/src/main/res/drawable/icon_party_member_absence.xml" value="0.20260416666666667" />
+        <entry key="app/src/main/res/drawable/party_member_absence.xml" value="0.20260416666666667" />
         <entry key="app/src/main/res/drawable/party_member_presence.xml" value="0.22239583333333332" />
         <entry key="app/src/main/res/drawable/selector_navigation_icon_alarm.xml" value="0.21927083333333333" />
         <entry key="app/src/main/res/drawable/selector_navigation_icon_home.xml" value="0.21927083333333333" />
