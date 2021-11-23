@@ -17,7 +17,7 @@ class AddressSearchViewHolder(
     fun bind(
         item: Address,
         searchQuery: String,
-        searchResultClickListener: ((Address) -> Unit)
+        searchResultClickListener: ((Address) -> Unit)?
     ) = with(binding) {
         if (searchQuery.isNotBlank()) {
             val builder = SpannableStringBuilder(item.addressName)
@@ -41,7 +41,7 @@ class AddressSearchViewHolder(
         }
 
         itemView.setOnClickListener {
-            searchResultClickListener.invoke(item)
+            searchResultClickListener?.invoke(item)
         }
     }
 

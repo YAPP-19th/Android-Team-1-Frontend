@@ -26,7 +26,7 @@ class AddressSearchAdapter : RecyclerView.Adapter<AddressSearchViewHolder>() {
             bind(
                 getItem(position),
                 resultPair.first,
-                searchResultClickListener!!
+                searchResultClickListener
             )
         }
     }
@@ -48,7 +48,7 @@ class AddressSearchAdapter : RecyclerView.Adapter<AddressSearchViewHolder>() {
         notifyDataSetChanged()
     }
 
-    fun setItemClickListener(listener: ((Address) -> Unit)) {
+    fun setItemClickListener(listener: ((Address) -> Unit)?) {
         this.searchResultClickListener = listener
     }
 }
