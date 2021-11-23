@@ -22,6 +22,7 @@ class PartiesAdapter(private val onClick: (PartyEntity) -> Unit) :
         private val binding: IncludeLayoutPartyItemBinding,
         val onClick: (PartyEntity) -> Unit,
     ) : RecyclerView.ViewHolder(binding.root) {
+        private val context = binding.root.context
         private var currentPartyEntity: PartyEntity? = null
 
         init {
@@ -41,11 +42,9 @@ class PartiesAdapter(private val onClick: (PartyEntity) -> Unit) :
             binding.partyScheduledTime.text = "10월 5일 10시 40분"
             setMemberIcon(5, 3)
             binding.memberCount.text = "3/5"
-
         }
 
         private fun setMemberIcon(totalMemberNumber: Int, presenceMemberNumber: Int) {
-            val context = binding.root.context
             val params = LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT)
             params.setMargins(0, 0, context.dpToPx(8).toInt(), 0)
@@ -66,6 +65,11 @@ class PartiesAdapter(private val onClick: (PartyEntity) -> Unit) :
                 image.layoutParams = params
                 binding.memberIcon.addView(image)
             }
+        }
+
+        private fun setDisabledUI() {
+            binding.partyItem.alpha = 0.4f
+            binding.partyItem.setBackgroundColor(ContextCompat.getColor(context, R.color.light_grey_background))
         }
     }
 
