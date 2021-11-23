@@ -2,7 +2,7 @@ package yapp.android1.data.entity
 
 import com.google.gson.annotations.SerializedName
 
-data class ResponseAddress(
+data class AddressModel(
     @SerializedName("documents")
     val documents: List<AddressDocument>,
     @SerializedName("meta")
