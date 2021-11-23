@@ -24,9 +24,9 @@ class AddressSearchAdapter : RecyclerView.Adapter<AddressSearchViewHolder>() {
     override fun onBindViewHolder(holder: AddressSearchViewHolder, position: Int) {
         with(holder) {
             bind(
-                getItem(position),
-                resultPair.first,
-                searchResultClickListener!!
+                item = getItem(position),
+                searchQuery = resultPair.first,
+                searchResultClickListener = searchResultClickListener!!
             )
         }
     }
