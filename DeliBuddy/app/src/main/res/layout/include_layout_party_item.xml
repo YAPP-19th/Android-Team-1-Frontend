@@ -56,6 +56,19 @@
             app:layout_constraintTop_toBottomOf="@id/icon_location" />
 
         <androidx.appcompat.widget.AppCompatTextView
+            style="@style/RobotoRegular12"
+            android:layout_width="40dp"
+            android:layout_height="20dp"
+            android:layout_marginLeft="12dp"
+            android:background="@drawable/home_status_btn_radius"
+            android:gravity="center"
+            android:text="@string/party_status_onorder"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="@id/party_title"
+            app:layout_constraintStart_toEndOf="@id/party_title"
+            app:layout_constraintTop_toTopOf="@id/party_title" />
+
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/party_scheduled_time"
             style="@style/RobotoRegular14"
             android:layout_width="wrap_content"

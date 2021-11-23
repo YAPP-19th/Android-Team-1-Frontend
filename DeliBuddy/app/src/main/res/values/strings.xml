@@ -13,4 +13,5 @@
     <string name="navigation_mypage">My Page</string>
 
     <string name="party_scheduled_time">주문 예정</string>
+    <string name="party_status_onorder">주문중</string>
 </resources>

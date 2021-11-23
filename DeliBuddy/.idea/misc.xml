@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/drawable-hdpi/home_status_btn_radius.xml" value="0.20260416666666667" />
         <entry key="app/src/main/res/drawable/delibuddy_btn_radius.xml" value="0.215625" />
         <entry key="app/src/main/res/drawable/floating_button_add_party.xml" value="0.20260416666666667" />
         <entry key="app/src/main/res/drawable/floating_button_icon.xml" value="0.20260416666666667" />
@@ -19,6 +20,7 @@
         <entry key="app/src/main/res/font/roboto.xml" value="0.23645833333333333" />
         <entry key="app/src/main/res/layout/activity_home.xml" value="0.203125" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.4194453423628242" />
+        <entry key="app/src/main/res/layout/activity_party_detail.xml" value="0.22604166666666667" />
         <entry key="app/src/main/res/layout/activity_permission.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_permission_description.xml" value="0.22" />
         <entry key="app/src/main/res/layout/activity_splash.xml" value="0.11979166666666667" />
@@ -26,7 +28,7 @@
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.21487869184194963" />
         <entry key="app/src/main/res/layout/fragment_mypage.xml" value="0.20625" />
         <entry key="app/src/main/res/layout/fragment_myparty.xml" value="0.20625" />
-        <entry key="app/src/main/res/layout/include_layout_party_item.xml" value="0.23555555555555555" />
+        <entry key="app/src/main/res/layout/include_layout_party_item.xml" value="0.43797856049004597" />
         <entry key="app/src/main/res/menu/bottom_navigation_menu.xml" value="0.20625" />
       </map>
     </option>
