@@ -3,6 +3,8 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/drawable/delibuddy_btn_radius.xml" value="0.2212962962962963" />
+        <entry key="app/src/main/res/drawable/delibuddy_text_field_radius.xml" value="0.2212962962962963" />
         <entry key="app/src/main/res/drawable/ic_splash_logo.xml" value="0.146875" />
         <entry key="app/src/main/res/drawable/icon_delibuddy_foreground.xml" value="0.13541666666666666" />
         <entry key="app/src/main/res/drawable/selector_navigation_icon_alarm.xml" value="0.21927083333333333" />
@@ -11,14 +13,22 @@
         <entry key="app/src/main/res/drawable/selector_navigation_icon_myparty.xml" value="0.21927083333333333" />
         <entry key="app/src/main/res/drawable/splash_background.xml" value="0.13541666666666666" />
         <entry key="app/src/main/res/drawable/splash_background_gradient.xml" value="0.13645833333333332" />
+        <entry key="app/src/main/res/layout/activity_address.xml" value="0.33795853965737555" />
         <entry key="app/src/main/res/layout/activity_home.xml" value="0.203125" />
+        <entry key="app/src/main/res/layout/activity_location.xml" value="0.22395833333333334" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.4194453423628242" />
+        <entry key="app/src/main/res/layout/activity_party_detail.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_permission.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/activity_permission_description.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_splash.xml" value="0.11979166666666667" />
+        <entry key="app/src/main/res/layout/fragment_address_search.xml" value="0.6909479292258306" />
         <entry key="app/src/main/res/layout/fragment_alarm.xml" value="0.20625" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.178125" />
+        <entry key="app/src/main/res/layout/fragment_location_search.xml" value="0.27846436388540363" />
         <entry key="app/src/main/res/layout/fragment_mypage.xml" value="0.20625" />
         <entry key="app/src/main/res/layout/fragment_myparty.xml" value="0.20625" />
+        <entry key="app/src/main/res/layout/view_holder_address_search_result.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/view_holder_location_search_result.xml" value="0.22837806097102342" />
         <entry key="app/src/main/res/menu/bottom_navigation_menu.xml" value="0.20625" />
       </map>
     </option>
@@ -28,7 +38,7 @@
   <component name="VisualizationToolProject">
     <option name="state">
       <ProjectState>
-        <option name="scale" value="0.11979166666666667" />
+        <option name="scale" value="0.33795853965737555" />
       </ProjectState>
     </option>
   </component>
