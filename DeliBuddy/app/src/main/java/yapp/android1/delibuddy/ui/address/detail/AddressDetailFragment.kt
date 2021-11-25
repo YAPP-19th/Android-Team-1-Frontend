@@ -11,19 +11,29 @@ import dagger.hilt.android.AndroidEntryPoint
 import yapp.android1.delibuddy.R
 import yapp.android1.delibuddy.base.BaseFragment
 import yapp.android1.delibuddy.databinding.FragmentAddressDetailBinding
+import yapp.android1.domain.entity.Address
 
 @AndroidEntryPoint
 class AddressDetailFragment :
     BaseFragment<FragmentAddressDetailBinding>(FragmentAddressDetailBinding::inflate),
     OnMapReadyCallback {
     private val viewModel: AddressDetailViewModel by viewModels()
-    private val latLng = LatLng(37.54626561463918, 127.07269333978718)
 
-    //    private val actViewModel: LocationViewModel by activityViewModels()
+    private lateinit var address: Address
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        initAddressData()
+        initView()
         initMap()
         initObserve()
+    }
+
+    private fun initAddressData() {
+        address = arguments?.getSerializable("address") as Address
+    }
+
+    private fun initView() = with(binding) {
+        tvAddressDetailName.text = address.addressName
     }
 
     private fun initMap() = with(binding) {
@@ -40,10 +50,11 @@ class AddressDetailFragment :
         mapUiSettings.isTiltGesturesEnabled = false
         mapUiSettings.isRotateGesturesEnabled = false
 
-        map.cameraPosition = CameraPosition(latLng, 16.0)
+        val addressLatLng = LatLng(address.lat, address.lon)
+        map.cameraPosition = CameraPosition(addressLatLng, 16.0)
 
         val marker = Marker()
-        marker.position = latLng
+        marker.position = addressLatLng
         marker.icon = OverlayImage.fromResource(R.drawable.icon_marker)
         marker.map = map
     }

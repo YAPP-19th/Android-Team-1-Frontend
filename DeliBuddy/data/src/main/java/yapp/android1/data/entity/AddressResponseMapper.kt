@@ -9,8 +9,8 @@ object AddressResponseMapper {
                 addressName = placeName,
                 roadAddress = roadAddressName,
                 address = addressName,
-                lat = x.toDouble(),
-                lon = y.toDouble()
+                lat = y.toDouble(),
+                lon = x.toDouble()
             )
         }
     }
@@ -21,8 +21,8 @@ object AddressResponseMapper {
                 addressName = addressName,
                 roadAddress = roadAddress.addressName,
                 address = address.addressName,
-                lat = x.toDouble(),
-                lon = y.toDouble()
+                lat = y.toDouble(),
+                lon = x.toDouble()
             )
         }
     }
