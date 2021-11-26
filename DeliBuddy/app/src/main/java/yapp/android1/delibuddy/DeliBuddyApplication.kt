@@ -6,11 +6,16 @@ import com.naver.maps.map.NaverMapSdk
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 import timber.log.Timber.Forest.plant
+import yapp.android1.delibuddy.util.sharedpreferences.SharedPreferencesManager
 
 @HiltAndroidApp
 internal class DeliBuddyApplication : Application() {
+    companion object {
+        lateinit var prefs: SharedPreferencesManager
+    }
 
     override fun onCreate() {
+        prefs = SharedPreferencesManager(applicationContext)
         super.onCreate()
         NaverMapSdk.getInstance(this).client =
             NaverMapSdk.NaverCloudPlatformClient(BuildConfig.NAVER_MAP_APIKEY_ID)

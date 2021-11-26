@@ -1,5 +1,6 @@
 package yapp.android1.delibuddy.ui.address.detail
 
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
@@ -8,9 +9,13 @@ import com.naver.maps.map.*
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.OverlayImage
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
+import yapp.android1.delibuddy.DeliBuddyApplication
 import yapp.android1.delibuddy.R
 import yapp.android1.delibuddy.base.BaseFragment
 import yapp.android1.delibuddy.databinding.FragmentAddressDetailBinding
+import yapp.android1.delibuddy.util.sharedpreferences.SharedPreferenceHelper
+import yapp.android1.delibuddy.util.sharedpreferences.SharedPreferencesManager
 import yapp.android1.domain.entity.Address
 
 @AndroidEntryPoint
@@ -34,6 +39,10 @@ class AddressDetailFragment :
 
     private fun initView() = with(binding) {
         tvAddressDetailName.text = address.addressName
+
+        btnAddressDetail.setOnClickListener {
+            viewModel.occurEvent(AddressDetailEvent.SaveAddress(address))
+        }
     }
 
     private fun initMap() = with(binding) {
