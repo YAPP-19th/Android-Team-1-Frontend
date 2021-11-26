@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.commit
+import androidx.fragment.app.replace
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
@@ -14,6 +16,7 @@ import yapp.android1.delibuddy.R
 import yapp.android1.delibuddy.adapter.AddressSearchAdapter
 import yapp.android1.delibuddy.base.BaseFragment
 import yapp.android1.delibuddy.databinding.FragmentAddressSearchBinding
+import yapp.android1.delibuddy.ui.address.AddressSharedViewModel
 import yapp.android1.delibuddy.ui.address.detail.AddressDetailFragment
 import yapp.android1.delibuddy.util.extensions.repeatOnStarted
 import yapp.android1.domain.entity.Address
@@ -22,6 +25,7 @@ import yapp.android1.domain.entity.Address
 class AddressSearchFragment :
     BaseFragment<FragmentAddressSearchBinding>(FragmentAddressSearchBinding::inflate) {
     private val viewModel: AddressSearchViewModel by viewModels()
+    private val sharedViewModel: AddressSharedViewModel by activityViewModels()
 
     private var addressAdapter: AddressSearchAdapter = AddressSearchAdapter()
 
@@ -65,11 +69,10 @@ class AddressSearchFragment :
     }
 
     private fun moveToAddressDetailFragment(address: Address) {
-        requireActivity().supportFragmentManager.commit {
-            val bundle = Bundle().apply {
-                putSerializable("address", address)
-            }
-            replace(R.id.fcv_location, AddressDetailFragment::class.java, bundle)
+        sharedViewModel.selectAddress(address)
+        parentFragmentManager.commit {
+            setReorderingAllowed(true)
+            replace<AddressDetailFragment>(R.id.fcv_location)
             addToBackStack("Search")
         }
     }

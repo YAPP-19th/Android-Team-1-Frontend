@@ -1,47 +1,39 @@
 package yapp.android1.delibuddy.ui.address.detail
 
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.*
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.OverlayImage
 import dagger.hilt.android.AndroidEntryPoint
-import timber.log.Timber
-import yapp.android1.delibuddy.DeliBuddyApplication
 import yapp.android1.delibuddy.R
 import yapp.android1.delibuddy.base.BaseFragment
 import yapp.android1.delibuddy.databinding.FragmentAddressDetailBinding
-import yapp.android1.delibuddy.util.sharedpreferences.SharedPreferenceHelper
-import yapp.android1.delibuddy.util.sharedpreferences.SharedPreferencesManager
-import yapp.android1.domain.entity.Address
+import yapp.android1.delibuddy.ui.address.AddressSharedViewModel
 
 @AndroidEntryPoint
 class AddressDetailFragment :
     BaseFragment<FragmentAddressDetailBinding>(FragmentAddressDetailBinding::inflate),
     OnMapReadyCallback {
     private val viewModel: AddressDetailViewModel by viewModels()
-
-    private lateinit var address: Address
+    private val addressSharedViewModel: AddressSharedViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        initAddressData()
         initView()
         initMap()
         initObserve()
     }
 
-    private fun initAddressData() {
-        address = arguments?.getSerializable("address") as Address
-    }
-
     private fun initView() = with(binding) {
-        tvAddressDetailName.text = address.addressName
+        tvAddressDetailName.text = addressSharedViewModel.selectedAddress.value!!.addressName
 
         btnAddressDetail.setOnClickListener {
-            viewModel.occurEvent(AddressDetailEvent.SaveAddress(address))
+            viewModel.occurEvent(
+                AddressDetailEvent.SaveAddress(addressSharedViewModel.selectedAddress.value!!)
+            )
         }
     }
 
@@ -59,7 +51,11 @@ class AddressDetailFragment :
         mapUiSettings.isTiltGesturesEnabled = false
         mapUiSettings.isRotateGesturesEnabled = false
 
-        val addressLatLng = LatLng(address.lat, address.lon)
+        //val addressLatLng = LatLng(address!!.lat, address.lon)
+        val addressLatLng = LatLng(
+            addressSharedViewModel.selectedAddress.value!!.lat,
+            addressSharedViewModel.selectedAddress.value!!.lon
+        )
         map.cameraPosition = CameraPosition(addressLatLng, 16.0)
 
         val marker = Marker()

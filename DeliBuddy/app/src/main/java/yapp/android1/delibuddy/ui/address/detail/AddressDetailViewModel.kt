@@ -2,8 +2,6 @@ package yapp.android1.delibuddy.ui.address.detail
 
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import timber.log.Timber
 import yapp.android1.delibuddy.DeliBuddyApplication
 import yapp.android1.delibuddy.base.BaseViewModel
@@ -19,13 +17,10 @@ class AddressDetailViewModel @Inject constructor(
 ) : BaseViewModel<Event>() {
     private var job: Job? = null
 
-//    private val _address = MutableStateFlow<Address?>(null)
-//    val address: StateFlow<Address?> = _address
-
     override suspend fun handleEvent(event: Event) {
         when (event) {
             is AddressDetailEvent.SaveAddress -> {
-                saveAddress(address = event.address)
+                saveAddress(event.address)
             }
         }
     }
