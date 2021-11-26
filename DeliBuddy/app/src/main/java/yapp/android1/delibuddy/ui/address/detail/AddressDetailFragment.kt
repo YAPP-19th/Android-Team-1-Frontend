@@ -9,6 +9,7 @@ import com.naver.maps.map.*
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.OverlayImage
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 import yapp.android1.delibuddy.R
 import yapp.android1.delibuddy.base.BaseFragment
 import yapp.android1.delibuddy.databinding.FragmentAddressDetailBinding
@@ -47,20 +48,31 @@ class AddressDetailFragment :
 
     override fun onMapReady(map: NaverMap) {
         val mapUiSettings = map.uiSettings
-        mapUiSettings.isScrollGesturesEnabled = false
+        mapUiSettings.isScrollGesturesEnabled = true
         mapUiSettings.isTiltGesturesEnabled = false
         mapUiSettings.isRotateGesturesEnabled = false
 
-        val addressLatLng = LatLng(
-            addressSharedViewModel.selectedAddress.value!!.lat,
-            addressSharedViewModel.selectedAddress.value!!.lon
+        map.cameraPosition = CameraPosition(
+            LatLng(
+                addressSharedViewModel.selectedAddress.value!!.lat,
+                addressSharedViewModel.selectedAddress.value!!.lon
+            ),
+            16.0
         )
-        map.cameraPosition = CameraPosition(addressLatLng, 16.0)
 
         val marker = Marker()
-        marker.position = addressLatLng
+        marker.position = map.cameraPosition.target
         marker.icon = OverlayImage.fromResource(R.drawable.icon_marker)
         marker.map = map
+
+        map.addOnCameraChangeListener { _, _ ->
+            marker.position = map.cameraPosition.target
+        }
+
+        map.addOnCameraIdleListener {
+            marker.position = map.cameraPosition.target
+            Timber.w("lat: ${marker.position.latitude}, lng: ${marker.position.longitude}")
+        }
     }
 
     private fun initObserve() {
