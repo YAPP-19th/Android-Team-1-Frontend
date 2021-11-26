@@ -51,7 +51,6 @@ class AddressDetailFragment :
         mapUiSettings.isTiltGesturesEnabled = false
         mapUiSettings.isRotateGesturesEnabled = false
 
-        //val addressLatLng = LatLng(address!!.lat, address.lon)
         val addressLatLng = LatLng(
             addressSharedViewModel.selectedAddress.value!!.lat,
             addressSharedViewModel.selectedAddress.value!!.lon
