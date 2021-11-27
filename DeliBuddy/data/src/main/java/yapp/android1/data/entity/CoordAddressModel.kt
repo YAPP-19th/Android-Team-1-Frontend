@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class CoordAddressModel(
     @SerializedName("documents")
-    val coordAddressDocument: CoordAddressDocument,
+    val coordAddressDocuments: List<CoordAddressDocument>,
     @SerializedName("meta")
     val meta: CoordAddressMeta
 )

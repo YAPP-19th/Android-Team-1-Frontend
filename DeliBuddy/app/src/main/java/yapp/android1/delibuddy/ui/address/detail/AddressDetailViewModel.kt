@@ -1,7 +1,12 @@
 package yapp.android1.delibuddy.ui.address.detail
 
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import yapp.android1.delibuddy.DeliBuddyApplication
 import yapp.android1.delibuddy.base.BaseViewModel
@@ -10,17 +15,26 @@ import yapp.android1.delibuddy.model.Event
 import yapp.android1.domain.NetworkResult
 import yapp.android1.domain.entity.Address
 import yapp.android1.domain.entity.NetworkError
+import yapp.android1.domain.interactor.usecase.CoordToAddressUseCase
 import javax.inject.Inject
 
 @HiltViewModel
 class AddressDetailViewModel @Inject constructor(
+    private val coordToAddressUseCase: CoordToAddressUseCase
 ) : BaseViewModel<Event>() {
     private var job: Job? = null
+
+    private val _addressResult = MutableStateFlow<Address?>(null)
+    val addressResult: StateFlow<Address?> = _addressResult
 
     override suspend fun handleEvent(event: Event) {
         when (event) {
             is AddressDetailEvent.SaveAddress -> {
                 saveAddress(event.address)
+            }
+
+            is AddressDetailEvent.CoordToAddress -> {
+                convertCoordToAddress(event.lat, event.lng)
             }
         }
     }
@@ -31,7 +45,25 @@ class AddressDetailViewModel @Inject constructor(
         Timber.w("Save Success ${test.addressName}, lat: ${test.lat}, lon: ${test.lon}")
     }
 
+    private fun convertCoordToAddress(lat: Double, lng: Double) {
+        job?.cancel()
+        job = viewModelScope.launch {
+            when(val result = coordToAddressUseCase(doubleArrayOf(lat, lng))) {
+                is NetworkResult.Success -> {
+                    Timber.w("convert coord to address network success")
+                    val address = result.data
+                    _addressResult.value = address
+                }
+
+                is NetworkResult.Error -> handleError(result) {
+
+                }
+            }
+        }
+    }
+
     override suspend fun handleError(result: NetworkResult.Error, retryAction: RetryAction?) {
+        Timber.w("convert coord to address network error")
         when (result.errorType) {
             is NetworkError.Unknown -> {
                 showToast("알 수 없는 에러가 발생했습니다.")

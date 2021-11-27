@@ -2,6 +2,7 @@ package yapp.android1.delibuddy.ui.address.detail
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.naver.maps.geometry.LatLng
@@ -9,11 +10,13 @@ import com.naver.maps.map.*
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.OverlayImage
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 import timber.log.Timber
 import yapp.android1.delibuddy.R
 import yapp.android1.delibuddy.base.BaseFragment
 import yapp.android1.delibuddy.databinding.FragmentAddressDetailBinding
 import yapp.android1.delibuddy.ui.address.AddressSharedViewModel
+import yapp.android1.delibuddy.util.extensions.repeatOnStarted
 
 @AndroidEntryPoint
 class AddressDetailFragment :
@@ -72,10 +75,30 @@ class AddressDetailFragment :
         map.addOnCameraIdleListener {
             marker.position = map.cameraPosition.target
             Timber.w("lat: ${marker.position.latitude}, lng: ${marker.position.longitude}")
+            viewModel.occurEvent(
+                AddressDetailEvent.CoordToAddress(
+                    marker.position.latitude,
+                    marker.position.longitude
+                )
+            )
         }
     }
 
-    private fun initObserve() {
+    private fun initObserve() = with(binding) {
+        repeatOnStarted {
+            viewModel.addressResult.collect {
+                if (it != null) {
+                    tvAddressDetailName.text = it.addressName
+                } else {
+                    tvAddressDetailName.text = "다시 시도해 주세요"
+                }
+            }
+        }
 
+        repeatOnStarted {
+            viewModel.showToast.collect {
+                Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 }

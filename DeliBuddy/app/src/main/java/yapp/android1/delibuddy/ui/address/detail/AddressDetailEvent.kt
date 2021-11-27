@@ -5,4 +5,5 @@ import yapp.android1.domain.entity.Address
 
 sealed class AddressDetailEvent : Event {
     class SaveAddress(val address: Address) : AddressDetailEvent()
+    class CoordToAddress(val lat: Double, val lng: Double) : AddressDetailEvent()
 }
