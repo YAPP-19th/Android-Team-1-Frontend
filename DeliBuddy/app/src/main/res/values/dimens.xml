@@ -7,6 +7,6 @@
     <dimen name="font_size_14">14dp</dimen>
     <dimen name="font_size_16">16dp</dimen>
     <dimen name="font_size_20">20dp</dimen>
+    <dimen name="font_size_24">20dp</dimen>
 
-    <dimen name="interval_size_20">20dp</dimen>
 </resources>

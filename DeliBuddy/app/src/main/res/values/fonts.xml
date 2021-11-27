@@ -53,4 +53,8 @@
         <item name="android:textSize">@dimen/font_size_20</item>
     </style>
 
+    <style name="RobotoBold24" parent="RobotoBold">
+        <item name="android:textSize">@dimen/font_size_24</item>
+    </style>
+
 </resources>

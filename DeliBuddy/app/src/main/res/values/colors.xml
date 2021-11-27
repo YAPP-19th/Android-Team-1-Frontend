@@ -22,6 +22,8 @@
     <color name="block_space_grey">#F0F0F0</color>
     <color name="shadow_grey">#0F202020</color>
 
+    <color name="kakao_yellow">#FEE339</color>
+
     <color name="chicken_background">#FFEEDE</color>
     <color name="chinese_background"></color>
     <color name="pizza_background">#FFE3D8</color>

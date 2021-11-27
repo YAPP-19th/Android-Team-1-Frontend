@@ -2,7 +2,9 @@ package yapp.android1.delibuddy.ui.login
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.user.UserApiClient
 import yapp.android1.delibuddy.databinding.ActivityLoginBinding
 
@@ -18,16 +20,26 @@ class LoginActivity : AppCompatActivity() {
 
         context = this
 
-        loginWithKaKao()
+        loginWithKakao()
     }
 
-    private fun loginWithKaKao() {
-        binding.login.setOnClickListener {
+    val kakaoLoginCallback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
+        if(error != null) {
+            Log.e("TAG", "로그인 실패", error)
+
+        } else if(token != null) {
+            Log.i("TAG", "로그인 성공 ${token.accessToken}")
+
+        }
+    }
+
+    private fun loginWithKakao() {
+        binding.buttonKakaoLogin.setOnClickListener {
             with(UserApiClient.instance) {
                 if (isKakaoTalkLoginAvailable(context = context)) {
-                    loginWithKakaoTalk(context = context, callback = KaKaoLoginCallback.callback)
+                    loginWithKakaoTalk(context = context, callback = kakaoLoginCallback)
                 } else {
-                    loginWithKakaoAccount(context = context, callback = KaKaoLoginCallback.callback)
+                    loginWithKakaoAccount(context = context, callback = kakaoLoginCallback)
                 }
             }
         }
