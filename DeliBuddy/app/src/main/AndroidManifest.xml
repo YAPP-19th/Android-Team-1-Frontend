@@ -32,14 +32,33 @@
         <activity
             android:name=".util.permission.PermissionActivity"
             android:exported="false"
-            android:theme="@style/Theme.AppCompat.Transparent.NoActionBar"/>
+            android:theme="@style/Theme.AppCompat.Transparent.NoActionBar" />
 
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"
             android:value="${NAVER_MAP_APIKEY_ID}" />
-    </application>
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
+        <activity
+            android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="oauth"
+                    android:scheme="kakao${KAKAO_LOGIN_API_KEY}" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".ui.login.LoginActivity"
+            android:exported="true" />
+    </application>
+
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
 </manifest>

@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import dagger.hilt.android.AndroidEntryPoint
 import yapp.android1.delibuddy.databinding.ActivityPermissionDescriptionBinding
 import yapp.android1.delibuddy.ui.dialog.PermissionDialogFragment
-import yapp.android1.delibuddy.ui.home.HomeActivity
+import yapp.android1.delibuddy.ui.login.LoginActivity
 import yapp.android1.delibuddy.util.intentTo
 import yapp.android1.delibuddy.util.permission.PermissionManager
 import yapp.android1.delibuddy.util.permission.PermissionState
@@ -31,15 +31,15 @@ class PermissionDescriptionActivity : AppCompatActivity() {
                 PermissionType.LOCATION
             ) {
                 when (it) {
-                    PermissionState.GRANTED -> intentMain()
+                    PermissionState.GRANTED -> intentLogin()
                     PermissionState.DENIED -> showPermissionDeniedDialog()
                 }
             }
         }
     }
 
-    private fun intentMain() {
-        intentTo(HomeActivity::class.java)
+    private fun intentLogin() {
+        intentTo(LoginActivity::class.java)
     }
 
     private fun showPermissionDeniedDialog() {
