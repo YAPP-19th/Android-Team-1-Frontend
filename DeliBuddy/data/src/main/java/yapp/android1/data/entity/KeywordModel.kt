@@ -3,7 +3,7 @@ package yapp.android1.data.entity
 
 import com.google.gson.annotations.SerializedName
 
-data class ResponseKeyword(
+data class KeywordModel(
     @SerializedName("documents")
     val documents: List<KeywordDocument>,
     @SerializedName("meta")
