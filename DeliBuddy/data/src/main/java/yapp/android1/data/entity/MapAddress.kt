@@ -26,4 +26,20 @@ object MapAddress {
             )
         }
     }
+
+    fun toAddress(
+        lat: Double,
+        lng: Double,
+        coordAddressDocument: CoordAddressDocument
+    ): Address {
+        coordAddressDocument.apply {
+            return Address(
+                addressName = coordRoadAddress.addressName,
+                address = coordAddress.addressName,
+                roadAddress = coordRoadAddress.addressName,
+                lat = lat,
+                lon = lng
+            )
+        }
+    }
 }
