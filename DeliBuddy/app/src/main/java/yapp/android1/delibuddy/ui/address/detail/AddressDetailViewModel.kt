@@ -2,7 +2,6 @@ package yapp.android1.delibuddy.ui.address.detail
 
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -48,7 +47,7 @@ class AddressDetailViewModel @Inject constructor(
     private fun convertCoordToAddress(lat: Double, lng: Double) {
         job?.cancel()
         job = viewModelScope.launch {
-            when(val result = coordToAddressUseCase(doubleArrayOf(lat, lng))) {
+            when (val result = coordToAddressUseCase(Pair<Double, Double>(lat, lng))) {
                 is NetworkResult.Success -> {
                     Timber.w("convert coord to address network success")
                     val address = result.data

@@ -7,12 +7,12 @@ import javax.inject.Inject
 
 class CoordToAddressUseCase @Inject constructor(
     private val coordToAddressRepository: CoordToAddressRepository
-) : BaseUseCase<NetworkResult<Address>, DoubleArray>() {
+) : BaseUseCase<NetworkResult<Address>, Pair<Double, Double>>() {
     override suspend fun run(
-        params: DoubleArray
+        params: Pair<Double, Double>
     ): NetworkResult<Address> {
-        val latitude = params[0]
-        val longitude = params[1]
+        val latitude = params.first
+        val longitude = params.second
 
         return coordToAddressRepository.coordToAddress(latitude, longitude)
     }
