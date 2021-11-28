@@ -89,8 +89,14 @@ class AddressDetailFragment :
             viewModel.addressResult.collect {
                 if (it != null) {
                     tvAddressDetailName.text = it.addressName
+                    if (it.roadAddress != "") {
+                        tvAddress.text = it.roadAddress
+                    } else {
+                        tvAddress.text = it.address
+                    }
                 } else {
                     tvAddressDetailName.text = "다시 시도해 주세요"
+                    tvAddress.text = "주소를 찾을 수 없습니다"
                 }
             }
         }
