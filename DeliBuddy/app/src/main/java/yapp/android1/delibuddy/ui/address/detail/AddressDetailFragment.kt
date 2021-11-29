@@ -17,6 +17,7 @@ import yapp.android1.delibuddy.base.BaseFragment
 import yapp.android1.delibuddy.databinding.FragmentAddressDetailBinding
 import yapp.android1.delibuddy.ui.address.AddressSharedViewModel
 import yapp.android1.delibuddy.util.extensions.repeatOnStarted
+import yapp.android1.domain.entity.Address
 
 @AndroidEntryPoint
 class AddressDetailFragment :
@@ -32,7 +33,13 @@ class AddressDetailFragment :
     }
 
     private fun initView() = with(binding) {
-        tvAddressDetailName.text = addressSharedViewModel.selectedAddress.value!!.addressName
+        val addressDataFromSearchFragment: Address = addressSharedViewModel.selectedAddress.value!!
+        tvAddressDetailName.text = addressDataFromSearchFragment.addressName
+        if (addressDataFromSearchFragment.roadAddress != "") {
+            tvAddress.text = addressDataFromSearchFragment.roadAddress
+        } else {
+            tvAddress.text = addressDataFromSearchFragment.address
+        }
 
         btnAddressDetail.setOnClickListener {
             viewModel.occurEvent(
