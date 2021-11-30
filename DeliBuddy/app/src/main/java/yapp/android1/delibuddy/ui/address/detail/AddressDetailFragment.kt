@@ -10,12 +10,14 @@ import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
+import timber.log.Timber
 import yapp.android1.delibuddy.R
 import yapp.android1.delibuddy.base.BaseFragment
 import yapp.android1.delibuddy.databinding.FragmentAddressDetailBinding
 import yapp.android1.delibuddy.ui.address.AddressSharedViewModel
 import yapp.android1.delibuddy.util.extensions.repeatOnStarted
 import yapp.android1.domain.entity.Address
+import kotlin.math.abs
 
 @AndroidEntryPoint
 class AddressDetailFragment :
@@ -31,17 +33,11 @@ class AddressDetailFragment :
     }
 
     private fun initView() = with(binding) {
-        val addressDataFromSearchFragment: Address = addressSharedViewModel.selectedAddress.value!!
-        tvAddressDetailName.text = addressDataFromSearchFragment.addressName
-        if (addressDataFromSearchFragment.roadAddress != "") {
-            tvAddress.text = addressDataFromSearchFragment.roadAddress
-        } else {
-            tvAddress.text = addressDataFromSearchFragment.address
-        }
+        activateAddressView(addressSharedViewModel.selectedAddress.value)
 
         btnAddressDetail.setOnClickListener {
             viewModel.occurEvent(
-                AddressDetailEvent.SaveAddress(addressSharedViewModel.selectedAddress.value!!)
+                AddressDetailEvent.SaveAddress(addressSharedViewModel.selectedAddress.value)
             )
         }
     }
@@ -62,8 +58,8 @@ class AddressDetailFragment :
 
         map.cameraPosition = CameraPosition(
             LatLng(
-                addressSharedViewModel.selectedAddress.value!!.lat,
-                addressSharedViewModel.selectedAddress.value!!.lon
+                addressSharedViewModel.selectedAddress.value.lat,
+                addressSharedViewModel.selectedAddress.value.lon
             ),
             16.0
         )
@@ -77,17 +73,22 @@ class AddressDetailFragment :
 //                addressSharedViewModel.selectedAddress.value!!.lon
 //            )
 
-//            Timber.w("sharedAddress => lat: ${sharedAddress.latitude}, lng: ${sharedAddress.longitude}")
-//            Timber.w("marker => lat: ${marker.position.latitude}, lng: ${marker.position.longitude}")
+            Timber.w("camera => lat: ${map.cameraPosition.target.latitude}, lng: ${map.cameraPosition.target.longitude}")
+            Timber.w("search => lat: ${addressSharedViewModel.selectedAddress.value.lat}, lng: ${addressSharedViewModel.selectedAddress.value.lon}")
 
-            viewModel.occurEvent(
-                AddressDetailEvent.CoordToAddress(
+            if (!isSameCoordWithSearchResult(map.cameraPosition.target)) {
+                Timber.w("occur coord to address event")
+                viewModel.occurEvent(
+                    AddressDetailEvent.CoordToAddress(
 //                    marker.position.latitude,
 //                    marker.position.longitude
-                    map.cameraPosition.target.latitude,
-                    map.cameraPosition.target.longitude
+                        map.cameraPosition.target.latitude,
+                        map.cameraPosition.target.longitude
+                    )
                 )
-            )
+            } else {
+                activateAddressView(addressSharedViewModel.selectedAddress.value)
+            }
         }
     }
 
@@ -96,7 +97,11 @@ class AddressDetailFragment :
         repeatOnStarted {
             viewModel.addressResult.collect {
                 if (it != null) {
-                    activateAddressView(it)
+                    if (!isSameAddressWithSearchResult(it)) {
+                        activateAddressView(it)
+                    } else {
+                        activateAddressView(addressSharedViewModel.selectedAddress.value)
+                    }
                 } else {
                     deactivateAddressView()
                 }
@@ -116,6 +121,20 @@ class AddressDetailFragment :
                 Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    private fun isSameAddressWithSearchResult(address: Address): Boolean {
+        return addressSharedViewModel.selectedAddress.value.roadAddress == address.roadAddress
+                || addressSharedViewModel.selectedAddress.value.address == address.address
+    }
+
+    private fun isSameCoordWithSearchResult(latLng: LatLng): Boolean {
+        return addressSharedViewModel.selectedAddress.value.lat - latLng.latitude < abs(
+            0.000000000001
+        )
+                && addressSharedViewModel.selectedAddress.value.lon - latLng.longitude < abs(
+            0.000000000001
+        )
     }
 
     private fun activateAddressView(address: Address) = with(binding) {
