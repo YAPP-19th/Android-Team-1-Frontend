@@ -25,6 +25,7 @@ class AddressDetailFragment :
     OnMapReadyCallback {
     private val viewModel: AddressDetailViewModel by viewModels()
     private val addressSharedViewModel: AddressSharedViewModel by activityViewModels()
+    private val ABOUT_ZERO = 0.0000000000001
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         initView()
@@ -119,12 +120,9 @@ class AddressDetailFragment :
     }
 
     private fun isSameCoordWithSearchResult(latLng: LatLng): Boolean {
-        return addressSharedViewModel.selectedAddress.value.lat - latLng.latitude < abs(
-            0.000000000001
-        )
-                && addressSharedViewModel.selectedAddress.value.lng - latLng.longitude < abs(
-            0.000000000001
-        )
+        return abs(addressSharedViewModel.selectedAddress.value.lat - latLng.latitude) < ABOUT_ZERO
+                && abs(addressSharedViewModel.selectedAddress.value.lng - latLng.longitude) < ABOUT_ZERO
+
     }
 
     private fun activateAddressView(address: Address) = with(binding) {
