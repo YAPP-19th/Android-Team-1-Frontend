@@ -19,9 +19,9 @@
 
         <ImageView
             android:id="@+id/iv_icon_exit"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginStart="20dp"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:scaleType="center"
             android:src="@drawable/icon_exit"
             app:layout_constraintBottom_toBottomOf="@id/cl_address_detail_title"
             app:layout_constraintLeft_toLeftOf="@id/cl_address_detail_title"
@@ -33,7 +33,6 @@
             style="@style/RobotoBold16"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
             android:text="주소 설정"
             android:textColor="@color/text_black"
             app:layout_constraintBottom_toBottomOf="@id/cl_address_detail_title"
