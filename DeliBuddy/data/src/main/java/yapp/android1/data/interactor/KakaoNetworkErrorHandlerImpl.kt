@@ -4,14 +4,13 @@ import retrofit2.HttpException
 import retrofit2.Response
 import retrofit2.Retrofit
 import yapp.android1.domain.entity.NetworkError
-import yapp.android1.domain.interactor.DeliBuddyNetworkErrorHandler
+import yapp.android1.domain.interactor.KakaoNetworkErrorHandler
 import java.net.SocketTimeoutException
 import javax.inject.Inject
 
-
-class DeliBuddyNetworkErrorHandlerImpl @Inject constructor(
+class KakaoNetworkErrorHandlerImpl @Inject constructor(
     private val retrofit: Retrofit
-) : DeliBuddyNetworkErrorHandler {
+) : KakaoNetworkErrorHandler {
 
     override fun getError(exception: Throwable): NetworkError {
         return when (exception) {
