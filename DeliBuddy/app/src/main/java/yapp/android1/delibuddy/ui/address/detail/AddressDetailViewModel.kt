@@ -26,6 +26,9 @@ class AddressDetailViewModel @Inject constructor(
     private val _addressResult = MutableStateFlow<Address?>(null)
     val addressResult: StateFlow<Address?> = _addressResult
 
+    private val _isActivate = MutableStateFlow<Boolean>(true)
+    val isActivate: StateFlow<Boolean> = _isActivate
+
     override suspend fun handleEvent(event: Event) {
         when (event) {
             is AddressDetailEvent.SaveAddress -> {
@@ -40,6 +43,8 @@ class AddressDetailViewModel @Inject constructor(
 
     private fun saveAddress(address: Address) {
         DeliBuddyApplication.prefs.saveUserAddress(address)
+
+        // save address test
         val test = DeliBuddyApplication.prefs.getCurrentUserAddress()
         Timber.w("Save Success ${test.addressName}, lat: ${test.lat}, lon: ${test.lon}")
     }
@@ -50,6 +55,7 @@ class AddressDetailViewModel @Inject constructor(
             when (val result = coordToAddressUseCase(Pair<Double, Double>(lat, lng))) {
                 is NetworkResult.Success -> {
                     Timber.w("convert coord to address network success")
+                    _isActivate.value = true
                     val address = result.data
                     _addressResult.value = address
                 }
@@ -63,6 +69,8 @@ class AddressDetailViewModel @Inject constructor(
 
     override suspend fun handleError(result: NetworkResult.Error, retryAction: RetryAction?) {
         Timber.w("convert coord to address network error")
+        _isActivate.value = false
+
         when (result.errorType) {
             is NetworkError.Unknown -> {
                 showToast("알 수 없는 에러가 발생했습니다.")

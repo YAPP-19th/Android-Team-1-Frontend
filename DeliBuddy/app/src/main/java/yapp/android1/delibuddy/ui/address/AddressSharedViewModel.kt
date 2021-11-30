@@ -8,8 +8,16 @@ import yapp.android1.domain.NetworkResult
 import yapp.android1.domain.entity.Address
 
 class AddressSharedViewModel : BaseViewModel<Event>() {
-    private var _selectedAddress = MutableStateFlow<Address?>(null)
-    val selectedAddress: MutableStateFlow<Address?> = _selectedAddress
+    private var _selectedAddress = MutableStateFlow<Address>(
+        Address(
+            addressName = "서울역",
+            roadAddress = "서울특별시 중구 한강대로 405",
+            address = "",
+            lat = 37.5283169,
+            lon = 126.9294254
+        )
+    )
+    val selectedAddress: MutableStateFlow<Address> = _selectedAddress
 
     fun selectAddress(address: Address) {
         _selectedAddress.value = address

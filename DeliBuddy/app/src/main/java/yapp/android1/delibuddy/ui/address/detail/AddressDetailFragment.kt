@@ -3,15 +3,13 @@ package yapp.android1.delibuddy.ui.address.detail
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.*
-import com.naver.maps.map.overlay.Marker
-import com.naver.maps.map.overlay.OverlayImage
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
-import timber.log.Timber
 import yapp.android1.delibuddy.R
 import yapp.android1.delibuddy.base.BaseFragment
 import yapp.android1.delibuddy.databinding.FragmentAddressDetailBinding
@@ -70,40 +68,45 @@ class AddressDetailFragment :
             16.0
         )
 
-        val marker = Marker()
-        marker.position = map.cameraPosition.target
-        marker.icon = OverlayImage.fromResource(R.drawable.icon_marker)
-        marker.map = map
-
-        map.addOnCameraChangeListener { _, _ ->
-            marker.position = map.cameraPosition.target
-        }
-
         map.addOnCameraIdleListener {
-            marker.position = map.cameraPosition.target
-            Timber.w("lat: ${marker.position.latitude}, lng: ${marker.position.longitude}")
+//            marker.position = map.cameraPosition.target
+//            Timber.w("lat: ${marker.position.latitude}, lng: ${marker.position.longitude}")
+//
+//            val sharedAddress = LatLng(
+//                addressSharedViewModel.selectedAddress.value!!.lat,
+//                addressSharedViewModel.selectedAddress.value!!.lon
+//            )
+
+//            Timber.w("sharedAddress => lat: ${sharedAddress.latitude}, lng: ${sharedAddress.longitude}")
+//            Timber.w("marker => lat: ${marker.position.latitude}, lng: ${marker.position.longitude}")
+
             viewModel.occurEvent(
                 AddressDetailEvent.CoordToAddress(
-                    marker.position.latitude,
-                    marker.position.longitude
+//                    marker.position.latitude,
+//                    marker.position.longitude
+                    map.cameraPosition.target.latitude,
+                    map.cameraPosition.target.longitude
                 )
             )
         }
     }
 
+
     private fun initObserve() = with(binding) {
         repeatOnStarted {
             viewModel.addressResult.collect {
                 if (it != null) {
-                    tvAddressDetailName.text = it.addressName
-                    if (it.roadAddress != "") {
-                        tvAddress.text = it.roadAddress
-                    } else {
-                        tvAddress.text = it.address
-                    }
+                    activateAddressView(it)
                 } else {
-                    tvAddressDetailName.text = "다시 시도해 주세요"
-                    tvAddress.text = "주소를 찾을 수 없습니다"
+                    deactivateAddressView()
+                }
+            }
+        }
+
+        repeatOnStarted {
+            viewModel.isActivate.collect {
+                if (!it) {
+                    deactivateAddressView()
                 }
             }
         }
@@ -113,5 +116,37 @@ class AddressDetailFragment :
                 Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    private fun activateAddressView(address: Address) = with(binding) {
+        tvAddressDetailName.text = address.addressName
+
+        if (address.roadAddress != "") {
+            tvAddress.text = address.roadAddress
+        } else {
+            tvAddress.text = address.address
+        }
+
+        etAddressDetail.isFocusableInTouchMode = true
+        etAddressDetail.isFocusable = true
+
+        btnAddressDetail.background =
+            ContextCompat.getDrawable(requireContext(), R.drawable.delibuddy_btn_radius)
+        btnAddressDetail.isClickable = true
+        btnAddressDetail.isEnabled = true
+    }
+
+    private fun deactivateAddressView() = with(binding) {
+        tvAddressDetailName.text = "위치를 다시 지정해 주세요"
+
+        tvAddress.text = "주소 정보가 없습니다"
+
+        etAddressDetail.isClickable = false
+        etAddressDetail.isFocusable = false
+
+        btnAddressDetail.background =
+            ContextCompat.getDrawable(requireContext(), R.drawable.delibuddy_btn_radius_deactivate)
+        btnAddressDetail.isClickable = false
+        btnAddressDetail.isEnabled = false
     }
 }
