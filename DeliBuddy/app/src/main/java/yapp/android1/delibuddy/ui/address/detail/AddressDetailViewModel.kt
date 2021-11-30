@@ -11,6 +11,8 @@ import yapp.android1.delibuddy.DeliBuddyApplication
 import yapp.android1.delibuddy.base.BaseViewModel
 import yapp.android1.delibuddy.base.RetryAction
 import yapp.android1.delibuddy.model.Event
+import yapp.android1.delibuddy.util.EventFlow
+import yapp.android1.delibuddy.util.MutableEventFlow
 import yapp.android1.domain.NetworkResult
 import yapp.android1.domain.entity.Address
 import yapp.android1.domain.entity.NetworkError
@@ -26,8 +28,8 @@ class AddressDetailViewModel @Inject constructor(
     private val _addressResult = MutableStateFlow<Address?>(null)
     val addressResult: StateFlow<Address?> = _addressResult
 
-    private val _isActivate = MutableStateFlow<Boolean>(true)
-    val isActivate: StateFlow<Boolean> = _isActivate
+    private val _isActivate = MutableEventFlow<Boolean>()
+    val isActivate: EventFlow<Boolean> = _isActivate
 
     override suspend fun handleEvent(event: Event) {
         when (event) {
@@ -54,7 +56,7 @@ class AddressDetailViewModel @Inject constructor(
         job = viewModelScope.launch {
             when (val result = coordToAddressUseCase(Pair<Double, Double>(lat, lng))) {
                 is NetworkResult.Success -> {
-                    _isActivate.value = true
+                    Timber.w("success to convert")
                     _addressResult.value = result.data
                 }
 
@@ -66,7 +68,8 @@ class AddressDetailViewModel @Inject constructor(
     }
 
     override suspend fun handleError(result: NetworkResult.Error, retryAction: RetryAction?) {
-        _isActivate.value = false
+        _isActivate.emit(false)
+        Timber.w("fail to convert")
 
         when (result.errorType) {
             is NetworkError.Unknown -> {

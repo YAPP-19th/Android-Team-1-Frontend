@@ -25,7 +25,7 @@ class AddressDetailFragment :
     OnMapReadyCallback {
     private val viewModel: AddressDetailViewModel by viewModels()
     private val addressSharedViewModel: AddressSharedViewModel by activityViewModels()
-    private val ABOUT_ZERO = 0.0000000000001
+    private val ABOUT_ZERO = 0.000000000001
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         initView()
@@ -66,11 +66,7 @@ class AddressDetailFragment :
         )
 
         map.addOnCameraIdleListener {
-            Timber.w("camera => lat: ${map.cameraPosition.target.latitude}, lng: ${map.cameraPosition.target.longitude}")
-            Timber.w("search => lat: ${addressSharedViewModel.selectedAddress.value.lat}, lng: ${addressSharedViewModel.selectedAddress.value.lng}")
-
             if (!isSameCoordWithSearchResult(map.cameraPosition.target)) {
-                Timber.w("occur coord to address event")
                 viewModel.occurEvent(
                     AddressDetailEvent.CoordToAddress(
                         map.cameraPosition.target.latitude,
@@ -86,23 +82,21 @@ class AddressDetailFragment :
 
     private fun initObserve() = with(binding) {
         repeatOnStarted {
+            viewModel.isActivate.collect {
+                if (!it) deactivateAddressView()
+            }
+        }
+
+        repeatOnStarted {
             viewModel.addressResult.collect {
-                if (it != null) {
+                if (it == null) {
+                    deactivateAddressView()
+                } else {
                     if (!isSameAddressWithSearchResult(it)) {
                         activateAddressView(it)
                     } else {
                         activateAddressView(addressSharedViewModel.selectedAddress.value)
                     }
-                } else {
-                    deactivateAddressView()
-                }
-            }
-        }
-
-        repeatOnStarted {
-            viewModel.isActivate.collect {
-                if (!it) {
-                    deactivateAddressView()
                 }
             }
         }
