@@ -10,7 +10,7 @@ object MapAddress {
                 roadAddress = roadAddressName,
                 address = addressName,
                 lat = y.toDouble(),
-                lon = x.toDouble()
+                lng = x.toDouble()
             )
         }
     }
@@ -22,7 +22,7 @@ object MapAddress {
                 roadAddress = roadAddress.addressName,
                 address = address.addressName,
                 lat = y.toDouble(),
-                lon = x.toDouble()
+                lng = x.toDouble()
             )
         }
     }
@@ -38,7 +38,7 @@ object MapAddress {
                 address = coordAddress.addressName,
                 roadAddress = coordRoadAddress.addressName,
                 lat = lat,
-                lon = lng
+                lng = lng
             )
         }
     }

@@ -46,7 +46,7 @@ class AddressDetailViewModel @Inject constructor(
 
         // save address test
         val test = DeliBuddyApplication.prefs.getCurrentUserAddress()
-        Timber.w("Save Success ${test.addressName}, lat: ${test.lat}, lon: ${test.lon}")
+        Timber.w("Save Success ${test.addressName}, lat: ${test.lat}, lon: ${test.lng}")
     }
 
     private fun convertCoordToAddress(lat: Double, lng: Double) {
@@ -54,10 +54,8 @@ class AddressDetailViewModel @Inject constructor(
         job = viewModelScope.launch {
             when (val result = coordToAddressUseCase(Pair<Double, Double>(lat, lng))) {
                 is NetworkResult.Success -> {
-                    Timber.w("convert coord to address network success")
                     _isActivate.value = true
-                    val address = result.data
-                    _addressResult.value = address
+                    _addressResult.value = result.data
                 }
 
                 is NetworkResult.Error -> handleError(result) {
@@ -68,7 +66,6 @@ class AddressDetailViewModel @Inject constructor(
     }
 
     override suspend fun handleError(result: NetworkResult.Error, retryAction: RetryAction?) {
-        Timber.w("convert coord to address network error")
         _isActivate.value = false
 
         when (result.errorType) {

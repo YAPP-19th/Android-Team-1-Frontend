@@ -63,7 +63,7 @@ class AddressSearchFragment :
         layoutManager = LinearLayoutManager(activity)
         setHasFixedSize(true)
         addressAdapter.setItemClickListener { address ->
-            Timber.w(address.lat.toString() + ", " + address.lon.toString())
+            Timber.w(address.lat.toString() + ", " + address.lng.toString())
             moveToAddressDetailFragment(address)
         }
     }

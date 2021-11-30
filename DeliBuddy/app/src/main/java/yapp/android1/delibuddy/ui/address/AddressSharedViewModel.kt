@@ -14,7 +14,7 @@ class AddressSharedViewModel : BaseViewModel<Event>() {
             roadAddress = "서울특별시 중구 한강대로 405",
             address = "",
             lat = 37.5283169,
-            lon = 126.9294254
+            lng = 126.9294254
         )
     )
     val selectedAddress: MutableStateFlow<Address> = _selectedAddress

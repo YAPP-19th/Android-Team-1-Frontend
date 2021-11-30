@@ -14,7 +14,7 @@ class SharedPreferencesManager(context: Context) {
         prefs["address"] = address.address
         prefs["roadAddress"] = address.roadAddress
         prefs["lat"] = address.lat
-        prefs["lon"] = address.lon
+        prefs["lon"] = address.lng
     }
 
     fun getCurrentUserAddress(): Address {
@@ -23,7 +23,7 @@ class SharedPreferencesManager(context: Context) {
             address = prefs["address", "주소를 입력해 주세요"],
             roadAddress = prefs["roadAddress", "주소를 입력해 주세요"],
             lat = prefs["lat", 0.0],
-            lon = prefs["lon", 0.0]
+            lng = prefs["lon", 0.0]
         )
     }
 }

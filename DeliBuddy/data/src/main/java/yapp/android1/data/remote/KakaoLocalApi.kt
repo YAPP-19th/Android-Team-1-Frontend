@@ -22,5 +22,5 @@ interface KakaoLocalApi {
     suspend fun coordToAddress(
         @Query("x") lng: String,
         @Query("y") lat: String
-    ) : CoordAddressModel
+    ): CoordAddressModel
 }

@@ -59,29 +59,19 @@ class AddressDetailFragment :
         map.cameraPosition = CameraPosition(
             LatLng(
                 addressSharedViewModel.selectedAddress.value.lat,
-                addressSharedViewModel.selectedAddress.value.lon
+                addressSharedViewModel.selectedAddress.value.lng
             ),
             16.0
         )
 
         map.addOnCameraIdleListener {
-//            marker.position = map.cameraPosition.target
-//            Timber.w("lat: ${marker.position.latitude}, lng: ${marker.position.longitude}")
-//
-//            val sharedAddress = LatLng(
-//                addressSharedViewModel.selectedAddress.value!!.lat,
-//                addressSharedViewModel.selectedAddress.value!!.lon
-//            )
-
             Timber.w("camera => lat: ${map.cameraPosition.target.latitude}, lng: ${map.cameraPosition.target.longitude}")
-            Timber.w("search => lat: ${addressSharedViewModel.selectedAddress.value.lat}, lng: ${addressSharedViewModel.selectedAddress.value.lon}")
+            Timber.w("search => lat: ${addressSharedViewModel.selectedAddress.value.lat}, lng: ${addressSharedViewModel.selectedAddress.value.lng}")
 
             if (!isSameCoordWithSearchResult(map.cameraPosition.target)) {
                 Timber.w("occur coord to address event")
                 viewModel.occurEvent(
                     AddressDetailEvent.CoordToAddress(
-//                    marker.position.latitude,
-//                    marker.position.longitude
                         map.cameraPosition.target.latitude,
                         map.cameraPosition.target.longitude
                     )
@@ -132,7 +122,7 @@ class AddressDetailFragment :
         return addressSharedViewModel.selectedAddress.value.lat - latLng.latitude < abs(
             0.000000000001
         )
-                && addressSharedViewModel.selectedAddress.value.lon - latLng.longitude < abs(
+                && addressSharedViewModel.selectedAddress.value.lng - latLng.longitude < abs(
             0.000000000001
         )
     }

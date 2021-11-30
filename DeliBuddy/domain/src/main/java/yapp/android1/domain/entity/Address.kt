@@ -7,5 +7,5 @@ data class Address(
     val roadAddress: String,
     val address: String,
     val lat: Double,
-    val lon: Double
+    val lng: Double
 ) : Serializable

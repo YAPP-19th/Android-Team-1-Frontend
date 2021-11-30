@@ -82,7 +82,7 @@
 
         <TextView
             android:id="@+id/tv_address_tag"
-            style="@style/RobotoRegular11"
+            style="@style/RobotoRegular10"
             android:layout_width="32dp"
             android:layout_height="16dp"
             android:layout_marginStart="20dp"
