@@ -12,9 +12,9 @@ class CoordToAddressRepositoryImpl @Inject constructor(
     private val api: KakaoLocalApi,
     private val kakaoNetworkErrorHandler: KakaoNetworkErrorHandler
 ) : CoordToAddressRepository {
-    override suspend fun coordToAddress(lat: Double, lng: Double): NetworkResult<Address> {
+    override suspend fun convertCoordToAddress(lat: Double, lng: Double): NetworkResult<Address> {
         return try {
-            val response = api.coordToAddress(lng = lng.toString(), lat = lat.toString())
+            val response = api.convertCoordToAddress(lng = lng.toString(), lat = lat.toString())
 
             NetworkResult.Success(
                 MapAddress.toAddress(lat, lng, response.coordAddressDocuments[0])

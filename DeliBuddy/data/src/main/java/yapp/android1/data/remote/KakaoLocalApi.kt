@@ -19,7 +19,7 @@ interface KakaoLocalApi {
     ): AddressModel
 
     @GET("/v2/local/geo/coord2address.json")
-    suspend fun coordToAddress(
+    suspend fun convertCoordToAddress(
         @Query("x") lng: String,
         @Query("y") lat: String
     ): CoordAddressModel

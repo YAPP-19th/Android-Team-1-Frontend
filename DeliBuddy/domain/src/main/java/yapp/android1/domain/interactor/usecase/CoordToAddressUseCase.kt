@@ -5,15 +5,17 @@ import yapp.android1.domain.entity.Address
 import yapp.android1.domain.repository.CoordToAddressRepository
 import javax.inject.Inject
 
+typealias LatLngPair = Pair<Double, Double>
+
 class CoordToAddressUseCase @Inject constructor(
     private val coordToAddressRepository: CoordToAddressRepository
-) : BaseUseCase<NetworkResult<Address>, Pair<Double, Double>>() {
+) : BaseUseCase<NetworkResult<Address>, LatLngPair>() {
     override suspend fun run(
-        params: Pair<Double, Double>
+        params: LatLngPair
     ): NetworkResult<Address> {
         val latitude = params.first
         val longitude = params.second
 
-        return coordToAddressRepository.coordToAddress(latitude, longitude)
+        return coordToAddressRepository.convertCoordToAddress(latitude, longitude)
     }
 }

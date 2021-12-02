@@ -19,6 +19,11 @@ import yapp.android1.domain.entity.NetworkError
 import yapp.android1.domain.interactor.usecase.CoordToAddressUseCase
 import javax.inject.Inject
 
+sealed class AddressDetailEvent : Event {
+    class SaveAddress(val address: Address) : AddressDetailEvent()
+    class CoordToAddress(val lat: Double, val lng: Double) : AddressDetailEvent()
+}
+
 @HiltViewModel
 class AddressDetailViewModel @Inject constructor(
     private val coordToAddressUseCase: CoordToAddressUseCase
@@ -91,5 +96,6 @@ class AddressDetailViewModel @Inject constructor(
 
     override fun onCleared() {
         job = null
+        super.onCleared()
     }
 }

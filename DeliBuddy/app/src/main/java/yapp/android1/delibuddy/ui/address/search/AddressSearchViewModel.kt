@@ -15,6 +15,10 @@ import yapp.android1.domain.entity.NetworkError
 import yapp.android1.domain.interactor.usecase.SearchAddressUseCase
 import javax.inject.Inject
 
+sealed class AddressSearchEvent : Event {
+    class SearchAddress(val query: String) : AddressSearchEvent()
+}
+
 @HiltViewModel
 class AddressSearchViewModel @Inject constructor(
     private val searchAddressUseCase: SearchAddressUseCase
@@ -69,5 +73,6 @@ class AddressSearchViewModel @Inject constructor(
 
     override fun onCleared() {
         job = null
+        super.onCleared()
     }
 }

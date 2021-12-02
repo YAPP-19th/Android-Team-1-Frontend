@@ -16,6 +16,7 @@ import yapp.android1.delibuddy.R
 import yapp.android1.delibuddy.adapter.AddressSearchAdapter
 import yapp.android1.delibuddy.base.BaseFragment
 import yapp.android1.delibuddy.databinding.FragmentAddressSearchBinding
+import yapp.android1.delibuddy.ui.address.AddressSharedEvent
 import yapp.android1.delibuddy.ui.address.AddressSharedViewModel
 import yapp.android1.delibuddy.ui.address.detail.AddressDetailFragment
 import yapp.android1.delibuddy.util.extensions.repeatOnStarted
@@ -69,7 +70,7 @@ class AddressSearchFragment :
     }
 
     private fun moveToAddressDetailFragment(address: Address) {
-        sharedViewModel.selectAddress(address)
+        sharedViewModel.occurEvent(AddressSharedEvent.SelectAddress(address))
         parentFragmentManager.commit {
             setReorderingAllowed(true)
             replace<AddressDetailFragment>(R.id.fcv_location)

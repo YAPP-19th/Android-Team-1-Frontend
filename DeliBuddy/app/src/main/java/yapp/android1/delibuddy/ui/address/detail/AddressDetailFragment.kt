@@ -10,6 +10,7 @@ import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.isActive
 import timber.log.Timber
 import yapp.android1.delibuddy.R
 import yapp.android1.delibuddy.base.BaseFragment
@@ -82,18 +83,18 @@ class AddressDetailFragment :
 
     private fun initObserve() = with(binding) {
         repeatOnStarted {
-            viewModel.isActivate.collect {
-                if (!it) deactivateAddressView()
+            viewModel.isActivate.collect { isActivate ->
+                if (!isActivate) deactivateAddressView()
             }
         }
 
         repeatOnStarted {
-            viewModel.addressResult.collect {
-                if (it == null) {
+            viewModel.addressResult.collect { address ->
+                if (address == null) {
                     deactivateAddressView()
                 } else {
-                    if (!isSameAddressWithSearchResult(it)) {
-                        activateAddressView(it)
+                    if (!isSameAddressWithSearchResult(address)) {
+                        activateAddressView(address)
                     } else {
                         activateAddressView(addressSharedViewModel.selectedAddress.value)
                     }
@@ -102,8 +103,8 @@ class AddressDetailFragment :
         }
 
         repeatOnStarted {
-            viewModel.showToast.collect {
-                Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+            viewModel.showToast.collect { toastMsg ->
+                Toast.makeText(context, toastMsg, Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -122,7 +123,7 @@ class AddressDetailFragment :
     private fun activateAddressView(address: Address) = with(binding) {
         tvAddressDetailName.text = address.addressName
 
-        if (address.roadAddress != "") {
+        if (address.roadAddress.isNotBlank()) {
             tvAddress.text = address.roadAddress
         } else {
             tvAddress.text = address.address

@@ -4,5 +4,5 @@ import yapp.android1.domain.NetworkResult
 import yapp.android1.domain.entity.Address
 
 interface CoordToAddressRepository {
-    suspend fun coordToAddress(lat: Double, lng: Double): NetworkResult<Address>
+    suspend fun convertCoordToAddress(lat: Double, lng: Double): NetworkResult<Address>
 }
