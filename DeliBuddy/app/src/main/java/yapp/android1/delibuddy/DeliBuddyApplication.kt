@@ -15,8 +15,8 @@ internal class DeliBuddyApplication : Application() {
     }
 
     override fun onCreate() {
-        prefs = SharedPreferencesManager(applicationContext)
         super.onCreate()
+        prefs = SharedPreferencesManager(applicationContext)
         NaverMapSdk.getInstance(this).client =
             NaverMapSdk.NaverCloudPlatformClient(BuildConfig.NAVER_MAP_APIKEY_ID)
 
