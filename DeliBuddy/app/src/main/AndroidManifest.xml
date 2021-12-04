@@ -11,8 +11,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DeliBuddy">
         <activity
-            android:exported="true"
+            android:exported="false"
+            android:name=".ui.partyDetail.PartyDetailActivity" />
+        <activity
             android:name=".ui.splash.SplashActivity"
+            android:exported="true"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,23 +24,22 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.home.HomeActivity" />
+
         <activity
-            android:exported="false"
-            android:name=".ui.partyInformation.PartyInformationActivity" />
+            android:name=".ui.permission.PermissionDescriptionActivity"
+            android:exported="false" />
+
         <activity
-            android:exported="false"
-            android:name=".ui.permission.PermissionDescriptionActivity" />
-        <activity
-            android:exported="false"
             android:name=".util.permission.PermissionActivity"
-            android:theme="@style/Theme.AppCompat.Transparent.NoActionBar" />
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.Transparent.NoActionBar"/>
 
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"
             android:value="${NAVER_MAP_APIKEY_ID}" />
     </application>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
 </manifest>
