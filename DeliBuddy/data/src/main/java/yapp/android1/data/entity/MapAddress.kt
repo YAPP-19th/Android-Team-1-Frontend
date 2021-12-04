@@ -9,8 +9,8 @@ object MapAddress {
                 addressName = placeName,
                 roadAddress = roadAddressName,
                 address = addressName,
-                lat = x.toDouble(),
-                lon = y.toDouble()
+                lat = y.toDouble(),
+                lng = x.toDouble()
             )
         }
     }
@@ -21,8 +21,24 @@ object MapAddress {
                 addressName = addressName,
                 roadAddress = roadAddress.addressName,
                 address = address.addressName,
-                lat = x.toDouble(),
-                lon = y.toDouble()
+                lat = y.toDouble(),
+                lng = x.toDouble()
+            )
+        }
+    }
+
+    fun toAddress(
+        lat: Double,
+        lng: Double,
+        coordAddressDocument: CoordAddressDocument
+    ): Address {
+        coordAddressDocument.apply {
+            return Address(
+                addressName = coordRoadAddress.addressName,
+                address = coordAddress.addressName,
+                roadAddress = coordRoadAddress.addressName,
+                lat = lat,
+                lng = lng
             )
         }
     }

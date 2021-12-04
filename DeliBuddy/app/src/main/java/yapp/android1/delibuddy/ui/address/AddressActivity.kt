@@ -7,7 +7,6 @@ import yapp.android1.delibuddy.R
 
 @AndroidEntryPoint
 class AddressActivity : AppCompatActivity() {
-    //    private val viewModel: LocationViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_address)
