@@ -2,17 +2,45 @@ package yapp.android1.delibuddy.ui.partyInformation
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.activity.viewModels
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 import yapp.android1.delibuddy.R
 import yapp.android1.delibuddy.databinding.ActivityPartyInformationBinding
+import yapp.android1.delibuddy.model.Party
+import yapp.android1.delibuddy.ui.partyInformation.PartyInformationViewModel.PartyInformationEvent.OnIntent
+import yapp.android1.delibuddy.util.extensions.repeatOnStarted
 
 @AndroidEntryPoint
 class PartyInformationActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPartyInformationBinding
 
+    private val viewModel by viewModels<PartyInformationViewModel>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_party_information)
+        binding = ActivityPartyInformationBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        initializeSetup()
+        collectData()
+    }
+
+    private fun initializeSetup() {
+        val intentData = intent.getSerializableExtra("party") as Party
+        viewModel.occurEvent(OnIntent(intentData))
+    }
+
+    private fun collectData() {
+        repeatOnStarted {
+            viewModel.party.collect { party ->
+                renderView(party)
+            }
+        }
+    }
+
+    private fun renderView(party: Party) = with(binding) {
+
     }
 }
