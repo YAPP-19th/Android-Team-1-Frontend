@@ -1,16 +1,16 @@
-package yapp.android1.domain.entity
+package yapp.android1.data.entity
 
 
-data class CommentEntity(
+data class CommentModel(
     val id: Int,
     val parentId: Int?,
     val partyId: Int,
-    val writer: WriterEntity,
+    val writer: WriterModel,
     val body: String,
     val createAt: String,
-    val childComment: List<CommentEntity>?
+    val childComment: List<CommentModel>?
 ) {
-    data class WriterEntity(
+    data class WriterModel(
         val nickName: String,
         val profileImage: String
     )
