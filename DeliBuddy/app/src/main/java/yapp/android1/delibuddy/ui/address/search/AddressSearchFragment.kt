@@ -4,22 +4,30 @@ import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.commit
+import androidx.fragment.app.replace
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import timber.log.Timber
+import yapp.android1.delibuddy.R
 import yapp.android1.delibuddy.adapter.AddressSearchAdapter
 import yapp.android1.delibuddy.base.BaseFragment
 import yapp.android1.delibuddy.databinding.FragmentAddressSearchBinding
+import yapp.android1.delibuddy.ui.address.AddressSharedEvent
+import yapp.android1.delibuddy.ui.address.AddressSharedViewModel
+import yapp.android1.delibuddy.ui.address.detail.AddressDetailFragment
 import yapp.android1.delibuddy.util.extensions.repeatOnStarted
+import yapp.android1.domain.entity.Address
 
 @AndroidEntryPoint
 class AddressSearchFragment :
     BaseFragment<FragmentAddressSearchBinding>(FragmentAddressSearchBinding::inflate) {
     private val viewModel: AddressSearchViewModel by viewModels()
+    private val sharedViewModel: AddressSharedViewModel by activityViewModels()
 
-    //    private val actViewModel: LocationViewModel by activityViewModels()
     private var addressAdapter: AddressSearchAdapter = AddressSearchAdapter()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -56,7 +64,17 @@ class AddressSearchFragment :
         layoutManager = LinearLayoutManager(activity)
         setHasFixedSize(true)
         addressAdapter.setItemClickListener { address ->
-            Timber.w(address.lat.toString() + ", " + address.lon.toString())
+            Timber.w(address.lat.toString() + ", " + address.lng.toString())
+            moveToAddressDetailFragment(address)
+        }
+    }
+
+    private fun moveToAddressDetailFragment(address: Address) {
+        sharedViewModel.occurEvent(AddressSharedEvent.SelectAddress(address))
+        parentFragmentManager.commit {
+            setReorderingAllowed(true)
+            replace<AddressDetailFragment>(R.id.fcv_location)
+            addToBackStack("Search")
         }
     }
 }

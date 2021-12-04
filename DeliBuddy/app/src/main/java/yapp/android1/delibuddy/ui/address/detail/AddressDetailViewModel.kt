@@ -1,4 +1,4 @@
-package yapp.android1.delibuddy.ui.address.search
+package yapp.android1.delibuddy.ui.address.detail
 
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -6,43 +6,63 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import timber.log.Timber
+import yapp.android1.delibuddy.DeliBuddyApplication
 import yapp.android1.delibuddy.base.BaseViewModel
 import yapp.android1.delibuddy.base.RetryAction
 import yapp.android1.delibuddy.model.Event
+import yapp.android1.delibuddy.util.EventFlow
+import yapp.android1.delibuddy.util.MutableEventFlow
 import yapp.android1.domain.NetworkResult
 import yapp.android1.domain.entity.Address
 import yapp.android1.domain.entity.NetworkError
-import yapp.android1.domain.interactor.usecase.SearchAddressUseCase
+import yapp.android1.domain.interactor.usecase.CoordToAddressUseCase
 import javax.inject.Inject
 
-sealed class AddressSearchEvent : Event {
-    class SearchAddress(val query: String) : AddressSearchEvent()
+sealed class AddressDetailEvent : Event {
+    class SaveAddress(val address: Address) : AddressDetailEvent()
+    class CoordToAddress(val lat: Double, val lng: Double) : AddressDetailEvent()
 }
 
 @HiltViewModel
-class AddressSearchViewModel @Inject constructor(
-    private val searchAddressUseCase: SearchAddressUseCase
+class AddressDetailViewModel @Inject constructor(
+    private val coordToAddressUseCase: CoordToAddressUseCase
 ) : BaseViewModel<Event>() {
     private var job: Job? = null
 
-    private val _searchResult = MutableStateFlow<Pair<String, List<Address>>>(Pair("", emptyList()))
-    val searchResult: StateFlow<Pair<String, List<Address>>> = _searchResult
+    private val _addressResult = MutableStateFlow<Address?>(null)
+    val addressResult: StateFlow<Address?> = _addressResult
+
+    private val _isActivate = MutableEventFlow<Boolean>()
+    val isActivate: EventFlow<Boolean> = _isActivate
 
     override suspend fun handleEvent(event: Event) {
         when (event) {
-            is AddressSearchEvent.SearchAddress -> {
-                searchAddress(event.query)
+            is AddressDetailEvent.SaveAddress -> {
+                saveAddress(event.address)
+            }
+
+            is AddressDetailEvent.CoordToAddress -> {
+                convertCoordToAddress(event.lat, event.lng)
             }
         }
     }
 
-    private fun searchAddress(query: String) {
+    private fun saveAddress(address: Address) {
+        DeliBuddyApplication.prefs.saveUserAddress(address)
+
+        // save address test
+        val test = DeliBuddyApplication.prefs.getCurrentUserAddress()
+        Timber.w("Save Success ${test.addressName}, lat: ${test.lat}, lon: ${test.lng}")
+    }
+
+    private fun convertCoordToAddress(lat: Double, lng: Double) {
         job?.cancel()
         job = viewModelScope.launch {
-            when(val result = searchAddressUseCase(query)) {
+            when (val result = coordToAddressUseCase(Pair<Double, Double>(lat, lng))) {
                 is NetworkResult.Success -> {
-                    val addressList = result.data
-                    _searchResult.value = Pair(query, addressList)
+                    Timber.w("success to convert")
+                    _addressResult.value = result.data
                 }
 
                 is NetworkResult.Error -> handleError(result) {
@@ -53,6 +73,9 @@ class AddressSearchViewModel @Inject constructor(
     }
 
     override suspend fun handleError(result: NetworkResult.Error, retryAction: RetryAction?) {
+        _isActivate.emit(false)
+        Timber.w("fail to convert")
+
         when (result.errorType) {
             is NetworkError.Unknown -> {
                 showToast("알 수 없는 에러가 발생했습니다.")
