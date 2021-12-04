@@ -11,6 +11,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import yapp.android1.data.interactor.DeliBuddyNetworkErrorHandlerImpl
 import yapp.android1.data.interactor.KakaoNetworkErrorHandlerImpl
+import yapp.android1.data.remote.AuthApi
 import yapp.android1.data.remote.DeliBuddyApi
 import yapp.android1.data.remote.KakaoLocalApi
 import yapp.android1.delibuddy.BuildConfig
@@ -20,15 +21,17 @@ import yapp.android1.domain.interactor.KakaoNetworkErrorHandler
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
-    private const val BASE_URL = "https://dapi.kakao.com/"
+    private const val API_BASE_URL =
+        "http://ec2-54-180-186-128.ap-northeast-2.compute.amazonaws.com/"
+    private const val KAKAO_BASE_URL = "https://dapi.kakao.com/"
 
     @DeliBuddyRetrofit
     @Provides
     fun provideDeliBuddyApiRetrofit(
-        @DeliBuddyOkHttpClient okHttpClient: OkHttpClient
+        @DeliBuddyOkHttpClient okHttpClient: OkHttpClient,
     ): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("BASE_URL")
+            .baseUrl(API_BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create(Gson()))
             .build()
@@ -40,7 +43,7 @@ object NetworkModule {
         @KakaoOkHttpClient okHttpClient: OkHttpClient
     ): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(KAKAO_BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
@@ -80,7 +83,7 @@ object NetworkModule {
 
     @Provides
     fun provideKaKaoNetworkErrorHandler(
-        @KakaoRetrofit retrofit: Retrofit
+        @KakaoRetrofit retrofit: Retrofit,
     ): KakaoNetworkErrorHandler {
         return KakaoNetworkErrorHandlerImpl(retrofit)
     }
@@ -88,6 +91,11 @@ object NetworkModule {
     @Provides
     fun provideDeliBuddyApiService(@DeliBuddyRetrofit retrofit: Retrofit): DeliBuddyApi {
         return retrofit.create(DeliBuddyApi::class.java)
+    }
+
+    @Provides
+    fun provideAuthApiService(@DeliBuddyRetrofit retrofit: Retrofit): AuthApi {
+        return retrofit.create(AuthApi::class.java)
     }
 
     @Provides
