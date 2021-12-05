@@ -10,17 +10,17 @@ import timber.log.Timber
 import yapp.android1.delibuddy.DeliBuddyApplication
 import yapp.android1.delibuddy.base.BaseViewModel
 import yapp.android1.delibuddy.base.RetryAction
+import yapp.android1.delibuddy.model.Address
 import yapp.android1.delibuddy.model.Event
 import yapp.android1.delibuddy.util.EventFlow
 import yapp.android1.delibuddy.util.MutableEventFlow
 import yapp.android1.domain.NetworkResult
-import yapp.android1.domain.entity.Address
 import yapp.android1.domain.entity.NetworkError
 import yapp.android1.domain.interactor.usecase.CoordToAddressUseCase
 import javax.inject.Inject
 
 sealed class AddressDetailEvent : Event {
-    class SaveAddress(val address: Address) : AddressDetailEvent()
+    class SaveAddress(val address: Address, val addressDetail: String) : AddressDetailEvent()
     class CoordToAddress(val lat: Double, val lng: Double) : AddressDetailEvent()
 }
 
@@ -39,7 +39,9 @@ class AddressDetailViewModel @Inject constructor(
     override suspend fun handleEvent(event: Event) {
         when (event) {
             is AddressDetailEvent.SaveAddress -> {
-                saveAddress(event.address)
+                val address = event.address
+                address.addressDetail = event.addressDetail
+                saveAddress(address)
             }
 
             is AddressDetailEvent.CoordToAddress -> {
@@ -53,7 +55,7 @@ class AddressDetailViewModel @Inject constructor(
 
         // save address test
         val test = DeliBuddyApplication.prefs.getCurrentUserAddress()
-        Timber.w("Save Success ${test.addressName}, lat: ${test.lat}, lon: ${test.lng}")
+        Timber.w("Save Success ${test.addressName}, lat: ${test.lat}, lon: ${test.lng}, detail: ${test.addressDetail}")
     }
 
     private fun convertCoordToAddress(lat: Double, lng: Double) {
@@ -62,7 +64,7 @@ class AddressDetailViewModel @Inject constructor(
             when (val result = coordToAddressUseCase(Pair<Double, Double>(lat, lng))) {
                 is NetworkResult.Success -> {
                     Timber.w("success to convert")
-                    _addressResult.value = result.data
+                    _addressResult.value = Address.mapToAddress(result.data)
                 }
 
                 is NetworkResult.Error -> handleError(result) {

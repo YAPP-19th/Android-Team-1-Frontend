@@ -7,7 +7,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import yapp.android1.delibuddy.R
 import yapp.android1.delibuddy.databinding.ViewHolderAddressSearchResultBinding
-import yapp.android1.domain.entity.Address
+import yapp.android1.delibuddy.model.Address
 
 class AddressSearchViewHolder(
     private val binding: ViewHolderAddressSearchResultBinding

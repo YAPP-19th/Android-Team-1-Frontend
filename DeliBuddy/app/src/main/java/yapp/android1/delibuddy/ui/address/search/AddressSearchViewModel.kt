@@ -8,9 +8,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import yapp.android1.delibuddy.base.BaseViewModel
 import yapp.android1.delibuddy.base.RetryAction
+import yapp.android1.delibuddy.model.Address
 import yapp.android1.delibuddy.model.Event
 import yapp.android1.domain.NetworkResult
-import yapp.android1.domain.entity.Address
 import yapp.android1.domain.entity.NetworkError
 import yapp.android1.domain.interactor.usecase.SearchAddressUseCase
 import javax.inject.Inject
@@ -39,9 +39,11 @@ class AddressSearchViewModel @Inject constructor(
     private fun searchAddress(query: String) {
         job?.cancel()
         job = viewModelScope.launch {
-            when(val result = searchAddressUseCase(query)) {
+            when (val result = searchAddressUseCase(query)) {
                 is NetworkResult.Success -> {
-                    val addressList = result.data
+                    val addressList = result.data.map {
+                        Address.mapToAddress(it)
+                    }
                     _searchResult.value = Pair(query, addressList)
                 }
 

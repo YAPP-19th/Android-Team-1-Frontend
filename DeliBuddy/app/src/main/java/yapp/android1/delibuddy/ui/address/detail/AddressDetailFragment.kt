@@ -10,14 +10,12 @@ import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.isActive
-import timber.log.Timber
 import yapp.android1.delibuddy.R
 import yapp.android1.delibuddy.base.BaseFragment
 import yapp.android1.delibuddy.databinding.FragmentAddressDetailBinding
+import yapp.android1.delibuddy.model.Address
 import yapp.android1.delibuddy.ui.address.AddressSharedViewModel
 import yapp.android1.delibuddy.util.extensions.repeatOnStarted
-import yapp.android1.domain.entity.Address
 import kotlin.math.abs
 
 @AndroidEntryPoint
@@ -38,10 +36,27 @@ class AddressDetailFragment :
         activateAddressView(addressSharedViewModel.selectedAddress.value)
 
         btnAddressDetail.setOnClickListener {
+            saveAddress()
+        }
+    }
+
+    private fun saveAddress() {
+        if (viewModel.addressResult.value != null) {
             viewModel.occurEvent(
-                AddressDetailEvent.SaveAddress(addressSharedViewModel.selectedAddress.value)
+                AddressDetailEvent.SaveAddress(
+                    viewModel.addressResult.value!!,
+                    binding.etAddressDetail.text.toString()
+                )
+            )
+        } else {
+            viewModel.occurEvent(
+                AddressDetailEvent.SaveAddress(
+                    addressSharedViewModel.selectedAddress.value,
+                    binding.etAddressDetail.text.toString()
+                )
             )
         }
+
     }
 
     private fun initMap() = with(binding) {
