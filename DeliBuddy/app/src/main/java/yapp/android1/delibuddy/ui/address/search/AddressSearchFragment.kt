@@ -1,6 +1,8 @@
 package yapp.android1.delibuddy.ui.address.search
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
@@ -31,10 +33,31 @@ class AddressSearchFragment :
     private var addressAdapter: AddressSearchAdapter = AddressSearchAdapter()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        initView()
         initRecyclerView()
         initObserve()
+    }
 
-        binding.etSearchKeyword.setOnEditorActionListener { _, actionId, _ ->
+    private fun initView() = with(binding) {
+        etSearchKeyword.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                if (s!!.isEmpty()) {
+                    btnCurrentLocation.visibility = View.VISIBLE
+                } else {
+                    btnCurrentLocation.visibility = View.GONE
+                }
+            }
+        })
+
+        etSearchKeyword.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 viewModel.occurEvent(
                     AddressSearchEvent.SearchAddress(binding.etSearchKeyword.text.toString())
@@ -42,20 +65,6 @@ class AddressSearchFragment :
                 return@setOnEditorActionListener true
             }
             return@setOnEditorActionListener false
-        }
-    }
-
-    private fun initObserve() {
-        repeatOnStarted {
-            viewModel.searchResult.collect {
-                addressAdapter.updateResult(it)
-            }
-        }
-
-        repeatOnStarted {
-            viewModel.showToast.collect {
-                Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
-            }
         }
     }
 
@@ -75,6 +84,20 @@ class AddressSearchFragment :
             setReorderingAllowed(true)
             replace<AddressDetailFragment>(R.id.fcv_location)
             addToBackStack("Search")
+        }
+    }
+
+    private fun initObserve() {
+        repeatOnStarted {
+            viewModel.searchResult.collect {
+                addressAdapter.updateResult(it)
+            }
+        }
+
+        repeatOnStarted {
+            viewModel.showToast.collect {
+                Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+            }
         }
     }
 }
