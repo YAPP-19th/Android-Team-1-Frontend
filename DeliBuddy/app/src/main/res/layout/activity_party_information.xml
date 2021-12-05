@@ -61,14 +61,14 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:paddingTop="28dp"
-            android:paddingHorizontal="20dp">
+            android:layout_height="0dp">
 
             <ImageView
                 android:id="@+id/iv_party_owner_profile"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
+                android:layout_marginTop="28dp"
+                android:layout_marginHorizontal="20dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:src="@drawable/icon_user_profile_blue" />
@@ -95,29 +95,49 @@
                 tools:text="인천 남동구 논현동" />
 
 
-            <View
-                android:id="@+id/divider_first"
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:background="@color/divider_grey"
-                android:layout_marginTop="24dp"
-                app:layout_constraintTop_toBottomOf="@+id/tv_party_owner_address"
-                tools:layout_editor_absoluteX="20dp" />
-
             <TextView
                 android:id="@+id/tv_party_content"
                 style="@style/RobotoRegular14"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:letterSpacing="-0.02"
                 android:layout_marginTop="20dp"
+                android:layout_marginHorizontal="20dp"
+                android:letterSpacing="-0.02"
+                android:maxLines="10"
                 app:layout_constraintTop_toBottomOf="@+id/divider_first"
                 tools:layout_editor_absoluteX="20dp"
-                android:maxLines="10"
                 tools:text="유로코 피자 4인팟 구해\n메뉴는 채팅에서 같이 정해" />
 
+            <View
+                android:id="@+id/divider_first"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginHorizontal="20dp"
+                android:background="@color/divider_grey"
+                app:layout_constraintTop_toBottomOf="@+id/tv_party_owner_address"
+                tools:layout_editor_absoluteX="20dp" />
+
+            <View
+                android:id="@+id/divider_second"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/divider_grey"
+                app:layout_constraintEnd_toEndOf="@+id/tl_community"
+                app:layout_constraintStart_toStartOf="@+id/tl_community"
+                app:layout_constraintTop_toBottomOf="@+id/tl_community" />
+
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/vp_community"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:paddingVertical="12dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider_second" />
+
             <com.google.android.material.tabs.TabLayout
-                android:id="@+id/tabLayout"
+                android:id="@+id/tl_community"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
@@ -141,15 +161,6 @@
                     android:text="파티인원" />
 
             </com.google.android.material.tabs.TabLayout>
-
-            <View
-                android:id="@+id/divider_second"
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:background="@color/divider_grey"
-                app:layout_constraintEnd_toEndOf="@+id/tabLayout"
-                app:layout_constraintStart_toStartOf="@+id/tabLayout"
-                app:layout_constraintTop_toBottomOf="@+id/tabLayout" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -38,9 +38,9 @@ class CommentViewHolder private constructor(
             listener.invoke(comment)
         }
 
-        Glide.with(itemView.context)
-            .load(comment.writer.profileImage)
-            .into(binding.ivUserIcon)
+//        Glide.with(itemView.context)
+//            .load(comment.writer.profileImage)
+//            .into(binding.ivIconUser)
     }
 
     private fun bindChildComment(
@@ -51,9 +51,9 @@ class CommentViewHolder private constructor(
         tvWriterNickname.text = comment.writer.nickName
         tvBody.text = comment.body
 
-        Glide.with(itemView.context)
-            .load(comment.writer.profileImage)
-            .into(binding.ivUserIcon)
+//        Glide.with(itemView.context)
+//            .load(comment.writer.profileImage)
+//            .into(binding.ivIconUser)
     }
 
     companion object {

@@ -12,6 +12,7 @@
         android:layout_height="32dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:src="@drawable/icon_user_profile_deep_purple"
         tools:src="@drawable/icon_user_profile_blue" />
 
     <ImageView
@@ -21,7 +22,7 @@
         android:layout_marginTop="22dp"
         android:src="@drawable/icon_owner"
         android:layout_marginStart="22dp"
-        android:visibility="visible"
+        android:visibility="invisible"
         app:layout_constraintStart_toStartOf="@+id/iv_icon_user"
         app:layout_constraintTop_toTopOf="@+id/iv_icon_user" />
 

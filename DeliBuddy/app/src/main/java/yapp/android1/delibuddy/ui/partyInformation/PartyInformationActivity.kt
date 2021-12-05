@@ -3,9 +3,11 @@ package yapp.android1.delibuddy.ui.partyInformation
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
+import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import yapp.android1.delibuddy.R
+import yapp.android1.delibuddy.adapter.CommunityViewPagerAdapter
 import yapp.android1.delibuddy.databinding.ActivityPartyInformationBinding
 import yapp.android1.delibuddy.model.Party
 import yapp.android1.delibuddy.ui.partyInformation.PartyInformationViewModel.PartyInformationEvent.OnIntent
@@ -23,13 +25,25 @@ class PartyInformationActivity : AppCompatActivity() {
         binding = ActivityPartyInformationBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        initializeSetup()
+        receiverIntent()
+        initializeView()
         collectData()
     }
 
-    private fun initializeSetup() {
+    private fun receiverIntent() {
         val intentData = intent.getSerializableExtra("party") as Party
         viewModel.occurEvent(OnIntent(intentData))
+    }
+
+    private fun initializeView() = with(binding) {
+        vpCommunity.adapter = CommunityViewPagerAdapter(this@PartyInformationActivity)
+
+        TabLayoutMediator(tlCommunity, vpCommunity) { tab, position ->
+            when(position) {
+                0 -> tab.text = "댓글"
+                1 -> tab.text = "파티인원"
+            }
+        }.attach()
     }
 
     private fun collectData() {
