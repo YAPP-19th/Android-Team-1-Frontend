@@ -2,6 +2,7 @@ package yapp.android1.delibuddy.ui.partyInformation
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
@@ -11,7 +12,9 @@ import yapp.android1.delibuddy.adapter.CommunityViewPagerAdapter
 import yapp.android1.delibuddy.databinding.ActivityPartyInformationBinding
 import yapp.android1.delibuddy.model.Party
 import yapp.android1.delibuddy.ui.partyInformation.PartyInformationViewModel.PartyInformationEvent.OnIntent
+import yapp.android1.delibuddy.util.extensions.hide
 import yapp.android1.delibuddy.util.extensions.repeatOnStarted
+import yapp.android1.delibuddy.util.extensions.show
 
 @AndroidEntryPoint
 class PartyInformationActivity : AppCompatActivity() {
@@ -26,7 +29,6 @@ class PartyInformationActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         receiverIntent()
-        initializeView()
         collectData()
     }
 
@@ -35,7 +37,27 @@ class PartyInformationActivity : AppCompatActivity() {
         viewModel.occurEvent(OnIntent(intentData))
     }
 
-    private fun initializeView() = with(binding) {
+    private fun collectData() {
+        repeatOnStarted {
+            viewModel.isOwner.collect { isOwner ->
+                initializeViews(isOwner)
+            }
+        }
+    }
+
+    private fun initializeViews(isOwner: Boolean) = with(binding) {
+        initializeViewPager()
+
+        if(isOwner) {
+            tvStatus.hide()
+            tvStatusChange.show()
+        } else {
+            tvStatus.show()
+            tvStatusChange.hide()
+        }
+    }
+
+    private fun initializeViewPager() = with(binding) {
         vpCommunity.adapter = CommunityViewPagerAdapter(this@PartyInformationActivity)
 
         TabLayoutMediator(tlCommunity, vpCommunity) { tab, position ->
@@ -46,15 +68,4 @@ class PartyInformationActivity : AppCompatActivity() {
         }.attach()
     }
 
-    private fun collectData() {
-        repeatOnStarted {
-            viewModel.party.collect { party ->
-                renderView(party)
-            }
-        }
-    }
-
-    private fun renderView(party: Party) = with(binding) {
-
-    }
 }
