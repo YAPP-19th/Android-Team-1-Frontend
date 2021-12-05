@@ -7,7 +7,7 @@
     android:padding="16dp">
 
     <ImageView
-        android:id="@+id/iv_user_icon"
+        android:id="@+id/iv_icon_user"
         android:layout_width="32dp"
         android:layout_height="32dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -15,14 +15,25 @@
         tools:src="@drawable/icon_user_profile_blue" />
 
     <ImageView
+        android:id="@+id/iv_icon_owner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="22dp"
+        android:src="@drawable/icon_owner"
+        android:layout_marginStart="22dp"
+        android:visibility="visible"
+        app:layout_constraintStart_toStartOf="@+id/iv_icon_user"
+        app:layout_constraintTop_toTopOf="@+id/iv_icon_user" />
+
+    <ImageView
         android:id="@+id/iv_options"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="4dp"
         android:src="@drawable/icon_options_grey"
-        app:layout_constraintBottom_toBottomOf="@+id/iv_user_icon"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_icon_user"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/iv_user_icon" />
+        app:layout_constraintTop_toTopOf="@+id/iv_icon_user" />
 
     <TextView
         android:id="@+id/tv_time_ago"
@@ -43,8 +54,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
         app:layout_constraintEnd_toStartOf="@+id/iv_options"
-        app:layout_constraintStart_toEndOf="@+id/iv_user_icon"
-        app:layout_constraintTop_toTopOf="@+id/iv_user_icon"
+        app:layout_constraintStart_toEndOf="@+id/iv_icon_user"
+        app:layout_constraintTop_toTopOf="@+id/iv_icon_user"
         tools:text="김선달" />
 
     <TextView
