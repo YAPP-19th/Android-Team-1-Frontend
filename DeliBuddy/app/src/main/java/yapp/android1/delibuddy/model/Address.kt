@@ -19,7 +19,7 @@ data class Address(
                 addressName = entity.addressName,
                 roadAddress = entity.roadAddress,
                 address = entity.address,
-                addressDetail = "",
+                addressDetail = entity.addressDetail,
                 lat = entity.lat,
                 lng = entity.lng
             )
