@@ -13,16 +13,7 @@ sealed class AddressSharedEvent : Event {
 }
 
 class AddressSharedViewModel : BaseViewModel<Event>() {
-    private var _selectedAddress = MutableStateFlow<Address>(
-        Address(
-            addressName = "서울역",
-            roadAddress = "서울특별시 중구 한강대로 405",
-            address = "",
-            addressDetail = "",
-            lat = 37.5283169,
-            lng = 126.9294254
-        )
-    )
+    private var _selectedAddress = MutableStateFlow<Address>(Address.DEFAULT)
     val selectedAddress: StateFlow<Address> = _selectedAddress
 
     override suspend fun handleEvent(event: Event) {

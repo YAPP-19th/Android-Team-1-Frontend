@@ -14,6 +14,15 @@ data class Address(
     val lng: Double
 ) : Parcelable {
     companion object {
+        val DEFAULT = Address(
+            addressName = "서울역",
+            roadAddress = "서울특별시 중구 한강대로 405",
+            address = "",
+            addressDetail = "",
+            lat = 37.5283169,
+            lng = 126.9294254
+        )
+
         fun mapToAddress(entity: AddressEntity): Address {
             return Address(
                 addressName = entity.addressName,
