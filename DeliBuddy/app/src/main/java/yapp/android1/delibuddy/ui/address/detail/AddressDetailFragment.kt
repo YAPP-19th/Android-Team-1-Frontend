@@ -14,6 +14,7 @@ import yapp.android1.delibuddy.R
 import yapp.android1.delibuddy.base.BaseFragment
 import yapp.android1.delibuddy.databinding.FragmentAddressDetailBinding
 import yapp.android1.delibuddy.model.Address
+import yapp.android1.delibuddy.ui.address.AddressSharedEvent
 import yapp.android1.delibuddy.ui.address.AddressSharedViewModel
 import yapp.android1.delibuddy.util.extensions.repeatOnStarted
 import kotlin.math.abs
@@ -22,8 +23,7 @@ import kotlin.math.abs
 class AddressDetailFragment :
     BaseFragment<FragmentAddressDetailBinding>(FragmentAddressDetailBinding::inflate),
     OnMapReadyCallback {
-    private val viewModel: AddressDetailViewModel by viewModels()
-    private val addressSharedViewModel: AddressSharedViewModel by activityViewModels()
+    private val viewModel: AddressSharedViewModel by activityViewModels()
     private val ABOUT_ZERO = 0.000000000001
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -33,7 +33,7 @@ class AddressDetailFragment :
     }
 
     private fun initView() = with(binding) {
-        activateAddressView(addressSharedViewModel.selectedAddress.value)
+        activateAddressView(viewModel.selectedAddress.value)
 
         btnAddressDetail.setOnClickListener {
             saveAddress()
@@ -41,22 +41,12 @@ class AddressDetailFragment :
     }
 
     private fun saveAddress() {
-        if (viewModel.addressResult.value != null) {
-            viewModel.occurEvent(
-                AddressDetailEvent.SaveAddress(
-                    viewModel.addressResult.value!!,
-                    binding.etAddressDetail.text.toString()
-                )
+        viewModel.occurEvent(
+            AddressSharedEvent.SaveAddress(
+                viewModel.selectedAddress.value,
+                binding.etAddressDetail.text.toString()
             )
-        } else {
-            viewModel.occurEvent(
-                AddressDetailEvent.SaveAddress(
-                    addressSharedViewModel.selectedAddress.value,
-                    binding.etAddressDetail.text.toString()
-                )
-            )
-        }
-
+        )
     }
 
     private fun initMap() = with(binding) {
@@ -75,8 +65,8 @@ class AddressDetailFragment :
 
         map.cameraPosition = CameraPosition(
             LatLng(
-                addressSharedViewModel.selectedAddress.value.lat,
-                addressSharedViewModel.selectedAddress.value.lng
+                viewModel.selectedAddress.value.lat,
+                viewModel.selectedAddress.value.lng
             ),
             16.0
         )
@@ -84,13 +74,13 @@ class AddressDetailFragment :
         map.addOnCameraIdleListener {
             if (!isSameCoordWithSearchResult(map.cameraPosition.target)) {
                 viewModel.occurEvent(
-                    AddressDetailEvent.CoordToAddress(
+                    AddressSharedEvent.CoordToAddress(
                         map.cameraPosition.target.latitude,
                         map.cameraPosition.target.longitude
                     )
                 )
             } else {
-                activateAddressView(addressSharedViewModel.selectedAddress.value)
+                activateAddressView(viewModel.selectedAddress.value)
             }
         }
     }
@@ -104,16 +94,8 @@ class AddressDetailFragment :
         }
 
         repeatOnStarted {
-            viewModel.addressResult.collect { address ->
-                if (address == null) {
-                    deactivateAddressView()
-                } else {
-                    if (!isSameAddressWithSearchResult(address)) {
-                        activateAddressView(address)
-                    } else {
-                        activateAddressView(addressSharedViewModel.selectedAddress.value)
-                    }
-                }
+            viewModel.selectedAddress.collect { address ->
+                activateAddressView(address)
             }
         }
 
@@ -124,14 +106,9 @@ class AddressDetailFragment :
         }
     }
 
-    private fun isSameAddressWithSearchResult(address: Address): Boolean {
-        return addressSharedViewModel.selectedAddress.value.roadAddress == address.roadAddress
-                || addressSharedViewModel.selectedAddress.value.address == address.address
-    }
-
     private fun isSameCoordWithSearchResult(latLng: LatLng): Boolean {
-        return abs(addressSharedViewModel.selectedAddress.value.lat - latLng.latitude) < ABOUT_ZERO
-                && abs(addressSharedViewModel.selectedAddress.value.lng - latLng.longitude) < ABOUT_ZERO
+        return abs(viewModel.selectedAddress.value.lat - latLng.latitude) < ABOUT_ZERO
+                && abs(viewModel.selectedAddress.value.lng - latLng.longitude) < ABOUT_ZERO
 
     }
 
@@ -144,6 +121,7 @@ class AddressDetailFragment :
             tvAddress.text = address.address
         }
 
+        etAddressDetail.setText("")
         etAddressDetail.isFocusableInTouchMode = true
         etAddressDetail.isFocusable = true
 
@@ -158,6 +136,7 @@ class AddressDetailFragment :
 
         tvAddress.text = "주소 정보가 없습니다"
 
+        etAddressDetail.setText("")
         etAddressDetail.isClickable = false
         etAddressDetail.isFocusable = false
 

@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import dagger.hilt.android.AndroidEntryPoint
 import yapp.android1.delibuddy.databinding.ActivityPermissionDescriptionBinding
+import yapp.android1.delibuddy.ui.address.AddressActivity
 import yapp.android1.delibuddy.ui.dialog.PermissionDialogFragment
 import yapp.android1.delibuddy.ui.home.HomeActivity
 import yapp.android1.delibuddy.util.intentTo
@@ -39,7 +40,8 @@ class PermissionDescriptionActivity : AppCompatActivity() {
     }
 
     private fun intentMain() {
-        intentTo(HomeActivity::class.java)
+        //intentTo(HomeActivity::class.java)
+        intentTo(AddressActivity::class.java)
     }
 
     private fun showPermissionDeniedDialog() {
