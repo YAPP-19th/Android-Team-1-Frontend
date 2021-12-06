@@ -45,7 +45,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="14dp"
         app:layout_constraintBottom_toBottomOf="@+id/iv_icon_user"
-        app:layout_constraintEnd_toStartOf="@+id/btn_kickout"
+        app:layout_constraintEnd_toStartOf="@+id/btn_kick_out"
         app:layout_constraintStart_toEndOf="@+id/iv_icon_user"
         app:layout_constraintTop_toTopOf="@+id/iv_icon_user"
         tools:text="홍길동 (나)" />
