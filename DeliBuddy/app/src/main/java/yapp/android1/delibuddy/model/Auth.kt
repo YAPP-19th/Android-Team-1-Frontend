@@ -20,4 +20,7 @@ data class Auth(
         }
     }
 
+    fun isNotEmpty(): Boolean =
+        token.isNotEmpty() && userId != -1
+
 }

@@ -2,8 +2,9 @@ package yapp.android1.delibuddy.util.sharedpreferences
 
 import android.content.Context
 import android.content.SharedPreferences
-import yapp.android1.delibuddy.util.sharedpreferences.SharedPreferenceHelper.set
+import yapp.android1.delibuddy.model.Auth
 import yapp.android1.delibuddy.util.sharedpreferences.SharedPreferenceHelper.get
+import yapp.android1.delibuddy.util.sharedpreferences.SharedPreferenceHelper.set
 import yapp.android1.domain.entity.Address
 
 class SharedPreferencesManager(context: Context) {
@@ -27,4 +28,23 @@ class SharedPreferencesManager(context: Context) {
         )
     }
 
+    fun saveAuthData(auth: Auth) {
+        prefs["userToken"] = auth.token
+        prefs["userId"] = auth.userId
+    }
+
+    fun getAuth(): Auth {
+        return Auth(
+            getUserToken(),
+            getUserId()
+        )
+    }
+
+    fun getUserToken(): String {
+        return prefs["userToken", "Unknown"]
+    }
+
+    fun getUserId(): Int {
+        return prefs["userId", -1]
+    }
 }
