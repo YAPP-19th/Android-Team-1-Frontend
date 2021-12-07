@@ -6,7 +6,8 @@ object MapAuth {
     fun map(authModel: AuthModel): AuthEntity {
         authModel.apply {
             return AuthEntity(
-                token = jwt
+                token = jwt,
+                userId = userId
             )
         }
     }
