@@ -5,6 +5,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -15,6 +16,7 @@ import yapp.android1.data.remote.AuthApi
 import yapp.android1.data.remote.DeliBuddyApi
 import yapp.android1.data.remote.KakaoLocalApi
 import yapp.android1.delibuddy.BuildConfig
+import yapp.android1.delibuddy.DeliBuddyApplication
 import yapp.android1.domain.interactor.DeliBuddyNetworkErrorHandler
 import yapp.android1.domain.interactor.KakaoNetworkErrorHandler
 
@@ -67,6 +69,7 @@ object NetworkModule {
     fun provideDeliBuddyOkHttpClient(): OkHttpClient {
         return OkHttpClient.Builder()
             .addInterceptor(makeLoggingInterceptor(true))
+            .addInterceptor(headerInterceptor)
             .addNetworkInterceptor {
                 val builder = it.request().newBuilder()
                 it.proceed(builder.build())
@@ -112,4 +115,12 @@ object NetworkModule {
         return logging
     }
 
+    private val headerInterceptor = Interceptor {
+        var token = DeliBuddyApplication.prefs.getUserToken()
+        val request = it.request()
+            .newBuilder()
+            .addHeader("Authorization", "Bearer $token")
+            .build()
+        return@Interceptor it.proceed(request)
+    }
 }
