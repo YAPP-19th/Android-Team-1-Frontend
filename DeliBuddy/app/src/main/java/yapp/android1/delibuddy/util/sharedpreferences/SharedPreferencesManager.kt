@@ -26,4 +26,5 @@ class SharedPreferencesManager(context: Context) {
             lng = prefs["lon", 0.0]
         )
     }
+
 }

@@ -1,25 +1,22 @@
 package yapp.android1.delibuddy.ui.login
 
-import android.content.Context
 import android.os.Bundle
-import android.util.Log
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.user.UserApiClient
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.collect
+import timber.log.Timber
 import yapp.android1.delibuddy.databinding.ActivityLoginBinding
 import yapp.android1.delibuddy.ui.login.viewmodel.AuthViewModel
-import yapp.android1.domain.interactor.usecase.FetchAuthUseCase
-import javax.inject.Inject
+import yapp.android1.delibuddy.util.extensions.repeatOnStarted
 
 @AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
-    private lateinit var context: Context
     private val authViewModel: AuthViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,32 +24,47 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        context = this
+        collectData()
+        loginWithKakaoApi()
+    }
 
-        loginWithKakao()
+    private fun collectData() {
+        repeatOnStarted {
+            authViewModel.tokenResult.collect { auth ->
+                Toast.makeText(this@LoginActivity, "TOKEN - $auth", Toast.LENGTH_SHORT).show()
+
+            }
+        }
     }
 
     private val kakaoLoginCallback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
         if (error != null) {
-            Log.e("TAG", "로그인 실패", error)
-
+            authViewModel.occurEvent(
+                AuthViewModel.AuthEvent.OnKakaoLoginFailed(error.message ?: "Unknown error")
+            )
         } else if (token != null) {
-            Log.i("TAG", "로그인 성공 ${token.accessToken}")
-
-            authViewModel.test(token.accessToken)
+            authViewModel.occurEvent(
+                AuthViewModel.AuthEvent.OnKakaoLoginSuccess(token.accessToken)
+            )
         }
+
     }
 
-    private fun loginWithKakao() {
+    private fun loginWithKakaoApi() {
         binding.buttonKakaoLogin.setOnClickListener {
-            with(UserApiClient.instance) {
-                if (isKakaoTalkLoginAvailable(context = context)) {
-                    loginWithKakaoTalk(context = context, callback = kakaoLoginCallback)
-                } else {
-                    loginWithKakaoAccount(context = context, callback = kakaoLoginCallback)
-                }
+            if (UserApiClient.instance.isKakaoTalkLoginAvailable(context = this@LoginActivity)) {
+                UserApiClient.instance.loginWithKakaoTalk(
+                    context = this@LoginActivity,
+                    callback = kakaoLoginCallback
+                )
+            } else {
+                UserApiClient.instance.loginWithKakaoAccount(
+                    context = this@LoginActivity,
+                    callback = kakaoLoginCallback
+                )
             }
         }
     }
 
 }
+
