@@ -4,16 +4,16 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
 import yapp.android1.domain.NetworkResult
-import yapp.android1.domain.entity.Address
+import yapp.android1.domain.entity.AddressEntity
 import yapp.android1.domain.repository.AddressRepository
 import javax.inject.Inject
 
 class SearchAddressUseCase @Inject constructor(
     private val addressRepository: AddressRepository
-) : BaseUseCase<NetworkResult<List<Address>>, String>() {
+) : BaseUseCase<NetworkResult<List<AddressEntity>>, String>() {
     override suspend fun run(
         params: String
-    ): NetworkResult<List<Address>> = withContext(Dispatchers.IO) {
+    ): NetworkResult<List<AddressEntity>> = withContext(Dispatchers.IO) {
         val responseAddressJob = async { addressRepository.searchAddressByAddress(params) }
         val responseKeywordJob = async { addressRepository.searchAddressByKeyword(params) }
 
