@@ -41,7 +41,7 @@ class SharedPreferencesManager(context: Context) {
     }
 
     fun getUserToken(): String {
-        return prefs["userToken", "Unknown"]
+        return prefs["userToken", ""]
     }
 
     fun getUserId(): Int {

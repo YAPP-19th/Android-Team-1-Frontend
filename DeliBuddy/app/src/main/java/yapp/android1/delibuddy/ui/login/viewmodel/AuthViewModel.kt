@@ -29,12 +29,12 @@ class AuthViewModel @Inject constructor(
 
     override suspend fun handleEvent(event: Event) {
         when (event) {
-            is AuthEvent.OnKakaoLoginSuccess -> loginWithKakao(token = event.token)
+            is AuthEvent.OnKakaoLoginSuccess -> loginWithDelibuddyApi(token = event.token)
             is AuthEvent.OnKakaoLoginFailed -> showToast(message = event.message)
         }
     }
 
-    private suspend fun loginWithKakao(token: String) {
+    private suspend fun loginWithDelibuddyApi(token: String) {
         when (val result = fetchAuthUseCase.invoke(token)) {
             is NetworkResult.Success -> {
                 val token = result.data
