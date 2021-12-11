@@ -1,6 +1,7 @@
 package yapp.android1.delibuddy.ui.login
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.kakao.sdk.auth.model.OAuthToken
@@ -28,6 +29,7 @@ class LoginActivity : AppCompatActivity() {
         checkAuthCondition()
 
         collectData()
+        toastErrorMessage()
         loginWithKakaoApi()
     }
 
@@ -50,6 +52,14 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    private fun toastErrorMessage() {
+        repeatOnStarted {
+            authViewModel.showToast.collect {
+                Toast.makeText(this@LoginActivity, it, Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
     private val kakaoLoginCallback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
         if (error != null) {
             authViewModel.occurEvent(
@@ -60,7 +70,6 @@ class LoginActivity : AppCompatActivity() {
                 AuthViewModel.AuthEvent.OnKakaoLoginSuccess(token.accessToken)
             )
         }
-
     }
 
     private fun loginWithKakaoApi() {
