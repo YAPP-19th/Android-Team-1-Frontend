@@ -13,7 +13,7 @@ data class CoordAddressDocument(
     @SerializedName("address")
     val coordAddress: CoordAddress,
     @SerializedName("road_address")
-    val coordRoadAddress: CoordRoadAddress
+    val coordRoadAddress: CoordRoadAddress? = null
 )
 
 data class CoordAddress(

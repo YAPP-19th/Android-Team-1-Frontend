@@ -8,6 +8,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import yapp.android1.delibuddy.databinding.ActivitySplashBinding
+import yapp.android1.delibuddy.ui.address.AddressActivity
 import yapp.android1.delibuddy.ui.dialog.PermissionDialogFragment
 import yapp.android1.delibuddy.ui.login.LoginActivity
 import yapp.android1.delibuddy.ui.permission.PermissionDescriptionActivity
