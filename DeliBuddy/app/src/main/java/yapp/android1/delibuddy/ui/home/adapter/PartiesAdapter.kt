@@ -11,30 +11,29 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import yapp.android1.delibuddy.R
 import yapp.android1.delibuddy.databinding.IncludeLayoutPartyItemBinding
+import yapp.android1.delibuddy.model.Party
 import yapp.android1.delibuddy.util.dpToPx
-import yapp.android1.domain.entity.PartyEntity
 
-
-class PartiesAdapter(private val onClick: (PartyEntity) -> Unit) :
-    ListAdapter<PartyEntity, PartiesAdapter.PartiesViewHolder>(PartiesDiffCallback) {
+class PartiesAdapter(private val onClick: (Party) -> Unit) :
+    ListAdapter<Party, PartiesAdapter.PartiesViewHolder>(PartiesDiffCallback) {
 
     inner class PartiesViewHolder(
         private val binding: IncludeLayoutPartyItemBinding,
-        val onClick: (PartyEntity) -> Unit,
+        val onClick: (Party) -> Unit,
     ) : RecyclerView.ViewHolder(binding.root) {
         private val context = binding.root.context
-        private var currentPartyEntity: PartyEntity? = null
+        private var currentParty: Party? = null
 
         init {
             binding.root.setOnClickListener {
-                currentPartyEntity?.let {
+                currentParty?.let {
                     onClick(it)
                 }
             }
         }
 
-        fun bind(partyEntity: PartyEntity) {
-            currentPartyEntity = partyEntity
+        fun bind(party: Party) {
+            currentParty = party
 
             binding.foodCategoryImage.setImageResource(R.drawable.icon_food_bread_small)
             binding.partyLocation.text = "성복역 1번 출구"
@@ -85,12 +84,12 @@ class PartiesAdapter(private val onClick: (PartyEntity) -> Unit) :
     }
 }
 
-object PartiesDiffCallback : DiffUtil.ItemCallback<PartyEntity>() {
-    override fun areItemsTheSame(oldItem: PartyEntity, newItem: PartyEntity): Boolean {
+object PartiesDiffCallback : DiffUtil.ItemCallback<Party>() {
+    override fun areItemsTheSame(oldItem: Party, newItem: Party): Boolean {
         return oldItem.id == newItem.id
     }
 
-    override fun areContentsTheSame(oldItem: PartyEntity, newItem: PartyEntity): Boolean {
+    override fun areContentsTheSame(oldItem: Party, newItem: Party): Boolean {
         return oldItem == newItem
     }
 }

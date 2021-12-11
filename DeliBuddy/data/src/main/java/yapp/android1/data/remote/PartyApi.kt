@@ -6,43 +6,43 @@ import yapp.android1.data.entity.PartyCreationRequestModel
 import yapp.android1.data.entity.PartyModel
 
 interface PartyApi : DeliBuddyApi {
-    @GET("v1/parties/circle")
+    @GET("api/v1/parties/circle")
     suspend fun getPartiesInCircle(
         @Query("point") point: String,
         @Query("distance") distance: Int,
     ): List<PartyModel>
 
-    @GET("v1/parties/api/v1/parties/geom")
+    @GET("api/v1/parties/api/v1/parties/geom")
     suspend fun getPartiesInGeom(): Unit
 
-    @POST("v1/parties")
+    @POST("api/v1/parties")
     suspend fun createParty(
         @Body partyCreationRequest: PartyCreationRequestModel,
     ): List<PartyModel>
 
     // "okay": true 만 오는 경우, 우선은 Unit 으로 대체하고 추후에 한번에 고치기 !
-    @PUT("v1/parties/{id}")
+    @PUT("api/v1/parties/{id}")
     suspend fun editParty(
         @Path("id") id: String,
     ): Unit
 
-    @DELETE("v1/parties/{id}")
+    @DELETE("api/v1/parties/{id}")
     suspend fun deleteParty(
         @Path("id") id: String,
     ): Unit
 
-    @POST("v1/parties/{id}/ban")
+    @POST("api/v1/parties/{id}/ban")
     suspend fun banFromParty(
         @Path("id") id: String,
         @Body partyBanRequestModel: PartyBanRequestModel,
     ): Unit
 
-    @POST("v1/parties/{id}/join")
+    @POST("api/v1/parties/{id}/join")
     suspend fun joinParty(
         @Path("id") id: String,
     ): Unit
 
-    @POST("v1/parties/{id}/leave")
+    @POST("api/v1/parties/{id}/leave")
     suspend fun leaveParty(
         @Path("id") id: String,
     ): Unit

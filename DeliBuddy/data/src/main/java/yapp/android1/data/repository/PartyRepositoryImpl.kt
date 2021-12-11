@@ -19,7 +19,7 @@ class PartyRepositoryImpl @Inject constructor(
     override suspend fun getPartiesInCircle(point: String, distance: Int): NetworkResult<List<PartyEntity>> {
         return try {
             val response = api.getPartiesInCircle(point, distance)
-
+            println("second $response")
             NetworkResult.Success(
                 response.map {
                     PartyModel.toPartyEntity(it)
@@ -27,6 +27,7 @@ class PartyRepositoryImpl @Inject constructor(
             )
         } catch (e: Exception) {
             val errorType = deliBuddyNetworkErrorHandler.getError(exception = e)
+            println("third $errorType")
             return NetworkResult.Error(errorType)
         }
     }

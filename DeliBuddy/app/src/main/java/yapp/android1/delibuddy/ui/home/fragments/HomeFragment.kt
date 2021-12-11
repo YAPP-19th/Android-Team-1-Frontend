@@ -2,20 +2,28 @@ package yapp.android1.delibuddy.ui.home.fragments
 
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 import yapp.android1.delibuddy.base.BaseFragment
 import yapp.android1.delibuddy.databinding.FragmentHomeBinding
+import yapp.android1.delibuddy.model.Party
 import yapp.android1.delibuddy.ui.home.adapter.PartiesAdapter
+import yapp.android1.delibuddy.ui.home.viewmodel.PartiesViewModel
 import yapp.android1.delibuddy.ui.partyDetail.PartyDetailActivity
+import yapp.android1.delibuddy.util.extensions.repeatOnStarted
 import yapp.android1.delibuddy.util.intentTo
-import yapp.android1.domain.entity.PartyEntity
 
+typealias LocationRange = Pair<String, Int>
 const val PARTY_ID = "party id"
 
+@AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding>(
     FragmentHomeBinding::inflate
 ) {
 
+    private val partiesViewModel: PartiesViewModel by viewModels()
     private val partiesAdapter: PartiesAdapter by lazy {
         PartiesAdapter {
             adapterOnClick(it)
@@ -25,8 +33,21 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        getPartiesInCircle()
+
         initPartiesRecyclerView()
         setPartiesAdapterData()
+    }
+
+    private fun getPartiesInCircle() {
+        partiesViewModel.occurEvent(
+            PartiesViewModel.PartiesEvent.GetPartiesInCircle(
+                LocationRange(
+                    "POINT (127.027779 37.497830)",
+                    2000
+                )
+            )
+        )
 
     }
 
@@ -36,21 +57,16 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
     }
 
     private fun setPartiesAdapterData() {
-        partiesAdapter.submitList(
-            listOf(
-//                PartyEntity(1),
-//                PartyEntity(2),
-//                PartyEntity(3),
-//                PartyEntity(4),
-//                PartyEntity(5),
-//                PartyEntity(6)
-            )
-        )
+        repeatOnStarted {
+            partiesViewModel.partiesResult.collect { parties ->
+                partiesAdapter.submitList(parties)
+            }
+        }
     }
 
-    private fun adapterOnClick(partyEntity: PartyEntity) {
+    private fun adapterOnClick(party: Party) {
         val bundle = Bundle()
-        bundle.putInt(PARTY_ID, partyEntity.id)
+        bundle.putInt(PARTY_ID, party.id)
 
         requireActivity().intentTo(PartyDetailActivity::class.java, bundle)
     }
