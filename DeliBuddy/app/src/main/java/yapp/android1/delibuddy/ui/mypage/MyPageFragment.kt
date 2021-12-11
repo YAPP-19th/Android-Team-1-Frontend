@@ -1,4 +1,4 @@
-package yapp.android1.delibuddy.ui.home.fragments
+package yapp.android1.delibuddy.ui.mypage
 
 import yapp.android1.delibuddy.base.BaseFragment
 import yapp.android1.delibuddy.databinding.FragmentMypageBinding
