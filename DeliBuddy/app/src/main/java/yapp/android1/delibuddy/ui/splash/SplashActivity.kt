@@ -26,15 +26,14 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        intentTo(AddressActivity::class.java)
 
-//        PermissionManager.checkPermission(this, PermissionType.LOCATION) {
-//            when (it) {
-//                PermissionState.NEED_PERMISSION -> intentPermissionDescription()
-//                PermissionState.DENIED -> showPermissionDeniedDialog()
-//                PermissionState.GRANTED -> intentLogin()
-//            }
-//        }
+        PermissionManager.checkPermission(this, PermissionType.LOCATION) {
+            when (it) {
+                PermissionState.NEED_PERMISSION -> intentPermissionDescription()
+                PermissionState.DENIED -> showPermissionDeniedDialog()
+                PermissionState.GRANTED -> intentLogin()
+            }
+        }
     }
 
     private fun intentLogin() {
