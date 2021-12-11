@@ -12,6 +12,8 @@
     <string name="navigation_alarm">Alarm</string>
     <string name="navigation_mypage">My Page</string>
 
+    <string name="navigation_alarm_title">알림</string>
+
     <string name="navigation_myparty_title">내가 참여 중인 파티</string>
 
     <string name="navigation_mypage_title">마이페이지</string>
