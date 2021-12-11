@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import yapp.android1.delibuddy.databinding.ViewHolderAddressSearchResultBinding
 import yapp.android1.delibuddy.holder.AddressSearchViewHolder
-import yapp.android1.domain.entity.Address
+import yapp.android1.delibuddy.model.Address
 
 class AddressSearchAdapter : RecyclerView.Adapter<AddressSearchViewHolder>() {
     private var searchResultClickListener: ((Address) -> Unit)? = null

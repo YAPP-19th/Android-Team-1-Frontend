@@ -1,26 +1,28 @@
 package yapp.android1.data.entity
 
-import yapp.android1.domain.entity.Address
+import yapp.android1.domain.entity.AddressEntity
 
 object MapAddress {
-    fun toAddress(keywordDocument: KeywordDocument): Address {
+    fun toAddress(keywordDocument: KeywordDocument): AddressEntity {
         keywordDocument.apply {
-            return Address(
+            return AddressEntity(
                 addressName = placeName,
                 roadAddress = roadAddressName,
                 address = addressName,
+                addressDetail = "",
                 lat = y.toDouble(),
                 lng = x.toDouble()
             )
         }
     }
 
-    fun toAddress(addressDocument: AddressDocument): Address {
+    fun toAddress(addressDocument: AddressDocument): AddressEntity {
         addressDocument.apply {
-            return Address(
+            return AddressEntity(
                 addressName = addressName,
                 roadAddress = roadAddress.addressName,
                 address = address.addressName,
+                addressDetail = "",
                 lat = y.toDouble(),
                 lng = x.toDouble()
             )
@@ -31,12 +33,13 @@ object MapAddress {
         lat: Double,
         lng: Double,
         coordAddressDocument: CoordAddressDocument
-    ): Address {
+    ): AddressEntity {
         coordAddressDocument.apply {
-            return Address(
+            return AddressEntity(
                 addressName = coordRoadAddress.addressName,
                 address = coordAddress.addressName,
                 roadAddress = coordRoadAddress.addressName,
+                addressDetail = "",
                 lat = lat,
                 lng = lng
             )
