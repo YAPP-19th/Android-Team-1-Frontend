@@ -15,6 +15,7 @@ import yapp.android1.data.interactor.KakaoNetworkErrorHandlerImpl
 import yapp.android1.data.remote.AuthApi
 import yapp.android1.data.remote.DeliBuddyApi
 import yapp.android1.data.remote.KakaoLocalApi
+import yapp.android1.data.remote.PartyApi
 import yapp.android1.delibuddy.BuildConfig
 import yapp.android1.delibuddy.DeliBuddyApplication
 import yapp.android1.domain.interactor.DeliBuddyNetworkErrorHandler
@@ -42,7 +43,7 @@ object NetworkModule {
     @KakaoRetrofit
     @Provides
     fun provideKakaoApiRetrofit(
-        @KakaoOkHttpClient okHttpClient: OkHttpClient
+        @KakaoOkHttpClient okHttpClient: OkHttpClient,
     ): Retrofit {
         return Retrofit.Builder()
             .baseUrl(KAKAO_BASE_URL)
@@ -79,7 +80,7 @@ object NetworkModule {
 
     @Provides
     fun provideDeliBuddyNetworkHandler(
-        @DeliBuddyRetrofit retrofit: Retrofit
+        @DeliBuddyRetrofit retrofit: Retrofit,
     ): DeliBuddyNetworkErrorHandler {
         return DeliBuddyNetworkErrorHandlerImpl(retrofit)
     }
@@ -94,6 +95,11 @@ object NetworkModule {
     @Provides
     fun provideDeliBuddyApiService(@DeliBuddyRetrofit retrofit: Retrofit): DeliBuddyApi {
         return retrofit.create(DeliBuddyApi::class.java)
+    }
+
+    @Provides
+    fun providePartyApiService(@DeliBuddyRetrofit retrofit: Retrofit): PartyApi {
+        return retrofit.create(PartyApi::class.java)
     }
 
     @Provides
