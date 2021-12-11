@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import yapp.android1.delibuddy.R
 import yapp.android1.delibuddy.databinding.ViewHolderMypartyItemBinding
 
 class MyPartyAdapter : ListAdapter<MyPartyMockEntity, MyPartyAdapter.ViewHolder>(
@@ -24,6 +25,7 @@ class MyPartyAdapter : ListAdapter<MyPartyMockEntity, MyPartyAdapter.ViewHolder>
     inner class ViewHolder constructor(
         private val binding: ViewHolderMypartyItemBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
+        val resources = binding.root.resources
 
         fun bind(item: MyPartyMockEntity) {
             binding.apply {
@@ -32,6 +34,19 @@ class MyPartyAdapter : ListAdapter<MyPartyMockEntity, MyPartyAdapter.ViewHolder>
                 tvDate.text = item.date
 
                 //todo: left icon, background 색상 지정이 필요함
+                if (item.isCompleted) {
+                    cardView.setCardBackgroundColor(resources.getColor(R.color.block_space_grey, null))
+                    tvLocation.setTextColor(resources.getColor(R.color.sub_grey, null))
+                    tvContent.setTextColor(resources.getColor(R.color.sub_grey, null))
+                    tvDate.setTextColor(resources.getColor(R.color.sub_grey, null))
+                    locationIcon.setColorFilter(resources.getColor(R.color.sub_grey, null))
+                } else {
+                    cardView.setCardBackgroundColor(resources.getColor(R.color.white, null))
+                    tvLocation.setTextColor(resources.getColor(R.color.black, null))
+                    tvContent.setTextColor(resources.getColor(R.color.black, null))
+                    tvDate.setTextColor(resources.getColor(R.color.black, null))
+                    locationIcon.setColorFilter(resources.getColor(R.color.black, null))
+                }
             }
         }
     }
