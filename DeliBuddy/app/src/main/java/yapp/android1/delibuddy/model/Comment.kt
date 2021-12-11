@@ -1,9 +1,9 @@
 package yapp.android1.delibuddy.model
 
 
-class Comment(
+data class Comment(
     val id: Int,
-    val parentId: Int?,
+    val parentId: Int? = null,
     val partyId: Int,
     val writer: Writer,
     val body: String,

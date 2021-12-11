@@ -26,6 +26,10 @@ android {
         buildConfigField("String", "NAVER_MAP_APIKEY_ID", getApiKey("NAVER_MAP_APIKEY_ID"))
         buildConfigField("String", "NAVER_MAP_APIKEY_SECRET", getApiKey("NAVER_MAP_APIKEY_SECRET"))
         manifestPlaceholders["NAVER_MAP_APIKEY_ID"] = getApiKey("NAVER_MAP_APIKEY_ID")
+
+        buildConfigField("String", "KAKAO_LOGIN_API_KEY", getApiKey("KAKAO_LOGIN_API_KEY"))
+        manifestPlaceholders["KAKAO_NATIVE_APP_KEY"] = getApiKey("KAKAO_NATIVE_APP_KEY")
+
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -121,6 +125,7 @@ dependencies {
     implementation(Libraries.TED_PERMISSION_COROUTINE)
 
     implementation (Libraries.NAVER_MAP)
+    implementation (Libraries.KAKAO_LOGIN)
 
     testImplementation(UnitTest.JUNIT)
 

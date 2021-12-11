@@ -34,7 +34,7 @@ object AppModule {
     @Provides
     fun provideAddressRepository(
         kakaoLocalApi: KakaoLocalApi,
-        kakaoNetworkErrorHandler: KakaoNetworkErrorHandler
+        kakaoNetworkErrorHandler: KakaoNetworkErrorHandler,
     ): AddressRepository {
         return AddressRepositoryImpl(kakaoLocalApi, kakaoNetworkErrorHandler)
     }
