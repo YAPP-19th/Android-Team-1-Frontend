@@ -22,6 +22,9 @@ allprojects {
         maven {
             this.setUrl("https://naver.jfrog.io/artifactory/maven/")
         }
+        maven {
+            this.setUrl("https://devrepo.kakao.com/nexus/content/groups/public/")
+        }
     }
 }
 

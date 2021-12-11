@@ -45,6 +45,7 @@ object Libraries {
     const val LOTTIE                     = "com.airbnb.android:lottie:${Versions.LOTTIE}"
     
     const val NAVER_MAP                  = "com.naver.maps:map-sdk:${Versions.NAVER_MAP}"
+    const val KAKAO_LOGIN                = "com.kakao.sdk:v2-user:${Versions.KAKAO_LOGIN}"
 
     const val TED_PERMISSION             = "io.github.ParkSangGwon:tedpermission-normal:${Versions.TED_PERMISSION}"
     const val TED_PERMISSION_COROUTINE   = "io.github.ParkSangGwon:tedpermission-coroutine:${Versions.TED_PERMISSION}"
