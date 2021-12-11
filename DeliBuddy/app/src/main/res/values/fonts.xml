@@ -13,6 +13,10 @@
         <item name="android:includeFontPadding">false</item>
     </style>
 
+    <style name="RobotoRegular10" parent="RobotoRegular">
+        <item name="android:textSize">@dimen/font_size_10</item>
+    </style>
+
     <style name="RobotoRegular11" parent="RobotoRegular">
         <item name="android:textSize">@dimen/font_size_11</item>
     </style>
@@ -33,6 +37,10 @@
         <item name="android:textSize">@dimen/font_size_20</item>
     </style>
 
+    <style name="RobotoBold10" parent="RobotoBold">
+        <item name="android:textSize">@dimen/font_size_10</item>
+    </style>
+
     <style name="RobotoBold11" parent="RobotoBold">
         <item name="android:textSize">@dimen/font_size_11</item>
     </style>
@@ -51,6 +59,10 @@
 
     <style name="RobotoBold20" parent="RobotoBold">
         <item name="android:textSize">@dimen/font_size_20</item>
+    </style>
+
+    <style name="RobotoBold24" parent="RobotoBold">
+        <item name="android:textSize">@dimen/font_size_24</item>
     </style>
 
 </resources>

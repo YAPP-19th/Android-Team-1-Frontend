@@ -8,8 +8,10 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import yapp.android1.delibuddy.databinding.ActivitySplashBinding
+import yapp.android1.delibuddy.ui.address.AddressActivity
 import yapp.android1.delibuddy.ui.dialog.PermissionDialogFragment
 import yapp.android1.delibuddy.ui.home.HomeActivity
+import yapp.android1.delibuddy.ui.login.LoginActivity
 import yapp.android1.delibuddy.ui.permission.PermissionDescriptionActivity
 import yapp.android1.delibuddy.util.intentTo
 import yapp.android1.delibuddy.util.permission.PermissionManager
@@ -25,27 +27,28 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        intentTo(HomeActivity::class.java)
 
-        PermissionManager.checkPermission(this, PermissionType.LOCATION) {
-            when (it) {
-                PermissionState.NEED_PERMISSION -> intentPermissionDescription()
-                PermissionState.DENIED -> showPermissionDeniedDialog()
-                PermissionState.GRANTED -> intentMain()
-            }
-        }
+//        PermissionManager.checkPermission(this, PermissionType.LOCATION) {
+//            when (it) {
+//                PermissionState.NEED_PERMISSION -> intentPermissionDescription()
+//                PermissionState.DENIED -> showPermissionDeniedDialog()
+//                PermissionState.GRANTED -> intentLogin()
+//            }
+//        }
     }
 
-    private fun intentMain() {
+    private fun intentLogin() {
         intentJob = lifecycleScope.launch {
             delay(2000L)
-            intentTo(HomeActivity::class.java)
+            intentTo(LoginActivity::class.java)
         }
     }
 
     private fun intentPermissionDescription() {
         intentJob = lifecycleScope.launch {
             delay(2000L)
-            intentTo(PermissionDescriptionActivity::class.java)
+           // intentTo(PermissionDescriptionActivity::class.java)
         }
     }
 

@@ -38,12 +38,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
     private fun setPartiesAdapterData() {
         partiesAdapter.submitList(
             listOf(
-                PartyEntity(1),
-                PartyEntity(2),
-                PartyEntity(3),
-                PartyEntity(4),
-                PartyEntity(5),
-                PartyEntity(6)
+//                PartyEntity(1),
+//                PartyEntity(2),
+//                PartyEntity(3),
+//                PartyEntity(4),
+//                PartyEntity(5),
+//                PartyEntity(6)
             )
         )
     }
