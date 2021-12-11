@@ -5,4 +5,6 @@ import yapp.android1.delibuddy.databinding.FragmentMypageBinding
 
 class MyPageFragment : BaseFragment<FragmentMypageBinding>(
     FragmentMypageBinding::inflate
-)
+) {
+
+}
