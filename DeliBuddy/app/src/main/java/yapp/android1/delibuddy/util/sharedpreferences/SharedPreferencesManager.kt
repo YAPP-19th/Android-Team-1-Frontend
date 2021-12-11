@@ -13,7 +13,7 @@ class SharedPreferencesManager(context: Context) {
     fun saveUserAddress(address: Address) {
         prefs["addressName"] = address.addressName
         prefs["address"] = address.address
-        prefs["roadAddress"] = address.roadAddress
+        prefs["roadAddress"] = address.roadAddress ?: ""
         prefs["addressDetail"] = address.addressDetail
         prefs["lat"] = address.lat
         prefs["lon"] = address.lng
