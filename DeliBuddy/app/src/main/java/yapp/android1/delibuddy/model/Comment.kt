@@ -8,18 +8,23 @@ data class Comment(
     val writer: Writer,
     val body: String,
     val createAt: String,
-    val childComment: List<Comment>? = emptyList()
+    val childComments: List<Comment>? = emptyList()
 ) {
-    val viewType = if (parentId == null) PARENT else CHILD
-
     data class Writer(
         val nickName: String,
         val profileImage: String
     )
 
+    val viewType = if(parentId != null) PARENT else CHILD
+
+    fun hasChildComments(): Boolean {
+        return childComments != null && childComments.isNotEmpty()
+    }
+
     companion object {
         const val PARENT = 1
         const val CHILD = 2
     }
+
 }
 

@@ -30,6 +30,7 @@ class CommentTabFragment : BaseFragment<FragmentCommentTabBinding>(FragmentComme
         super.onViewCreated(view, savedInstanceState)
 
         initializeRecyclerView()
+        collectComments()
     }
 
     private fun initializeRecyclerView() = with(binding) {
@@ -44,8 +45,8 @@ class CommentTabFragment : BaseFragment<FragmentCommentTabBinding>(FragmentComme
 
     private fun collectComments() {
         repeatOnStarted {
-            viewModel.value.party.collect { party ->
-                //TODO recyclerview에 submit
+            viewModel.value.comments.collect { party ->
+                commentAdapter.submitList(party)
             }
         }
     }

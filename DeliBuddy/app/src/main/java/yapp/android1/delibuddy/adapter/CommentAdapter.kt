@@ -4,6 +4,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
+import yapp.android1.delibuddy.databinding.ItemChildCommentBinding
+import yapp.android1.delibuddy.databinding.ItemParentCommentBinding
 import yapp.android1.delibuddy.model.Comment
 
 typealias WriteReplyListener = (Comment) -> Unit
@@ -14,7 +16,18 @@ class CommentAdapter : ListAdapter<Comment, CommentViewHolder>(CommentDiffUtil()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CommentViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
-        return CommentViewHolder.of(layoutInflater, viewType)
+
+        return when(viewType) {
+            Comment.PARENT ->{
+                val binding = ItemParentCommentBinding.inflate(layoutInflater)
+                ParentCommentViewHolder(binding)
+            }
+            Comment.CHILD -> {
+                val binding = ItemChildCommentBinding.inflate(layoutInflater)
+                ChildCommentViewHolder(binding)
+            }
+            else -> throw RuntimeException("올바른 ViewType이 아닙니다")
+        }
     }
 
     override fun onBindViewHolder(holder: CommentViewHolder, position: Int) {

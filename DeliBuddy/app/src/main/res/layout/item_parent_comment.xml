@@ -1,83 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="16dp">
+    android:layout_height="match_parent"
+    android:id="@+id/container"
+    android:orientation="vertical">
 
-    <ImageView
-        android:id="@+id/iv_icon_user"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:src="@drawable/icon_user_profile_deep_purple"
-        tools:src="@drawable/icon_user_profile_blue" />
-
-    <ImageView
-        android:id="@+id/iv_icon_owner"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="22dp"
-        android:src="@drawable/icon_owner"
-        android:layout_marginStart="22dp"
-        android:visibility="invisible"
-        app:layout_constraintStart_toStartOf="@+id/iv_icon_user"
-        app:layout_constraintTop_toTopOf="@+id/iv_icon_user" />
+        android:padding="16dp">
 
-    <ImageView
-        android:id="@+id/iv_options"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="4dp"
-        android:src="@drawable/icon_options_grey"
-        app:layout_constraintBottom_toBottomOf="@+id/iv_icon_user"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/iv_icon_user" />
+        <ImageView
+            android:id="@+id/iv_icon_user"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/icon_user_profile_deep_purple"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/icon_user_profile_blue" />
 
-    <TextView
-        android:id="@+id/tv_time_ago"
-        style="@style/RobotoRegular12"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        android:textColor="@color/text_grey"
-        app:layout_constraintEnd_toStartOf="@+id/iv_options"
-        app:layout_constraintStart_toStartOf="@+id/tv_writer_nickname"
-        app:layout_constraintTop_toBottomOf="@+id/tv_writer_nickname"
-        tools:text="25분 전" />
+        <ImageView
+            android:id="@+id/iv_icon_owner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="22dp"
+            android:layout_marginTop="22dp"
+            android:src="@drawable/icon_owner"
+            android:visibility="invisible"
+            app:layout_constraintStart_toStartOf="@+id/iv_icon_user"
+            app:layout_constraintTop_toTopOf="@+id/iv_icon_user" />
 
-    <TextView
-        android:id="@+id/tv_writer_nickname"
-        style="@style/RobotoBold14"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        app:layout_constraintEnd_toStartOf="@+id/iv_options"
-        app:layout_constraintStart_toEndOf="@+id/iv_icon_user"
-        app:layout_constraintTop_toTopOf="@+id/iv_icon_user"
-        tools:text="김선달" />
+        <ImageView
+            android:id="@+id/iv_options"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="4dp"
+            android:src="@drawable/icon_options_grey"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_icon_user"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/iv_icon_user" />
 
-    <TextView
-        android:id="@+id/tv_body"
-        style="@style/RobotoRegular14"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        app:layout_constraintEnd_toEndOf="@+id/iv_options"
-        app:layout_constraintStart_toStartOf="@+id/tv_time_ago"
-        app:layout_constraintTop_toBottomOf="@+id/tv_time_ago"
-        tools:text="저 참여해도 되나요??" />
+        <TextView
+            android:id="@+id/tv_time_ago"
+            style="@style/RobotoRegular12"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:textColor="@color/text_grey"
+            app:layout_constraintEnd_toStartOf="@+id/iv_options"
+            app:layout_constraintStart_toStartOf="@+id/tv_writer_nickname"
+            app:layout_constraintTop_toBottomOf="@+id/tv_writer_nickname"
+            tools:text="25분 전" />
 
-    <TextView
-        android:id="@+id/tv_write_comment"
-        style="@style/RobotoBold12"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="답글쓰기"
-        android:layout_marginTop="8dp"
-        app:layout_constraintStart_toStartOf="@+id/tv_body"
-        app:layout_constraintTop_toBottomOf="@+id/tv_body" />
+        <TextView
+            android:id="@+id/tv_writer_nickname"
+            style="@style/RobotoBold14"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            app:layout_constraintEnd_toStartOf="@+id/iv_options"
+            app:layout_constraintStart_toEndOf="@+id/iv_icon_user"
+            app:layout_constraintTop_toTopOf="@+id/iv_icon_user"
+            tools:text="김선달" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/tv_body"
+            style="@style/RobotoRegular14"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            app:layout_constraintEnd_toEndOf="@+id/iv_options"
+            app:layout_constraintStart_toStartOf="@+id/tv_time_ago"
+            app:layout_constraintTop_toBottomOf="@+id/tv_time_ago"
+            tools:text="저 참여해도 되나요??" />
+
+        <TextView
+            android:id="@+id/tv_write_comment"
+            style="@style/RobotoBold12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="답글쓰기"
+            app:layout_constraintStart_toStartOf="@+id/tv_body"
+            app:layout_constraintTop_toBottomOf="@+id/tv_body" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_child_comments"
+        tools:listitem="@layout/item_child_comment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>

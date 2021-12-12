@@ -22,7 +22,7 @@ class PartyInformationViewModel : BaseViewModel<PartyInformationEvent>() {
     val party = _party.asStateFlow()
 
     private val _comments = MutableStateFlow<List<Comment>>(emptyList())
-    val comment = _comments.asStateFlow()
+    val comments = _comments.asStateFlow()
 
     sealed class PartyInformationEvent : Event {
         class OnIntent(val data: Party) : PartyInformationEvent()
