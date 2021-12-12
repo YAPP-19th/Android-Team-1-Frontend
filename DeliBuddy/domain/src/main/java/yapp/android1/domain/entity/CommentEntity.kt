@@ -8,7 +8,7 @@ data class CommentEntity(
     val writer: WriterEntity,
     val body: String,
     val createAt: String,
-    val childComment: List<CommentEntity>?
+    val childComments: List<CommentEntity>?
 ) {
     data class WriterEntity(
         val nickName: String,
