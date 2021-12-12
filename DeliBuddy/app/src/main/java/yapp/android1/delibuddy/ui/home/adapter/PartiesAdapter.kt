@@ -15,12 +15,12 @@ import yapp.android1.delibuddy.databinding.IncludeLayoutPartyItemBinding
 import yapp.android1.delibuddy.model.Party
 import yapp.android1.delibuddy.util.dpToPx
 
-class PartiesAdapter(private val onClick: (Party) -> Unit) :
+class PartiesAdapter(private val onClick: (IncludeLayoutPartyItemBinding, Party) -> Unit) :
     ListAdapter<Party, PartiesAdapter.PartiesViewHolder>(PartiesDiffCallback) {
 
     inner class PartiesViewHolder(
         private val binding: IncludeLayoutPartyItemBinding,
-        val onClick: (Party) -> Unit,
+        val onClick: (IncludeLayoutPartyItemBinding, Party) -> Unit,
     ) : RecyclerView.ViewHolder(binding.root) {
         private val context = binding.root.context
         private var currentParty: Party? = null
@@ -28,7 +28,7 @@ class PartiesAdapter(private val onClick: (Party) -> Unit) :
         init {
             binding.root.setOnClickListener {
                 currentParty?.let {
-                    onClick(it)
+                    onClick(binding, it)
                 }
             }
         }
