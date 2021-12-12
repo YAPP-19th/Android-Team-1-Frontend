@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
+import timber.log.Timber
 import yapp.android1.delibuddy.R
 import yapp.android1.delibuddy.adapter.CommentAdapter
 import yapp.android1.delibuddy.base.BaseFragment
@@ -39,14 +40,22 @@ class CommentTabFragment : BaseFragment<FragmentCommentTabBinding>(FragmentComme
         rvComment.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
         commentAdapter.setWriteReplyListener { comment ->
-            Toast.makeText(requireContext(), comment.writer.nickName, Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), comment.writer?.nickName, Toast.LENGTH_SHORT).show()
         }
     }
 
     private fun collectComments() {
         repeatOnStarted {
-            viewModel.value.comments.collect { party ->
-                commentAdapter.submitList(party)
+
+            viewModel.value.comments.collect { comments ->
+                Timber.tag("[TAG]").d("$comments")
+                commentAdapter.submitList(comments)
+            }
+        }
+
+        repeatOnStarted {
+            viewModel.value.showToast.collect {
+                Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
             }
         }
     }

@@ -8,10 +8,10 @@ data class CommentModel(
     val id: Int,
     val parentId: Int?,
     val partyId: Int,
-    val writer: WriterModel,
+    val writer: WriterModel?,
     val body: String,
-    val createAt: String,
-    val childComments: List<CommentModel>?
+    val createdAt: String,
+    val children: List<CommentModel> = emptyList()
 ) {
     data class WriterModel(
         val nickName: String,
@@ -33,10 +33,10 @@ data class CommentModel(
                 id = model.id,
                 parentId = model.parentId,
                 partyId = model.partyId,
-                writer =  WriterModel.toWriterEntity(model.writer),
+                writer =  if(model.writer == null) null else WriterModel.toWriterEntity(model.writer),
                 body = model.body,
-                createAt = model.createAt,
-                childComments = model.childComments?.map { CommentModel.toCommentEntity(it) }
+                createdAt = model.createdAt,
+                children = model.children?.map { CommentModel.toCommentEntity(it) }
             )
         }
     }

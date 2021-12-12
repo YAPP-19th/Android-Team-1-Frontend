@@ -7,10 +7,10 @@ data class Comment(
     val id: Int,
     val parentId: Int? = null,
     val partyId: Int,
-    val writer: Writer,
+    val writer: Writer?,
     val body: String,
-    val createAt: String,
-    val childComments: List<Comment>? = emptyList()
+    val createdAt: String,
+    val children: List<Comment> = emptyList()
 ) {
     data class Writer(
         val nickName: String,
@@ -26,10 +26,10 @@ data class Comment(
         }
     }
 
-    val viewType = if(parentId != null) PARENT else CHILD
+    val viewType = if(parentId == null) PARENT else CHILD
 
     fun hasChildComments(): Boolean {
-        return childComments != null && childComments.isNotEmpty()
+        return children.isNotEmpty()
     }
 
     companion object {
@@ -41,10 +41,10 @@ data class Comment(
                 id = entity.id,
                 parentId = entity.parentId,
                 partyId = entity.partyId,
-                writer = Writer.fromWriterEntity(entity.writer),
+                writer = if(entity.writer == null) null else Writer.fromWriterEntity(entity.writer!!),
                 body = entity.body,
-                createAt = entity.createAt,
-                childComments = entity.childComments?.map { Comment.fromCommentEntity(it) }
+                createdAt = entity.createdAt,
+                children = entity.children.map { Comment.fromCommentEntity(it) }
             )
         }
     }

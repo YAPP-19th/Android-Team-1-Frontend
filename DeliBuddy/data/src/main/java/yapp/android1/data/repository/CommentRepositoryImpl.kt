@@ -18,16 +18,13 @@ class CommentRepositoryImpl @Inject constructor(
 ) : CommentRepository {
 
     override suspend fun getCommentsInParty(partyId: Int): NetworkResult<List<CommentEntity>> {
-        try {
-            val partyModels = api.getCommentsInParty(partyId)
-            val partyEntities = partyModels.map { model ->
+
+            val commentModels = api.getCommentsInParty(partyId)
+            val commentEntities = commentModels.map { model ->
                 CommentModel.toCommentEntity(model)
             }
-            return NetworkResult.Success(partyEntities)
-        } catch (t: Throwable) {
-            val errorType = networkErrorHandler.getError(t)
-            return NetworkResult.Error(errorType)
-        }
+            return NetworkResult.Success(commentEntities)
+
     }
 
     override suspend fun deleteComment(commentId: Int): NetworkResult<Boolean> {

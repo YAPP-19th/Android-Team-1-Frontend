@@ -5,10 +5,10 @@ data class CommentEntity(
     val id: Int,
     val parentId: Int?,
     val partyId: Int,
-    val writer: WriterEntity,
+    val writer: WriterEntity?,
     val body: String,
-    val createAt: String,
-    val childComments: List<CommentEntity>?
+    val createdAt: String,
+    val children: List<CommentEntity>
 ) {
     data class WriterEntity(
         val nickName: String,

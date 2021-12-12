@@ -1,9 +1,11 @@
 package yapp.android1.delibuddy.ui.partyInformation
 
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
+import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -28,6 +30,7 @@ class PartyInformationActivity : AppCompatActivity() {
         binding = ActivityPartyInformationBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        initializeViewPager()
         receiverIntent()
         collectData()
     }
@@ -40,14 +43,34 @@ class PartyInformationActivity : AppCompatActivity() {
     private fun collectData() {
         repeatOnStarted {
             viewModel.isOwner.collect { isOwner ->
-                initializeViews(isOwner)
+                switchViewState(isOwner)
+            }
+        }
+
+        repeatOnStarted {
+            viewModel.party.collect { party ->
+                settingPartyInformationViews(party)
             }
         }
     }
 
-    private fun initializeViews(isOwner: Boolean) = with(binding) {
-        initializeViewPager()
+    private fun settingPartyInformationViews(party: Party) = with(binding) {
+        tvPartyLocation.text = party.coordinate
+        tvPartyTitle.text = party.title
+        tvOrderTime.text = party.orderTime
+        tvPartyContent.text = party.body
 
+        val backgroundColor = Color.parseColor("#${party.category.backgroundColorCode}")
+        clBackground.setBackgroundColor(backgroundColor)
+        window.statusBarColor = backgroundColor
+
+        Glide.with(this@PartyInformationActivity)
+            .load(party.category.iconUrl)
+            .into(ivPartyFoodType)
+
+    }
+
+    private fun switchViewState(isOwner: Boolean) = with(binding) {
         if(isOwner) {
             tvStatus.hide()
             tvStatusChange.show()

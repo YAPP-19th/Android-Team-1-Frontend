@@ -19,11 +19,11 @@ class CommentAdapter : ListAdapter<Comment, CommentViewHolder>(CommentDiffUtil()
 
         return when(viewType) {
             Comment.PARENT ->{
-                val binding = ItemParentCommentBinding.inflate(layoutInflater)
+                val binding = ItemParentCommentBinding.inflate(layoutInflater, parent, false)
                 ParentCommentViewHolder(binding)
             }
             Comment.CHILD -> {
-                val binding = ItemChildCommentBinding.inflate(layoutInflater)
+                val binding = ItemChildCommentBinding.inflate(layoutInflater, parent, false)
                 ChildCommentViewHolder(binding)
             }
             else -> throw RuntimeException("올바른 ViewType이 아닙니다")
@@ -31,7 +31,7 @@ class CommentAdapter : ListAdapter<Comment, CommentViewHolder>(CommentDiffUtil()
     }
 
     override fun onBindViewHolder(holder: CommentViewHolder, position: Int) {
-        holder.onBind(currentList[position], writeReplyListener!!)
+        holder.onBind(currentList[position], writeReplyListener)
     }
 
     override fun getItemViewType(position: Int): Int {

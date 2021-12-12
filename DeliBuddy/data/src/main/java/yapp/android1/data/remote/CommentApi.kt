@@ -9,7 +9,7 @@ interface CommentApi : DeliBuddyApi {
 
     @GET("api/v1/parties/{id}/comments")
     suspend fun getCommentsInParty(
-        @Path("id") partyId: Int
+        @Path("id") id: Int
     ): List<CommentModel>
 
     @DELETE("api/v1/comments/{id}")
