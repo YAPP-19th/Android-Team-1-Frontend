@@ -19,7 +19,6 @@ class PartyRepositoryImpl @Inject constructor(
     override suspend fun getPartiesInCircle(point: String, distance: Int): NetworkResult<List<PartyEntity>> {
         return try {
             val response = api.getPartiesInCircle(point, distance)
-
             NetworkResult.Success(
                 response.map {
                     PartyModel.toPartyEntity(it)

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="138dp"
+    android:layout_marginHorizontal="20dp"
+    android:layout_marginBottom="16dp"
+    android:outlineSpotShadowColor="@color/shadow_grey"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="20dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/party_item"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="8dp">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/food_category_image"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/icon_location"
+            android:layout_width="12dp"
+            android:layout_height="18dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginTop="8dp"
+            android:src="@drawable/icon_location"
+            app:layout_constraintStart_toEndOf="@id/food_category_image"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/party_location"
+            style="@style/RobotoRegular14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toBottomOf="@id/icon_location"
+            app:layout_constraintStart_toEndOf="@id/icon_location"
+            app:layout_constraintTop_toTopOf="@id/icon_location" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/party_title"
+            style="@style/RobotoBold16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/black"
+            app:layout_constraintStart_toStartOf="@id/icon_location"
+            app:layout_constraintTop_toBottomOf="@id/icon_location" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            style="@style/RobotoRegular12"
+            android:layout_width="40dp"
+            android:layout_height="20dp"
+            android:layout_marginLeft="12dp"
+            android:background="@drawable/home_status_btn_radius"
+            android:gravity="center"
+            android:text="@string/party_status_onorder"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="@id/party_title"
+            app:layout_constraintStart_toEndOf="@id/party_title"
+            app:layout_constraintTop_toTopOf="@id/party_title" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/party_scheduled_time"
+            style="@style/RobotoRegular14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:textColor="@color/black"
+            app:layout_constraintStart_toStartOf="@id/icon_location"
+            app:layout_constraintTop_toBottomOf="@id/party_title" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            style="@style/RobotoRegular14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="2dp"
+            android:text="@string/party_scheduled_time"
+            android:textColor="@color/text_grey"
+            app:layout_constraintStart_toEndOf="@id/party_scheduled_time"
+            app:layout_constraintTop_toTopOf="@id/party_scheduled_time" />
+
+        <LinearLayout
+            android:id="@+id/member_icon"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="@id/icon_location"
+            app:layout_constraintTop_toBottomOf="@id/party_scheduled_time" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/member_count"
+            style="@style/RobotoRegular12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:textColor="@color/text_light_grey"
+            app:layout_constraintBottom_toBottomOf="@id/member_icon"
+            app:layout_constraintStart_toEndOf="@id/member_icon"
+            app:layout_constraintTop_toTopOf="@id/member_icon" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>
