@@ -4,17 +4,17 @@ import yapp.android1.domain.entity.CategoryEntity
 
 data class Category(
     val backgroundColorCode: String,
-    val code: String,
+    val code: String?,
     val iconUrl: String,
-    val id: String,
+    val id: Int,
     val name: String,
 ) {
     companion object {
         val EMPTY = Category(
             backgroundColorCode = "",
-            code = "",
+            code = null,
             iconUrl = "",
-            id = "",
+            id = -1,
             name = ""
         )
 

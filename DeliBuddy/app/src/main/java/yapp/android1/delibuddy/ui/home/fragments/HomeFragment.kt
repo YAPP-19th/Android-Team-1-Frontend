@@ -48,7 +48,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
                 )
             )
         )
-
     }
 
     private fun initPartiesRecyclerView() = with(binding.rvParties) {

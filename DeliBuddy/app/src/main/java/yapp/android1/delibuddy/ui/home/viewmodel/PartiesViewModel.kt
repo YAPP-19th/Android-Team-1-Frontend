@@ -35,10 +35,7 @@ class PartiesViewModel @Inject constructor(
     private suspend fun getPartiesInCircle(locationRange: LocationRange) {
         when (val result = getPartiesInCircleUseCase.invoke(locationRange)) {
             is NetworkResult.Success -> {
-                println("second ${result.data}")
-
                 val parties = result.data.map { Party.toParty(it) }
-
                 _partiesResult.emit(parties)
             }
             is NetworkResult.Error -> handleError(result) {}
