@@ -1,5 +1,6 @@
 package yapp.android1.delibuddy.ui.home.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
@@ -16,7 +17,8 @@ import yapp.android1.delibuddy.util.extensions.repeatOnStarted
 import yapp.android1.delibuddy.util.intentTo
 
 typealias LocationRange = Pair<String, Int>
-const val PARTY_ID = "party id"
+
+const val PARTY = "party"
 
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding>(
@@ -64,9 +66,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
     }
 
     private fun adapterOnClick(party: Party) {
-        val bundle = Bundle()
-        bundle.putInt(PARTY_ID, party.id)
-
-        requireActivity().intentTo(PartyDetailActivity::class.java, bundle)
+        val intent = Intent(activity, PartyDetailActivity::class.java)
+        intent.putExtra(PARTY, party)
+        startActivity(intent)
     }
 }

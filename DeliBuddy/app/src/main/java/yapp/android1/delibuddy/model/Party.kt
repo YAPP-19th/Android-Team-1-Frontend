@@ -1,6 +1,7 @@
 package yapp.android1.delibuddy.model
 
 import yapp.android1.domain.entity.PartyEntity
+import java.io.Serializable
 
 data class Party(
     val allStatuses: List<String>,
@@ -12,7 +13,7 @@ data class Party(
     val orderTime: String,
     val targetUserCount: Int,
     val title: String,
-) {
+) : Serializable {
     companion object {
         val EMPTY = Party(
             allStatuses = emptyList(),
