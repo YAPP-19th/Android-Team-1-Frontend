@@ -40,6 +40,9 @@
     <color name="seafood_background">#EDEDED</color>
     <color name="western_background">#D1F4CA</color>
 
+    <color name="mypage_banner_background">#FBF5F4</color>
+    <color name="text_burgundy">#56170F</color>
+
     <color name="text_orange">#F15641</color>
     <color name="text_light_grey">#D1D1D1</color>
     <color name="text_grey">#686868</color>

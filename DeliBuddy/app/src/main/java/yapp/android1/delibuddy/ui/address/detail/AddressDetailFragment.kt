@@ -115,10 +115,10 @@ class AddressDetailFragment :
     private fun activateAddressView(address: Address) = with(binding) {
         tvAddressDetailName.text = address.addressName
 
-        if (address.roadAddress.isNotBlank()) {
-            tvAddress.text = address.roadAddress
-        } else {
+        if (address.roadAddress?.isNullOrBlank() == true) {
             tvAddress.text = address.address
+        } else {
+            tvAddress.text = address.roadAddress
         }
 
         etAddressDetail.setText("")

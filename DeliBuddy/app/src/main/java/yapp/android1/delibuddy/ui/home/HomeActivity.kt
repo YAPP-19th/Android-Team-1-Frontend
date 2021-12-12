@@ -8,8 +8,8 @@ import yapp.android1.delibuddy.R
 import yapp.android1.delibuddy.databinding.ActivityHomeBinding
 import yapp.android1.delibuddy.ui.home.fragments.AlarmFragment
 import yapp.android1.delibuddy.ui.home.fragments.HomeFragment
-import yapp.android1.delibuddy.ui.home.fragments.MyPageFragment
-import yapp.android1.delibuddy.ui.home.fragments.MyPartyFragment
+import yapp.android1.delibuddy.ui.mypage.MyPageFragment
+import yapp.android1.delibuddy.ui.myparty.MyPartyFragment
 
 class HomeActivity: AppCompatActivity() {
 

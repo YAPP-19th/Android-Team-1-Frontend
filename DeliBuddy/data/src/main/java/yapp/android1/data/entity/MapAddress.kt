@@ -32,13 +32,13 @@ object MapAddress {
     fun toAddress(
         lat: Double,
         lng: Double,
-        coordAddressDocument: CoordAddressDocument
+        coordAddressDocument: CoordAddressDocument,
     ): AddressEntity {
         coordAddressDocument.apply {
             return AddressEntity(
-                addressName = coordRoadAddress.addressName,
+                addressName = coordRoadAddress?.addressName ?: coordAddress.addressName,
                 address = coordAddress.addressName,
-                roadAddress = coordRoadAddress.addressName,
+                roadAddress = coordRoadAddress?.addressName ?: coordAddress.addressName,
                 addressDetail = "",
                 lat = lat,
                 lng = lng

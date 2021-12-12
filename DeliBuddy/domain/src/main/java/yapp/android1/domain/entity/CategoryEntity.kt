@@ -1,8 +1,9 @@
 package yapp.android1.domain.entity
 
-
 data class CategoryEntity(
+    val backgroundColorCode: String,
     val code: String,
-    val id: Int,
+    val iconUrl: String,
+    val id: String,
     val name: String,
 )

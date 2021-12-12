@@ -7,7 +7,7 @@ import yapp.android1.domain.entity.AddressEntity
 @Parcelize
 data class Address(
     val addressName: String,
-    val roadAddress: String,
+    val roadAddress: String? = null,
     val address: String,
     var addressDetail: String,
     val lat: Double,
