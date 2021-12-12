@@ -12,6 +12,9 @@
     <string name="navigation_alarm">Alarm</string>
     <string name="navigation_mypage">My Page</string>
 
+    <string name="party_scheduled_time">주문 예정</string>
+    <string name="party_status_onorder">주문중</string>
+
     <string name="navigation_myparty_title">내가 참여 중인 파티</string>
 
     <string name="navigation_mypage_title">마이페이지</string>
@@ -21,5 +24,4 @@
     <string name="login_info">효율적인 음식 배달,\n지금 바로 딜리버디로\n시작해볼까요?</string>
     <string name="kakao_login">카카오로 시작하기</string>
     <string name="policy_info">가입을 진행할 경우, 아래의 정책에 동의한 것으로 간주됩니다.\n서비스이용약관 및 개인정보처리방침</string>
-
 </resources>

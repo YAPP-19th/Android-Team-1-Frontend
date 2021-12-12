@@ -1,7 +1,5 @@
 package yapp.android1.data.entity
 
-import yapp.android1.domain.entity.CategoryEntity
-
 import yapp.android1.domain.entity.PartyEntity
 
 data class PartyModel(
