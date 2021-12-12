@@ -9,6 +9,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import yapp.android1.delibuddy.R
 import yapp.android1.delibuddy.databinding.IncludeLayoutPartyItemBinding
 import yapp.android1.delibuddy.model.Party
@@ -35,21 +36,30 @@ class PartiesAdapter(private val onClick: (Party) -> Unit) :
         fun bind(party: Party) {
             currentParty = party
 
-            binding.foodCategoryImage.setImageResource(R.drawable.icon_food_bread_small)
-            binding.partyLocation.text = "성복역 1번 출구"
-            binding.partyTitle.text = "유로코 피자 4인"
-            binding.partyScheduledTime.text = "10월 5일 10시 40분"
-            setMemberIcon(5, 3)
-            binding.memberCount.text = "3/5"
+            Glide.with(context)
+                .load(party.category.iconUrl)
+                .into(binding.foodCategoryImage)
+            binding.partyLocation.text = party.coordinate
+            binding.partyTitle.text = party.title
+            binding.partyScheduledTime.text = party.orderTime
+            setMemberIcon(party.targetUserCount, party.currentUserCount)
+            binding.memberCount.text = "${party.currentUserCount} / ${party.targetUserCount}"
         }
 
-        private fun setMemberIcon(totalMemberNumber: Int, presenceMemberNumber: Int) {
-            val params = LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT)
+        private fun setMemberIcon(targetUserCount: Int, currentUserCount: Int) {
+            val params = LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            )
             params.setMargins(0, 0, context.dpToPx(8).toInt(), 0)
 
-            makeMemberIcon(context, params, R.drawable.icon_party_member_presence, presenceMemberNumber)
-            makeMemberIcon(context, params, R.drawable.icon_party_member_absence, totalMemberNumber - presenceMemberNumber)
+            makeMemberIcon(context, params, R.drawable.icon_party_member_presence, currentUserCount)
+            makeMemberIcon(
+                context,
+                params,
+                R.drawable.icon_party_member_absence,
+                targetUserCount - currentUserCount
+            )
         }
 
         private fun makeMemberIcon(
