@@ -15,6 +15,8 @@
     <string name="party_scheduled_time">주문 예정</string>
     <string name="party_status_onorder">주문중</string>
 
+    <string name="navigation_alarm_title">알림</string>
+
     <string name="navigation_myparty_title">내가 참여 중인 파티</string>
 
     <string name="navigation_mypage_title">마이페이지</string>

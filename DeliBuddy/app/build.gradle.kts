@@ -17,10 +17,10 @@ android {
 
     defaultConfig {
         applicationId = Configs.APPLICATION_ID
-        minSdk        = Configs.MIN_SDK
-        targetSdk     = Configs.TARGET_SDK
-        versionCode   = Configs.VERSION_CODE
-        versionName   = Configs.VERSION_NAME
+        minSdk = Configs.MIN_SDK
+        targetSdk = Configs.TARGET_SDK
+        versionCode = Configs.VERSION_CODE
+        versionName = Configs.VERSION_NAME
 
         buildConfigField("String", "KAKAO_LOCAL_API_KEY", getApiKey("KAKAO_LOCAL_API_KEY"))
         buildConfigField("String", "NAVER_MAP_APIKEY_ID", getApiKey("NAVER_MAP_APIKEY_ID"))
@@ -35,18 +35,19 @@ android {
 
     buildFeatures {
         viewBinding = true
+        dataBinding = true
     }
 
     buildTypes {
         getByName(Configs.DEBUG) {
             isMinifyEnabled = false
-            isDebuggable    = true
+            isDebuggable = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
 
         getByName(Configs.RELEASE) {
             isMinifyEnabled = true
-            isDebuggable    = false
+            isDebuggable = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
 
             firebaseAppDistribution {
@@ -59,7 +60,7 @@ android {
 
         create(Configs.QA) {
             isMinifyEnabled = true
-            isDebuggable    = false
+            isDebuggable = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
 
             firebaseAppDistribution {
@@ -95,6 +96,7 @@ dependencies {
     implementation(AndroidX.APP_COMPAT)
     implementation(AndroidX.CONSTRAINT_LAYOUT)
     implementation(AndroidX.LEGACY_SUPPORT)
+    implementation(AndroidX.DATA_BINDING_RUNTIME)
     implementation(AndroidX.VIEW_DATA_BINDING)
     implementation(AndroidX.RECYCLERVIEW)
 
@@ -124,8 +126,8 @@ dependencies {
     implementation(Libraries.TED_PERMISSION)
     implementation(Libraries.TED_PERMISSION_COROUTINE)
 
-    implementation (Libraries.NAVER_MAP)
-    implementation (Libraries.KAKAO_LOGIN)
+    implementation(Libraries.NAVER_MAP)
+    implementation(Libraries.KAKAO_LOGIN)
 
     testImplementation(UnitTest.JUNIT)
 
