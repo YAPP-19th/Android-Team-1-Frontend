@@ -29,10 +29,16 @@ sealed class AddressSharedEvent : Event {
     class CoordToAddress(val lat: Double, val lng: Double) : AddressSharedEvent()
 }
 
+sealed class SaveAddressEvent : Event {
+    object Idle : SaveAddressEvent()
+    class Success(val userAddress: String) : SaveAddressEvent()
+    object Failed : SaveAddressEvent()
+}
+
 @HiltViewModel
 class AddressSharedViewModel @Inject constructor(
     private val searchAddressUseCase: SearchAddressUseCase,
-    private val coordToAddressUseCase: CoordToAddressUseCase
+    private val coordToAddressUseCase: CoordToAddressUseCase,
 ) : BaseViewModel<Event>() {
     private var job: Job? = null
 
@@ -45,6 +51,9 @@ class AddressSharedViewModel @Inject constructor(
 
     private val _isActivate = MutableEventFlow<Boolean>()
     val isActivate: EventFlow<Boolean> = _isActivate
+
+    private var _saveAddressEvent = MutableStateFlow<SaveAddressEvent>(SaveAddressEvent.Idle)
+    val saveAddressEvent: StateFlow<SaveAddressEvent> = _saveAddressEvent
 
     override suspend fun handleEvent(event: Event) {
         when (event) {
@@ -93,9 +102,14 @@ class AddressSharedViewModel @Inject constructor(
     private fun saveAddress(address: Address) {
         DeliBuddyApplication.prefs.saveUserAddress(address)
 
-        // save address test
-        val test = DeliBuddyApplication.prefs.getCurrentUserAddress()
-        Timber.w("Save Success ${test.addressName}, lat: ${test.lat}, lon: ${test.lng}, detail: ${test.addressDetail}")
+        if (DeliBuddyApplication.prefs.getCurrentUserAddress() == null) {
+            _saveAddressEvent.value = SaveAddressEvent.Failed
+            return
+        }
+
+        _saveAddressEvent.value = SaveAddressEvent.Success(
+            DeliBuddyApplication.prefs.getCurrentUserAddress()!!.address
+        )
     }
 
     private fun convertCoordToAddress(lat: Double, lng: Double) {
