@@ -3,6 +3,7 @@ package yapp.android1.delibuddy.util.sharedpreferences
 import android.content.Context
 import android.content.SharedPreferences
 import yapp.android1.delibuddy.model.Address
+import yapp.android1.delibuddy.model.Auth
 import yapp.android1.delibuddy.util.sharedpreferences.SharedPreferenceHelper.get
 import yapp.android1.delibuddy.util.sharedpreferences.SharedPreferenceHelper.set
 
@@ -12,7 +13,7 @@ class SharedPreferencesManager(context: Context) {
     fun saveUserAddress(address: Address) {
         prefs["addressName"] = address.addressName
         prefs["address"] = address.address
-        prefs["roadAddress"] = address.roadAddress
+        prefs["roadAddress"] = address.roadAddress ?: ""
         prefs["addressDetail"] = address.addressDetail
         prefs["lat"] = address.lat
         prefs["lon"] = address.lng
@@ -27,5 +28,25 @@ class SharedPreferencesManager(context: Context) {
             lat = prefs["lat", 0.0],
             lng = prefs["lon", 0.0]
         )
+    }
+
+    fun saveAuthData(auth: Auth) {
+        prefs["userToken"] = auth.token
+        prefs["userId"] = auth.userId
+    }
+
+    fun getAuth(): Auth {
+        return Auth(
+            getUserToken(),
+            getUserId()
+        )
+    }
+
+    fun getUserToken(): String {
+        return prefs["userToken", ""]
+    }
+
+    fun getUserId(): Int {
+        return prefs["userId", -1]
     }
 }

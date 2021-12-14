@@ -11,6 +11,7 @@ import yapp.android1.delibuddy.databinding.ActivitySplashBinding
 import yapp.android1.delibuddy.ui.address.AddressActivity
 import yapp.android1.delibuddy.ui.dialog.PermissionDialogFragment
 import yapp.android1.delibuddy.ui.home.HomeActivity
+import yapp.android1.delibuddy.ui.login.LoginActivity
 import yapp.android1.delibuddy.ui.permission.PermissionDescriptionActivity
 import yapp.android1.delibuddy.util.intentTo
 import yapp.android1.delibuddy.util.permission.PermissionManager
@@ -31,16 +32,15 @@ class SplashActivity : AppCompatActivity() {
             when (it) {
                 PermissionState.NEED_PERMISSION -> intentPermissionDescription()
                 PermissionState.DENIED -> showPermissionDeniedDialog()
-                PermissionState.GRANTED -> intentMain()
+                PermissionState.GRANTED -> intentLogin()
             }
         }
     }
 
-    private fun intentMain() {
+    private fun intentLogin() {
         intentJob = lifecycleScope.launch {
             delay(2000L)
-            //intentTo(HomeActivity::class.java)
-            intentTo(AddressActivity::class.java)
+            intentTo(LoginActivity::class.java)
         }
     }
 

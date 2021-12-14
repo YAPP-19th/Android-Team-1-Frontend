@@ -18,7 +18,7 @@ interface KakaoLocalApi {
         @Query("analyze_type") analyze_type: String
     ): AddressModel
 
-    @GET("/v2/local/geo/coord2address.json")
+    @GET("v2/local/geo/coord2address.json")
     suspend fun convertCoordToAddress(
         @Query("x") lng: String,
         @Query("y") lat: String

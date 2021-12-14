@@ -44,6 +44,12 @@ captures/
 *.iml
 .idea/
 
+### macOS ###
+# General
+.DS_Store
+.AppleDouble
+.LSOverride
+
 # Keystore files
 # Uncomment the following lines if you do not want to check your keystore files in.
 #*.jks
@@ -98,9 +104,6 @@ output.json
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
-
-# Package Files #
-!gradle/wrapper/gradle-wrapper.jar
 
 *.jar
 *.war

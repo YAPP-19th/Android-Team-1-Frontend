@@ -2,6 +2,7 @@ package yapp.android1.delibuddy
 
 import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
+import com.kakao.sdk.common.KakaoSdk
 import com.naver.maps.map.NaverMapSdk
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
@@ -19,6 +20,8 @@ internal class DeliBuddyApplication : Application() {
         prefs = SharedPreferencesManager(applicationContext)
         NaverMapSdk.getInstance(this).client =
             NaverMapSdk.NaverCloudPlatformClient(BuildConfig.NAVER_MAP_APIKEY_ID)
+
+        KakaoSdk.init(this, BuildConfig.KAKAO_LOGIN_API_KEY)
 
         plant(object : Timber.DebugTree() {
             override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {

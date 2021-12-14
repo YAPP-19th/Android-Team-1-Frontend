@@ -5,30 +5,36 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import yapp.android1.data.interactor.DeliBuddyNetworkErrorHandlerImpl
 import yapp.android1.data.interactor.KakaoNetworkErrorHandlerImpl
+import yapp.android1.data.remote.AuthApi
 import yapp.android1.data.remote.DeliBuddyApi
 import yapp.android1.data.remote.KakaoLocalApi
+import yapp.android1.data.remote.PartyApi
 import yapp.android1.delibuddy.BuildConfig
+import yapp.android1.delibuddy.DeliBuddyApplication
 import yapp.android1.domain.interactor.DeliBuddyNetworkErrorHandler
 import yapp.android1.domain.interactor.KakaoNetworkErrorHandler
 
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
-    private const val BASE_URL = "https://dapi.kakao.com/"
+    private const val API_BASE_URL =
+        "http://ec2-54-180-186-128.ap-northeast-2.compute.amazonaws.com/"
+    private const val KAKAO_BASE_URL = "https://dapi.kakao.com/"
 
     @DeliBuddyRetrofit
     @Provides
     fun provideDeliBuddyApiRetrofit(
-        @DeliBuddyOkHttpClient okHttpClient: OkHttpClient
+        @DeliBuddyOkHttpClient okHttpClient: OkHttpClient,
     ): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("BASE_URL")
+            .baseUrl(API_BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create(Gson()))
             .build()
@@ -37,10 +43,10 @@ object NetworkModule {
     @KakaoRetrofit
     @Provides
     fun provideKakaoApiRetrofit(
-        @KakaoOkHttpClient okHttpClient: OkHttpClient
+        @KakaoOkHttpClient okHttpClient: OkHttpClient,
     ): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(KAKAO_BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
@@ -64,6 +70,7 @@ object NetworkModule {
     fun provideDeliBuddyOkHttpClient(): OkHttpClient {
         return OkHttpClient.Builder()
             .addInterceptor(makeLoggingInterceptor(true))
+            .addInterceptor(headerInterceptor)
             .addNetworkInterceptor {
                 val builder = it.request().newBuilder()
                 it.proceed(builder.build())
@@ -73,14 +80,14 @@ object NetworkModule {
 
     @Provides
     fun provideDeliBuddyNetworkHandler(
-        @DeliBuddyRetrofit retrofit: Retrofit
+        @DeliBuddyRetrofit retrofit: Retrofit,
     ): DeliBuddyNetworkErrorHandler {
         return DeliBuddyNetworkErrorHandlerImpl(retrofit)
     }
 
     @Provides
     fun provideKaKaoNetworkErrorHandler(
-        @KakaoRetrofit retrofit: Retrofit
+        @KakaoRetrofit retrofit: Retrofit,
     ): KakaoNetworkErrorHandler {
         return KakaoNetworkErrorHandlerImpl(retrofit)
     }
@@ -88,6 +95,16 @@ object NetworkModule {
     @Provides
     fun provideDeliBuddyApiService(@DeliBuddyRetrofit retrofit: Retrofit): DeliBuddyApi {
         return retrofit.create(DeliBuddyApi::class.java)
+    }
+
+    @Provides
+    fun providePartyApiService(@DeliBuddyRetrofit retrofit: Retrofit): PartyApi {
+        return retrofit.create(PartyApi::class.java)
+    }
+
+    @Provides
+    fun provideAuthApiService(@DeliBuddyRetrofit retrofit: Retrofit): AuthApi {
+        return retrofit.create(AuthApi::class.java)
     }
 
     @Provides
@@ -104,4 +121,12 @@ object NetworkModule {
         return logging
     }
 
+    private val headerInterceptor = Interceptor {
+        var token = DeliBuddyApplication.prefs.getUserToken()
+        val request = it.request()
+            .newBuilder()
+            .addHeader("Authorization", "Bearer $token")
+            .build()
+        return@Interceptor it.proceed(request)
+    }
 }

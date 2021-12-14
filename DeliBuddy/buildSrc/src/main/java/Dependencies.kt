@@ -9,6 +9,7 @@ object AndroidX {
     const val CONSTRAINT_LAYOUT          = "androidx.constraintlayout:constraintlayout:${Versions.CONSTRAINT_LAYOUT}"
     const val LEGACY_SUPPORT             = "androidx.legacy:legacy-support-v4:${Versions.LEGACY_SUPPORT}"
     const val VIEW_DATA_BINDING          = "com.android.databinding:viewbinding:${Versions.VIEW_DATA_BINDING}"
+    const val DATA_BINDING_RUNTIME       = "androidx.databinding:databinding-runtime:${Versions.VIEW_DATA_BINDING}"
     const val RECYCLERVIEW               = "androidx.recyclerview:recyclerview:${Versions.RECYCLERVIEW}"
 
     const val CORE_KTX                   = "androidx.core:core-ktx:${Versions.CORE_KTX}"
@@ -45,6 +46,7 @@ object Libraries {
     const val LOTTIE                     = "com.airbnb.android:lottie:${Versions.LOTTIE}"
     
     const val NAVER_MAP                  = "com.naver.maps:map-sdk:${Versions.NAVER_MAP}"
+    const val KAKAO_LOGIN                = "com.kakao.sdk:v2-user:${Versions.KAKAO_LOGIN}"
 
     const val TED_PERMISSION             = "io.github.ParkSangGwon:tedpermission-normal:${Versions.TED_PERMISSION}"
     const val TED_PERMISSION_COROUTINE   = "io.github.ParkSangGwon:tedpermission-coroutine:${Versions.TED_PERMISSION}"
