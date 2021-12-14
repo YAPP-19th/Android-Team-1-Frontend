@@ -68,7 +68,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="24dp"
-                android:text="제목을 입력해 주세요"
+                android:text="10자 이하의 제목을 입력해 주세요"
                 android:textColor="@color/main_orange"
                 app:layout_constraintTop_toBottomOf="@id/et_party_title"
                 android:visibility="gone"/>
@@ -176,7 +176,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="24dp"
-                android:text="음식을 주문할 시간을 선택해 주세요"
+                android:text="최소 10분 후의 시간을 선택해 주세요"
                 android:textColor="@color/main_orange"
                 app:layout_constraintTop_toBottomOf="@id/tv_party_date"
                 android:visibility="gone"/>
@@ -246,7 +246,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="24dp"
-                android:text="오픈 카카오톡 채팅방 링크를 입력해 주세요"
+                android:text="오픈 카카오톡 채팅방 주소를 입력해 주세요"
                 android:textColor="@color/main_orange"
                 app:layout_constraintTop_toBottomOf="@id/et_chat_url"
                 android:visibility="gone"/>
@@ -315,7 +315,7 @@
                 android:layout_marginHorizontal="24dp"
                 android:layout_marginTop="6dp"
                 android:layout_marginBottom="20dp"
-                android:text="내용을 입력해 주세요"
+                android:text="255자 이하의 내용을 입력해 주세요"
                 android:textColor="@color/main_orange"
                 app:layout_constraintTop_toBottomOf="@id/et_party_body"
                 android:visibility="gone"/>

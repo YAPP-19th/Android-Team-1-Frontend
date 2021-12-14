@@ -100,7 +100,6 @@ class CreatePartyActivity : AppCompatActivity() {
                                     false
                                 )
                             )
-                            tvPartyTitleError.text = "제목을 입력해 주세요"
                             tvPartyTitleError.visibility = View.VISIBLE
                         }
                         title.length > MAX_TITLE -> {
@@ -110,7 +109,6 @@ class CreatePartyActivity : AppCompatActivity() {
                                     false
                                 )
                             )
-                            tvPartyTitleError.text = "글자수가 너무 많습니다"
                             tvPartyTitleError.visibility = View.VISIBLE
                         }
                         else -> {
@@ -142,7 +140,6 @@ class CreatePartyActivity : AppCompatActivity() {
                                     false
                                 )
                             )
-                            tvPartyBodyError.text = "내용을 입력해 주세요"
                             tvPartyBodyError.visibility = View.VISIBLE
                         }
                         title.length > MAX_BODY -> {
@@ -152,7 +149,6 @@ class CreatePartyActivity : AppCompatActivity() {
                                     false
                                 )
                             )
-                            tvPartyBodyError.text = "글자수가 너무 많습니다"
                             tvPartyBodyError.visibility = View.VISIBLE
                         }
                         else -> {
@@ -186,7 +182,6 @@ class CreatePartyActivity : AppCompatActivity() {
                                     false
                                 )
                             )
-                            tvChatUrlError.text = "오픈 카카오톡 채팅방 링크를 입력해 주세요"
                             tvChatUrlError.visibility = View.VISIBLE
                         }
                         !isMatchWithRule -> {
@@ -196,7 +191,6 @@ class CreatePartyActivity : AppCompatActivity() {
                                     false
                                 )
                             )
-                            tvChatUrlError.text = "오픈 카카오톡 채팅방 링크 형식에 어긋납니다"
                             tvChatUrlError.visibility = View.VISIBLE
                         }
                         else -> {
