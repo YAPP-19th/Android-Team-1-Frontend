@@ -32,193 +32,296 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/et_party_title"
-        style="@style/RobotoRegular14"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="2dp"
-        android:backgroundTint="@color/divider_grey"
-        android:hint="제목"
-        android:paddingBottom="6dp"
-        android:textColor="@color/text_black"
-        android:textColorHint="@color/text_light_grey"
-        app:layout_constraintTop_toBottomOf="@id/tv_create_party_title" />
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="2dp"
-        android:backgroundTint="@color/divider_grey"
-        android:clickable="false"
-        android:enabled="false"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        app:layout_constraintTop_toBottomOf="@id/et_party_title" />
-
-    <Spinner
-        android:id="@+id/spinner_category"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="2dp"
-        android:backgroundTint="@color/divider_grey"
-        android:padding="0dp"
-        app:layout_constraintTop_toBottomOf="@id/et_party_title"
-        android:background="@null"/>
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:padding="16dp"
-        android:src="@drawable/icon_spinner_more"
-        app:layout_constraintBottom_toBottomOf="@id/spinner_category"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@id/spinner_category" />
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="2dp"
-        android:backgroundTint="@color/divider_grey"
-        android:clickable="false"
-        android:enabled="false"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/spinner_category" />
-
-    <TextView
-        android:id="@+id/tv_party_date"
-        style="@style/RobotoRegular14"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="2dp"
-        android:gravity="center_vertical"
-        android:text="10월 5일"
-        android:textColor="@color/text_black"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/spinner_category" />
-
-    <TextView
-        android:id="@+id/tv_party_time"
-        style="@style/RobotoRegular14"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="2dp"
-        android:gravity="center_vertical"
-        android:text="10시 40분"
-        android:textColor="@color/text_black"
-        app:layout_constraintLeft_toRightOf="@id/tv_party_date"
-        app:layout_constraintTop_toBottomOf="@id/spinner_category" />
-
-    <TextView
-        style="@style/RobotoRegular14"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="2dp"
-        android:layout_marginEnd="24dp"
-        android:gravity="center_vertical"
-        android:text="주문 예정"
-        android:textColor="@color/text_grey"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/spinner_category" />
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="2dp"
-        android:backgroundTint="@color/divider_grey"
-        android:clickable="false"
-        android:enabled="false"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        app:layout_constraintTop_toBottomOf="@id/tv_party_date" />
-
-    <Spinner
-        android:id="@+id/spinner_member"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="2dp"
-        android:backgroundTint="@color/divider_grey"
-        android:padding="0dp"
-        app:layout_constraintTop_toBottomOf="@id/tv_party_date"
-        android:background="@null"/>
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:padding="16dp"
-        android:src="@drawable/icon_spinner_more"
-        app:layout_constraintBottom_toBottomOf="@id/spinner_member"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@id/spinner_member" />
-
-    <EditText
-        android:id="@+id/et_chat_url"
-        style="@style/RobotoRegular14"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="6dp"
-        android:backgroundTint="@color/divider_grey"
-        android:hint="오픈 카카오톡 채팅방 링크"
-        android:textColor="@color/text_black"
-        android:textColorHint="@color/text_light_grey"
-        app:layout_constraintTop_toBottomOf="@id/spinner_member" />
-
-    <TextView
-        android:id="@+id/tv_party_address"
-        style="@style/RobotoBold14"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="2dp"
-        android:drawableLeft="@drawable/icon_location"
-        android:drawablePadding="6dp"
-        android:drawableTint="@color/main_orange"
-        android:gravity="center_vertical"
-        android:text="용인 수지구 성복동"
-        android:textColor="@color/text_black"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/et_chat_url" />
-
-    <ImageView
-        android:id="@+id/iv_reset"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        android:layout_marginBottom="10dp"
-        android:padding="12dp"
-        android:src="@drawable/icon_reset"
-        app:layout_constraintBottom_toTopOf="@id/et_party_body"
-        app:layout_constraintLeft_toRightOf="@id/tv_party_address"
-        app:layout_constraintTop_toBottomOf="@id/et_chat_url" />
-
-    <EditText
-        android:id="@+id/et_party_body"
-        style="@style/RobotoRegular14"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="20dp"
-        android:background="@null"
-        android:gravity="top"
-        android:hint="파티 모집과 관련된 내용을 입력해 주세요.\n(파티 모집과 관련되지 않은 내용은 제한될 수 있습니다.)"
-        android:textColor="@color/text_black"
-        android:textColorHint="@color/text_light_grey"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_party_address"
-        tools:layout_editor_absoluteX="16dp" />
+        app:layout_constraintTop_toBottomOf="@id/tv_create_party_title"
+        app:layout_constraintVertical_bias="0"
+        app:layout_constraintVertical_weight="1"
+        android:layout_marginBottom="20dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_create_party"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/et_party_title"
+                style="@style/RobotoRegular14"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="2dp"
+                android:backgroundTint="@color/divider_grey"
+                android:hint="제목"
+                android:inputType="text"
+                android:maxLines="1"
+                android:paddingBottom="6dp"
+                android:textColor="@color/text_black"
+                android:textColorHint="@color/text_light_grey"
+                app:layout_constraintTop_toTopOf="@id/cl_create_party" />
+
+            <TextView
+                android:id="@+id/tv_party_title_error"
+                style="@style/RobotoRegular10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="24dp"
+                android:text="제목을 입력해 주세요"
+                android:textColor="@color/main_orange"
+                app:layout_constraintTop_toBottomOf="@id/et_party_title"
+                android:visibility="gone"/>
+
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="2dp"
+                android:backgroundTint="@color/divider_grey"
+                android:clickable="false"
+                android:enabled="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                app:layout_constraintTop_toBottomOf="@id/tv_party_title_error" />
+
+            <Spinner
+                android:id="@+id/spinner_category"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="2dp"
+                android:background="@null"
+                android:backgroundTint="@color/divider_grey"
+                android:padding="0dp"
+                app:layout_constraintTop_toBottomOf="@id/tv_party_title_error" />
+
+            <TextView
+                android:id="@+id/tv_party_category_error"
+                style="@style/RobotoRegular10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="24dp"
+                android:text="카테고리를 선택해 주세요"
+                android:textColor="@color/main_orange"
+                app:layout_constraintTop_toBottomOf="@id/spinner_category"
+                android:visibility="gone"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:padding="16dp"
+                android:src="@drawable/icon_spinner_more"
+                app:layout_constraintBottom_toBottomOf="@id/spinner_category"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@id/spinner_category" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="2dp"
+                android:backgroundTint="@color/divider_grey"
+                android:clickable="false"
+                android:enabled="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_party_category_error" />
+
+            <TextView
+                android:id="@+id/tv_party_date"
+                style="@style/RobotoRegular14"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="2dp"
+                android:gravity="center_vertical"
+                android:text="10월 5일"
+                android:textColor="@color/text_black"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_party_category_error" />
+
+            <TextView
+                android:id="@+id/tv_party_time"
+                style="@style/RobotoRegular14"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="2dp"
+                android:gravity="center_vertical"
+                android:text="10시 40분"
+                android:textColor="@color/text_black"
+                app:layout_constraintLeft_toRightOf="@id/tv_party_date"
+                app:layout_constraintTop_toBottomOf="@id/tv_party_category_error" />
+
+            <TextView
+                style="@style/RobotoRegular14"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="24dp"
+                android:gravity="center_vertical"
+                android:text="주문 예정"
+                android:textColor="@color/text_grey"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_party_category_error" />
+
+            <TextView
+                android:id="@+id/tv_party_time_error"
+                style="@style/RobotoRegular10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="24dp"
+                android:text="음식을 주문할 시간을 선택해 주세요"
+                android:textColor="@color/main_orange"
+                app:layout_constraintTop_toBottomOf="@id/tv_party_date"
+                android:visibility="gone"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="2dp"
+                android:backgroundTint="@color/divider_grey"
+                android:clickable="false"
+                android:enabled="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                app:layout_constraintTop_toBottomOf="@id/tv_party_time_error" />
+
+            <Spinner
+                android:id="@+id/spinner_member"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="2dp"
+                android:background="@null"
+                android:backgroundTint="@color/divider_grey"
+                android:padding="0dp"
+                app:layout_constraintTop_toBottomOf="@id/tv_party_time_error" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:padding="16dp"
+                android:src="@drawable/icon_spinner_more"
+                app:layout_constraintBottom_toBottomOf="@id/spinner_member"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@id/spinner_member" />
+
+            <TextView
+                android:id="@+id/tv_party_member_error"
+                style="@style/RobotoRegular10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="24dp"
+                android:text="파티 인원 수를 선택해 주세요"
+                android:textColor="@color/main_orange"
+                app:layout_constraintTop_toBottomOf="@id/spinner_member"
+                android:visibility="gone"/>
+
+            <EditText
+                android:id="@+id/et_chat_url"
+                style="@style/RobotoRegular14"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="6dp"
+                android:backgroundTint="@color/divider_grey"
+                android:hint="오픈 카카오톡 채팅방 링크"
+                android:inputType="text"
+                android:maxLines="1"
+                android:textColor="@color/text_black"
+                android:textColorHint="@color/text_light_grey"
+                app:layout_constraintTop_toBottomOf="@id/tv_party_member_error" />
+
+            <TextView
+                android:id="@+id/tv_chat_url_error"
+                style="@style/RobotoRegular10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="24dp"
+                android:text="오픈 카카오톡 채팅방 링크를 입력해 주세요"
+                android:textColor="@color/main_orange"
+                app:layout_constraintTop_toBottomOf="@id/et_chat_url"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/tv_party_address"
+                style="@style/RobotoBold14"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="2dp"
+                android:drawableLeft="@drawable/icon_location"
+                android:drawablePadding="6dp"
+                android:drawableTint="@color/main_orange"
+                android:gravity="center_vertical"
+                android:text="용인 수지구 성복동"
+                android:textColor="@color/text_grey"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_chat_url_error" />
+
+            <ImageView
+                android:id="@+id/iv_reset"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:padding="12dp"
+                android:src="@drawable/icon_reset"
+                app:layout_constraintBottom_toTopOf="@id/tv_party_address_error"
+                app:layout_constraintLeft_toRightOf="@id/tv_party_address"
+                app:layout_constraintTop_toBottomOf="@id/tv_chat_url_error" />
+
+            <TextView
+                android:id="@+id/tv_party_address_error"
+                style="@style/RobotoRegular10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="24dp"
+                android:text="음식을 나눠 가질 장소를 선택해 주세요"
+                android:textColor="@color/main_orange"
+                app:layout_constraintTop_toBottomOf="@id/tv_party_address"
+                android:visibility="gone"/>
+
+
+            <EditText
+                android:id="@+id/et_party_body"
+                style="@style/RobotoRegular14"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="8dp"
+                android:background="@null"
+                android:gravity="top"
+                android:hint="파티 모집과 관련된 내용을 입력해 주세요.\n(파티 모집과 관련되지 않은 내용은 제한될 수 있습니다.)"
+                android:overScrollMode="always"
+                android:scrollbarStyle="insideInset"
+                android:scrollbars="vertical"
+                android:textColor="@color/text_black"
+                android:textColorHint="@color/text_light_grey"
+                app:layout_constraintTop_toBottomOf="@id/tv_party_address_error"/>
+
+            <TextView
+                android:id="@+id/tv_party_body_error"
+                style="@style/RobotoRegular10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="24dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="20dp"
+                android:text="내용을 입력해 주세요"
+                android:textColor="@color/main_orange"
+                app:layout_constraintTop_toBottomOf="@id/et_party_body"
+                android:visibility="gone"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
