@@ -13,20 +13,9 @@ import yapp.android1.domain.NetworkResult
 sealed class CreatePartyEvent : Event {
     object ClearAddressEvent : CreatePartyEvent()
     object SearchAddressEvent : CreatePartyEvent()
-    class ChangeFlagsEvent(val flag: Flag, val tf: Boolean) : CreatePartyEvent()
+    class ChangeFlagsEvent(val partyElement: PartyElement, val isValid: Boolean) : CreatePartyEvent()
     object CheckFlagsEvent : CreatePartyEvent()
-    object ClickCreatePartyEvent : CreatePartyEvent()
-}
-
-enum class Flag {
-    TITLE,
-    CATEGORY,
-    TIME,
-    MEMBER,
-    CHAT_URL,
-    ADDRESS,
-    BODY,
-    NONE
+    object CreatePartyClickEvent : CreatePartyEvent()
 }
 
 class CreatePartyViewModel : BaseViewModel<CreatePartyEvent>() {
@@ -36,7 +25,13 @@ class CreatePartyViewModel : BaseViewModel<CreatePartyEvent>() {
     private var _searchAddressIsClicked = MutableEventFlow<Boolean>()
     val searchAddressIsClicked: MutableEventFlow<Boolean> = _searchAddressIsClicked
 
-    private var _createPartyFlags: Array<Boolean> =
+    private var _canCreateParty = MutableStateFlow<Boolean>(false)
+    val canCreateParty: MutableStateFlow<Boolean> = _canCreateParty
+
+    private var _invalidElement = MutableStateFlow<PartyElement>(PartyElement.NONE)
+    val invalidElement: MutableStateFlow<PartyElement> = _invalidElement
+
+    private var createPartyFlags: Array<Boolean> =
         arrayOf(
             false, // title
             false, // category
@@ -46,12 +41,6 @@ class CreatePartyViewModel : BaseViewModel<CreatePartyEvent>() {
             false, // address
             false // body
         )
-
-    private var _canCreateParty = MutableStateFlow<Boolean>(false)
-    val canCreateParty: MutableStateFlow<Boolean> = _canCreateParty
-
-    private var _wrong = MutableStateFlow<Flag>(Flag.NONE)
-    val wrong: MutableStateFlow<Flag> = _wrong
 
     init {
         getCurrentAddress()
@@ -72,14 +61,14 @@ class CreatePartyViewModel : BaseViewModel<CreatePartyEvent>() {
             }
 
             is CreatePartyEvent.ChangeFlagsEvent -> {
-                changeFlag(event.flag, event.tf)
+                changeFlag(event.partyElement, event.isValid)
             }
 
             is CreatePartyEvent.CheckFlagsEvent -> {
                 checkCanCreateParty()
             }
 
-            is CreatePartyEvent.ClickCreatePartyEvent -> {
+            is CreatePartyEvent.CreatePartyClickEvent -> {
                 checkAndCreate()
             }
         }
@@ -93,30 +82,31 @@ class CreatePartyViewModel : BaseViewModel<CreatePartyEvent>() {
         _searchAddressIsClicked.emit(true)
     }
 
-    private suspend fun checkAndCreate() {
-        val i = checkCanCreateParty()
-
-        if (i == 7) {
-            showToast("성공")
-        } else {
-            _wrong.value = Flag.values()[i]
-        }
+    private fun changeFlag(partyElement: PartyElement, isValid: Boolean) {
+        createPartyFlags[partyElement.ordinal] = isValid
+        checkCanCreateParty()
     }
 
     private fun checkCanCreateParty(): Int {
-        for (index in _createPartyFlags.indices) {
-            if (!_createPartyFlags[index]) {
+        for (index in createPartyFlags.indices) {
+            if (!createPartyFlags[index]) {
                 _canCreateParty.value = false
                 return index
             }
         }
         _canCreateParty.value = true
-        return 7
+        return PartyElement.NONE.ordinal
     }
 
-    private fun changeFlag(flag: Flag, tf: Boolean) {
-        _createPartyFlags[flag.ordinal] = tf
-        checkCanCreateParty()
+    private suspend fun checkAndCreate() {
+        val i = checkCanCreateParty()
+
+        if (i == PartyElement.NONE.ordinal) {
+            showToast("성공")
+        } else {
+            _invalidElement.value = PartyElement.values()[i]
+            showToast("파티글 생성에 실패하였습니다")
+        }
     }
 
     override suspend fun handleError(result: NetworkResult.Error, retryAction: RetryAction?) {

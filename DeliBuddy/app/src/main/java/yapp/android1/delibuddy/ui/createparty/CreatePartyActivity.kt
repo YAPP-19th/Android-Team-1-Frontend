@@ -1,9 +1,10 @@
 package yapp.android1.delibuddy.ui.createparty
 
-import android.R
+
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.graphics.Typeface
+import android.icu.text.SimpleDateFormat
 import android.icu.util.Calendar
 import android.os.Bundle
 import android.text.Editable
@@ -16,21 +17,20 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import kotlinx.coroutines.flow.collect
+import timber.log.Timber
 import yapp.android1.delibuddy.databinding.ActivityCreatePartyBinding
 import yapp.android1.delibuddy.ui.address.AddressActivity
 import yapp.android1.delibuddy.util.extensions.repeatOnStarted
 import yapp.android1.delibuddy.util.intentTo
 
-
 class CreatePartyActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCreatePartyBinding
     private val viewModel: CreatePartyViewModel by viewModels()
 
-    private val nowHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
-    private val nowMinute = Calendar.getInstance().get(Calendar.MINUTE)
-    private val nowYear = Calendar.getInstance().get(Calendar.YEAR)
-    private val nowMonth = Calendar.getInstance().get(Calendar.MONTH)
-    private val nowDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
+    private val targetTime = Calendar.getInstance()
+    private val targetTimes = arrayOf<Int>(0, 0, 0, 0, 0)
+    private val selectedTimes = arrayOf<Int>(0, 0, 0, 0, 0)
+    private var dateFormat = SimpleDateFormat("yyyy-MM-dd hh:mm:ss")
 
     private val MAX_TITLE = 10
     private val MAX_BODY = 255
@@ -46,16 +46,28 @@ class CreatePartyActivity : AppCompatActivity() {
     }
 
     private fun initTime() {
+        targetTime.add(Calendar.MINUTE, 10)
+        targetTimes[PartyTimeElement.YEAR.ordinal] = targetTime.get(Calendar.YEAR)
+        targetTimes[PartyTimeElement.MONTH.ordinal] = targetTime.get(Calendar.MONTH)
+        targetTimes[PartyTimeElement.DAY.ordinal] = targetTime.get(Calendar.DAY_OF_MONTH)
+        targetTimes[PartyTimeElement.HOUR.ordinal] = targetTime.get(Calendar.HOUR_OF_DAY)
+        targetTimes[PartyTimeElement.MINUTE.ordinal] = targetTime.get(Calendar.MINUTE)
 
+        for (i in selectedTimes.indices) {
+            selectedTimes[i] = targetTimes[i]
+        }
+        selectedTimes[PartyTimeElement.MONTH.ordinal] += 1
     }
 
     private fun initView() = with(binding) {
         tvCreateParty.setOnClickListener {
-            viewModel.occurEvent(CreatePartyEvent.ClickCreatePartyEvent)
+            viewModel.occurEvent(CreatePartyEvent.CreatePartyClickEvent)
         }
 
-        tvPartyDate.text = "${nowMonth + 1}월 ${nowDay}일"
-        tvPartyTime.text = "${nowHour}시 ${nowMinute}분"
+        tvPartyDate.text =
+            "${targetTimes[PartyTimeElement.MONTH.ordinal] + 1}월 ${targetTimes[PartyTimeElement.DAY.ordinal]}일"
+        tvPartyTime.text =
+            "${targetTimes[PartyTimeElement.HOUR.ordinal]}시 ${targetTimes[PartyTimeElement.MINUTE.ordinal]}분"
 
         ivReset.setOnClickListener {
             viewModel.occurEvent(CreatePartyEvent.ClearAddressEvent)
@@ -84,7 +96,7 @@ class CreatePartyActivity : AppCompatActivity() {
                         title.isBlank() -> {
                             viewModel.occurEvent(
                                 CreatePartyEvent.ChangeFlagsEvent(
-                                    Flag.TITLE,
+                                    PartyElement.TITLE,
                                     false
                                 )
                             )
@@ -94,7 +106,7 @@ class CreatePartyActivity : AppCompatActivity() {
                         title.length > MAX_TITLE -> {
                             viewModel.occurEvent(
                                 CreatePartyEvent.ChangeFlagsEvent(
-                                    Flag.TITLE,
+                                    PartyElement.TITLE,
                                     false
                                 )
                             )
@@ -104,7 +116,7 @@ class CreatePartyActivity : AppCompatActivity() {
                         else -> {
                             viewModel.occurEvent(
                                 CreatePartyEvent.ChangeFlagsEvent(
-                                    Flag.TITLE,
+                                    PartyElement.TITLE,
                                     true
                                 )
                             )
@@ -126,7 +138,7 @@ class CreatePartyActivity : AppCompatActivity() {
                         title.isBlank() -> {
                             viewModel.occurEvent(
                                 CreatePartyEvent.ChangeFlagsEvent(
-                                    Flag.BODY,
+                                    PartyElement.BODY,
                                     false
                                 )
                             )
@@ -136,7 +148,7 @@ class CreatePartyActivity : AppCompatActivity() {
                         title.length > MAX_BODY -> {
                             viewModel.occurEvent(
                                 CreatePartyEvent.ChangeFlagsEvent(
-                                    Flag.BODY,
+                                    PartyElement.BODY,
                                     false
                                 )
                             )
@@ -144,7 +156,12 @@ class CreatePartyActivity : AppCompatActivity() {
                             tvPartyBodyError.visibility = View.VISIBLE
                         }
                         else -> {
-                            viewModel.occurEvent(CreatePartyEvent.ChangeFlagsEvent(Flag.BODY, true))
+                            viewModel.occurEvent(
+                                CreatePartyEvent.ChangeFlagsEvent(
+                                    PartyElement.BODY,
+                                    true
+                                )
+                            )
                             tvPartyBodyError.visibility = View.GONE
                         }
                     }
@@ -165,7 +182,7 @@ class CreatePartyActivity : AppCompatActivity() {
                         title.isBlank() -> {
                             viewModel.occurEvent(
                                 CreatePartyEvent.ChangeFlagsEvent(
-                                    Flag.CHAT_URL,
+                                    PartyElement.CHAT_URL,
                                     false
                                 )
                             )
@@ -175,7 +192,7 @@ class CreatePartyActivity : AppCompatActivity() {
                         !isMatchWithRule -> {
                             viewModel.occurEvent(
                                 CreatePartyEvent.ChangeFlagsEvent(
-                                    Flag.CHAT_URL,
+                                    PartyElement.CHAT_URL,
                                     false
                                 )
                             )
@@ -185,7 +202,7 @@ class CreatePartyActivity : AppCompatActivity() {
                         else -> {
                             viewModel.occurEvent(
                                 CreatePartyEvent.ChangeFlagsEvent(
-                                    Flag.CHAT_URL,
+                                    PartyElement.CHAT_URL,
                                     true
                                 )
                             )
@@ -199,7 +216,11 @@ class CreatePartyActivity : AppCompatActivity() {
 
     private fun initDatePicker() = with(binding) {
         val datePickerDialogListener =
-            DatePickerDialog.OnDateSetListener { _, _, month, dayOfMonth ->
+            DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
+                selectedTimes[PartyTimeElement.YEAR.ordinal] = year
+                selectedTimes[PartyTimeElement.MONTH.ordinal] = month + 1
+                selectedTimes[PartyTimeElement.DAY.ordinal] = dayOfMonth
+                validateTime()
                 tvPartyDate.text = "${month + 1}월 ${dayOfMonth}일"
             }
 
@@ -207,10 +228,11 @@ class CreatePartyActivity : AppCompatActivity() {
             DatePickerDialog(
                 this@CreatePartyActivity,
                 datePickerDialogListener,
-                nowYear,
-                nowMonth,
-                nowDay
+                targetTimes[PartyTimeElement.YEAR.ordinal],
+                targetTimes[PartyTimeElement.MONTH.ordinal],
+                targetTimes[PartyTimeElement.DAY.ordinal]
             )
+
         tvPartyDate.setOnClickListener {
             datePickerDialog.show()
         }
@@ -218,13 +240,16 @@ class CreatePartyActivity : AppCompatActivity() {
 
     private fun initTimePicker() = with(binding) {
         val timePickerListener = TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
+            selectedTimes[PartyTimeElement.HOUR.ordinal] = hourOfDay
+            selectedTimes[PartyTimeElement.MINUTE.ordinal] = minute
+            validateTime()
             tvPartyTime.text = "${hourOfDay}시 ${minute}분"
         }
         val timePickerDialog = TimePickerDialog(
             this@CreatePartyActivity,
             timePickerListener,
-            nowHour,
-            nowMinute,
+            targetTimes[PartyTimeElement.HOUR.ordinal],
+            targetTimes[PartyTimeElement.MINUTE.ordinal],
             false
         )
 
@@ -233,12 +258,34 @@ class CreatePartyActivity : AppCompatActivity() {
         }
     }
 
+    private fun validateTime() = with(binding) {
+        if (isSelectedDatePast()) {
+            viewModel.occurEvent(CreatePartyEvent.ChangeFlagsEvent(PartyElement.TIME, false))
+            tvPartyTimeError.visibility = View.VISIBLE
+        } else {
+            viewModel.occurEvent(CreatePartyEvent.ChangeFlagsEvent(PartyElement.TIME, true))
+            tvPartyTimeError.visibility = View.GONE
+        }
+    }
+
+    private fun isSelectedDatePast(): Boolean {
+        Timber.w("selectedMonth: ${selectedTimes[PartyTimeElement.MONTH.ordinal]}")
+        val selectedDate = dateFormat.parse(
+            "%04d".format(selectedTimes[PartyTimeElement.YEAR.ordinal]) + "-" +
+                    "%02d".format(selectedTimes[PartyTimeElement.MONTH.ordinal]) + "-" +
+                    "%02d".format(selectedTimes[PartyTimeElement.DAY.ordinal]) + " " +
+                    "%02d".format(selectedTimes[PartyTimeElement.HOUR.ordinal]) + ":" +
+                    "%02d".format(selectedTimes[PartyTimeElement.MINUTE.ordinal]) + ":59"
+        )
+        return targetTime.time.time - selectedDate.time > 0
+    }
+
     private fun initCategorySpinner() = with(binding) {
         // TODO: Get Category List From Server
         val categories = arrayOf("음식 카테고리", "한식", "일식", "양식", "중식")
         val categorySpinnerAdapter = ArrayAdapter(
             this@CreatePartyActivity,
-            R.layout.simple_spinner_dropdown_item,
+            android.R.layout.simple_spinner_dropdown_item,
             categories
         )
         spinnerCategory.adapter = categorySpinnerAdapter
@@ -253,19 +300,13 @@ class CreatePartyActivity : AppCompatActivity() {
                 when (position) {
                     0 -> {
                         viewModel.occurEvent(
-                            CreatePartyEvent.ChangeFlagsEvent(
-                                Flag.CATEGORY,
-                                false
-                            )
+                            CreatePartyEvent.ChangeFlagsEvent(PartyElement.CATEGORY, false)
                         )
                         tvPartyCategoryError.visibility = View.VISIBLE
                     }
                     else -> {
                         viewModel.occurEvent(
-                            CreatePartyEvent.ChangeFlagsEvent(
-                                Flag.CATEGORY,
-                                true
-                            )
+                            CreatePartyEvent.ChangeFlagsEvent(PartyElement.CATEGORY, true)
                         )
                         tvPartyCategoryError.visibility = View.GONE
                     }
@@ -281,7 +322,7 @@ class CreatePartyActivity : AppCompatActivity() {
         val members = arrayOf("파티 인원 수", "2명", "3명", "4명", "5명")
         val memberSpinnerAdapter = ArrayAdapter(
             this@CreatePartyActivity,
-            R.layout.simple_spinner_dropdown_item,
+            android.R.layout.simple_spinner_dropdown_item,
             members
         )
         spinnerMember.adapter = memberSpinnerAdapter
@@ -295,11 +336,21 @@ class CreatePartyActivity : AppCompatActivity() {
             ) {
                 when (position) {
                     0 -> {
-                        viewModel.occurEvent(CreatePartyEvent.ChangeFlagsEvent(Flag.MEMBER, false))
+                        viewModel.occurEvent(
+                            CreatePartyEvent.ChangeFlagsEvent(
+                                PartyElement.MEMBER,
+                                false
+                            )
+                        )
                         tvPartyMemberError.visibility = View.VISIBLE
                     }
                     else -> {
-                        viewModel.occurEvent(CreatePartyEvent.ChangeFlagsEvent(Flag.MEMBER, true))
+                        viewModel.occurEvent(
+                            CreatePartyEvent.ChangeFlagsEvent(
+                                PartyElement.MEMBER,
+                                true
+                            )
+                        )
                         tvPartyMemberError.visibility = View.GONE
                     }
                 }
@@ -313,12 +364,22 @@ class CreatePartyActivity : AppCompatActivity() {
         repeatOnStarted {
             viewModel.currentAddress.collect { address ->
                 if (address == null) {
-                    viewModel.occurEvent(CreatePartyEvent.ChangeFlagsEvent(Flag.ADDRESS, false))
+                    viewModel.occurEvent(
+                        CreatePartyEvent.ChangeFlagsEvent(
+                            PartyElement.ADDRESS,
+                            false
+                        )
+                    )
                     tvPartyAddress.text = "위치 추가"
                     tvPartyAddress.typeface = Typeface.DEFAULT
                     tvPartyAddressError.visibility = View.VISIBLE
                 } else {
-                    viewModel.occurEvent(CreatePartyEvent.ChangeFlagsEvent(Flag.ADDRESS, true))
+                    viewModel.occurEvent(
+                        CreatePartyEvent.ChangeFlagsEvent(
+                            PartyElement.ADDRESS,
+                            true
+                        )
+                    )
                     tvPartyAddress.text = address.addressName
                     tvPartyAddress.typeface = Typeface.DEFAULT_BOLD
                     tvPartyAddressError.visibility = View.GONE
@@ -363,16 +424,17 @@ class CreatePartyActivity : AppCompatActivity() {
         }
 
         repeatOnStarted {
-            viewModel.wrong.collect { flag ->
-                when(flag) {
-                    Flag.TITLE -> tvPartyTitleError.visibility = View.VISIBLE
-                    Flag.CATEGORY -> tvPartyCategoryError.visibility = View.VISIBLE
-                    Flag.TIME -> tvPartyTimeError.visibility = View.VISIBLE
-                    Flag.MEMBER -> tvPartyMemberError.visibility = View.VISIBLE
-                    Flag.CHAT_URL -> tvChatUrlError.visibility = View.VISIBLE
-                    Flag.ADDRESS -> tvPartyAddressError.visibility = View.VISIBLE
-                    Flag.BODY -> tvPartyBodyError.visibility = View.VISIBLE
-                    else -> {}
+            viewModel.invalidElement.collect { flag ->
+                when (flag) {
+                    PartyElement.TITLE -> tvPartyTitleError.visibility = View.VISIBLE
+                    PartyElement.CATEGORY -> tvPartyCategoryError.visibility = View.VISIBLE
+                    PartyElement.TIME -> tvPartyTimeError.visibility = View.VISIBLE
+                    PartyElement.MEMBER -> tvPartyMemberError.visibility = View.VISIBLE
+                    PartyElement.CHAT_URL -> tvChatUrlError.visibility = View.VISIBLE
+                    PartyElement.ADDRESS -> tvPartyAddressError.visibility = View.VISIBLE
+                    PartyElement.BODY -> tvPartyBodyError.visibility = View.VISIBLE
+                    PartyElement.NONE -> {
+                    }
                 }
             }
         }
