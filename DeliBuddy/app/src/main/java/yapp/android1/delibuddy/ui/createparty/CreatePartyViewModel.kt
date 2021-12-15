@@ -41,10 +41,10 @@ class CreatePartyViewModel : BaseViewModel<CreatePartyEvent>() {
     )
 
     init {
-        getCurrentAddress()
+        initCurrentAddress()
     }
 
-    private fun getCurrentAddress() {
+    private fun initCurrentAddress() {
         _currentAddress.value = DeliBuddyApplication.prefs.getCurrentUserAddress()
     }
 

@@ -369,6 +369,7 @@ class CreatePartyActivity : AppCompatActivity() {
                     tvPartyAddress.text = "위치 추가"
                     tvPartyAddress.typeface = Typeface.DEFAULT
                     tvPartyAddressError.visibility = View.VISIBLE
+                    ivReset.visibility = View.GONE
                 } else {
                     viewModel.occurEvent(
                         CreatePartyEvent.ChangeFlagsEvent(
@@ -379,6 +380,7 @@ class CreatePartyActivity : AppCompatActivity() {
                     tvPartyAddress.text = address.addressName
                     tvPartyAddress.typeface = Typeface.DEFAULT_BOLD
                     tvPartyAddressError.visibility = View.GONE
+                    ivReset.visibility = View.VISIBLE
                 }
             }
         }
