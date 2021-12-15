@@ -23,7 +23,9 @@ import timber.log.Timber
 import yapp.android1.delibuddy.databinding.ActivityCreatePartyBinding
 import yapp.android1.delibuddy.model.Address
 import yapp.android1.delibuddy.ui.address.AddressActivity
+import yapp.android1.delibuddy.ui.home.HomeActivity
 import yapp.android1.delibuddy.util.extensions.repeatOnStarted
+import yapp.android1.delibuddy.util.intentTo
 
 class CreatePartyActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCreatePartyBinding
@@ -88,6 +90,10 @@ class CreatePartyActivity : AppCompatActivity() {
         tvPartyAddress.setOnClickListener {
             val intent = Intent(this@CreatePartyActivity, AddressActivity::class.java)
             getResult.launch(intent)
+        }
+
+        ivIconExit.setOnClickListener {
+            intentTo(HomeActivity::class.java)
         }
 
         initTitleTextWatcher()

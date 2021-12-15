@@ -20,12 +20,14 @@
         <entry key="app/src/main/res/drawable/splash_background.xml" value="0.13541666666666666" />
         <entry key="app/src/main/res/drawable/splash_background_gradient.xml" value="0.13645833333333332" />
         <entry key="app/src/main/res/font/roboto.xml" value="0.23645833333333333" />
+        <entry key="app/src/main/res/layout/activity_create_party.xml" value="0.37392373923739236" />
         <entry key="app/src/main/res/layout/activity_home.xml" value="0.203125" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.4194453423628242" />
         <entry key="app/src/main/res/layout/activity_party_detail.xml" value="0.22604166666666667" />
         <entry key="app/src/main/res/layout/activity_permission.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_permission_description.xml" value="0.22" />
         <entry key="app/src/main/res/layout/activity_splash.xml" value="0.11979166666666667" />
+        <entry key="app/src/main/res/layout/fragment_address_detail.xml" value="0.13768115942028986" />
         <entry key="app/src/main/res/layout/fragment_alarm.xml" value="0.20625" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.21487869184194963" />
         <entry key="app/src/main/res/layout/fragment_mypage.xml" value="0.20625" />

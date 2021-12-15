@@ -58,6 +58,10 @@ class AddressSearchFragment :
             }
             return@setOnEditorActionListener false
         }
+
+        ivLocationSearchExit.setOnClickListener {
+            requireActivity().finish()
+        }
     }
 
     private fun initRecyclerView() = with(binding.rvSearchResult) {

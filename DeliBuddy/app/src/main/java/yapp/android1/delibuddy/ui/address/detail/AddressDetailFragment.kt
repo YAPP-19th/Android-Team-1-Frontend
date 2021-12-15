@@ -45,6 +45,10 @@ class AddressDetailFragment :
             requireActivity().setResult(Activity.RESULT_OK, intent)
             requireActivity().finish()
         }
+
+        ivIconBack.setOnClickListener {
+            parentFragmentManager.popBackStack()
+        }
     }
 
     // todo: move to home
