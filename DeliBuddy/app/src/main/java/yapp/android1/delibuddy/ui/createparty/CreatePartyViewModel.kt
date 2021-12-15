@@ -7,12 +7,15 @@ import yapp.android1.delibuddy.base.BaseViewModel
 import yapp.android1.delibuddy.base.RetryAction
 import yapp.android1.delibuddy.model.Address
 import yapp.android1.delibuddy.model.Event
-import yapp.android1.delibuddy.util.MutableEventFlow
 import yapp.android1.domain.NetworkResult
 
 sealed class CreatePartyEvent : Event {
+    class ChangeFlagsEvent(
+        val partyElement: PartyElement,
+        val isValid: Boolean
+    ) : CreatePartyEvent()
+
     object ClearAddressEvent : CreatePartyEvent()
-    class ChangeFlagsEvent(val partyElement: PartyElement, val isValid: Boolean) : CreatePartyEvent()
     object CheckFlagsEvent : CreatePartyEvent()
     object CreatePartyClickEvent : CreatePartyEvent()
 }
@@ -27,16 +30,15 @@ class CreatePartyViewModel : BaseViewModel<CreatePartyEvent>() {
     private var _invalidElement = MutableStateFlow<PartyElement>(PartyElement.NONE)
     val invalidElement: MutableStateFlow<PartyElement> = _invalidElement
 
-    private var createPartyFlags: Array<Boolean> =
-        arrayOf(
-            false, // title
-            false, // category
-            true, // time
-            false, // member
-            false, // chat url
-            false, // address
-            false // body
-        )
+    private var createPartyFlags: MutableMap<PartyElement, Boolean> = mutableMapOf(
+        PartyElement.TITLE to false,
+        PartyElement.CATEGORY to false,
+        PartyElement.TIME to true,
+        PartyElement.MEMBER to false,
+        PartyElement.CHAT_URL to false,
+        PartyElement.ADDRESS to false,
+        PartyElement.BODY to false
+    )
 
     init {
         getCurrentAddress()
@@ -71,28 +73,28 @@ class CreatePartyViewModel : BaseViewModel<CreatePartyEvent>() {
     }
 
     private fun changeFlag(partyElement: PartyElement, isValid: Boolean) {
-        createPartyFlags[partyElement.ordinal] = isValid
+        createPartyFlags[partyElement] = isValid
         checkCanCreateParty()
     }
 
-    private fun checkCanCreateParty(): Int {
-        for (index in createPartyFlags.indices) {
-            if (!createPartyFlags[index]) {
+    private fun checkCanCreateParty(): PartyElement {
+        for (partyElement in createPartyFlags.keys) {
+            if (createPartyFlags[partyElement] == false) {
                 _canCreateParty.value = false
-                return index
+                return partyElement
             }
         }
         _canCreateParty.value = true
-        return PartyElement.NONE.ordinal
+        return PartyElement.NONE
     }
 
     private suspend fun checkAndCreate() {
         val i = checkCanCreateParty()
 
-        if (i == PartyElement.NONE.ordinal) {
+        if (i == PartyElement.NONE) {
             showToast("성공")
         } else {
-            _invalidElement.value = PartyElement.values()[i]
+            _invalidElement.value = i
             showToast("파티글 생성에 실패하였습니다")
         }
     }

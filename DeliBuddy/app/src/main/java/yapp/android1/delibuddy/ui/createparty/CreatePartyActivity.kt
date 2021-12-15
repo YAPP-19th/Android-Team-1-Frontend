@@ -240,6 +240,7 @@ class CreatePartyActivity : AppCompatActivity() {
             validateTime()
             tvPartyTime.text = "${hourOfDay}시 ${minute}분"
         }
+
         val timePickerDialog = TimePickerDialog(
             this@CreatePartyActivity,
             timePickerListener,
@@ -420,8 +421,7 @@ class CreatePartyActivity : AppCompatActivity() {
                     PartyElement.CHAT_URL -> tvChatUrlError.visibility = View.VISIBLE
                     PartyElement.ADDRESS -> tvPartyAddressError.visibility = View.VISIBLE
                     PartyElement.BODY -> tvPartyBodyError.visibility = View.VISIBLE
-                    PartyElement.NONE -> {
-                    }
+                    PartyElement.NONE -> { }
                 }
             }
         }
