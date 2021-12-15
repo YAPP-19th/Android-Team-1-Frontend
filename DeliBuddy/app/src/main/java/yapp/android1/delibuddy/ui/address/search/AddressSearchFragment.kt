@@ -1,6 +1,8 @@
 package yapp.android1.delibuddy.ui.address.search
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
@@ -29,13 +31,25 @@ class AddressSearchFragment :
     private var addressAdapter: AddressSearchAdapter = AddressSearchAdapter()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        initListener()
+        initView()
         initRecyclerView()
         initObserve()
     }
 
-    private fun initListener() {
-        binding.etSearchKeyword.setOnEditorActionListener { _, actionId, _ ->
+    private fun initView() = with(binding) {
+        etSearchKeyword.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { }
+            override fun afterTextChanged(s: Editable?) {
+                if (s!!.isEmpty()) {
+                    btnCurrentLocation.visibility = View.VISIBLE
+                } else {
+                    btnCurrentLocation.visibility = View.GONE
+                }
+            }
+        })
+
+        etSearchKeyword.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 viewModel.occurEvent(
                     AddressSharedEvent.SearchAddress(binding.etSearchKeyword.text.toString())
