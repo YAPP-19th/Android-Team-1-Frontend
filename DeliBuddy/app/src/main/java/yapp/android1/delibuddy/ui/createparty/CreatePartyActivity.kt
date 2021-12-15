@@ -74,7 +74,8 @@ class CreatePartyActivity : AppCompatActivity() {
         }
 
         tvPartyAddress.setOnClickListener {
-            viewModel.occurEvent(CreatePartyEvent.SearchAddressEvent)
+            intentTo(AddressActivity::class.java)
+            //viewModel.occurEvent(CreatePartyEvent.SearchAddressEvent)
         }
 
         initTitleTextWatcher()
@@ -382,15 +383,7 @@ class CreatePartyActivity : AppCompatActivity() {
         }
 
         repeatOnStarted {
-            viewModel.searchAddressIsClicked.collect { isClicked ->
-                if (isClicked) {
-                    intentTo(AddressActivity::class.java)
-                }
-            }
-        }
-
-        repeatOnStarted {
-            viewModel.canCreateParty.collect() {
+            viewModel.canCreateParty.collect {
                 if (it) {
                     tvCreateParty.setTextColor(
                         ContextCompat.getColor(

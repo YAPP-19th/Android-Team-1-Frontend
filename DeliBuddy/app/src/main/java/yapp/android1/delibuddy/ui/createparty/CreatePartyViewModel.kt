@@ -12,7 +12,6 @@ import yapp.android1.domain.NetworkResult
 
 sealed class CreatePartyEvent : Event {
     object ClearAddressEvent : CreatePartyEvent()
-    object SearchAddressEvent : CreatePartyEvent()
     class ChangeFlagsEvent(val partyElement: PartyElement, val isValid: Boolean) : CreatePartyEvent()
     object CheckFlagsEvent : CreatePartyEvent()
     object CreatePartyClickEvent : CreatePartyEvent()
@@ -21,9 +20,6 @@ sealed class CreatePartyEvent : Event {
 class CreatePartyViewModel : BaseViewModel<CreatePartyEvent>() {
     private var _currentAddress = MutableStateFlow<Address?>(null)
     val currentAddress: StateFlow<Address?> = _currentAddress
-
-    private var _searchAddressIsClicked = MutableEventFlow<Boolean>()
-    val searchAddressIsClicked: MutableEventFlow<Boolean> = _searchAddressIsClicked
 
     private var _canCreateParty = MutableStateFlow<Boolean>(false)
     val canCreateParty: MutableStateFlow<Boolean> = _canCreateParty
@@ -56,10 +52,6 @@ class CreatePartyViewModel : BaseViewModel<CreatePartyEvent>() {
                 clearAddress()
             }
 
-            is CreatePartyEvent.SearchAddressEvent -> {
-                searchAddress()
-            }
-
             is CreatePartyEvent.ChangeFlagsEvent -> {
                 changeFlag(event.partyElement, event.isValid)
             }
@@ -76,10 +68,6 @@ class CreatePartyViewModel : BaseViewModel<CreatePartyEvent>() {
 
     private fun clearAddress() {
         _currentAddress.value = null
-    }
-
-    private suspend fun searchAddress() {
-        _searchAddressIsClicked.emit(true)
     }
 
     private fun changeFlag(partyElement: PartyElement, isValid: Boolean) {
