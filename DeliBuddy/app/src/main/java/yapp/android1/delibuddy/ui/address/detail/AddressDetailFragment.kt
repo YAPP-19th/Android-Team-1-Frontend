@@ -1,14 +1,18 @@
 package yapp.android1.delibuddy.ui.address.detail
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.*
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import yapp.android1.delibuddy.R
 import yapp.android1.delibuddy.base.BaseFragment
@@ -36,10 +40,14 @@ class AddressDetailFragment :
         activateAddressView(viewModel.selectedAddress.value)
 
         btnAddressDetail.setOnClickListener {
-            saveAddress()
+            val intent = Intent()
+            intent.putExtra("address", viewModel.selectedAddress.value)
+            requireActivity().setResult(Activity.RESULT_OK, intent)
+            requireActivity().finish()
         }
     }
 
+    // todo: move to home
     private fun saveAddress() {
         viewModel.occurEvent(
             AddressSharedEvent.SaveAddress(

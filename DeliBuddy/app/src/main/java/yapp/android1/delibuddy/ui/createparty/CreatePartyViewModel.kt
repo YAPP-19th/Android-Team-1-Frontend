@@ -15,6 +15,10 @@ sealed class CreatePartyEvent : Event {
         val isValid: Boolean
     ) : CreatePartyEvent()
 
+    class SelectedAddressEvent(
+        val address: Address?
+    ) : CreatePartyEvent()
+
     object ClearAddressEvent : CreatePartyEvent()
     object CheckFlagsEvent : CreatePartyEvent()
     object CreatePartyClickEvent : CreatePartyEvent()
@@ -54,6 +58,10 @@ class CreatePartyViewModel : BaseViewModel<CreatePartyEvent>() {
                 clearAddress()
             }
 
+            is CreatePartyEvent.SelectedAddressEvent -> {
+                changeCurrentAddress(event.address)
+            }
+
             is CreatePartyEvent.ChangeFlagsEvent -> {
                 changeFlag(event.partyElement, event.isValid)
             }
@@ -70,6 +78,10 @@ class CreatePartyViewModel : BaseViewModel<CreatePartyEvent>() {
 
     private fun clearAddress() {
         _currentAddress.value = null
+    }
+
+    private fun changeCurrentAddress(newAddress: Address?) {
+        _currentAddress.value = newAddress
     }
 
     private fun changeFlag(partyElement: PartyElement, isValid: Boolean) {

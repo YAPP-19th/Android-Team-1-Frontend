@@ -3,6 +3,7 @@ package yapp.android1.delibuddy.ui.createparty
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.Intent
 import android.graphics.Typeface
 import android.icu.text.SimpleDateFormat
 import android.icu.util.Calendar
@@ -13,15 +14,16 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import kotlinx.coroutines.flow.collect
 import timber.log.Timber
 import yapp.android1.delibuddy.databinding.ActivityCreatePartyBinding
+import yapp.android1.delibuddy.model.Address
 import yapp.android1.delibuddy.ui.address.AddressActivity
 import yapp.android1.delibuddy.util.extensions.repeatOnStarted
-import yapp.android1.delibuddy.util.intentTo
 
 class CreatePartyActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCreatePartyBinding
@@ -34,6 +36,16 @@ class CreatePartyActivity : AppCompatActivity() {
 
     private val MAX_TITLE = 10
     private val MAX_BODY = 255
+
+    private val getResult = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == RESULT_OK) {
+            val data: Intent = result.data!!
+            val selectedAddress = data.getParcelableExtra<Address>("address")
+            viewModel.occurEvent(CreatePartyEvent.SelectedAddressEvent(selectedAddress))
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,8 +86,8 @@ class CreatePartyActivity : AppCompatActivity() {
         }
 
         tvPartyAddress.setOnClickListener {
-            intentTo(AddressActivity::class.java)
-            //viewModel.occurEvent(CreatePartyEvent.SearchAddressEvent)
+            val intent = Intent(this@CreatePartyActivity, AddressActivity::class.java)
+            getResult.launch(intent)
         }
 
         initTitleTextWatcher()
@@ -423,7 +435,8 @@ class CreatePartyActivity : AppCompatActivity() {
                     PartyElement.CHAT_URL -> tvChatUrlError.visibility = View.VISIBLE
                     PartyElement.ADDRESS -> tvPartyAddressError.visibility = View.VISIBLE
                     PartyElement.BODY -> tvPartyBodyError.visibility = View.VISIBLE
-                    PartyElement.NONE -> { }
+                    PartyElement.NONE -> {
+                    }
                 }
             }
         }
