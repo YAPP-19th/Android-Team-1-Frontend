@@ -27,6 +27,8 @@ sealed class AddressSharedEvent : Event {
 
     class SaveAddress(val address: Address, val addressDetail: String) : AddressSharedEvent()
     class CoordToAddress(val lat: Double, val lng: Double) : AddressSharedEvent()
+
+    object SelectCurrentLocation : AddressSharedEvent()
 }
 
 @HiltViewModel
@@ -39,16 +41,20 @@ class AddressSharedViewModel @Inject constructor(
     private var _selectedAddress = MutableStateFlow<Address>(Address.DEFAULT)
     val selectedAddress: StateFlow<Address> = _selectedAddress
 
-    private val _searchResults =
+    private var _searchResults =
         MutableStateFlow<Pair<String, List<Address>>>(Pair("", emptyList()))
     val searchResults: StateFlow<Pair<String, List<Address>>> = _searchResults
 
-    private val _isActivate = MutableEventFlow<Boolean>()
+    private var _isActivate = MutableEventFlow<Boolean>()
     val isActivate: EventFlow<Boolean> = _isActivate
+
+    private var _isCurrentLocation = MutableStateFlow<Boolean>(false)
+    val isCurrentLocation: MutableStateFlow<Boolean> = _isCurrentLocation
 
     override suspend fun handleEvent(event: Event) {
         when (event) {
             is AddressSharedEvent.SelectAddress -> {
+                _isCurrentLocation.value = false
                 selectAddress(event.address)
             }
 
@@ -64,6 +70,10 @@ class AddressSharedViewModel @Inject constructor(
 
             is AddressSharedEvent.CoordToAddress -> {
                 convertCoordToAddress(event.lat, event.lng)
+            }
+
+            is AddressSharedEvent.SelectCurrentLocation -> {
+                _isCurrentLocation.value = true
             }
         }
     }

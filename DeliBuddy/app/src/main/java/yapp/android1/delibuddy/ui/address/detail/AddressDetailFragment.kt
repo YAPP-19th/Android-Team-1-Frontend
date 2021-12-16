@@ -7,21 +7,22 @@ import android.view.View
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.setFragmentResult
-import androidx.fragment.app.viewModels
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.*
+import com.naver.maps.map.util.FusedLocationSource
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
+import timber.log.Timber
 import yapp.android1.delibuddy.R
 import yapp.android1.delibuddy.base.BaseFragment
 import yapp.android1.delibuddy.databinding.FragmentAddressDetailBinding
 import yapp.android1.delibuddy.model.Address
 import yapp.android1.delibuddy.ui.address.AddressSharedEvent
 import yapp.android1.delibuddy.ui.address.AddressSharedViewModel
+import yapp.android1.delibuddy.ui.dialog.PermissionDialogFragment
 import yapp.android1.delibuddy.util.extensions.repeatOnStarted
 import kotlin.math.abs
+import kotlin.properties.Delegates
 
 @AndroidEntryPoint
 class AddressDetailFragment :
@@ -29,11 +30,42 @@ class AddressDetailFragment :
     OnMapReadyCallback {
     private val viewModel: AddressSharedViewModel by activityViewModels()
     private val ABOUT_ZERO = 0.000000000001
+    private var naverMap: NaverMap? = null
+    private var isSelectedCurrentLocation = false
+    private lateinit var locationListener: LocationSource.OnLocationChangedListener
+    private lateinit var locationSource: FusedLocationSource
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        isSelectedCurrentLocation = viewModel.isCurrentLocation.value
+        Timber.w("isSelectedCurrentLocation: $isSelectedCurrentLocation")
+        initLocationObject()
         initView()
         initMap()
         initObserve()
+    }
+
+    private fun initLocationObject() {
+        locationListener = LocationSource.OnLocationChangedListener { location ->
+            Timber.w("location listener")
+            if (location == null) return@OnLocationChangedListener
+            naverMap?.moveCamera(CameraUpdate.scrollTo(LatLng(location)))
+        }
+        locationSource = FusedLocationSource(this, 0)
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        if (locationSource.onRequestPermissionsResult(requestCode, permissions, grantResults)) {
+            if (!locationSource.isActivated) {
+                naverMap!!.locationTrackingMode = LocationTrackingMode.None
+                showPermissionDeniedDialog()
+            }
+            return
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
     private fun initView() = with(binding) {
@@ -46,9 +78,23 @@ class AddressDetailFragment :
             requireActivity().finish()
         }
 
+        ivIconCurrentLocation.setOnClickListener {
+            locationSource.activate(locationListener)
+            Timber.w("locationSource-ivIconCurrentLocation: ${locationSource.isActivated}")
+        }
+
         ivIconBack.setOnClickListener {
             parentFragmentManager.popBackStack()
         }
+    }
+
+    private fun showPermissionDeniedDialog() {
+        val permissionDialog = PermissionDialogFragment(requireActivity()).apply {
+            negativeCallback = {
+                Toast.makeText(context, "위치 권한이 없어 실행할 수 없습니다", Toast.LENGTH_SHORT).show()
+            }
+        }
+        permissionDialog.show(parentFragmentManager, null)
     }
 
     // todo: move to home
@@ -70,20 +116,19 @@ class AddressDetailFragment :
     }
 
     override fun onMapReady(map: NaverMap) {
+        naverMap = map
+        naverMap!!.locationSource = locationSource
         val mapUiSettings = map.uiSettings
         mapUiSettings.isScrollGesturesEnabled = true
         mapUiSettings.isTiltGesturesEnabled = false
         mapUiSettings.isRotateGesturesEnabled = false
 
-        map.cameraPosition = CameraPosition(
-            LatLng(
-                viewModel.selectedAddress.value.lat,
-                viewModel.selectedAddress.value.lng
-            ),
-            16.0
-        )
-
         map.addOnCameraIdleListener {
+            if(!isSelectedCurrentLocation) {
+                locationSource.deactivate()
+            }
+            isSelectedCurrentLocation = false
+            Timber.w("locationSource-cameraIdleListener: ${locationSource.isActivated}")
             if (!isSameCoordWithSearchResult(map.cameraPosition.target)) {
                 viewModel.occurEvent(
                     AddressSharedEvent.CoordToAddress(
@@ -94,6 +139,19 @@ class AddressDetailFragment :
             } else {
                 activateAddressView(viewModel.selectedAddress.value)
             }
+        }
+
+        if (isSelectedCurrentLocation) {
+            locationSource.activate(locationListener)
+            Timber.w("locationSource-currentLocation: ${locationSource.isActivated}")
+        } else {
+            map.cameraPosition = CameraPosition(
+                LatLng(
+                    viewModel.selectedAddress.value.lat,
+                    viewModel.selectedAddress.value.lng
+                ),
+                16.0
+            )
         }
     }
 

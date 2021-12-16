@@ -17,7 +17,6 @@ import yapp.android1.delibuddy.R
 import yapp.android1.delibuddy.adapter.AddressSearchAdapter
 import yapp.android1.delibuddy.base.BaseFragment
 import yapp.android1.delibuddy.databinding.FragmentAddressSearchBinding
-import yapp.android1.delibuddy.model.Address
 import yapp.android1.delibuddy.ui.address.AddressSharedEvent
 import yapp.android1.delibuddy.ui.address.AddressSharedViewModel
 import yapp.android1.delibuddy.ui.address.detail.AddressDetailFragment
@@ -38,8 +37,8 @@ class AddressSearchFragment :
 
     private fun initView() = with(binding) {
         etSearchKeyword.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
             override fun afterTextChanged(s: Editable?) {
                 if (s!!.isEmpty()) {
                     btnCurrentLocation.visibility = View.VISIBLE
@@ -59,6 +58,11 @@ class AddressSearchFragment :
             return@setOnEditorActionListener false
         }
 
+        btnCurrentLocation.setOnClickListener {
+            moveToAddressDetailFragmentWithCurrentLocation()
+            moveToAddressDetailFragment()
+        }
+
         ivLocationSearchExit.setOnClickListener {
             requireActivity().finish()
         }
@@ -70,12 +74,17 @@ class AddressSearchFragment :
         setHasFixedSize(true)
         addressAdapter.setItemClickListener { address ->
             Timber.w(address.lat.toString() + ", " + address.lng.toString())
-            moveToAddressDetailFragment(address)
+            viewModel.occurEvent(AddressSharedEvent.SelectAddress(address))
+            moveToAddressDetailFragment()
         }
     }
 
-    private fun moveToAddressDetailFragment(address: Address) {
-        viewModel.occurEvent(AddressSharedEvent.SelectAddress(address))
+    private fun moveToAddressDetailFragmentWithCurrentLocation() {
+        viewModel.occurEvent(AddressSharedEvent.SelectCurrentLocation)
+        moveToAddressDetailFragment()
+    }
+
+    private fun moveToAddressDetailFragment() {
         parentFragmentManager.commit {
             setReorderingAllowed(true)
             replace<AddressDetailFragment>(R.id.fcv_location)
