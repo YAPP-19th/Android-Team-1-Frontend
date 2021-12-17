@@ -9,6 +9,7 @@ object AndroidX {
     const val CONSTRAINT_LAYOUT          = "androidx.constraintlayout:constraintlayout:${Versions.CONSTRAINT_LAYOUT}"
     const val LEGACY_SUPPORT             = "androidx.legacy:legacy-support-v4:${Versions.LEGACY_SUPPORT}"
     const val VIEW_DATA_BINDING          = "com.android.databinding:viewbinding:${Versions.VIEW_DATA_BINDING}"
+    const val DATA_BINDING_RUNTIME       = "androidx.databinding:databinding-runtime:${Versions.VIEW_DATA_BINDING}"
     const val RECYCLERVIEW               = "androidx.recyclerview:recyclerview:${Versions.RECYCLERVIEW}"
 
     const val CORE_KTX                   = "androidx.core:core-ktx:${Versions.CORE_KTX}"
