@@ -1,5 +1,6 @@
 package yapp.android1.delibuddy.model
 
+import yapp.android1.delibuddy.util.parseDate
 import yapp.android1.domain.entity.PartyEntity
 import java.io.Serializable
 
@@ -44,7 +45,7 @@ data class Party(
                 currentUserCount = partyEntity.currentUserCount,
                 id = partyEntity.id,
                 openKakaoUrl = partyEntity.openKakaoUrl,
-                orderTime = partyEntity.orderTime,
+                orderTime = parseDate(partyEntity.orderTime),
                 placeName = partyEntity.placeName,
                 placeNameDetail = partyEntity.placeNameDetail,
                 status = partyEntity.status,
