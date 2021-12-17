@@ -22,7 +22,6 @@ import yapp.android1.delibuddy.ui.address.AddressSharedViewModel
 import yapp.android1.delibuddy.ui.dialog.PermissionDialogFragment
 import yapp.android1.delibuddy.util.extensions.repeatOnStarted
 import kotlin.math.abs
-import kotlin.properties.Delegates
 
 @AndroidEntryPoint
 class AddressDetailFragment :
@@ -49,6 +48,7 @@ class AddressDetailFragment :
             Timber.w("location listener")
             if (location == null) return@OnLocationChangedListener
             naverMap?.moveCamera(CameraUpdate.scrollTo(LatLng(location)))
+            naverMap?.locationTrackingMode = LocationTrackingMode.None
         }
         locationSource = FusedLocationSource(this, 0)
     }
@@ -124,17 +124,15 @@ class AddressDetailFragment :
         mapUiSettings.isRotateGesturesEnabled = false
 
         map.addOnCameraIdleListener {
-            if(!isSelectedCurrentLocation) {
+            if (!isSelectedCurrentLocation) {
                 locationSource.deactivate()
             }
             isSelectedCurrentLocation = false
             Timber.w("locationSource-cameraIdleListener: ${locationSource.isActivated}")
             if (!isSameCoordWithSearchResult(map.cameraPosition.target)) {
-                viewModel.occurEvent(
-                    AddressSharedEvent.CoordToAddress(
-                        map.cameraPosition.target.latitude,
-                        map.cameraPosition.target.longitude
-                    )
+                getAddressFromCoord(
+                    map.cameraPosition.target.latitude,
+                    map.cameraPosition.target.longitude
                 )
             } else {
                 activateAddressView(viewModel.selectedAddress.value)
@@ -153,6 +151,10 @@ class AddressDetailFragment :
                 16.0
             )
         }
+    }
+
+    private fun getAddressFromCoord(lat: Double, lng: Double) {
+        viewModel.occurEvent(AddressSharedEvent.CoordToAddress(lat, lng))
     }
 
 

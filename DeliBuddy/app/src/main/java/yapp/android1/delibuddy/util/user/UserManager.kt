@@ -51,7 +51,7 @@ class UserManager(
         }
     }
 
-    fun setDeliBuddyToken(auth: Auth) {
+    fun setDeliBuddyAuth(auth: Auth) {
         prefs.saveAuthData(auth)
     }
 

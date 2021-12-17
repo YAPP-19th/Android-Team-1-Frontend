@@ -6,7 +6,6 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
-import yapp.android1.delibuddy.DeliBuddyApplication
 import yapp.android1.delibuddy.databinding.ActivityLoginBinding
 import yapp.android1.delibuddy.ui.home.HomeActivity
 import yapp.android1.delibuddy.ui.login.viewmodel.AuthViewModel
@@ -45,7 +44,7 @@ class LoginActivity : AppCompatActivity() {
             authViewModel.tokenResult.collect { auth ->
                 when (auth.isAvailable()) {
                     true -> {
-                        DeliBuddyApplication.prefs.saveAuthData(auth)
+                        userManager.setDeliBuddyAuth(auth)
                         intentTo(HomeActivity::class.java)
                     }
                     false -> AuthViewModel.AuthEvent.OnKakaoLoginFailed("다시 시도해 주세요.")

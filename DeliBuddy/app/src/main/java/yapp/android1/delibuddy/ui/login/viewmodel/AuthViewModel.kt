@@ -40,7 +40,7 @@ class AuthViewModel @Inject constructor(
         when (val result = fetchAuthUseCase.invoke(token)) {
             is NetworkResult.Success -> {
                 val auth = Auth.mapToAuth(result.data)
-                userManager.setDeliBuddyToken(auth)
+                userManager.setDeliBuddyAuth(auth)
                 _tokenResult.value = auth
             }
             is NetworkResult.Error -> handleError(result) {}

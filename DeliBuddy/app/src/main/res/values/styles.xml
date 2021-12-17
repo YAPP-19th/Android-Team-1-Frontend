@@ -1,5 +1,8 @@
 <resources> <!-- Base application theme. -->
     <style name="SplashTheme" parent="Theme.DeliBuddy">
         <item name="android:windowBackground">@drawable/splash_background</item>
+        <item name="android:windowActionBar">true</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">false</item>
     </style>
 </resources>
