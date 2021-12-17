@@ -1,5 +1,5 @@
 <resources> <!-- Base application theme. -->
-    <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
+    <style name="SplashTheme" parent="Theme.DeliBuddy">
         <item name="android:windowBackground">@drawable/splash_background</item>
     </style>
 </resources>

@@ -1,8 +1,10 @@
 package yapp.android1.delibuddy.di
 
+import android.content.Context
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -11,7 +13,10 @@ import yapp.android1.data.remote.PartyApi
 import yapp.android1.data.repository.AddressRepositoryImpl
 import yapp.android1.data.repository.CoordToAddressRepositoryImpl
 import yapp.android1.data.repository.PartyRepositoryImpl
+import yapp.android1.delibuddy.DeliBuddyApplication
 import yapp.android1.delibuddy.util.DispatcherProvider
+import yapp.android1.delibuddy.util.sharedpreferences.SharedPreferencesManager
+import yapp.android1.delibuddy.util.user.UserManager
 import yapp.android1.domain.interactor.DeliBuddyNetworkErrorHandler
 import yapp.android1.domain.interactor.KakaoNetworkErrorHandler
 import yapp.android1.domain.interactor.usecase.CoordToAddressUseCase
@@ -33,6 +38,13 @@ object AppModule {
             override val default: CoroutineDispatcher
                 get() = Dispatchers.Default
         }
+    }
+
+    @Provides
+    fun provideUserManager(
+        @ApplicationContext context: Context
+    ): UserManager {
+        return UserManager(context, DeliBuddyApplication.prefs)
     }
 
     @Provides

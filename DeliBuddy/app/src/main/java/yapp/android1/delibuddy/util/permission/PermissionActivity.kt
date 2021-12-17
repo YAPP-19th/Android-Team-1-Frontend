@@ -6,6 +6,7 @@ import android.view.WindowManager
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import timber.log.Timber
 
 class PermissionActivity : AppCompatActivity() {
     companion object {
@@ -41,15 +42,17 @@ class PermissionActivity : AppCompatActivity() {
         if (permissions.isEmpty())
             finish()
 
+        val permissionState = isAllPermissionGranted(permissions)
+        val rationalState = isRationaleNeed(permissions)
+        Timber.w("rationalState: $rationalState")
+
         when {
-            isAllPermissionGranted(permissions) ->
-                permissionCallBack(PermissionState.GRANTED)
+            permissionState -> permissionCallBack(PermissionState.GRANTED)
             bundle?.isRequestPermission == true -> {
                 requestPermissionLauncher.launch(permissions.toTypedArray())
             }
-            else -> {
-                permissionCallBack(PermissionState.NEED_PERMISSION)
-            }
+            rationalState -> permissionCallBack(PermissionState.NEED_RATIONALE)
+            else -> permissionCallBack(PermissionState.DENIED)
         }
     }
 
@@ -63,6 +66,19 @@ class PermissionActivity : AppCompatActivity() {
             }
         }
         return true
+    }
+
+    private fun isRationaleNeed(
+        requestedPermissions: List<String>
+    ): Boolean {
+        requestedPermissions.forEach {
+            val a = shouldShowRequestPermissionRationale(it)
+            Timber.w("permission $it: $a")
+            if (a)  {
+                return true
+            }
+        }
+        return false
     }
 
     private fun permissionCallBack(state: PermissionState) {
