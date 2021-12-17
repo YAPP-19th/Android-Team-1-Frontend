@@ -1,7 +1,7 @@
 package yapp.android1.delibuddy.model
 
 import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 import yapp.android1.domain.entity.AddressEntity
 
 @Parcelize

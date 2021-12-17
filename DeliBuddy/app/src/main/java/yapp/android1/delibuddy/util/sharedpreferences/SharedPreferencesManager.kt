@@ -27,15 +27,19 @@ class SharedPreferencesManager(context: Context) {
         prefs["lon"] = address.lng
     }
 
-    fun getCurrentUserAddress(): Address {
-        return Address(
-            addressName = prefs["addressName", "주소를 입력해 주세요"],
-            address = prefs["address", "주소를 입력해 주세요"],
-            roadAddress = prefs["roadAddress", "주소를 입력해 주세요"],
-            addressDetail = prefs["addressDetail", "상세 주소를 입력해 주세요"],
-            lat = prefs["lat", 0.0],
-            lng = prefs["lon", 0.0]
-        )
+    fun getCurrentUserAddress(): Address? {
+        return try {
+            Address(
+                addressName = prefs["addressName", "주소를 입력해 주세요"],
+                address = prefs["address", "주소를 입력해 주세요"],
+                roadAddress = prefs["roadAddress", "주소를 입력해 주세요"],
+                addressDetail = prefs["addressDetail", "상세 주소를 입력해 주세요"],
+                lat = prefs["lat", 0.0],
+                lng = prefs["lon", 0.0]
+            )
+        } catch (e: NullPointerException) {
+            null
+        }
     }
 
     fun saveAuthData(auth: Auth) {
