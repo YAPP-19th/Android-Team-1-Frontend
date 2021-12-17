@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
+import timber.log.Timber
 import yapp.android1.delibuddy.base.BaseFragment
 import yapp.android1.delibuddy.databinding.FragmentHomeBinding
 import yapp.android1.delibuddy.model.Party
@@ -81,6 +82,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
     private fun initObserve() {
         repeatOnStarted {
             partiesViewModel.partiesResult.collect { parties ->
+                Timber.d("parties $parties")
                 partiesAdapter.submitList(parties)
             }
         }
