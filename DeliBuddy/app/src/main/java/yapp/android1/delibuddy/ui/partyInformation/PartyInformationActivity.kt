@@ -35,6 +35,11 @@ class PartyInformationActivity : AppCompatActivity() {
         collectData()
     }
 
+//    override fun onEnterAnimationComplete() {
+//        super.onEnterAnimationComplete()
+//
+//    }
+
     private fun receiverIntent() {
         val intentData = intent.getSerializableExtra("party") as Party
         viewModel.occurEvent(OnIntent(intentData))
