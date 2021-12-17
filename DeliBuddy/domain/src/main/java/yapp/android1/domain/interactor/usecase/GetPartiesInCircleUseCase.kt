@@ -12,10 +12,7 @@ class GetPartiesInCircleUseCase @Inject constructor(
 ) : BaseUseCase<NetworkResult<List<PartyEntity>>, LocationRange>() {
 
     override suspend fun run(params: LocationRange): NetworkResult<List<PartyEntity>> {
-
-        val data =  partyRepository.getPartiesInCircle(params.first, params.second)
-        println("second ${data.toString()}")
-        return data
+        return partyRepository.getPartiesInCircle(params.first, params.second)
     }
 
 }

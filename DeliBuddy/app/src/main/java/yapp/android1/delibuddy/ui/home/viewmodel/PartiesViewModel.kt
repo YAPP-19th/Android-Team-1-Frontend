@@ -3,7 +3,7 @@ package yapp.android1.delibuddy.ui.home.viewmodel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import timber.log.Timber
+import yapp.android1.delibuddy.DeliBuddyApplication
 import yapp.android1.delibuddy.base.BaseViewModel
 import yapp.android1.delibuddy.base.RetryAction
 import yapp.android1.delibuddy.model.Event
@@ -22,8 +22,17 @@ class PartiesViewModel @Inject constructor(
     private val _partiesResult = MutableStateFlow<List<Party>>(emptyList())
     val partiesResult: StateFlow<List<Party>> = _partiesResult
 
+    private val _userAddress = MutableStateFlow<String>("")
+    val userAddress: StateFlow<String> = _userAddress
+
     sealed class PartiesEvent : Event {
         class GetPartiesInCircle(val locationRange: LocationRange) : PartiesEvent()
+    }
+
+    init {
+        DeliBuddyApplication.prefs.getCurrentUserAddress()?.let {
+            _userAddress.value = it.address
+        }
     }
 
     override suspend fun handleEvent(event: Event) {
