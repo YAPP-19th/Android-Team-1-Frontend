@@ -2,6 +2,7 @@ package yapp.android1.delibuddy.ui.home.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -39,11 +40,15 @@ class PartiesAdapter(private val onClick: (Party) -> Unit) :
             Glide.with(context)
                 .load(party.category.iconUrl)
                 .into(binding.foodCategoryImage)
-            binding.partyLocation.text = party.coordinate
+
+            binding.partyLocation.text = "${party.placeName} ${party.placeNameDetail}"
             binding.partyTitle.text = party.title
             binding.partyScheduledTime.text = party.orderTime
+
             setMemberIcon(party.targetUserCount, party.currentUserCount)
             binding.memberCount.text = "${party.currentUserCount} / ${party.targetUserCount}"
+
+            setUiBasedStatus(party)
         }
 
         private fun setMemberIcon(targetUserCount: Int, currentUserCount: Int) {
@@ -76,9 +81,27 @@ class PartiesAdapter(private val onClick: (Party) -> Unit) :
             }
         }
 
+        private fun setUiBasedStatus(party: Party) {
+            with(party) {
+                when (status) {
+                    allStatuses[1] -> setOrderingStatusLabel()
+                    allStatuses[2] -> setDisabledUI()
+                }
+            }
+        }
+
+        private fun setOrderingStatusLabel() {
+            binding.orderingStatusLabel.visibility = View.VISIBLE
+        }
+
         private fun setDisabledUI() {
             binding.partyItem.alpha = 0.4f
-            binding.partyItem.setBackgroundColor(ContextCompat.getColor(context, R.color.block_space_grey))
+            binding.partyItem.setBackgroundColor(
+                ContextCompat.getColor(
+                    context,
+                    R.color.block_space_grey
+                )
+            )
         }
     }
 
