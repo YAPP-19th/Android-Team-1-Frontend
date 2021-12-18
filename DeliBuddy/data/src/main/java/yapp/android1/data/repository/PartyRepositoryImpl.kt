@@ -2,12 +2,14 @@ package yapp.android1.data.repository
 
 import yapp.android1.data.entity.PartyBanRequestModel
 import yapp.android1.data.entity.PartyCreationRequestModel
+import yapp.android1.data.entity.PartyInformationModel
 import yapp.android1.data.entity.PartyModel
 import yapp.android1.data.remote.PartyApi
 import yapp.android1.domain.NetworkResult
 import yapp.android1.domain.entity.PartyBanRequestEntity
 import yapp.android1.domain.entity.PartyCreationRequestEntity
 import yapp.android1.domain.entity.PartyEntity
+import yapp.android1.domain.entity.PartyInformationEntity
 import yapp.android1.domain.interactor.DeliBuddyNetworkErrorHandler
 import yapp.android1.domain.repository.PartyRepository
 import javax.inject.Inject
@@ -108,10 +110,10 @@ class PartyRepositoryImpl @Inject constructor(
     }
 
 
-    override suspend fun getParty(id: Int): NetworkResult<PartyEntity> {
+    override suspend fun getPartyInformation(id: Int): NetworkResult<PartyInformationEntity> {
         try {
-            val partyModel = api.getParty(id)
-            return NetworkResult.Success(PartyModel.toPartyEntity(partyModel))
+            val partyModel = api.getPartyInformation(id)
+            return NetworkResult.Success(PartyInformationModel.toPartyInformationEntity(partyModel))
         } catch (t: Throwable) {
             val errorType = deliBuddyNetworkErrorHandler.getError(exception = t)
             return NetworkResult.Error(errorType)
