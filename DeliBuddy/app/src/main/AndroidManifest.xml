@@ -15,6 +15,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DeliBuddy">
         <activity
+            android:name=".ui.createparty.CreatePartyActivity"
+            android:windowSoftInputMode="adjustPan"
+            android:exported="false" />
+        <activity
             android:name=".ui.address.AddressActivity"
             android:exported="false" />
         <activity
