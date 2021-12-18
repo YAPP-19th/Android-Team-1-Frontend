@@ -1,63 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/cl_background"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#FFE3D8">
-
-        <ImageView
-            android:id="@+id/btn_back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
-            android:padding="20dp"
-            android:src="@drawable/icon_back"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:id="@+id/iv_location_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="8dp"
-            android:src="@drawable/icon_location"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_back" />
-
-        <ImageView
-            android:id="@+id/btn_more_options"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
-            android:padding="20dp"
-            android:src="@drawable/icon_options_black"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:id="@+id/iv_party_food_type"
-            android:layout_width="160dp"
-            android:layout_height="160dp"
-            android:layout_marginEnd="4dp"
-            android:transitionName="icon_food"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/tv_party_location"
-            tools:src="@drawable/big_food_icon_pizza" />
+        android:background="@android:color/transparent"
+        android:fillViewport="true"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="600dp"
-            android:layout_marginTop="32dp"
+            android:layout_height="match_parent"
             android:background="@drawable/shape_top_rounded_layout"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -194,103 +151,166 @@
 
             </com.google.android.material.tabs.TabLayout>
 
+
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <TextView
-            android:id="@+id/tv_party_location"
-            style="@style/RobotoRegular14"
-            android:layout_width="180dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:maxLines="1"
-            android:textColor="@color/black"
-            android:transitionName="tv_location"
-            app:layout_constraintBottom_toBottomOf="@+id/iv_location_icon"
-            app:layout_constraintStart_toEndOf="@+id/iv_location_icon"
-            app:layout_constraintTop_toTopOf="@+id/iv_location_icon"
-            tools:text="성복역 1번 출구" />
+    </androidx.core.widget.NestedScrollView>
 
-        <TextView
-            android:id="@+id/tv_order_time"
-            style="@style/RobotoRegular14"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:ellipsize="end"
-            android:maxLines="2"
-            android:textColor="@color/black"
-            android:transitionName="tv_time"
-            app:layout_constraintStart_toStartOf="@+id/tv_party_title"
-            app:layout_constraintTop_toBottomOf="@+id/tv_party_title"
-            tools:text="10월 5일 10시 40분 주문 예정" />
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/btn_join_party"
-            style="@style/RobotoBold14"
-            android:layout_width="130dp"
-            android:layout_height="32dp"
-            android:layout_marginTop="24dp"
-            android:background="@drawable/shape_rounded_button"
-            android:gravity="center"
-            android:text="파티 참가"
-            android:textColor="@color/white"
-            app:layout_constraintStart_toStartOf="@+id/tv_order_time"
-            app:layout_constraintTop_toBottomOf="@+id/tv_order_time" />
-
-
-        <TextView
-            android:id="@+id/tv_party_title"
-            style="@style/RobotoBold20"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:ellipsize="end"
-            android:maxLines="2"
-            android:textColor="@color/black"
-            android:transitionName="tv_title"
-            app:layout_constraintStart_toStartOf="@+id/iv_location_icon"
-            app:layout_constraintTop_toBottomOf="@+id/iv_location_icon"
-            tools:text="유로코 피자 4인" />
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constraintLayout"
+        <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:background="@color/white"
-            android:elevation="20dp"
-            android:visibility="invisible"
-            android:outlineSpotShadowColor="@color/shadow_grey"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-            <EditText
-                android:id="@+id/et_input_comment"
-                style="@style/RobotoRegular14"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_background"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginHorizontal="20dp"
-                android:background="@drawable/shape_rounded_grey_edittext"
-                android:paddingStart="12dp"
-                android:paddingEnd="40dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="저도 참여하고 싶은데" />
+                android:layout_height="match_parent"
+                android:background="#FFE3D8">
 
-            <ImageView
-                android:id="@+id/btn_send_comment"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:src="@drawable/icon_send_comment"
-                app:layout_constraintBottom_toBottomOf="@+id/et_input_comment"
-                app:layout_constraintEnd_toEndOf="@+id/et_input_comment"
-                app:layout_constraintTop_toTopOf="@+id/et_input_comment" />
+                <ImageView
+                    android:id="@+id/iv_location_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="58dp"
+                    android:src="@drawable/icon_location"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                <ImageView
+                    android:id="@+id/iv_party_food_type"
+                    android:layout_width="160dp"
+                    android:layout_height="160dp"
+                    android:layout_marginEnd="4dp"
+                    android:transitionName="icon_food"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/tv_party_location"
+                    tools:src="@drawable/big_food_icon_pizza" />
 
+                <TextView
+                    android:id="@+id/tv_party_location"
+                    style="@style/RobotoRegular14"
+                    android:layout_width="180dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:maxLines="1"
+                    android:textColor="@color/black"
+                    android:transitionName="tv_location"
+                    app:layout_constraintBottom_toBottomOf="@+id/iv_location_icon"
+                    app:layout_constraintStart_toEndOf="@+id/iv_location_icon"
+                    app:layout_constraintTop_toTopOf="@+id/iv_location_icon"
+                    tools:text="성복역 1번 출구" />
+
+                <TextView
+                    android:id="@+id/tv_order_time"
+                    style="@style/RobotoRegular14"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:ellipsize="end"
+                    android:maxLines="2"
+                    android:textColor="@color/black"
+                    android:transitionName="tv_time"
+                    app:layout_constraintStart_toStartOf="@+id/tv_party_title"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_party_title"
+                    tools:text="10월 5일 10시 40분 주문 예정" />
+
+                <TextView
+                    android:id="@+id/btn_join_party"
+                    style="@style/RobotoBold14"
+                    android:layout_width="130dp"
+                    android:layout_height="32dp"
+                    android:layout_marginTop="24dp"
+                    android:background="@drawable/shape_rounded_button"
+                    android:gravity="center"
+                    android:text="파티 참가"
+                    android:textColor="@color/white"
+                    app:layout_constraintStart_toStartOf="@+id/tv_order_time"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_order_time" />
+
+
+                <TextView
+                    android:id="@+id/tv_party_title"
+                    style="@style/RobotoBold20"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:ellipsize="end"
+                    android:maxLines="2"
+                    android:textColor="@color/black"
+                    android:transitionName="tv_title"
+                    app:layout_constraintStart_toStartOf="@+id/iv_location_icon"
+                    app:layout_constraintTop_toBottomOf="@+id/iv_location_icon"
+                    tools:text="유로코 피자 4인" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@android:color/transparent"
+                app:contentInsetStart="0dp"
+                app:layout_collapseMode="pin">
+
+                <include
+                    android:id="@+id/toolbar_container"
+                    layout="@layout/view_custom_toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:layout_collapseMode="pin"
+                    />
+
+            </com.google.android.material.appbar.MaterialToolbar>
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_input_comment_container"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@color/white"
+        android:elevation="20dp"
+        android:outlineSpotShadowColor="@color/shadow_grey"
+        android:visibility="visible"
+        android:layout_gravity="bottom"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <EditText
+            android:id="@+id/et_input_comment"
+            style="@style/RobotoRegular14"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginHorizontal="20dp"
+            android:background="@drawable/shape_rounded_grey_edittext"
+            android:paddingStart="12dp"
+            android:paddingEnd="40dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="저도 참여하고 싶은데" />
+
+        <ImageView
+            android:id="@+id/btn_send_comment"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/icon_send_comment"
+            app:layout_constraintBottom_toBottomOf="@+id/et_input_comment"
+            app:layout_constraintEnd_toEndOf="@+id/et_input_comment"
+            app:layout_constraintTop_toTopOf="@+id/et_input_comment" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-</ScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
