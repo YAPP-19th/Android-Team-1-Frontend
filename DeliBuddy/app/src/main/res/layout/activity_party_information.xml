@@ -5,10 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!-- Body -->
+
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/transparent"
         android:fillViewport="true"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
@@ -16,7 +18,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/shape_top_rounded_layout"
-
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -152,11 +153,11 @@
 
             </com.google.android.material.tabs.TabLayout>
 
-
-
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>
+
+    <!-- APPBAR -->
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
@@ -274,6 +275,8 @@
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
+
+    <!-- Input Comment -->
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_input_comment_container"

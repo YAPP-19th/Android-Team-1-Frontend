@@ -72,6 +72,8 @@ class PartyInformationActivity : AppCompatActivity() {
         clBackground.setBackgroundColor(backgroundColor)
         window.statusBarColor = backgroundColor
 
+        nestedScollView.setBackgroundColor(backgroundColor)
+
         Glide.with(this@PartyInformationActivity)
             .load(party.category.iconUrl)
             .into(ivPartyFoodType)
