@@ -19,13 +19,17 @@ import yapp.android1.delibuddy.databinding.FragmentCommentTabBinding
 import yapp.android1.delibuddy.model.Comment
 import yapp.android1.delibuddy.ui.partyInformation.PartyInformationViewModel
 import yapp.android1.delibuddy.util.extensions.repeatOnStarted
+import yapp.android1.delibuddy.util.sharedpreferences.SharedPreferenceHelper
+import yapp.android1.delibuddy.util.sharedpreferences.SharedPreferencesManager
 
 @AndroidEntryPoint
 class CommentTabFragment : BaseFragment<FragmentCommentTabBinding>(FragmentCommentTabBinding::inflate) {
 
     private val viewModel = activityViewModels<PartyInformationViewModel>()
 
-    private val commentAdapter = CommentAdapter()
+    private val sharedPreferenceManager = SharedPreferencesManager(requireContext())
+
+    private lateinit var commentAdapter: CommentAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -35,6 +39,9 @@ class CommentTabFragment : BaseFragment<FragmentCommentTabBinding>(FragmentComme
     }
 
     private fun initializeRecyclerView() = with(binding) {
+        val currentUserId = sharedPreferenceManager.getUserId()
+        commentAdapter = CommentAdapter(currentUserId)
+
         rvComment.adapter = commentAdapter
         rvComment.setHasFixedSize(true)
         rvComment.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
