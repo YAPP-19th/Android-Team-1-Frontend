@@ -10,7 +10,9 @@ import yapp.android1.delibuddy.model.Comment
 
 typealias WriteReplyListener = (Comment) -> Unit
 
-class CommentAdapter : ListAdapter<Comment, CommentViewHolder>(CommentDiffUtil()) {
+class CommentAdapter(
+    private val currentUserId: Int
+) : ListAdapter<Comment, CommentViewHolder>(CommentDiffUtil()) {
 
     private var writeReplyListener: WriteReplyListener? = null
 
@@ -20,11 +22,11 @@ class CommentAdapter : ListAdapter<Comment, CommentViewHolder>(CommentDiffUtil()
         return when(viewType) {
             Comment.PARENT ->{
                 val binding = ItemParentCommentBinding.inflate(layoutInflater, parent, false)
-                ParentCommentViewHolder(binding)
+                ParentCommentViewHolder(binding, currentUserId)
             }
             Comment.CHILD -> {
                 val binding = ItemChildCommentBinding.inflate(layoutInflater, parent, false)
-                ChildCommentViewHolder(binding)
+                ChildCommentViewHolder(binding, currentUserId)
             }
             else -> throw RuntimeException("올바른 ViewType이 아닙니다")
         }
