@@ -3,6 +3,7 @@ package yapp.android1.delibuddy.ui.home.fragments
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityOptionsCompat
 import androidx.fragment.app.viewModels
@@ -86,6 +87,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
             partiesViewModel.partiesResult.collect { parties ->
                 Timber.d("parties $parties")
                 partiesAdapter.submitList(parties)
+            }
+        }
+
+        repeatOnStarted {
+            partiesViewModel.showToast.collect {
+                Toast.makeText(activity, it, Toast.LENGTH_SHORT).show()
             }
         }
 
