@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
+import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -17,6 +18,7 @@ import yapp.android1.delibuddy.model.Party
 import yapp.android1.delibuddy.model.PartyInformation
 import yapp.android1.delibuddy.ui.partyInformation.PartyInformationViewModel.PartyInformationEvent
 import yapp.android1.delibuddy.ui.partyInformation.PartyInformationViewModel.PartyInformationEvent.OnIntent
+import yapp.android1.delibuddy.ui.partyInformation.model.PartyStatus
 import yapp.android1.delibuddy.ui.partyInformation.view.AppBarStateChangeListener
 import yapp.android1.delibuddy.ui.partyInformation.view.StatusBottomSheetDialog
 import yapp.android1.delibuddy.util.extensions.hide
@@ -65,32 +67,49 @@ class PartyInformationActivity : AppCompatActivity() {
     }
 
     private fun settingPartyInformationViews(party: PartyInformation) = with(binding) {
+        // [Header]
         tvPartyLocation.text = "${party.placeName} \n${party.placeNameDetail}"
         tvPartyTitle.text    = party.title
         tvOrderTime.text     = party.orderTime
         tvPartyContent.text  = party.body
-        tvStatus.text        = party.status
-        tvStatusChange.text  = party.status
 
+        Glide.with(this@PartyInformationActivity)
+            .load(party.category.iconUrl)
+            .into(ivPartyFoodType)
+
+        // [PartyStatus]
+        tvStatus.backgroundTintList = when(party.status) {
+            PartyStatus.RECRUIT -> {
+                 ContextCompat.getColorStateList(this@PartyInformationActivity, R.color.sub_yellow)
+            }
+            PartyStatus.ORDER -> {
+                ContextCompat.getColorStateList(this@PartyInformationActivity, R.color.sub_purple)
+            }
+            PartyStatus.COMPLETED -> {
+                ContextCompat.getColorStateList(this@PartyInformationActivity, R.color.sub_grey)
+            }
+        }
+
+
+        tvStatus.text = party.status.value
+        tvStatusChange.text  = party.status.value
+
+        // [ Toolbar ]
         toolbarContainer.tvTitle.text    = party.title
         toolbarContainer.tvLocation.text = "${party.placeName} ${party.placeNameDetail}"
 
+        // [Party Owner]
         tvPartyOwnerName.text = party.leader.nickName
 
         Glide.with(this@PartyInformationActivity)
             .load(party.leader.profileImage)
             .into(ivPartyOwnerProfile)
 
+        // [PartyInformation Background]
         val backgroundColor = Color.parseColor("#${party.category.backgroundColorCode}")
         clBackground.setBackgroundColor(backgroundColor)
         window.statusBarColor = backgroundColor
-
         nestedScollView.setBackgroundColor(backgroundColor)
-
-        Glide.with(this@PartyInformationActivity)
-            .load(party.category.iconUrl)
-            .into(ivPartyFoodType)
-
     }
 
     private fun initializeView() = with(binding) {
@@ -107,7 +126,7 @@ class PartyInformationActivity : AppCompatActivity() {
     }
 
     private fun switchViewState(isOwner: Boolean) = with(binding) {
-        if(!isOwner) {
+        if(isOwner) {
             tvStatus.hide()
             tvStatusChange.show()
         } else {

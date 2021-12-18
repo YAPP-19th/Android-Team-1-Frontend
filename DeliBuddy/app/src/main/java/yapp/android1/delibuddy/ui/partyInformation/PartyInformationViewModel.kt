@@ -51,7 +51,10 @@ class PartyInformationViewModel @Inject constructor(
             }
 
             is PartyInformationEvent.OnStatusChanged -> {
-                if(party.value.status != event.status.value) {
+                val currentStatus = party.value.status.value
+                val changedStatus = event.status.value
+
+                if(currentStatus != changedStatus) {
                     //ChangeStatus
                 }
             }
@@ -70,7 +73,7 @@ class PartyInformationViewModel @Inject constructor(
             orderTime        = party.orderTime,
             placeName        = party.placeName,
             placeNameDetail  = party.placeNameDetail,
-            status           = party.status,
+            status           = PartyStatus.of(party.status),
             targetUserCount  = party.targetUserCount,
             title            = party.title,
             leader           = PartyInformation.Leader.EMPTY
