@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_item1"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:padding="12dp"
+        android:gravity="center"
+        style="@style/RobotoRegular14"
+        android:drawablePadding="8dp"
+        android:text="미주문" />
+
+    <TextView
+        android:id="@+id/tv_item2"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:padding="12dp"
+        android:gravity="center"
+        style="@style/RobotoRegular14"
+        android:drawablePadding="8dp"
+        android:text="주문중" />
+
+    <TextView
+        android:id="@+id/tv_item3"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:gravity="center"
+        style="@style/RobotoRegular14"
+        android:padding="12dp"
+        android:drawablePadding="8dp"
+        android:text="파티완료" />
+
+</LinearLayout>

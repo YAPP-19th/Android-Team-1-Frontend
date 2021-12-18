@@ -12,6 +12,7 @@ import yapp.android1.delibuddy.model.Event
 import yapp.android1.delibuddy.model.Party
 import yapp.android1.delibuddy.model.PartyInformation
 import yapp.android1.delibuddy.ui.partyInformation.PartyInformationViewModel.PartyInformationEvent
+import yapp.android1.delibuddy.ui.partyInformation.model.PartyStatus
 import yapp.android1.domain.NetworkResult
 import yapp.android1.domain.entity.NetworkError
 import yapp.android1.domain.interactor.usecase.FetchPartyCommentsUseCase
@@ -33,18 +34,26 @@ class PartyInformationViewModel @Inject constructor(
     private val _comments = MutableStateFlow<List<Comment>>(emptyList())
     val comments = _comments.asStateFlow()
 
+    private var currentUserId = -1
+
     sealed class PartyInformationEvent : Event {
-        class OnIntent(val data: Party) : PartyInformationEvent()
-        class OnCommentSend(val body: String) : PartyInformationEvent()
-        class OnStatusChanged(val status: String) : PartyInformationEvent()
+        class OnIntent(val data: Party, val currentUserId: Int) : PartyInformationEvent()
+        class OnStatusChanged(val status: PartyStatus) : PartyInformationEvent()
     }
 
     override suspend fun handleEvent(event: PartyInformationEvent) {
         when(event) {
             is PartyInformationEvent.OnIntent -> {
+                currentUserId = event.currentUserId
                 setPartyWithoutLeader(event.data)
                 fetchPartyInformation(_party.value.id)
                 fetchPartyComments(_party.value.id)
+            }
+
+            is PartyInformationEvent.OnStatusChanged -> {
+                if(party.value.status != event.status.value) {
+                    //ChangeStatus
+                }
             }
         }
     }
@@ -73,10 +82,17 @@ class PartyInformationViewModel @Inject constructor(
         when(result) {
             is NetworkResult.Success -> {
                 _party.value = PartyInformation.toPartyInformation(result.data)
+                setPartyOwnerState(party.value.leader.id)
             }
             is NetworkResult.Error -> {
                handleError(result, null)
             }
+        }
+    }
+
+    private fun setPartyOwnerState(ownerId: Int) {
+        if(currentUserId == ownerId) {
+            _isOwner.value = true
         }
     }
 

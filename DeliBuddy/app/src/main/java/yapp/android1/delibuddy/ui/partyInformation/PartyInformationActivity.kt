@@ -15,11 +15,14 @@ import yapp.android1.delibuddy.adapter.CommunityViewPagerAdapter
 import yapp.android1.delibuddy.databinding.ActivityPartyInformationBinding
 import yapp.android1.delibuddy.model.Party
 import yapp.android1.delibuddy.model.PartyInformation
+import yapp.android1.delibuddy.ui.partyInformation.PartyInformationViewModel.PartyInformationEvent
 import yapp.android1.delibuddy.ui.partyInformation.PartyInformationViewModel.PartyInformationEvent.OnIntent
 import yapp.android1.delibuddy.ui.partyInformation.view.AppBarStateChangeListener
+import yapp.android1.delibuddy.ui.partyInformation.view.StatusBottomSheetDialog
 import yapp.android1.delibuddy.util.extensions.hide
 import yapp.android1.delibuddy.util.extensions.repeatOnStarted
 import yapp.android1.delibuddy.util.extensions.show
+import yapp.android1.delibuddy.util.sharedpreferences.SharedPreferencesManager
 
 @AndroidEntryPoint
 class PartyInformationActivity : AppCompatActivity() {
@@ -27,6 +30,8 @@ class PartyInformationActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPartyInformationBinding
 
     private val viewModel by viewModels<PartyInformationViewModel>()
+
+    private val sharedPreferencesManager by lazy { SharedPreferencesManager(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,7 +47,7 @@ class PartyInformationActivity : AppCompatActivity() {
 
     private fun receiverIntent() {
         val intentData = intent.getSerializableExtra("party") as Party
-        viewModel.occurEvent(OnIntent(intentData))
+        viewModel.occurEvent(OnIntent(intentData, sharedPreferencesManager.getUserId()))
     }
 
     private fun collectData() {
@@ -65,6 +70,7 @@ class PartyInformationActivity : AppCompatActivity() {
         tvOrderTime.text     = party.orderTime
         tvPartyContent.text  = party.body
         tvStatus.text        = party.status
+        tvStatusChange.text  = party.status
 
         toolbarContainer.tvTitle.text    = party.title
         toolbarContainer.tvLocation.text = "${party.placeName} ${party.placeNameDetail}"
@@ -91,10 +97,17 @@ class PartyInformationActivity : AppCompatActivity() {
         toolbarContainer.btnBack.setOnClickListener {
             onBackPressed()
         }
+
+        tvStatusChange.setOnClickListener {
+            supportFragmentManager.let { fragmentManager ->
+                val bottomSheetDialog = StatusBottomSheetDialog()
+                bottomSheetDialog.show(fragmentManager, null)
+            }
+        }
     }
 
     private fun switchViewState(isOwner: Boolean) = with(binding) {
-        if(isOwner) {
+        if(!isOwner) {
             tvStatus.hide()
             tvStatusChange.show()
         } else {
