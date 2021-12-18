@@ -54,6 +54,7 @@ class PartiesViewModel @Inject constructor(
 
             is PartiesEvent.SaveAddress -> {
                 saveAddress(event.address)
+                _userAddress.value = event.address
             }
         }
     }
