@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
 import com.bumptech.glide.Glide
+import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -14,6 +15,7 @@ import yapp.android1.delibuddy.adapter.CommunityViewPagerAdapter
 import yapp.android1.delibuddy.databinding.ActivityPartyInformationBinding
 import yapp.android1.delibuddy.model.Party
 import yapp.android1.delibuddy.ui.partyInformation.PartyInformationViewModel.PartyInformationEvent.OnIntent
+import yapp.android1.delibuddy.ui.partyInformation.view.AppBarStateChangeListener
 import yapp.android1.delibuddy.util.extensions.hide
 import yapp.android1.delibuddy.util.extensions.repeatOnStarted
 import yapp.android1.delibuddy.util.extensions.show
@@ -30,15 +32,12 @@ class PartyInformationActivity : AppCompatActivity() {
         binding = ActivityPartyInformationBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        initializeView()
         initializeViewPager()
+        initializeCollapsing()
         receiverIntent()
         collectData()
     }
-
-//    override fun onEnterAnimationComplete() {
-//        super.onEnterAnimationComplete()
-//
-//    }
 
     private fun receiverIntent() {
         val intentData = intent.getSerializableExtra("party") as Party
@@ -61,9 +60,13 @@ class PartyInformationActivity : AppCompatActivity() {
 
     private fun settingPartyInformationViews(party: Party) = with(binding) {
         tvPartyLocation.text = party.coordinate
-        tvPartyTitle.text = party.title
-        tvOrderTime.text = party.orderTime
-        tvPartyContent.text = party.body
+        tvPartyTitle.text    = party.title
+        tvOrderTime.text     = party.orderTime
+        tvPartyContent.text  = party.body
+        tvStatus.text        = party.status
+
+        toolbarContainer.tvTitle.text    = party.title
+        toolbarContainer.tvLocation.text = "${party.placeName} ${party.placeNameDetail}"
 
         val backgroundColor = Color.parseColor("#${party.category.backgroundColorCode}")
         clBackground.setBackgroundColor(backgroundColor)
@@ -75,6 +78,12 @@ class PartyInformationActivity : AppCompatActivity() {
 
     }
 
+    private fun initializeView() = with(binding) {
+        toolbarContainer.btnBack.setOnClickListener {
+            onBackPressed()
+        }
+    }
+
     private fun switchViewState(isOwner: Boolean) = with(binding) {
         if(isOwner) {
             tvStatus.hide()
@@ -83,6 +92,31 @@ class PartyInformationActivity : AppCompatActivity() {
             tvStatus.show()
             tvStatusChange.hide()
         }
+    }
+
+    private fun initializeCollapsing() = with(binding) {
+
+        appbar.addOnOffsetChangedListener(object : AppBarStateChangeListener() {
+            override fun onStateChanged(appBarLayout: AppBarLayout, state: State) {
+                when (state) {
+                    State.COLLAPSED -> {
+                        toolbarContainer.tvTitle.visibility = View.VISIBLE
+                        toolbarContainer.tvLocation.visibility = View.VISIBLE
+                        toolbarContainer.tvTitle.animate().alpha(1F).setDuration(100)
+                        toolbarContainer.tvLocation.animate().alpha(1F).setDuration(100)
+                        clBackground.animate().alpha(0F).setDuration(100)
+                    }
+                    State.EXPANDED -> {
+                        toolbarContainer.tvTitle.visibility = View.INVISIBLE
+                        toolbarContainer.tvLocation.visibility = View.INVISIBLE
+                        toolbarContainer.tvTitle.animate().alpha(0f).setDuration(250)
+                        toolbarContainer.tvLocation.animate().alpha(0F).setDuration(250)
+                        clBackground.animate().alpha(1F).setDuration(250)
+                    }
+                    State.IDLE -> Unit
+                }
+            }
+        })
     }
 
     private fun initializeViewPager() = with(binding) {
