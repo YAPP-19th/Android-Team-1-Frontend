@@ -18,7 +18,7 @@
             android:name=".ui.address.AddressActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.partyDetail.PartyDetailActivity"
+            android:name=".ui.partyInformation.PartyInformationActivity"
             android:exported="false" />
         <activity
             android:name=".ui.splash.SplashActivity"

@@ -106,4 +106,15 @@ class PartyRepositoryImpl @Inject constructor(
             return NetworkResult.Error(errorType)
         }
     }
+
+
+    override suspend fun getParty(id: Int): NetworkResult<PartyEntity> {
+        try {
+            val partyModel = api.getParty(id)
+            return NetworkResult.Success(PartyModel.toPartyEntity(partyModel))
+        } catch (t: Throwable) {
+            val errorType = deliBuddyNetworkErrorHandler.getError(exception = t)
+            return NetworkResult.Error(errorType)
+        }
+    }
 }

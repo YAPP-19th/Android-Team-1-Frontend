@@ -54,4 +54,3 @@ data class Party(
         }
     }
 }
-
