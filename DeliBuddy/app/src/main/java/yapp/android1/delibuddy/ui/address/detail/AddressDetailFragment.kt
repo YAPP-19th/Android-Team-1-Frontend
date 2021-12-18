@@ -17,6 +17,7 @@ import yapp.android1.delibuddy.R
 import yapp.android1.delibuddy.base.BaseFragment
 import yapp.android1.delibuddy.databinding.FragmentAddressDetailBinding
 import yapp.android1.delibuddy.model.Address
+import yapp.android1.delibuddy.ui.address.AddressActivity
 import yapp.android1.delibuddy.ui.address.AddressSharedEvent
 import yapp.android1.delibuddy.ui.address.AddressSharedViewModel
 import yapp.android1.delibuddy.ui.dialog.PermissionDialogFragment
@@ -73,8 +74,8 @@ class AddressDetailFragment :
 
         btnAddressDetail.setOnClickListener {
             val intent = Intent()
-            intent.putExtra("address", viewModel.selectedAddress.value)
-            requireActivity().setResult(Activity.RESULT_OK, intent)
+            intent.putExtra(AddressActivity.ADDRESS_ACTIVITY_USER_ADDRESS, viewModel.selectedAddress.value)
+            requireActivity().setResult(AddressActivity.ADDRESS_ACTIVITY_RESULT_CODE, intent)
             requireActivity().finish()
         }
 
@@ -97,15 +98,14 @@ class AddressDetailFragment :
         permissionDialog.show(parentFragmentManager, null)
     }
 
-    // todo: move to home
-    private fun saveAddress() {
-        viewModel.occurEvent(
-            AddressSharedEvent.SaveAddress(
-                viewModel.selectedAddress.value,
-                binding.etAddressDetail.text.toString()
-            )
-        )
-    }
+//    private fun saveAddress() {
+//        viewModel.occurEvent(
+//            AddressSharedEvent.SaveAddress(
+//                viewModel.selectedAddress.value,
+//                binding.etAddressDetail.text.toString()
+//            )
+//        )
+//    }
 
     private fun initMap() = with(binding) {
         val mapFragment = childFragmentManager.findFragmentById(R.id.fragment_map) as MapFragment?

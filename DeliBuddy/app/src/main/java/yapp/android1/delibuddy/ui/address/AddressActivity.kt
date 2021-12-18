@@ -11,29 +11,29 @@ import yapp.android1.delibuddy.R
 
 @AndroidEntryPoint
 class AddressActivity : AppCompatActivity() {
-    private val viewModel: AddressSharedViewModel by viewModels()
+    // private val viewModel: AddressSharedViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_address)
-        initObserve()
+        //initObserve()
     }
 
-    private fun initObserve() {
-        lifecycleScope.launchWhenCreated {
-            viewModel.saveAddressEvent.collectLatest { event ->
-                when(event) {
-                    is SaveAddressEvent.Success -> {
-                        setResult(ADDRESS_ACTIVITY_RESULT_CODE, Intent().putExtra(ADDRESS_ACTIVITY_USER_ADDRESS, event.userAddress))
-                        finish()
-                    }
-                    is SaveAddressEvent.Failed -> {
-                        //Error
-                    }
-                }
-            }
-        }
-    }
+//    private fun initObserve() {
+//        lifecycleScope.launchWhenCreated {
+//            viewModel.saveAddressEvent.collectLatest { event ->
+//                when(event) {
+//                    is SaveAddressEvent.Success -> {
+//                        setResult(ADDRESS_ACTIVITY_RESULT_CODE, Intent().putExtra(ADDRESS_ACTIVITY_USER_ADDRESS, event.userAddress))
+//                        finish()
+//                    }
+//                    is SaveAddressEvent.Failed -> {
+//                        //Error
+//                    }
+//                }
+//            }
+//        }
+//    }
 
 
     companion object {

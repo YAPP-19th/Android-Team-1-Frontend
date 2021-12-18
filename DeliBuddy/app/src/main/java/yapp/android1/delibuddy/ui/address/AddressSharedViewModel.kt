@@ -12,6 +12,7 @@ import yapp.android1.delibuddy.base.BaseViewModel
 import yapp.android1.delibuddy.base.RetryAction
 import yapp.android1.delibuddy.model.Address
 import yapp.android1.delibuddy.model.Event
+import yapp.android1.delibuddy.ui.home.viewmodel.PartiesViewModel
 import yapp.android1.delibuddy.util.EventFlow
 import yapp.android1.delibuddy.util.MutableEventFlow
 import yapp.android1.domain.NetworkResult
@@ -22,20 +23,16 @@ import javax.inject.Inject
 
 sealed class AddressSharedEvent : Event {
     class SelectAddress(val address: Address) : AddressSharedEvent()
-
     class SearchAddress(val query: String) : AddressSharedEvent()
-
-    class SaveAddress(val address: Address, val addressDetail: String) : AddressSharedEvent()
     class CoordToAddress(val lat: Double, val lng: Double) : AddressSharedEvent()
-
     object SelectCurrentLocation : AddressSharedEvent()
 }
 
-sealed class SaveAddressEvent : Event {
-    object Idle : SaveAddressEvent()
-    class Success(val userAddress: String) : SaveAddressEvent()
-    object Failed : SaveAddressEvent()
-}
+//sealed class SaveAddressEvent : Event {
+//    object Idle : SaveAddressEvent()
+//    class Success(val userAddress: String) : SaveAddressEvent()
+//    object Failed : SaveAddressEvent()
+//}
 
 @HiltViewModel
 class AddressSharedViewModel @Inject constructor(
@@ -57,8 +54,9 @@ class AddressSharedViewModel @Inject constructor(
     private var _isCurrentLocation = MutableStateFlow<Boolean>(false)
     val isCurrentLocation: MutableStateFlow<Boolean> = _isCurrentLocation
 
-    private var _saveAddressEvent = MutableStateFlow<SaveAddressEvent>(SaveAddressEvent.Idle)
-    val saveAddressEvent: StateFlow<SaveAddressEvent> = _saveAddressEvent
+//    private var _saveAddressEvent = MutableStateFlow<PartiesViewModel.SaveAddressEvent>(
+//        PartiesViewModel.SaveAddressEvent.Idle)
+//    val saveAddressEvent: StateFlow<PartiesViewModel.SaveAddressEvent> = _saveAddressEvent
 
     override suspend fun handleEvent(event: Event) {
         when (event) {
@@ -71,11 +69,11 @@ class AddressSharedViewModel @Inject constructor(
                 searchAddress(event.query)
             }
 
-            is AddressSharedEvent.SaveAddress -> {
-                val address = event.address
-                address.addressDetail = event.addressDetail
-                saveAddress(address)
-            }
+//            is AddressSharedEvent.SaveAddress -> {
+//                val address = event.address
+//                address.addressDetail = event.addressDetail
+//                saveAddress(address)
+//            }
 
             is AddressSharedEvent.CoordToAddress -> {
                 convertCoordToAddress(event.lat, event.lng)
@@ -109,18 +107,18 @@ class AddressSharedViewModel @Inject constructor(
         }
     }
 
-    private fun saveAddress(address: Address) {
-        DeliBuddyApplication.prefs.saveUserAddress(address)
-
-        if (DeliBuddyApplication.prefs.getCurrentUserAddress() == null) {
-            _saveAddressEvent.value = SaveAddressEvent.Failed
-            return
-        }
-
-        _saveAddressEvent.value = SaveAddressEvent.Success(
-            DeliBuddyApplication.prefs.getCurrentUserAddress()!!.address
-        )
-    }
+//    private fun saveAddress(address: Address) {
+//        DeliBuddyApplication.prefs.saveUserAddress(address)
+//
+//        if (DeliBuddyApplication.prefs.getCurrentUserAddress() == null) {
+//            _saveAddressEvent.value = PartiesViewModel.SaveAddressEvent.Failed
+//            return
+//        }
+//
+//        _saveAddressEvent.value = PartiesViewModel.SaveAddressEvent.Success(
+//            DeliBuddyApplication.prefs.getCurrentUserAddress()!!.address
+//        )
+//    }
 
     private fun convertCoordToAddress(lat: Double, lng: Double) {
         job?.cancel()

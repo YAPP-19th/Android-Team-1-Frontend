@@ -42,9 +42,9 @@ class CreatePartyActivity : AppCompatActivity() {
     private val getResult = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
-        if (result.resultCode == RESULT_OK) {
+        if (result.resultCode == AddressActivity.ADDRESS_ACTIVITY_RESULT_CODE) {
             val data: Intent = result.data!!
-            val selectedAddress = data.getParcelableExtra<Address>("address")
+            val selectedAddress = data.getParcelableExtra<Address>(AddressActivity.ADDRESS_ACTIVITY_USER_ADDRESS)
             viewModel.occurEvent(CreatePartyEvent.SelectedAddressEvent(selectedAddress))
         }
     }

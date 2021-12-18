@@ -8,6 +8,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import yapp.android1.delibuddy.R
 import yapp.android1.delibuddy.databinding.ActivityHomeBinding
 import yapp.android1.delibuddy.ui.alarm.AlarmFragment
+import yapp.android1.delibuddy.ui.home.fragments.HomeFragment
 import yapp.android1.delibuddy.ui.mypage.MyPageFragment
 import yapp.android1.delibuddy.ui.myparty.MyPartyFragment
 
