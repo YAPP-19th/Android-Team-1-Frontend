@@ -27,7 +27,7 @@ class CommentTabFragment : BaseFragment<FragmentCommentTabBinding>(FragmentComme
 
     private val viewModel = activityViewModels<PartyInformationViewModel>()
 
-    private val sharedPreferenceManager = SharedPreferencesManager(requireContext())
+    private val sharedPreferencesManager by lazy { SharedPreferencesManager(requireContext()) }
 
     private lateinit var commentAdapter: CommentAdapter
 
@@ -39,7 +39,7 @@ class CommentTabFragment : BaseFragment<FragmentCommentTabBinding>(FragmentComme
     }
 
     private fun initializeRecyclerView() = with(binding) {
-        val currentUserId = sharedPreferenceManager.getUserId()
+        val currentUserId = sharedPreferencesManager.getUserId()
         commentAdapter = CommentAdapter(currentUserId)
 
         rvComment.adapter = commentAdapter
