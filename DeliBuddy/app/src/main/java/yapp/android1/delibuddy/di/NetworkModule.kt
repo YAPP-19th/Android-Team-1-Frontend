@@ -12,10 +12,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import yapp.android1.data.interactor.DeliBuddyNetworkErrorHandlerImpl
 import yapp.android1.data.interactor.KakaoNetworkErrorHandlerImpl
-import yapp.android1.data.remote.AuthApi
-import yapp.android1.data.remote.DeliBuddyApi
-import yapp.android1.data.remote.KakaoLocalApi
-import yapp.android1.data.remote.PartyApi
+import yapp.android1.data.remote.*
 import yapp.android1.delibuddy.BuildConfig
 import yapp.android1.delibuddy.DeliBuddyApplication
 import yapp.android1.domain.interactor.DeliBuddyNetworkErrorHandler
@@ -105,6 +102,11 @@ object NetworkModule {
     @Provides
     fun provideAuthApiService(@DeliBuddyRetrofit retrofit: Retrofit): AuthApi {
         return retrofit.create(AuthApi::class.java)
+    }
+
+    @Provides
+    fun provideCommentApiService(@DeliBuddyRetrofit retrofit: Retrofit): CommentApi {
+        return retrofit.create(CommentApi::class.java)
     }
 
     @Provides

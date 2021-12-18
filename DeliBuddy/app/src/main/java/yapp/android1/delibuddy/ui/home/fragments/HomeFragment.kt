@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityOptionsCompat
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
@@ -13,11 +14,12 @@ import kotlinx.coroutines.flow.collectLatest
 import timber.log.Timber
 import yapp.android1.delibuddy.base.BaseFragment
 import yapp.android1.delibuddy.databinding.FragmentHomeBinding
+import yapp.android1.delibuddy.databinding.IncludeLayoutPartyItemBinding
 import yapp.android1.delibuddy.model.Party
 import yapp.android1.delibuddy.ui.address.AddressActivity
 import yapp.android1.delibuddy.ui.home.adapter.PartiesAdapter
 import yapp.android1.delibuddy.ui.home.viewmodel.PartiesViewModel
-import yapp.android1.delibuddy.ui.partyDetail.PartyDetailActivity
+import yapp.android1.delibuddy.ui.partyInformation.PartyInformationActivity
 import yapp.android1.delibuddy.util.extensions.repeatOnStarted
 
 typealias LocationRange = Pair<String, Int>
@@ -39,8 +41,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
         }
 
     private val partiesAdapter: PartiesAdapter by lazy {
-        PartiesAdapter {
-            adapterOnClick(it)
+        PartiesAdapter { binding, party ->
+            adapterOnClick(binding, party)
         }
     }
 
@@ -101,9 +103,17 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
         }
     }
 
-    private fun adapterOnClick(party: Party) {
-        val intent = Intent(activity, PartyDetailActivity::class.java)
+    private fun adapterOnClick(binding: IncludeLayoutPartyItemBinding, party: Party) {
+        val intent = Intent(activity, PartyInformationActivity::class.java)
         intent.putExtra(PARTY, party)
-        startActivity(intent)
+
+        val pairFoodIcon = androidx.core.util.Pair<View, String>(binding.foodCategoryImage, binding.foodCategoryImage.transitionName)
+        val pairTitle = androidx.core.util.Pair<View, String>(binding.partyTitle, binding.partyTitle.transitionName)
+        val pairLocation = androidx.core.util.Pair<View, String>(binding.partyLocation, binding.partyLocation.transitionName)
+        val pairTime = androidx.core.util.Pair<View, String>(binding.partyScheduledTime, binding.partyScheduledTime.transitionName)
+
+        val optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(requireActivity(), pairFoodIcon,pairTitle,pairLocation,pairTime)
+
+        startActivity(intent, optionsCompat.toBundle())
     }
 }

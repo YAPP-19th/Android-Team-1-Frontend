@@ -3,4 +3,8 @@
     <domain-config cleartextTrafficPermitted="true">
         <domain includeSubdomains="true">ec2-54-180-186-128.ap-northeast-2.compute.amazonaws.com</domain>
     </domain-config>
+
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">k.kakaocdn.net</domain>
+    </domain-config>
 </network-security-config>

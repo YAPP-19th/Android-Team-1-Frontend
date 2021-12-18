@@ -7,6 +7,7 @@ import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.user.UserApiClient
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
+import timber.log.Timber
 import yapp.android1.delibuddy.DeliBuddyApplication
 import yapp.android1.delibuddy.databinding.ActivityLoginBinding
 import yapp.android1.delibuddy.ui.home.HomeActivity
@@ -33,6 +34,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun checkAuthCondition() {
         if (DeliBuddyApplication.prefs.getAuth().isNotEmpty()) {
+            Timber.tag("------------[TAG]").d("- JWT : ${DeliBuddyApplication.prefs.getAuth().token}")
             intentTo(HomeActivity::class.java)
         }
     }
