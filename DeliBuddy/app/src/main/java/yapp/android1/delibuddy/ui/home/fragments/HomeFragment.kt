@@ -14,8 +14,8 @@ import kotlinx.coroutines.flow.collectLatest
 import timber.log.Timber
 import yapp.android1.delibuddy.base.BaseFragment
 import yapp.android1.delibuddy.databinding.FragmentHomeBinding
-import yapp.android1.delibuddy.model.Address
 import yapp.android1.delibuddy.databinding.IncludeLayoutPartyItemBinding
+import yapp.android1.delibuddy.model.Address
 import yapp.android1.delibuddy.model.Party
 import yapp.android1.delibuddy.ui.address.AddressActivity
 import yapp.android1.delibuddy.ui.createparty.CreatePartyActivity
@@ -42,9 +42,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
             val selectedAddress =
                 data?.getParcelableExtra<Address>(AddressActivity.ADDRESS_ACTIVITY_USER_ADDRESS)
             selectedAddress?.let { address ->
-//                partiesViewModel.occurEvent()
-//                DeliBuddyApplication.prefs.saveUserAddress(address)
-//                binding.tvUserAddress.text = address.addressName
                 partiesViewModel.occurEvent(PartiesViewModel.PartiesEvent.SaveAddress(address))
             }
         }
@@ -111,18 +108,50 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
                 binding.tvUserAddress.text = it.addressName
             }
         }
+
+        repeatOnStarted {
+            partiesViewModel.saveAddressEvent.collectLatest { event ->
+                when (event) {
+                    is PartiesViewModel.SaveAddressEvent.Success -> {
+                        Toast.makeText(activity, "주소 변경에 성공하였습니다.", Toast.LENGTH_SHORT).show()
+                    }
+                    is PartiesViewModel.SaveAddressEvent.Failed -> {
+                        Toast.makeText(activity, "주소 변경에 실패하였습니다.\n다시 시도해 주세요.", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                }
+            }
+        }
     }
 
     private fun adapterOnClick(binding: IncludeLayoutPartyItemBinding, party: Party) {
         val intent = Intent(activity, PartyInformationActivity::class.java)
         intent.putExtra(PARTY, party)
 
-        val pairFoodIcon = androidx.core.util.Pair<View, String>(binding.foodCategoryImage, binding.foodCategoryImage.transitionName)
-        val pairTitle = androidx.core.util.Pair<View, String>(binding.partyTitle, binding.partyTitle.transitionName)
-        val pairLocation = androidx.core.util.Pair<View, String>(binding.partyLocation, binding.partyLocation.transitionName)
-        val pairTime = androidx.core.util.Pair<View, String>(binding.partyScheduledTime, binding.partyScheduledTime.transitionName)
+        val pairFoodIcon = androidx.core.util.Pair<View, String>(
+            binding.foodCategoryImage,
+            binding.foodCategoryImage.transitionName
+        )
+        val pairTitle = androidx.core.util.Pair<View, String>(
+            binding.partyTitle,
+            binding.partyTitle.transitionName
+        )
+        val pairLocation = androidx.core.util.Pair<View, String>(
+            binding.partyLocation,
+            binding.partyLocation.transitionName
+        )
+        val pairTime = androidx.core.util.Pair<View, String>(
+            binding.partyScheduledTime,
+            binding.partyScheduledTime.transitionName
+        )
 
-        val optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(requireActivity(), pairFoodIcon,pairTitle,pairLocation,pairTime)
+        val optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
+            requireActivity(),
+            pairFoodIcon,
+            pairTitle,
+            pairLocation,
+            pairTime
+        )
 
         startActivity(intent, optionsCompat.toBundle())
     }

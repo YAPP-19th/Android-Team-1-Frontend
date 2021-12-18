@@ -54,7 +54,6 @@ class PartiesViewModel @Inject constructor(
 
             is PartiesEvent.SaveAddress -> {
                 saveAddress(event.address)
-                _userAddress.value = event.address
             }
         }
     }
@@ -70,6 +69,7 @@ class PartiesViewModel @Inject constructor(
         _saveAddressEvent.value = SaveAddressEvent.Success(
             DeliBuddyApplication.prefs.getCurrentUserAddress()!!.address
         )
+        _userAddress.value = address
     }
 
     private suspend fun getPartiesInCircle(locationRange: LocationRange) {

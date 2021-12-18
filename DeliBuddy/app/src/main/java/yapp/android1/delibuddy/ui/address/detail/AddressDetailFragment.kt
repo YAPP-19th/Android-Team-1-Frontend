@@ -98,15 +98,6 @@ class AddressDetailFragment :
         permissionDialog.show(parentFragmentManager, null)
     }
 
-//    private fun saveAddress() {
-//        viewModel.occurEvent(
-//            AddressSharedEvent.SaveAddress(
-//                viewModel.selectedAddress.value,
-//                binding.etAddressDetail.text.toString()
-//            )
-//        )
-//    }
-
     private fun initMap() = with(binding) {
         val mapFragment = childFragmentManager.findFragmentById(R.id.fragment_map) as MapFragment?
             ?: MapFragment.newInstance().also {

@@ -28,12 +28,6 @@ sealed class AddressSharedEvent : Event {
     object SelectCurrentLocation : AddressSharedEvent()
 }
 
-//sealed class SaveAddressEvent : Event {
-//    object Idle : SaveAddressEvent()
-//    class Success(val userAddress: String) : SaveAddressEvent()
-//    object Failed : SaveAddressEvent()
-//}
-
 @HiltViewModel
 class AddressSharedViewModel @Inject constructor(
     private val searchAddressUseCase: SearchAddressUseCase,
@@ -54,10 +48,6 @@ class AddressSharedViewModel @Inject constructor(
     private var _isCurrentLocation = MutableStateFlow<Boolean>(false)
     val isCurrentLocation: MutableStateFlow<Boolean> = _isCurrentLocation
 
-//    private var _saveAddressEvent = MutableStateFlow<PartiesViewModel.SaveAddressEvent>(
-//        PartiesViewModel.SaveAddressEvent.Idle)
-//    val saveAddressEvent: StateFlow<PartiesViewModel.SaveAddressEvent> = _saveAddressEvent
-
     override suspend fun handleEvent(event: Event) {
         when (event) {
             is AddressSharedEvent.SelectAddress -> {
@@ -68,12 +58,6 @@ class AddressSharedViewModel @Inject constructor(
             is AddressSharedEvent.SearchAddress -> {
                 searchAddress(event.query)
             }
-
-//            is AddressSharedEvent.SaveAddress -> {
-//                val address = event.address
-//                address.addressDetail = event.addressDetail
-//                saveAddress(address)
-//            }
 
             is AddressSharedEvent.CoordToAddress -> {
                 convertCoordToAddress(event.lat, event.lng)
@@ -106,19 +90,6 @@ class AddressSharedViewModel @Inject constructor(
             }
         }
     }
-
-//    private fun saveAddress(address: Address) {
-//        DeliBuddyApplication.prefs.saveUserAddress(address)
-//
-//        if (DeliBuddyApplication.prefs.getCurrentUserAddress() == null) {
-//            _saveAddressEvent.value = PartiesViewModel.SaveAddressEvent.Failed
-//            return
-//        }
-//
-//        _saveAddressEvent.value = PartiesViewModel.SaveAddressEvent.Success(
-//            DeliBuddyApplication.prefs.getCurrentUserAddress()!!.address
-//        )
-//    }
 
     private fun convertCoordToAddress(lat: Double, lng: Double) {
         job?.cancel()
