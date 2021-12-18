@@ -1,6 +1,5 @@
 package yapp.android1.delibuddy.ui.createparty
 
-
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Intent
@@ -18,6 +17,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import timber.log.Timber
 import yapp.android1.delibuddy.databinding.ActivityCreatePartyBinding
@@ -27,6 +27,7 @@ import yapp.android1.delibuddy.ui.home.HomeActivity
 import yapp.android1.delibuddy.util.extensions.repeatOnStarted
 import yapp.android1.delibuddy.util.intentTo
 
+@AndroidEntryPoint
 class CreatePartyActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCreatePartyBinding
     private val viewModel: CreatePartyViewModel by viewModels()
@@ -101,7 +102,6 @@ class CreatePartyActivity : AppCompatActivity() {
         initBodyTextWatcher()
         initDatePicker()
         initTimePicker()
-        initCategorySpinner()
         initMemberSpinner()
     }
 
@@ -294,9 +294,9 @@ class CreatePartyActivity : AppCompatActivity() {
         return targetTime.time.time - selectedDate.time > 0
     }
 
-    private fun initCategorySpinner() = with(binding) {
-        // TODO: Get Category List From Server
-        val categories = arrayOf("음식 카테고리", "한식", "일식", "양식", "중식")
+    private fun initCategorySpinnerAfterGetListFromServer() = with(binding) {
+        // val categories = arrayOf("음식 카테고리", "한식", "일식", "양식", "중식")
+        val categories = viewModel.categoryList.value
         val categorySpinnerAdapter = ArrayAdapter(
             this@CreatePartyActivity,
             android.R.layout.simple_spinner_dropdown_item,
@@ -444,6 +444,12 @@ class CreatePartyActivity : AppCompatActivity() {
                     PartyElement.NONE -> {
                     }
                 }
+            }
+        }
+
+        repeatOnStarted {
+            viewModel.categoryList.collect {
+                initCategorySpinnerAfterGetListFromServer()
             }
         }
     }

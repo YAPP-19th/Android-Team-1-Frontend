@@ -1,13 +1,21 @@
 package yapp.android1.delibuddy.ui.createparty
 
+import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
+import timber.log.Timber
 import yapp.android1.delibuddy.DeliBuddyApplication
 import yapp.android1.delibuddy.base.BaseViewModel
 import yapp.android1.delibuddy.base.RetryAction
 import yapp.android1.delibuddy.model.Address
+import yapp.android1.delibuddy.model.Category
 import yapp.android1.delibuddy.model.Event
 import yapp.android1.domain.NetworkResult
+import yapp.android1.domain.interactor.usecase.CategoryListUseCase
+import javax.inject.Inject
 
 sealed class CreatePartyEvent : Event {
     class ChangeFlagsEvent(
@@ -24,7 +32,12 @@ sealed class CreatePartyEvent : Event {
     object CreatePartyClickEvent : CreatePartyEvent()
 }
 
-class CreatePartyViewModel : BaseViewModel<CreatePartyEvent>() {
+@HiltViewModel
+class CreatePartyViewModel @Inject constructor(
+    private val categoryListUseCase: CategoryListUseCase,
+) : BaseViewModel<CreatePartyEvent>() {
+    private var job: Job? = null
+
     private val _currentAddress = MutableStateFlow<Address?>(null)
     val currentAddress: StateFlow<Address?> = _currentAddress
 
@@ -33,6 +46,9 @@ class CreatePartyViewModel : BaseViewModel<CreatePartyEvent>() {
 
     private val _invalidElement = MutableStateFlow<PartyElement>(PartyElement.NONE)
     val invalidElement: MutableStateFlow<PartyElement> = _invalidElement
+
+    private val _categoryList = MutableStateFlow<Array<String>>(arrayOf())
+    val categoryList: MutableStateFlow<Array<String>> = _categoryList
 
     private var createPartyFlags: MutableMap<PartyElement, Boolean> = mutableMapOf(
         PartyElement.TITLE to false,
@@ -46,10 +62,32 @@ class CreatePartyViewModel : BaseViewModel<CreatePartyEvent>() {
 
     init {
         initCurrentAddress()
+        getCategoryListFromServer()
     }
 
     private fun initCurrentAddress() {
         _currentAddress.value = DeliBuddyApplication.prefs.getCurrentUserAddress()
+    }
+
+    private fun getCategoryListFromServer() {
+        job?.cancel()
+        job = viewModelScope.launch {
+            when (val result = categoryListUseCase.invoke()) {
+                is NetworkResult.Success -> {
+                    val categoryList = result.data.map {
+                        Category.mapToCategory(it)
+                    }
+                    val list = (categoryList.map { it.name }).toMutableList()
+                    list.add(0, "음식 카테고리")
+                    _categoryList.value = list.toTypedArray()
+                    Timber.w("categoryList: ${_categoryList.value}")
+                }
+
+                is NetworkResult.Error -> handleError(result) {
+
+                }
+            }
+        }
     }
 
     override suspend fun handleEvent(event: CreatePartyEvent) {

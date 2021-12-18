@@ -61,30 +61,4 @@ object AppModule {
     ): PartyRepository {
         return PartyRepositoryImpl(partyApi, deliBuddyNetworkErrorHandler)
     }
-
-    @Provides
-    fun provideAddressRepository(
-        kakaoLocalApi: KakaoLocalApi,
-        kakaoNetworkErrorHandler: KakaoNetworkErrorHandler,
-    ): AddressRepository {
-        return AddressRepositoryImpl(kakaoLocalApi, kakaoNetworkErrorHandler)
-    }
-
-    @Provides
-    fun provideCoordToAddressRepository(
-        kakaoLocalApi: KakaoLocalApi,
-        kakaoNetworkErrorHandler: KakaoNetworkErrorHandler,
-    ): CoordToAddressRepository {
-        return CoordToAddressRepositoryImpl(kakaoLocalApi, kakaoNetworkErrorHandler)
-    }
-
-    @Provides
-    fun provideSearchAddressUseCase(addressRepository: AddressRepository): SearchAddressUseCase {
-        return SearchAddressUseCase(addressRepository)
-    }
-
-    @Provides
-    fun provideCoordToAddressUseCase(coordToAddressRepository: CoordToAddressRepository): CoordToAddressUseCase {
-        return CoordToAddressUseCase(coordToAddressRepository)
-    }
 }
