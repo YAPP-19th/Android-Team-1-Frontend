@@ -10,14 +10,16 @@ import yapp.android1.delibuddy.model.Comment
 
 
 abstract class CommentViewHolder(
-    protected val binding: ViewBinding
+    protected val binding: ViewBinding,
+    protected val currentUserId: Int
 ) : RecyclerView.ViewHolder(binding.root) {
     abstract fun onBind(comment: Comment, listener: WriteReplyListener?)
 }
 
 class ParentCommentViewHolder(
-    binding: ItemParentCommentBinding
-) : CommentViewHolder(binding) {
+    binding: ItemParentCommentBinding,
+    currentUserId: Int
+) : CommentViewHolder(binding, currentUserId) {
 
     override fun onBind(comment: Comment, listener: WriteReplyListener?) =
         with(binding as ItemParentCommentBinding) {
@@ -40,7 +42,7 @@ class ParentCommentViewHolder(
 
     private fun setChildCommentRecyclerView(comments: List<Comment>) =
         with(binding as ItemParentCommentBinding) {
-            val commentAdapter = CommentAdapter()
+            val commentAdapter = CommentAdapter(currentUserId)
             rvChildComments.layoutManager = LinearLayoutManager(itemView.context, LinearLayoutManager.VERTICAL, false)
             rvChildComments.adapter = commentAdapter
             commentAdapter.submitList(comments)
@@ -49,8 +51,9 @@ class ParentCommentViewHolder(
 }
 
 class ChildCommentViewHolder(
-    binding: ItemChildCommentBinding
-) : CommentViewHolder(binding) {
+    binding: ItemChildCommentBinding,
+    currentUserId: Int
+) : CommentViewHolder(binding, currentUserId) {
 
     override fun onBind(comment: Comment, listener: WriteReplyListener?) =
         with(binding as ItemChildCommentBinding) {

@@ -10,6 +10,7 @@ import yapp.android1.delibuddy.base.RetryAction
 import yapp.android1.delibuddy.model.Comment
 import yapp.android1.delibuddy.model.Event
 import yapp.android1.delibuddy.model.Party
+import yapp.android1.delibuddy.model.PartyInformation
 import yapp.android1.delibuddy.ui.partyInformation.PartyInformationViewModel.PartyInformationEvent
 import yapp.android1.domain.NetworkResult
 import yapp.android1.domain.entity.NetworkError
@@ -26,7 +27,7 @@ class PartyInformationViewModel @Inject constructor(
     private val _isOwner = MutableStateFlow<Boolean>(false)
     val isOwner = _isOwner.asStateFlow()
 
-    private val _party = MutableStateFlow<Party>(Party.EMPTY)
+    private val _party = MutableStateFlow<PartyInformation>(PartyInformation.EMPTY)
     val party = _party.asStateFlow()
 
     private val _comments = MutableStateFlow<List<Comment>>(emptyList())
@@ -41,19 +42,37 @@ class PartyInformationViewModel @Inject constructor(
     override suspend fun handleEvent(event: PartyInformationEvent) {
         when(event) {
             is PartyInformationEvent.OnIntent -> {
-                _party.value = event.data
+                setPartyWithoutLeader(event.data)
                 fetchPartyInformation(_party.value.id)
                 fetchPartyComments(_party.value.id)
             }
         }
     }
 
+    private fun setPartyWithoutLeader(party: Party) {
+        _party.value = PartyInformation(
+            id               = party.id,
+            allStatuses      = party.allStatuses,
+            body             = party.body,
+            category         = party.category,
+            coordinate       = party.coordinate,
+            currentUserCount = party.currentUserCount,
+            openKakaoUrl     = party.openKakaoUrl,
+            orderTime        = party.orderTime,
+            placeName        = party.placeName,
+            placeNameDetail  = party.placeNameDetail,
+            status           = party.status,
+            targetUserCount  = party.targetUserCount,
+            title            = party.title,
+            leader           = PartyInformation.Leader.EMPTY
+        )
+    }
+
     private fun fetchPartyInformation(partyId: Int) = viewModelScope.launch {
         val result = fetchPartyInformationUseCase.invoke(partyId)
         when(result) {
             is NetworkResult.Success -> {
-                val party = Party.toParty(result.data)
-                _party.value = party
+                _party.value = PartyInformation.toPartyInformation(result.data)
             }
             is NetworkResult.Error -> {
                handleError(result, null)

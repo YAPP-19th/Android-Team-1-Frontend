@@ -3,6 +3,7 @@ package yapp.android1.data.remote
 import retrofit2.http.*
 import yapp.android1.data.entity.PartyBanRequestModel
 import yapp.android1.data.entity.PartyCreationRequestModel
+import yapp.android1.data.entity.PartyInformationModel
 import yapp.android1.data.entity.PartyModel
 
 interface PartyApi : DeliBuddyApi {
@@ -48,7 +49,7 @@ interface PartyApi : DeliBuddyApi {
     ): Unit
 
     @GET("api/v1/parties/{id}")
-    suspend fun getParty(
-        @Path("id") id: Int
-    ): PartyModel
+    suspend fun getPartyInformation(
+        @Query("id") id: Int
+    ): PartyInformationModel
 }
