@@ -11,9 +11,12 @@
     <color name="main_orange">#F15641</color>
     <color name="sub_yellow">#F5CD3D</color>
     <color name="sub_purple">#7F1DC1</color>
-    <color name="sub_grey">#B8B8B8</color>
 
+    <color name="light_grey_background">#E5E5E5</color>
     <color name="main_background">#FDFDFD</color>
+    <color name="input_line_background">#F0F0F0</color>
+
+    <color name="sub_grey">#B8B8B8</color>
 
     <color name="splash_background_start">#F57C6C</color>
     <color name="splash_background_end">#E73B23</color>
@@ -44,4 +47,5 @@
     <color name="text_light_grey">#D1D1D1</color>
     <color name="text_grey">#686868</color>
     <color name="text_black">#000000</color>
+
 </resources>

@@ -2,6 +2,7 @@ package yapp.android1.delibuddy.ui.home.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -15,12 +16,12 @@ import yapp.android1.delibuddy.databinding.IncludeLayoutPartyItemBinding
 import yapp.android1.delibuddy.model.Party
 import yapp.android1.delibuddy.util.dpToPx
 
-class PartiesAdapter(private val onClick: (Party) -> Unit) :
+class PartiesAdapter(private val onClick: (IncludeLayoutPartyItemBinding, Party) -> Unit) :
     ListAdapter<Party, PartiesAdapter.PartiesViewHolder>(PartiesDiffCallback) {
 
     inner class PartiesViewHolder(
         private val binding: IncludeLayoutPartyItemBinding,
-        val onClick: (Party) -> Unit,
+        val onClick: (IncludeLayoutPartyItemBinding, Party) -> Unit,
     ) : RecyclerView.ViewHolder(binding.root) {
         private val context = binding.root.context
         private var currentParty: Party? = null
@@ -28,7 +29,7 @@ class PartiesAdapter(private val onClick: (Party) -> Unit) :
         init {
             binding.root.setOnClickListener {
                 currentParty?.let {
-                    onClick(it)
+                    onClick(binding, it)
                 }
             }
         }
@@ -39,11 +40,15 @@ class PartiesAdapter(private val onClick: (Party) -> Unit) :
             Glide.with(context)
                 .load(party.category.iconUrl)
                 .into(binding.foodCategoryImage)
-            binding.partyLocation.text = party.coordinate
+
+            binding.partyLocation.text = "${party.placeName} ${party.placeNameDetail}"
             binding.partyTitle.text = party.title
             binding.partyScheduledTime.text = party.orderTime
+
             setMemberIcon(party.targetUserCount, party.currentUserCount)
             binding.memberCount.text = "${party.currentUserCount} / ${party.targetUserCount}"
+
+            setUiBasedStatus(party)
         }
 
         private fun setMemberIcon(targetUserCount: Int, currentUserCount: Int) {
@@ -76,9 +81,27 @@ class PartiesAdapter(private val onClick: (Party) -> Unit) :
             }
         }
 
+        private fun setUiBasedStatus(party: Party) {
+            with(party) {
+                when (status) {
+                    allStatuses[1] -> setOrderingStatusLabel()
+                    allStatuses[2] -> setDisabledUI()
+                }
+            }
+        }
+
+        private fun setOrderingStatusLabel() {
+            binding.orderingStatusLabel.visibility = View.VISIBLE
+        }
+
         private fun setDisabledUI() {
             binding.partyItem.alpha = 0.4f
-            binding.partyItem.setBackgroundColor(ContextCompat.getColor(context, R.color.block_space_grey))
+            binding.partyItem.setBackgroundColor(
+                ContextCompat.getColor(
+                    context,
+                    R.color.block_space_grey
+                )
+            )
         }
     }
 

@@ -5,4 +5,9 @@
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowDrawsSystemBarBackgrounds">false</item>
     </style>
+    
+    <style name="TabItemTheme" parent="TextAppearance.MaterialComponents.Button">
+        <item name="fontFamily"> @font/roboto_regular</item>
+        <item name="android:textSize"> 14dp </item>
+    </style>
 </resources>

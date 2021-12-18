@@ -6,6 +6,8 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
+import timber.log.Timber
+import yapp.android1.delibuddy.DeliBuddyApplication
 import yapp.android1.delibuddy.databinding.ActivityLoginBinding
 import yapp.android1.delibuddy.ui.home.HomeActivity
 import yapp.android1.delibuddy.ui.login.viewmodel.AuthViewModel
@@ -35,6 +37,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun checkAuthCondition() {
         if (userManager.getDeliBuddyAuth().isAvailable()) {
+            Timber.tag("------------[TAG]").d("- JWT : ${DeliBuddyApplication.prefs.getAuth().token}")
             intentTo(HomeActivity::class.java)
         }
     }
