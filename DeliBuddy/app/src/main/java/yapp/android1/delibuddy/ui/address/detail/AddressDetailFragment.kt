@@ -1,6 +1,5 @@
 package yapp.android1.delibuddy.ui.address.detail
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -48,8 +47,7 @@ class AddressDetailFragment :
         locationListener = LocationSource.OnLocationChangedListener { location ->
             Timber.w("location listener")
             if (location == null) return@OnLocationChangedListener
-            naverMap?.moveCamera(CameraUpdate.scrollTo(LatLng(location)))
-            naverMap?.locationTrackingMode = LocationTrackingMode.None
+            naverMap?.cameraPosition = CameraPosition(LatLng(location), 16.0)
         }
         locationSource = FusedLocationSource(this, 0)
     }
@@ -74,7 +72,10 @@ class AddressDetailFragment :
 
         btnAddressDetail.setOnClickListener {
             val intent = Intent()
-            intent.putExtra(AddressActivity.ADDRESS_ACTIVITY_USER_ADDRESS, viewModel.selectedAddress.value)
+            intent.putExtra(
+                AddressActivity.ADDRESS_ACTIVITY_USER_ADDRESS,
+                viewModel.selectedAddress.value
+            )
             requireActivity().setResult(AddressActivity.ADDRESS_ACTIVITY_RESULT_CODE, intent)
             requireActivity().finish()
         }
