@@ -15,7 +15,7 @@ import yapp.android1.data.repository.CoordToAddressRepositoryImpl
 import yapp.android1.data.repository.PartyRepositoryImpl
 import yapp.android1.delibuddy.DeliBuddyApplication
 import yapp.android1.delibuddy.util.DispatcherProvider
-import yapp.android1.delibuddy.util.sharedpreferences.SharedPreferencesManager
+import yapp.android1.delibuddy.util.user.KakaoLoginManager
 import yapp.android1.delibuddy.util.user.UserManager
 import yapp.android1.domain.interactor.DeliBuddyNetworkErrorHandler
 import yapp.android1.domain.interactor.KakaoNetworkErrorHandler
@@ -38,6 +38,13 @@ object AppModule {
             override val default: CoroutineDispatcher
                 get() = Dispatchers.Default
         }
+    }
+
+    @Provides
+    fun provideKakaoLoginManager(
+        @ApplicationContext context: Context,
+    ): KakaoLoginManager {
+        return KakaoLoginManager(context)
     }
 
     @Provides

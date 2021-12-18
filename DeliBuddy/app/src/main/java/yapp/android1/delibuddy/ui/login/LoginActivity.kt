@@ -13,6 +13,7 @@ import yapp.android1.delibuddy.ui.home.HomeActivity
 import yapp.android1.delibuddy.ui.login.viewmodel.AuthViewModel
 import yapp.android1.delibuddy.util.extensions.repeatOnStarted
 import yapp.android1.delibuddy.util.intentTo
+import yapp.android1.delibuddy.util.user.KakaoLoginManager
 import yapp.android1.delibuddy.util.user.UserManager
 import javax.inject.Inject
 
@@ -20,6 +21,9 @@ import javax.inject.Inject
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
     private val authViewModel: AuthViewModel by viewModels()
+
+    @Inject
+    lateinit var kakaoLoginManager: KakaoLoginManager
 
     @Inject
     lateinit var userManager: UserManager
@@ -37,7 +41,8 @@ class LoginActivity : AppCompatActivity() {
 
     private fun checkAuthCondition() {
         if (userManager.getDeliBuddyAuth().isAvailable()) {
-            Timber.tag("------------[TAG]").d("- JWT : ${DeliBuddyApplication.prefs.getAuth().token}")
+            Timber.tag("------------[TAG]")
+                .d("- JWT : ${DeliBuddyApplication.prefs.getAuth().token}")
             intentTo(HomeActivity::class.java)
         }
     }
@@ -45,12 +50,11 @@ class LoginActivity : AppCompatActivity() {
     private fun collectData() {
         repeatOnStarted {
             authViewModel.tokenResult.collect { auth ->
-                when (auth.isAvailable()) {
-                    true -> {
-                        userManager.setDeliBuddyAuth(auth)
-                        intentTo(HomeActivity::class.java)
-                    }
-                    false -> AuthViewModel.AuthEvent.OnKakaoLoginFailed("다시 시도해 주세요.")
+                if (auth.isAvailable()) {
+                    userManager.setDeliBuddyAuth(auth)
+                    intentTo(HomeActivity::class.java)
+                } else {
+                    AuthViewModel.AuthEvent.OnKakaoLoginFailed("다시 시도해 주세요.")
                 }
             }
         }
@@ -58,7 +62,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun loginWithKakaoApi() {
         binding.buttonKakaoLogin.setOnClickListener {
-            userManager.kakaoLogin { isLoginSuccess, errorMessage, kakaoToken ->
+            kakaoLoginManager.kakaoLogin { isLoginSuccess, errorMessage, kakaoToken ->
                 when (isLoginSuccess) {
                     true -> authViewModel.occurEvent(
                         AuthViewModel.AuthEvent.OnKakaoLoginSuccess(
@@ -76,6 +80,5 @@ class LoginActivity : AppCompatActivity() {
             }
         }
     }
-
 }
 

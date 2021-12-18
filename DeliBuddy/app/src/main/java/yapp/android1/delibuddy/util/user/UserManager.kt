@@ -1,7 +1,6 @@
 package yapp.android1.delibuddy.util.user
 
 import android.content.Context
-import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.user.UserApiClient
 import yapp.android1.delibuddy.model.Auth
 import yapp.android1.delibuddy.model.User
@@ -13,42 +12,11 @@ class UserManager(
 ) {
     var user: User? = null
 
-    private var loginCallback: ((
-        isLoginSuccess: Boolean,
-        errorMsg: String?,
-        kakaoToken: String?
-    ) -> Unit)? = null
-
-    val isLogin: Boolean
-        get() {
-            if (user != null) {
-                return true
-            }
-            return UserApiClient.instance.isKakaoTalkLoginAvailable(context = context)
+    fun isLogin(): Boolean {
+        if (user != null) {
+            return true
         }
-
-    private val kakaoLoginCallback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
-        if (error != null) {
-            loginCallback?.let { it(false, error.message ?: "Unknown error", null) }
-        } else if (token != null) {
-            loginCallback?.let { it(true, null, token.accessToken) }
-        }
-    }
-
-    fun kakaoLogin(call: (Boolean, String?, String?) -> Unit) {
-        loginCallback = call
-
-        if (UserApiClient.instance.isKakaoTalkLoginAvailable(context = context)) {
-            UserApiClient.instance.loginWithKakaoTalk(
-                context = context,
-                callback = kakaoLoginCallback
-            )
-        } else {
-            UserApiClient.instance.loginWithKakaoAccount(
-                context = context,
-                callback = kakaoLoginCallback
-            )
-        }
+        return UserApiClient.instance.isKakaoTalkLoginAvailable(context = context)
     }
 
     fun setDeliBuddyAuth(auth: Auth) {

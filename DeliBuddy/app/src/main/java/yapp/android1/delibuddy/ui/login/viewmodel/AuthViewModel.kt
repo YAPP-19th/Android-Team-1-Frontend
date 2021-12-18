@@ -9,6 +9,7 @@ import yapp.android1.delibuddy.base.RetryAction
 import yapp.android1.delibuddy.model.Auth
 import yapp.android1.delibuddy.model.Auth.Companion.EMPTY
 import yapp.android1.delibuddy.model.Event
+import yapp.android1.delibuddy.util.user.KakaoLoginManager
 import yapp.android1.delibuddy.util.user.UserManager
 import yapp.android1.domain.NetworkResult
 import yapp.android1.domain.entity.NetworkError
@@ -18,7 +19,8 @@ import javax.inject.Inject
 @HiltViewModel
 class AuthViewModel @Inject constructor(
     private val fetchAuthUseCase: FetchAuthUseCase,
-    private val userManager: UserManager
+    private val kakaoLoginManager: KakaoLoginManager,
+    private val userManager: UserManager,
 ) : BaseViewModel<Event>() {
 
     private val _tokenResult = MutableStateFlow<Auth>(EMPTY)

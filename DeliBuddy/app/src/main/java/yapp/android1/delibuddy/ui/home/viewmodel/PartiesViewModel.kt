@@ -28,7 +28,7 @@ class PartiesViewModel @Inject constructor(
     private val _userAddress = MutableStateFlow<Address>(Address.DEFAULT)
     val userAddress: StateFlow<Address> = _userAddress
 
-    private var _saveAddressEvent = MutableStateFlow<SaveAddressEvent>(SaveAddressEvent.Idle)
+    private val _saveAddressEvent = MutableStateFlow<SaveAddressEvent>(SaveAddressEvent.Idle)
     val saveAddressEvent: StateFlow<SaveAddressEvent> = _saveAddressEvent
 
     sealed class PartiesEvent : Event {

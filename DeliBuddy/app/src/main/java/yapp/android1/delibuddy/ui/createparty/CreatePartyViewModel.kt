@@ -25,13 +25,13 @@ sealed class CreatePartyEvent : Event {
 }
 
 class CreatePartyViewModel : BaseViewModel<CreatePartyEvent>() {
-    private var _currentAddress = MutableStateFlow<Address?>(null)
+    private val _currentAddress = MutableStateFlow<Address?>(null)
     val currentAddress: StateFlow<Address?> = _currentAddress
 
-    private var _canCreateParty = MutableStateFlow<Boolean>(false)
+    private val _canCreateParty = MutableStateFlow<Boolean>(false)
     val canCreateParty: MutableStateFlow<Boolean> = _canCreateParty
 
-    private var _invalidElement = MutableStateFlow<PartyElement>(PartyElement.NONE)
+    private val _invalidElement = MutableStateFlow<PartyElement>(PartyElement.NONE)
     val invalidElement: MutableStateFlow<PartyElement> = _invalidElement
 
     private var createPartyFlags: MutableMap<PartyElement, Boolean> = mutableMapOf(

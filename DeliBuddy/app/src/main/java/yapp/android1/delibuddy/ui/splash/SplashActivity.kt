@@ -21,7 +21,7 @@ import yapp.android1.delibuddy.util.intentTo
 import yapp.android1.delibuddy.util.permission.PermissionManager
 import yapp.android1.delibuddy.util.permission.PermissionState
 import yapp.android1.delibuddy.util.permission.PermissionType
-import yapp.android1.delibuddy.util.user.UserManager
+import yapp.android1.delibuddy.util.user.KakaoLoginManager
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -31,7 +31,7 @@ class SplashActivity : AppCompatActivity() {
     private val authViewModel: AuthViewModel by viewModels()
 
     @Inject
-    lateinit var userManager: UserManager
+    lateinit var kakaoLoginManager: KakaoLoginManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,7 +59,7 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private fun checkLoginAndIntent() {
-        userManager.kakaoLogin { isLoginSuccess, _, kakaoToken ->
+        kakaoLoginManager.kakaoLogin { isLoginSuccess, _, kakaoToken ->
             when (isLoginSuccess) {
                 true -> authViewModel.occurEvent(
                     AuthViewModel.AuthEvent.OnKakaoLoginSuccess(

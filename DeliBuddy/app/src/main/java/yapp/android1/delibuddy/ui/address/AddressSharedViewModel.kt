@@ -35,17 +35,17 @@ class AddressSharedViewModel @Inject constructor(
 ) : BaseViewModel<Event>() {
     private var job: Job? = null
 
-    private var _selectedAddress = MutableStateFlow<Address>(Address.DEFAULT)
+    private val _selectedAddress = MutableStateFlow<Address>(Address.DEFAULT)
     val selectedAddress: StateFlow<Address> = _selectedAddress
 
-    private var _searchResults =
+    private val _searchResults =
         MutableStateFlow<Pair<String, List<Address>>>(Pair("", emptyList()))
     val searchResults: StateFlow<Pair<String, List<Address>>> = _searchResults
 
-    private var _isActivate = MutableEventFlow<Boolean>()
+    private val _isActivate = MutableEventFlow<Boolean>()
     val isActivate: EventFlow<Boolean> = _isActivate
 
-    private var _isCurrentLocation = MutableStateFlow<Boolean>(false)
+    private val _isCurrentLocation = MutableStateFlow<Boolean>(false)
     val isCurrentLocation: MutableStateFlow<Boolean> = _isCurrentLocation
 
     override suspend fun handleEvent(event: Event) {
