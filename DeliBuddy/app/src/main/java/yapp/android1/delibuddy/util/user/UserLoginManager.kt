@@ -6,17 +6,22 @@ import yapp.android1.delibuddy.model.Auth
 import yapp.android1.delibuddy.model.User
 import yapp.android1.delibuddy.util.sharedpreferences.SharedPreferencesManager
 
-class UserManager(
+class UserLoginManager(
     private val context: Context,
-    private val prefs: SharedPreferencesManager
+    private val kakaoLoginModule: KakaoLoginModule,
+    private val prefs: SharedPreferencesManager,
 ) {
     var user: User? = null
 
-    fun isLogin(): Boolean {
+    fun isAlreadyLoggedInKakao(): Boolean {
         if (user != null) {
             return true
         }
         return UserApiClient.instance.isKakaoTalkLoginAvailable(context = context)
+    }
+
+    fun kakaoLogin(call: (Boolean, String?, String?) -> Unit) {
+        kakaoLoginModule.kakaoLogin(call)
     }
 
     fun setDeliBuddyAuth(auth: Auth) {

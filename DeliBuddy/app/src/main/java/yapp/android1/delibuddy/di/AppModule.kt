@@ -15,8 +15,8 @@ import yapp.android1.data.repository.CoordToAddressRepositoryImpl
 import yapp.android1.data.repository.PartyRepositoryImpl
 import yapp.android1.delibuddy.DeliBuddyApplication
 import yapp.android1.delibuddy.util.DispatcherProvider
-import yapp.android1.delibuddy.util.user.KakaoLoginManager
-import yapp.android1.delibuddy.util.user.UserManager
+import yapp.android1.delibuddy.util.user.KakaoLoginModule
+import yapp.android1.delibuddy.util.user.UserLoginManager
 import yapp.android1.domain.interactor.DeliBuddyNetworkErrorHandler
 import yapp.android1.domain.interactor.KakaoNetworkErrorHandler
 import yapp.android1.domain.interactor.usecase.CoordToAddressUseCase
@@ -41,17 +41,18 @@ object AppModule {
     }
 
     @Provides
-    fun provideKakaoLoginManager(
+    fun provideKakaoLoginModule(
         @ApplicationContext context: Context,
-    ): KakaoLoginManager {
-        return KakaoLoginManager(context)
+    ): KakaoLoginModule {
+        return KakaoLoginModule(context)
     }
 
     @Provides
-    fun provideUserManager(
-        @ApplicationContext context: Context
-    ): UserManager {
-        return UserManager(context, DeliBuddyApplication.prefs)
+    fun provideUserLoginModule(
+        @ApplicationContext context: Context,
+        kakaoLoginModule: KakaoLoginModule,
+    ): UserLoginManager {
+        return UserLoginManager(context, kakaoLoginModule, DeliBuddyApplication.prefs)
     }
 
     @Provides
