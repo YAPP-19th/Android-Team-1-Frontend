@@ -14,6 +14,7 @@ import yapp.android1.delibuddy.R
 import yapp.android1.delibuddy.adapter.CommunityViewPagerAdapter
 import yapp.android1.delibuddy.databinding.ActivityPartyInformationBinding
 import yapp.android1.delibuddy.model.Party
+import yapp.android1.delibuddy.model.PartyInformation
 import yapp.android1.delibuddy.ui.partyInformation.PartyInformationViewModel.PartyInformationEvent.OnIntent
 import yapp.android1.delibuddy.ui.partyInformation.view.AppBarStateChangeListener
 import yapp.android1.delibuddy.util.extensions.hide
@@ -58,8 +59,8 @@ class PartyInformationActivity : AppCompatActivity() {
         }
     }
 
-    private fun settingPartyInformationViews(party: Party) = with(binding) {
-        tvPartyLocation.text = party.coordinate
+    private fun settingPartyInformationViews(party: PartyInformation) = with(binding) {
+        tvPartyLocation.text = "${party.placeName} \n${party.placeNameDetail}"
         tvPartyTitle.text    = party.title
         tvOrderTime.text     = party.orderTime
         tvPartyContent.text  = party.body
@@ -67,6 +68,12 @@ class PartyInformationActivity : AppCompatActivity() {
 
         toolbarContainer.tvTitle.text    = party.title
         toolbarContainer.tvLocation.text = "${party.placeName} ${party.placeNameDetail}"
+
+        tvPartyOwnerName.text = party.leader.nickName
+
+        Glide.with(this@PartyInformationActivity)
+            .load(party.leader.profileImage)
+            .into(ivPartyOwnerProfile)
 
         val backgroundColor = Color.parseColor("#${party.category.backgroundColorCode}")
         clBackground.setBackgroundColor(backgroundColor)
