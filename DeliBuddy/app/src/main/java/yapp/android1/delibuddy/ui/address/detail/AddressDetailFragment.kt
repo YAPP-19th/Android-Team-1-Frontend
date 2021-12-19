@@ -71,10 +71,13 @@ class AddressDetailFragment :
         activateAddressView(viewModel.selectedAddress.value)
 
         btnAddressDetail.setOnClickListener {
+            val selectedAddress = viewModel.selectedAddress.value
+            selectedAddress.addressDetail = etAddressDetail.text.toString()
+
             val intent = Intent()
             intent.putExtra(
                 AddressActivity.ADDRESS_ACTIVITY_USER_ADDRESS,
-                viewModel.selectedAddress.value
+                selectedAddress
             )
             requireActivity().setResult(AddressActivity.ADDRESS_ACTIVITY_RESULT_CODE, intent)
             requireActivity().finish()
