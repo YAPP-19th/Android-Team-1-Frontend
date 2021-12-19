@@ -63,7 +63,7 @@ class PartiesViewModel @Inject constructor(
 
         if (DeliBuddyApplication.prefs.getCurrentUserAddress() == null) {
             _saveAddressEvent.value = SaveAddressEvent.Failed
-            showToast("주소 변경에 성공하였습니다.")
+            showToast("주소 변경에 실패하였습니다.\n다시 시도해 주세요.")
             return
         }
 
@@ -71,7 +71,7 @@ class PartiesViewModel @Inject constructor(
             DeliBuddyApplication.prefs.getCurrentUserAddress()!!.address
         )
         _userAddress.value = address
-        showToast("주소 변경에 실패하였습니다.\n다시 시도해 주세요.")
+        showToast("주소 변경에 성공하였습니다.")
     }
 
     private suspend fun getPartiesInCircle(locationRange: LocationRange) {
