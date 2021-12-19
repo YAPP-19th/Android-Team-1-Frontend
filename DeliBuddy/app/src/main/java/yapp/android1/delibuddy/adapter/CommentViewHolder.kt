@@ -7,21 +7,23 @@ import com.bumptech.glide.Glide
 import yapp.android1.delibuddy.databinding.ItemChildCommentBinding
 import yapp.android1.delibuddy.databinding.ItemParentCommentBinding
 import yapp.android1.delibuddy.model.Comment
+import yapp.android1.delibuddy.util.extensions.hide
+import yapp.android1.delibuddy.util.extensions.show
 
 
 abstract class CommentViewHolder(
     protected val binding: ViewBinding,
-    protected val currentUserId: Int
+    protected val isOwner: Boolean
 ) : RecyclerView.ViewHolder(binding.root) {
-    abstract fun onBind(comment: Comment, listener: WriteReplyListener?)
+    abstract fun onBind(comment: Comment, listener: CommentEventListener)
 }
 
 class ParentCommentViewHolder(
     binding: ItemParentCommentBinding,
-    currentUserId: Int
-) : CommentViewHolder(binding, currentUserId) {
+    isOwner: Boolean
+) : CommentViewHolder(binding, isOwner) {
 
-    override fun onBind(comment: Comment, listener: WriteReplyListener?) =
+    override fun onBind(comment: Comment, listener: CommentEventListener) =
         with(binding as ItemParentCommentBinding) {
             tvWriterNickname.text = comment.writer?.nickName
             tvBody.text = comment.body
@@ -32,19 +34,26 @@ class ParentCommentViewHolder(
                 .into(ivIconUser)
 
             tvWriteComment.setOnClickListener {
-                listener?.invoke(comment)
+                listener?.invoke(CommentEvent.OnWriteCommentClicked(comment))
             }
 
             if (comment.hasChildComments()) {
-                setChildCommentRecyclerView(comment.children)
+                setChildCommentRecyclerView(comment.children, listener)
+            }
+
+            if(isOwner) {
+                ivOptions.show()
+            } else {
+                ivOptions.hide()
             }
         }
 
-    private fun setChildCommentRecyclerView(comments: List<Comment>) =
+    private fun setChildCommentRecyclerView(comments: List<Comment>, listener: CommentEventListener) =
         with(binding as ItemParentCommentBinding) {
-            val commentAdapter = CommentAdapter(currentUserId)
+            val commentAdapter = CommentAdapter(isOwner)
             rvChildComments.layoutManager = LinearLayoutManager(itemView.context, LinearLayoutManager.VERTICAL, false)
             rvChildComments.adapter = commentAdapter
+            commentAdapter.setCommentEventListener(listener)
             commentAdapter.submitList(comments)
         }
 
@@ -52,14 +61,24 @@ class ParentCommentViewHolder(
 
 class ChildCommentViewHolder(
     binding: ItemChildCommentBinding,
-    currentUserId: Int
-) : CommentViewHolder(binding, currentUserId) {
+    isOwner: Boolean
+) : CommentViewHolder(binding, isOwner) {
 
-    override fun onBind(comment: Comment, listener: WriteReplyListener?) =
+    override fun onBind(comment: Comment, listener: CommentEventListener) =
         with(binding as ItemChildCommentBinding) {
             tvWriterNickname.text = comment.writer?.nickName
             tvBody.text = comment.body
             tvTimeAgo.text = comment.createdAt
+
+            ivOptions.setOnClickListener {
+                listener.invoke(CommentEvent.OnRemoveCommentClicked(comment))
+            }
+
+            if(isOwner) {
+                ivOptions.show()
+            } else {
+                ivOptions.hide()
+            }
         }
 
 }

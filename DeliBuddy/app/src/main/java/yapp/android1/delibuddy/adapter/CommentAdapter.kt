@@ -8,13 +8,18 @@ import yapp.android1.delibuddy.databinding.ItemChildCommentBinding
 import yapp.android1.delibuddy.databinding.ItemParentCommentBinding
 import yapp.android1.delibuddy.model.Comment
 
-typealias WriteReplyListener = (Comment) -> Unit
+typealias CommentEventListener = (CommentEvent) -> Unit
+
+sealed class CommentEvent {
+    class OnWriteCommentClicked(val comment: Comment) : CommentEvent()
+    class OnRemoveCommentClicked(val comment: Comment) : CommentEvent()
+}
 
 class CommentAdapter(
-    private val currentUserId: Int
+    private val isOwner: Boolean
 ) : ListAdapter<Comment, CommentViewHolder>(CommentDiffUtil()) {
 
-    private var writeReplyListener: WriteReplyListener? = null
+    private var commentEventListener: CommentEventListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CommentViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -22,26 +27,26 @@ class CommentAdapter(
         return when(viewType) {
             Comment.PARENT ->{
                 val binding = ItemParentCommentBinding.inflate(layoutInflater, parent, false)
-                ParentCommentViewHolder(binding, currentUserId)
+                ParentCommentViewHolder(binding, isOwner)
             }
             Comment.CHILD -> {
                 val binding = ItemChildCommentBinding.inflate(layoutInflater, parent, false)
-                ChildCommentViewHolder(binding, currentUserId)
+                ChildCommentViewHolder(binding, isOwner)
             }
             else -> throw RuntimeException("올바른 ViewType이 아닙니다")
         }
     }
 
     override fun onBindViewHolder(holder: CommentViewHolder, position: Int) {
-        holder.onBind(currentList[position], writeReplyListener)
+        holder.onBind(currentList[position], commentEventListener!!)
     }
 
     override fun getItemViewType(position: Int): Int {
         return currentList[position].viewType
     }
 
-    fun setWriteReplyListener(listener: WriteReplyListener) {
-        writeReplyListener = listener
+    fun setCommentEventListener(listener: CommentEventListener) {
+        commentEventListener = listener
     }
 
 }
