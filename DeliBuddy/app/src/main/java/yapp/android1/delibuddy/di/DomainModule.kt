@@ -44,4 +44,9 @@ object DomainModule {
     fun provideCategoryListUseCase(categoryListRepository: CategoryListRepository): CategoryListUseCase {
         return CategoryListUseCase(categoryListRepository)
     }
+
+    @Provides
+    fun provideCreatePartyUseCase(partyRepository: PartyRepository): CreatePartyUseCase {
+        return CreatePartyUseCase(partyRepository)
+    }
 }

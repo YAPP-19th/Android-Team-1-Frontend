@@ -113,11 +113,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
             partiesViewModel.saveAddressEvent.collectLatest { event ->
                 when (event) {
                     is PartiesViewModel.SaveAddressEvent.Success -> {
-                        Toast.makeText(activity, "주소 변경에 성공하였습니다.", Toast.LENGTH_SHORT).show()
+
                     }
                     is PartiesViewModel.SaveAddressEvent.Failed -> {
-                        Toast.makeText(activity, "주소 변경에 실패하였습니다.\n다시 시도해 주세요.", Toast.LENGTH_SHORT)
-                            .show()
+
                     }
                 }
             }
