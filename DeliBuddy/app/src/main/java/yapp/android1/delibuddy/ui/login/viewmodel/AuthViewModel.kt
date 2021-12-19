@@ -1,14 +1,12 @@
 package yapp.android1.delibuddy.ui.login.viewmodel
 
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import yapp.android1.delibuddy.base.BaseViewModel
 import yapp.android1.delibuddy.base.RetryAction
 import yapp.android1.delibuddy.model.Auth
-import yapp.android1.delibuddy.model.Auth.Companion.EMPTY
 import yapp.android1.delibuddy.model.Event
+import yapp.android1.delibuddy.util.EventFlow
+import yapp.android1.delibuddy.util.MutableEventFlow
 import yapp.android1.domain.NetworkResult
 import yapp.android1.domain.entity.NetworkError
 import yapp.android1.domain.interactor.usecase.FetchAuthUseCase
@@ -19,8 +17,8 @@ class AuthViewModel @Inject constructor(
     private val fetchAuthUseCase: FetchAuthUseCase,
 ) : BaseViewModel<Event>() {
 
-    private val _tokenResult = MutableStateFlow<Auth>(EMPTY)
-    val tokenResult: StateFlow<Auth> = _tokenResult.asStateFlow()
+    private val _tokenResult = MutableEventFlow<Auth>()
+    val tokenResult: EventFlow<Auth> = _tokenResult
 
     sealed class AuthEvent : Event {
         class OnKakaoLoginSuccess(val token: String) : AuthEvent()
@@ -37,8 +35,9 @@ class AuthViewModel @Inject constructor(
     private suspend fun loginWithDelibuddyApi(token: String) {
         when (val result = fetchAuthUseCase.invoke(token)) {
             is NetworkResult.Success -> {
-                val token = result.data
-                _tokenResult.value = Auth.mapToAuth(token)
+                var token = result.data
+                var auth = Auth.mapToAuth(token)
+                _tokenResult.emit(auth)
             }
             is NetworkResult.Error -> handleError(result) {}
         }
