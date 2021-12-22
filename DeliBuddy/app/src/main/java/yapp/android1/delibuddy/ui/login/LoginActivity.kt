@@ -32,7 +32,6 @@ class LoginActivity : AppCompatActivity() {
         checkAuthCondition()
 
         collectData()
-        toastErrorMessage()
         loginWithKakaoApi()
     }
 
@@ -48,7 +47,6 @@ class LoginActivity : AppCompatActivity() {
         repeatOnStarted {
             authViewModel.tokenResult.collect { auth ->
                 if (auth.isAvailable()) {
-                    userManager.setDeliBuddyAuth(auth)
                     intentTo(HomeActivity::class.java)
                 } else {
                     AuthViewModel.AuthEvent.OnKakaoLoginFailed("다시 시도해 주세요.")

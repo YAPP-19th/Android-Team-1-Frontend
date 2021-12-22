@@ -40,7 +40,7 @@ class AuthViewModel @Inject constructor(
             is NetworkResult.Success -> {
                 val auth = Auth.mapToAuth(result.data)
                 userManager.setDeliBuddyAuth(auth)
-                _tokenResult.value = auth
+                _tokenResult.emit(auth)
             }
             is NetworkResult.Error -> handleError(result) {}
         }
