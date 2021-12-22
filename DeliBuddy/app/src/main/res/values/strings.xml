@@ -26,4 +26,8 @@
     <string name="login_info">효율적인 음식 배달,\n지금 바로 딜리버디로\n시작해볼까요?</string>
     <string name="kakao_login">카카오로 시작하기</string>
     <string name="policy_info">가입을 진행할 경우, 아래의 정책에 동의한 것으로 간주됩니다.\n서비스이용약관 및 개인정보처리방침</string>
+
+    <string name="partie_empty_title">근처 파티가 존재하지 않아요 :’(</string>
+    <string name="partie_empty_sub">파티를 직접 만들어서\n근처 버디들과 음식을 나눠보세요!</string>
+    <string name="partie_empty_button">파티 추가</string>
 </resources>

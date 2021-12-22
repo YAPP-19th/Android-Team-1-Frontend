@@ -32,6 +32,7 @@ class LoginActivity : AppCompatActivity() {
         checkAuthCondition()
 
         collectData()
+        toastErrorMessage()
         loginWithKakaoApi()
     }
 
