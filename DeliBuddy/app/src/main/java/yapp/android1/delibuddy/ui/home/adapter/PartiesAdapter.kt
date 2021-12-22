@@ -27,7 +27,7 @@ class PartiesAdapter(private val onClick: (IncludeLayoutPartyItemBinding, Party)
         private var currentParty: Party? = null
 
         init {
-            binding.root.setOnClickListener {
+            binding.partyItem.setOnClickListener {
                 currentParty?.let {
                     onClick(binding, it)
                 }
@@ -41,7 +41,7 @@ class PartiesAdapter(private val onClick: (IncludeLayoutPartyItemBinding, Party)
                 .load(party.category.iconUrl)
                 .into(binding.foodCategoryImage)
 
-            binding.partyLocation.text = "${party.placeName} ${party.placeNameDetail}"
+            binding.partyLocation.text = party.placeName
             binding.partyTitle.text = party.title
             binding.partyScheduledTime.text = party.orderTime
 
@@ -92,6 +92,7 @@ class PartiesAdapter(private val onClick: (IncludeLayoutPartyItemBinding, Party)
 
         private fun setOrderingStatusLabel() {
             binding.orderingStatusLabel.visibility = View.VISIBLE
+            binding.partyTitle.maxEms = 9
         }
 
         private fun setDisabledUI() {
@@ -102,6 +103,9 @@ class PartiesAdapter(private val onClick: (IncludeLayoutPartyItemBinding, Party)
                     R.color.block_space_grey
                 )
             )
+            binding.greyScaleView.visibility = View.VISIBLE
+
+            currentParty = null
         }
     }
 

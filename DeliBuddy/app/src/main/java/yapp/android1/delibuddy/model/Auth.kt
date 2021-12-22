@@ -22,5 +22,4 @@ data class Auth(
 
     fun isAvailable(): Boolean =
         token.isNotEmpty() && userId != -1
-
 }

@@ -1,16 +1,14 @@
 package yapp.android1.delibuddy.ui.login.viewmodel
 
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import yapp.android1.delibuddy.base.BaseViewModel
 import yapp.android1.delibuddy.base.RetryAction
 import yapp.android1.delibuddy.model.Auth
-import yapp.android1.delibuddy.model.Auth.Companion.EMPTY
 import yapp.android1.delibuddy.model.Event
-import yapp.android1.delibuddy.util.user.KakaoLoginManager
-import yapp.android1.delibuddy.util.user.UserManager
+import yapp.android1.delibuddy.util.user.KakaoLoginModule
+import yapp.android1.delibuddy.util.user.UserLoginManager
+import yapp.android1.delibuddy.util.EventFlow
+import yapp.android1.delibuddy.util.MutableEventFlow
 import yapp.android1.domain.NetworkResult
 import yapp.android1.domain.entity.NetworkError
 import yapp.android1.domain.interactor.usecase.FetchAuthUseCase
@@ -19,12 +17,11 @@ import javax.inject.Inject
 @HiltViewModel
 class AuthViewModel @Inject constructor(
     private val fetchAuthUseCase: FetchAuthUseCase,
-    private val kakaoLoginManager: KakaoLoginManager,
-    private val userManager: UserManager,
+    private val userManager: UserLoginManager,
 ) : BaseViewModel<Event>() {
 
-    private val _tokenResult = MutableStateFlow<Auth>(EMPTY)
-    val tokenResult: StateFlow<Auth> = _tokenResult.asStateFlow()
+    private val _tokenResult = MutableEventFlow<Auth>()
+    val tokenResult: EventFlow<Auth> = _tokenResult
 
     sealed class AuthEvent : Event {
         class OnKakaoLoginSuccess(val token: String) : AuthEvent()
@@ -43,7 +40,7 @@ class AuthViewModel @Inject constructor(
             is NetworkResult.Success -> {
                 val auth = Auth.mapToAuth(result.data)
                 userManager.setDeliBuddyAuth(auth)
-                _tokenResult.value = auth
+                _tokenResult.emit(auth)
             }
             is NetworkResult.Error -> handleError(result) {}
         }

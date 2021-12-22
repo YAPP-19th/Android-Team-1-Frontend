@@ -13,8 +13,7 @@ import yapp.android1.delibuddy.ui.home.HomeActivity
 import yapp.android1.delibuddy.ui.login.viewmodel.AuthViewModel
 import yapp.android1.delibuddy.util.extensions.repeatOnStarted
 import yapp.android1.delibuddy.util.intentTo
-import yapp.android1.delibuddy.util.user.KakaoLoginManager
-import yapp.android1.delibuddy.util.user.UserManager
+import yapp.android1.delibuddy.util.user.UserLoginManager
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -23,10 +22,7 @@ class LoginActivity : AppCompatActivity() {
     private val authViewModel: AuthViewModel by viewModels()
 
     @Inject
-    lateinit var kakaoLoginManager: KakaoLoginManager
-
-    @Inject
-    lateinit var userManager: UserManager
+    lateinit var userManager: UserLoginManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,7 +47,6 @@ class LoginActivity : AppCompatActivity() {
         repeatOnStarted {
             authViewModel.tokenResult.collect { auth ->
                 if (auth.isAvailable()) {
-                    userManager.setDeliBuddyAuth(auth)
                     intentTo(HomeActivity::class.java)
                 } else {
                     AuthViewModel.AuthEvent.OnKakaoLoginFailed("다시 시도해 주세요.")
@@ -62,7 +57,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun loginWithKakaoApi() {
         binding.buttonKakaoLogin.setOnClickListener {
-            kakaoLoginManager.kakaoLogin { isLoginSuccess, errorMessage, kakaoToken ->
+            userManager.kakaoLogin { isLoginSuccess, errorMessage, kakaoToken ->
                 when (isLoginSuccess) {
                     true -> authViewModel.occurEvent(
                         AuthViewModel.AuthEvent.OnKakaoLoginSuccess(

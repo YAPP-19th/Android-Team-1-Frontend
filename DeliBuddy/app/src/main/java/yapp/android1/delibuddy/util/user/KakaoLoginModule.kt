@@ -3,11 +3,8 @@ package yapp.android1.delibuddy.util.user
 import android.content.Context
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.user.UserApiClient
-import yapp.android1.delibuddy.model.Auth
-import yapp.android1.delibuddy.model.User
-import yapp.android1.delibuddy.util.sharedpreferences.SharedPreferencesManager
 
-class KakaoLoginManager(
+class KakaoLoginModule(
     private val context: Context
 ) {
     private var loginCallback: ((

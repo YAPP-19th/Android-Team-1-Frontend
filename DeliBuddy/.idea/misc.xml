@@ -4,7 +4,11 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="app/src/main/res/drawable-hdpi/home_status_btn_radius.xml" value="0.20260416666666667" />
+        <entry key="app/src/main/res/drawable-xxxhdpi/shape_rounded_button.xml" value="0.16302083333333334" />
+        <entry key="app/src/main/res/drawable-xxxhdpi/shape_rounded_orange_line_button.xml" value="0.16302083333333334" />
+        <entry key="app/src/main/res/drawable-xxxhdpi/shape_top_rounded_layout.xml" value="0.16302083333333334" />
         <entry key="app/src/main/res/drawable/delibuddy_btn_radius.xml" value="0.215625" />
+        <entry key="app/src/main/res/drawable/delibuddy_btn_radius_deactivate.xml" value="0.16302083333333334" />
         <entry key="app/src/main/res/drawable/floating_button_add_party.xml" value="0.20260416666666667" />
         <entry key="app/src/main/res/drawable/floating_button_icon.xml" value="0.20260416666666667" />
         <entry key="app/src/main/res/drawable/ic_splash_logo.xml" value="0.146875" />
@@ -17,6 +21,9 @@
         <entry key="app/src/main/res/drawable/selector_navigation_icon_home.xml" value="0.21927083333333333" />
         <entry key="app/src/main/res/drawable/selector_navigation_icon_mypage.xml" value="0.21927083333333333" />
         <entry key="app/src/main/res/drawable/selector_navigation_icon_myparty.xml" value="0.21927083333333333" />
+        <entry key="app/src/main/res/drawable/shadow_constraint_layout.xml" value="0.16302083333333334" />
+        <entry key="app/src/main/res/drawable/shape_rounded_grey_edittext.xml" value="0.16302083333333334" />
+        <entry key="app/src/main/res/drawable/shape_status_background.xml" value="0.16302083333333334" />
         <entry key="app/src/main/res/drawable/splash_background.xml" value="0.13541666666666666" />
         <entry key="app/src/main/res/drawable/splash_background_gradient.xml" value="0.13645833333333332" />
         <entry key="app/src/main/res/font/roboto.xml" value="0.23645833333333333" />
@@ -32,7 +39,10 @@
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.21487869184194963" />
         <entry key="app/src/main/res/layout/fragment_mypage.xml" value="0.20625" />
         <entry key="app/src/main/res/layout/fragment_myparty.xml" value="0.20625" />
-        <entry key="app/src/main/res/layout/include_layout_party_item.xml" value="0.43797856049004597" />
+        <entry key="app/src/main/res/layout/include_layout_home_empty_view.xml" value="0.146875" />
+        <entry key="app/src/main/res/layout/include_layout_parties_empty_view.xml" value="0.375" />
+        <entry key="app/src/main/res/layout/include_layout_party_item.xml" value="0.4582763337893297" />
+        <entry key="app/src/main/res/layout/view_holder_myparty_item.xml" value="0.25" />
         <entry key="app/src/main/res/menu/bottom_navigation_menu.xml" value="0.20625" />
       </map>
     </option>

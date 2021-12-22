@@ -4,16 +4,18 @@
     android:layout_width="match_parent"
     android:layout_height="138dp"
     android:layout_marginHorizontal="20dp"
-    android:layout_marginBottom="16dp"
+    android:layout_marginVertical="8dp"
     android:outlineSpotShadowColor="@color/shadow_grey"
     app:cardCornerRadius="10dp"
-    app:cardElevation="20dp">
+    app:cardElevation="4dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/party_item"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="8dp">
+        android:paddingLeft="10dp"
+        android:paddingTop="16dp"
+        android:paddingRight="16dp">
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/food_category_image"
@@ -27,8 +29,7 @@
             android:id="@+id/icon_location"
             android:layout_width="12dp"
             android:layout_height="18dp"
-            android:layout_marginLeft="4dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginLeft="12dp"
             android:src="@drawable/icon_location"
             app:layout_constraintStart_toEndOf="@id/food_category_image"
             app:layout_constraintTop_toTopOf="parent" />
@@ -38,9 +39,10 @@
             style="@style/RobotoRegular14"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:transitionName="tv_location"
             android:layout_marginLeft="8dp"
+            android:maxWidth="100dp"
             android:textColor="@color/black"
+            android:transitionName="tv_location"
             app:layout_constraintBottom_toBottomOf="@id/icon_location"
             app:layout_constraintStart_toEndOf="@id/icon_location"
             app:layout_constraintTop_toTopOf="@id/icon_location" />
@@ -51,10 +53,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:transitionName="tv_title"
             android:ellipsize="end"
             android:maxLines="1"
+            android:maxEms="12"
             android:textColor="@color/black"
+            android:transitionName="tv_title"
+            app:layout_constraintEnd_toStartOf="@id/ordering_status_label"
             app:layout_constraintStart_toStartOf="@id/icon_location"
             app:layout_constraintTop_toBottomOf="@id/icon_location" />
 
@@ -63,12 +67,12 @@
             style="@style/RobotoRegular12"
             android:layout_width="40dp"
             android:layout_height="20dp"
-            android:layout_marginLeft="12dp"
+            android:layout_marginLeft="6dp"
+            android:visibility="gone"
             android:background="@drawable/home_status_btn_radius"
             android:gravity="center"
             android:text="@string/party_status_onorder"
             android:textColor="@color/white"
-            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@id/party_title"
             app:layout_constraintStart_toEndOf="@id/party_title"
             app:layout_constraintTop_toTopOf="@id/party_title" />
@@ -79,8 +83,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
-            android:transitionName="tv_time"
             android:textColor="@color/black"
+            android:transitionName="tv_time"
             app:layout_constraintStart_toStartOf="@id/icon_location"
             app:layout_constraintTop_toBottomOf="@id/party_title" />
 
@@ -113,7 +117,14 @@
             app:layout_constraintBottom_toBottomOf="@id/member_icon"
             app:layout_constraintStart_toEndOf="@id/member_icon"
             app:layout_constraintTop_toTopOf="@id/member_icon" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:id="@+id/grey_scale_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0.7"
+        android:background="@color/block_space_grey"
+        android:visibility="gone" />
 
 </androidx.cardview.widget.CardView>
