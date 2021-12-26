@@ -6,18 +6,26 @@
     android:layout_height="match_parent"
     tools:context=".ui.createparty.CreatePartyActivity">
 
+    <ImageView
+        android:id="@+id/iv_icon_exit"
+        android:layout_width="56dp"
+        android:layout_height="54dp"
+        android:src="@drawable/icon_exit"
+        android:scaleType="center"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/tv_create_party_title"/>
+
     <TextView
         android:id="@+id/tv_create_party_title"
         style="@style/RobotoBold16"
         android:layout_width="wrap_content"
         android:layout_height="54dp"
-        android:drawableLeft="@drawable/icon_exit"
         android:drawablePadding="20dp"
         android:gravity="center_vertical"
-        android:paddingStart="20dp"
         android:text="파티 생성하기"
         android:textColor="@color/text_black"
-        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/iv_icon_exit"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
