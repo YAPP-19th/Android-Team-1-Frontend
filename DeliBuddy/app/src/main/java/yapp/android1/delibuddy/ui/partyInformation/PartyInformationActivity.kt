@@ -3,6 +3,9 @@ package yapp.android1.delibuddy.ui.partyInformation
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Spannable
+import android.text.Spanned
+import android.text.style.ForegroundColorSpan
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.view.animation.TranslateAnimation
@@ -97,8 +100,10 @@ class PartyInformationActivity : AppCompatActivity() {
         // [Header]
         tvPartyLocation.text = "${party.placeName} \n${party.placeNameDetail}"
         tvPartyTitle.text    = party.title
-        tvOrderTime.text     = party.orderTime
         tvPartyContent.text  = party.body
+        tvOrderTime.text     = party.orderTime + " 주문 예정"
+        val span = tvOrderTime.text as Spannable
+        span.setSpan(ForegroundColorSpan(getColor(R.color.text_grey)), tvOrderTime.text.lastIndex - 4, tvOrderTime.text.lastIndex + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
 
         Glide.with(this@PartyInformationActivity)
             .load(party.category.iconUrl)
@@ -116,7 +121,6 @@ class PartyInformationActivity : AppCompatActivity() {
                 ContextCompat.getColorStateList(this@PartyInformationActivity, R.color.sub_grey)
             }
         }
-
 
         tvStatus.text = party.status.value
         tvStatusChange.text  = party.status.value
