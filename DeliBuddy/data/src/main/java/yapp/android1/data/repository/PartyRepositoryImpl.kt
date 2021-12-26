@@ -1,15 +1,9 @@
 package yapp.android1.data.repository
 
-import yapp.android1.data.entity.PartyBanRequestModel
-import yapp.android1.data.entity.PartyCreationRequestModel
-import yapp.android1.data.entity.PartyInformationModel
-import yapp.android1.data.entity.PartyModel
+import yapp.android1.data.entity.*
 import yapp.android1.data.remote.PartyApi
 import yapp.android1.domain.NetworkResult
-import yapp.android1.domain.entity.PartyBanRequestEntity
-import yapp.android1.domain.entity.PartyCreationRequestEntity
-import yapp.android1.domain.entity.PartyEntity
-import yapp.android1.domain.entity.PartyInformationEntity
+import yapp.android1.domain.entity.*
 import yapp.android1.domain.interactor.DeliBuddyNetworkErrorHandler
 import yapp.android1.domain.repository.PartyRepository
 import javax.inject.Inject
@@ -89,14 +83,18 @@ class PartyRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun joinParty(id: String): NetworkResult<Unit> {
-        return try {
-            val response = api.joinParty(id)
-            NetworkResult.Success(response)
-        } catch (e: Exception) {
-            val errorType = deliBuddyNetworkErrorHandler.getError(exception = e)
-            return NetworkResult.Error(errorType)
-        }
+    override suspend fun joinParty(id: Int): NetworkResult<Boolean> {
+        return runCatching {
+            api.joinParty(id)
+        }.fold(
+            onSuccess = { model ->
+                NetworkResult.Success(model.okay)
+            },
+            onFailure = { throwable ->
+                val errorType = deliBuddyNetworkErrorHandler.getError(throwable)
+                NetworkResult.Error(errorType)
+            }
+        )
     }
 
     override suspend fun leaveParty(id: String): NetworkResult<Unit> {

@@ -29,3 +29,13 @@ class FetchPartyCommentsUseCase @Inject constructor(
     }
 
 }
+
+class JoinPartyUseCase @Inject constructor(
+    private val partyRepository: PartyRepository
+) : BaseUseCase<NetworkResult<Boolean>, PartyId>() {
+
+    override suspend fun run(params: PartyId): NetworkResult<Boolean> {
+        return partyRepository.joinParty(params)
+    }
+
+}

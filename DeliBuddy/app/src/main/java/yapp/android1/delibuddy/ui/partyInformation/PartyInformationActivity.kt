@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.view.animation.TranslateAnimation
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
@@ -66,6 +67,30 @@ class PartyInformationActivity : AppCompatActivity() {
                 settingPartyInformationViews(party)
             }
         }
+
+        repeatOnStarted {
+            viewModel.hasJoined.collect { hasJoined ->
+                if(hasJoined) {
+                    binding.btnJoinParty.text = "참가중"
+                    binding.btnJoinParty.backgroundTintList = ContextCompat.getColorStateList(this@PartyInformationActivity, R.color.sub_grey)
+                    binding.btnJoinParty.setTextColor(ContextCompat.getColor(this@PartyInformationActivity, R.color.text_black))
+                } else {
+                    binding.btnJoinParty.text = "파티 참가"
+                    binding.btnJoinParty.backgroundTintList = ContextCompat.getColorStateList(this@PartyInformationActivity, R.color.main_orange)
+                    binding.btnJoinParty.setTextColor(ContextCompat.getColor(this@PartyInformationActivity, R.color.white))
+                }
+            }
+        }
+
+        repeatOnStarted {
+            viewModel.joinPartEvent.collect { isSuccess ->
+                if(isSuccess) {
+                    Toast.makeText(this@PartyInformationActivity, "파티 참가 성공", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(this@PartyInformationActivity, "파티 인원이 다 찼습니다.", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
     }
 
     private fun settingPartyInformationViews(party: PartyInformation) = with(binding) {
@@ -124,6 +149,10 @@ class PartyInformationActivity : AppCompatActivity() {
                 val bottomSheetDialog = StatusBottomSheetDialog()
                 bottomSheetDialog.show(fragmentManager, null)
             }
+        }
+
+        btnJoinParty.setOnClickListener {
+            viewModel.occurEvent(PartyInformationEvent.OnJointPartyClicked)
         }
     }
 

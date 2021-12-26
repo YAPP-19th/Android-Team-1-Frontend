@@ -13,17 +13,27 @@ import yapp.android1.delibuddy.model.Party
 import yapp.android1.delibuddy.model.PartyInformation
 import yapp.android1.delibuddy.ui.partyInformation.PartyInformationViewModel.PartyInformationEvent
 import yapp.android1.delibuddy.ui.partyInformation.model.PartyStatus
+import yapp.android1.delibuddy.util.MutableEventFlow
+import yapp.android1.delibuddy.util.asEventFlow
 import yapp.android1.domain.NetworkResult
 import yapp.android1.domain.entity.NetworkError
 import yapp.android1.domain.interactor.usecase.FetchPartyCommentsUseCase
 import yapp.android1.domain.interactor.usecase.FetchPartyInformationUseCase
+import yapp.android1.domain.interactor.usecase.JoinPartyUseCase
 import javax.inject.Inject
 
 @HiltViewModel
 class PartyInformationViewModel @Inject constructor(
     private val fetchPartyInformationUseCase: FetchPartyInformationUseCase,
-    private val fetchPartyCommentsUseCase: FetchPartyCommentsUseCase
+    private val fetchPartyCommentsUseCase: FetchPartyCommentsUseCase,
+    private val jointPartyUseCase: JoinPartyUseCase
 ) : BaseViewModel<PartyInformationEvent>() {
+
+    private val _joinPartyEvent = MutableEventFlow<Boolean>()
+    val joinPartEvent = _joinPartyEvent.asEventFlow()
+
+    private val _hasJoined = MutableStateFlow<Boolean>(false)
+    val hasJoined = _hasJoined.asStateFlow()
 
     private val _isOwner = MutableStateFlow<Boolean>(false)
     val isOwner = _isOwner.asStateFlow()
@@ -39,6 +49,7 @@ class PartyInformationViewModel @Inject constructor(
     sealed class PartyInformationEvent : Event {
         class OnIntent(val data: Party, val currentUserId: Int) : PartyInformationEvent()
         class OnStatusChanged(val status: PartyStatus) : PartyInformationEvent()
+        object OnJointPartyClicked : PartyInformationEvent()
     }
 
     override suspend fun handleEvent(event: PartyInformationEvent) {
@@ -56,6 +67,13 @@ class PartyInformationViewModel @Inject constructor(
 
                 if(currentStatus != changedStatus) {
                     //ChangeStatus
+                }
+            }
+
+            is PartyInformationEvent.OnJointPartyClicked -> {
+                if(_hasJoined.value == false) {
+                    _hasJoined.value = true
+                    joinParty()
                 }
             }
         }
@@ -78,6 +96,22 @@ class PartyInformationViewModel @Inject constructor(
             title            = party.title,
             leader           = PartyInformation.Leader.EMPTY
         )
+    }
+
+    private fun joinParty() = viewModelScope.launch {
+        when(val result = jointPartyUseCase.invoke(_party.value.id)) {
+            is NetworkResult.Success -> {
+                if(result.data == true) {
+                    _joinPartyEvent.emit(result.data)
+                } else {
+                    _hasJoined.value = false
+                    _joinPartyEvent.emit(result.data)
+                }
+            }
+            is NetworkResult.Error -> {
+                handleError(result, null)
+            }
+        }
     }
 
     private fun fetchPartyInformation(partyId: Int) = viewModelScope.launch {

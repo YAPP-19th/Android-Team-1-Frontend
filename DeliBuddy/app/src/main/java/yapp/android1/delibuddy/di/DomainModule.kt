@@ -4,10 +4,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import yapp.android1.domain.interactor.usecase.FetchAuthUseCase
-import yapp.android1.domain.interactor.usecase.FetchPartyCommentsUseCase
-import yapp.android1.domain.interactor.usecase.FetchPartyInformationUseCase
-import yapp.android1.domain.interactor.usecase.GetPartiesInCircleUseCase
+import yapp.android1.domain.interactor.usecase.*
 import yapp.android1.domain.repository.AuthRepository
 import yapp.android1.domain.repository.CommentRepository
 import yapp.android1.domain.repository.PartyRepository
@@ -33,5 +30,10 @@ object DomainModule {
     @Provides
     fun provideFetchPartyInformationUseCase(partyRepository: PartyRepository): FetchPartyInformationUseCase {
         return FetchPartyInformationUseCase(partyRepository)
+    }
+
+    @Provides
+    fun provideJoinPartyUseCase(partyRepository: PartyRepository): JoinPartyUseCase {
+        return JoinPartyUseCase(partyRepository)
     }
 }
