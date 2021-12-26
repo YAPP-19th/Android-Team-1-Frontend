@@ -34,7 +34,7 @@ class ParentCommentViewHolder(
                 .into(ivIconUser)
 
             tvWriteComment.setOnClickListener {
-                listener?.invoke(CommentEvent.OnWriteCommentClicked(comment))
+                listener.invoke(CommentEvent.OnWriteCommentClicked(comment))
             }
 
             if (comment.hasChildComments()) {
@@ -53,6 +53,7 @@ class ParentCommentViewHolder(
             val commentAdapter = CommentAdapter(isOwner)
             rvChildComments.apply {
                 adapter = commentAdapter
+                layoutManager = LinearLayoutManager(itemView.context, LinearLayoutManager.VERTICAL, false)
                 setHasFixedSize(false)
                 isNestedScrollingEnabled = false
             }
