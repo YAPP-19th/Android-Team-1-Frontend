@@ -36,7 +36,7 @@ internal class StatusBottomSheetDialog : BottomSheetDialogFragment() {
 
     private fun initViews() = with(binding) {
         tvItem1.setOnClickListener {
-            viewModel.occurEvent(OnStatusChanged(PartyStatus.RECRUIT))
+            viewModel.occurEvent(OnStatusChanged(PartyStatus.YET_ORDER))
             dismiss()
         }
         tvItem2.setOnClickListener {

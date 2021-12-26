@@ -45,6 +45,12 @@ interface PartyApi : DeliBuddyApi {
         @Path("id") id: String,
     ): Unit
 
+    @PUT("api/v1/parties/{id}/status")
+    suspend fun changeStatus(
+        @Path("id") id: Int,
+        @Body statusChangeRequestModel: StatusChangeRequestModel
+    ): PostResponseModel
+
     @GET("api/v1/parties/{id}")
     suspend fun getPartyInformation(
         @Query("id") id: Int

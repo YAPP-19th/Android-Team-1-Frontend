@@ -111,7 +111,7 @@ class PartyInformationActivity : AppCompatActivity() {
 
         // [PartyStatus]
         tvStatus.backgroundTintList = when(party.status) {
-            PartyStatus.RECRUIT -> {
+            PartyStatus.YET_ORDER -> {
                  ContextCompat.getColorStateList(this@PartyInformationActivity, R.color.sub_yellow)
             }
             PartyStatus.ORDER -> {
@@ -161,7 +161,7 @@ class PartyInformationActivity : AppCompatActivity() {
     }
 
     private fun switchViewState(isOwner: Boolean) = with(binding) {
-        if(isOwner) {
+        if(!isOwner) {
             tvStatus.hide()
             tvStatusChange.show()
         } else {

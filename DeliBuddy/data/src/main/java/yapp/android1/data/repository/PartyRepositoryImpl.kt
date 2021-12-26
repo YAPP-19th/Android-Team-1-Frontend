@@ -117,4 +117,21 @@ class PartyRepositoryImpl @Inject constructor(
             return NetworkResult.Error(errorType)
         }
     }
+
+    override suspend fun changeStatus(
+        id: Int,
+        request: StatusChangeRequestEntity
+    ): NetworkResult<Boolean> {
+        return runCatching {
+            api.changeStatus(id, StatusChangeRequestModel.fromEntitiyToModel(request))
+        }.fold(
+            onSuccess = { model ->
+                NetworkResult.Success(model.okay)
+            },
+            onFailure = { throwable ->
+                val errorType = deliBuddyNetworkErrorHandler.getError(exception = throwable)
+                NetworkResult.Error(errorType)
+            }
+        )
+    }
 }

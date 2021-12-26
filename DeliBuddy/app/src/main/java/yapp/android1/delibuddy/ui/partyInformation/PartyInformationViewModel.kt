@@ -17,6 +17,7 @@ import yapp.android1.delibuddy.util.MutableEventFlow
 import yapp.android1.delibuddy.util.asEventFlow
 import yapp.android1.domain.NetworkResult
 import yapp.android1.domain.entity.NetworkError
+import yapp.android1.domain.interactor.usecase.ChangeStatusUseCase
 import yapp.android1.domain.interactor.usecase.FetchPartyCommentsUseCase
 import yapp.android1.domain.interactor.usecase.FetchPartyInformationUseCase
 import yapp.android1.domain.interactor.usecase.JoinPartyUseCase
@@ -26,7 +27,8 @@ import javax.inject.Inject
 class PartyInformationViewModel @Inject constructor(
     private val fetchPartyInformationUseCase: FetchPartyInformationUseCase,
     private val fetchPartyCommentsUseCase: FetchPartyCommentsUseCase,
-    private val jointPartyUseCase: JoinPartyUseCase
+    private val jointPartyUseCase: JoinPartyUseCase,
+    private val changeStatusUseCase: ChangeStatusUseCase
 ) : BaseViewModel<PartyInformationEvent>() {
 
     private val _joinPartyEvent = MutableEventFlow<Boolean>()
@@ -66,7 +68,7 @@ class PartyInformationViewModel @Inject constructor(
                 val changedStatus = event.status.value
 
                 if(currentStatus != changedStatus) {
-                    //ChangeStatus
+                    changeParty(_party.value.id, changedStatus)
                 }
             }
 
@@ -96,6 +98,31 @@ class PartyInformationViewModel @Inject constructor(
             title            = party.title,
             leader           = PartyInformation.Leader.EMPTY
         )
+    }
+
+    private fun changeParty(partyId: Int, changedStatus: String) = viewModelScope.launch {
+        val result = changeStatusUseCase.invoke(
+            params = ChangeStatusUseCase.Params(
+                partyId = partyId,
+                changedStatus = changedStatus
+            )
+        )
+
+        when(result) {
+            is NetworkResult.Success -> {
+                if(result.data == true) {
+                    _party.value = _party.value.copy(
+                        status = PartyStatus.of(changedStatus)
+                    )
+                } else {
+                    showToast("알 수 없는 에러가 발생했습니다.")
+                }
+            }
+            is NetworkResult.Error -> {
+                handleError(result, null)
+            }
+        }
+
     }
 
     private fun joinParty() = viewModelScope.launch {

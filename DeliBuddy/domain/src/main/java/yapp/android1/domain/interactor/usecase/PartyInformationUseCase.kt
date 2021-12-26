@@ -4,6 +4,7 @@ import yapp.android1.domain.NetworkResult
 import yapp.android1.domain.entity.CommentEntity
 import yapp.android1.domain.entity.PartyEntity
 import yapp.android1.domain.entity.PartyInformationEntity
+import yapp.android1.domain.entity.StatusChangeRequestEntity
 import yapp.android1.domain.repository.CommentRepository
 import yapp.android1.domain.repository.PartyRepository
 import javax.inject.Inject
@@ -38,4 +39,18 @@ class JoinPartyUseCase @Inject constructor(
         return partyRepository.joinParty(params)
     }
 
+}
+
+class ChangeStatusUseCase @Inject constructor(
+    private val partyRepository: PartyRepository
+) : BaseUseCase<NetworkResult<Boolean>, ChangeStatusUseCase.Params>() {
+
+    override suspend fun run(params: Params): NetworkResult<Boolean> {
+        return partyRepository.changeStatus(params.partyId, StatusChangeRequestEntity.fromStringToEntity(params.changedStatus))
+    }
+
+    data class Params(
+        val partyId: Int,
+        val changedStatus: String
+    )
 }

@@ -13,4 +13,5 @@ interface PartyRepository {
     suspend fun banFromParty(id: String, request: PartyBanRequestEntity): NetworkResult<Unit>
     suspend fun joinParty(id: Int): NetworkResult<Boolean>
     suspend fun leaveParty(id: String): NetworkResult<Unit>
+    suspend fun changeStatus(id: Int, request: StatusChangeRequestEntity): NetworkResult<Boolean>
 }

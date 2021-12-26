@@ -60,7 +60,7 @@ data class PartyInformation(
             orderTime = "",
             placeName = "",
             placeNameDetail = "",
-            status = PartyStatus.RECRUIT,
+            status = PartyStatus.YET_ORDER,
             targetUserCount = -1,
             title = "",
             leader = Leader.EMPTY
