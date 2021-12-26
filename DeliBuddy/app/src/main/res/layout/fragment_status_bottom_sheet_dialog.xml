@@ -6,17 +6,17 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/tv_item1"
+        android:id="@+id/tv_recruit"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:padding="12dp"
         android:gravity="center"
         style="@style/RobotoRegular14"
         android:drawablePadding="8dp"
-        android:text="미주문" />
+        android:text="모집중" />
 
     <TextView
-        android:id="@+id/tv_item2"
+        android:id="@+id/tv_order"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:padding="12dp"
@@ -26,7 +26,7 @@
         android:text="주문중" />
 
     <TextView
-        android:id="@+id/tv_item3"
+        android:id="@+id/tv_complete"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:gravity="center"

@@ -111,7 +111,7 @@ class PartyInformationActivity : AppCompatActivity() {
 
         // [PartyStatus]
         tvStatus.backgroundTintList = when(party.status) {
-            PartyStatus.YET_ORDER -> {
+            PartyStatus.RECRUIT -> {
                  ContextCompat.getColorStateList(this@PartyInformationActivity, R.color.sub_yellow)
             }
             PartyStatus.ORDER -> {
