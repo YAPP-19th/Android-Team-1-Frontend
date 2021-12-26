@@ -51,8 +51,11 @@ class ParentCommentViewHolder(
     private fun setChildCommentRecyclerView(comments: List<Comment>, listener: CommentEventListener) =
         with(binding as ItemParentCommentBinding) {
             val commentAdapter = CommentAdapter(isOwner)
-            rvChildComments.layoutManager = LinearLayoutManager(itemView.context, LinearLayoutManager.VERTICAL, false)
-            rvChildComments.adapter = commentAdapter
+            rvChildComments.apply {
+                adapter = commentAdapter
+                setHasFixedSize(false)
+                isNestedScrollingEnabled = false
+            }
             commentAdapter.setCommentEventListener(listener)
             commentAdapter.submitList(comments)
         }
@@ -69,7 +72,6 @@ class ChildCommentViewHolder(
             tvWriterNickname.text = comment.writer?.nickName
             tvBody.text = comment.body
             tvTimeAgo.text = comment.createdAt
-
             ivOptions.setOnClickListener {
                 listener.invoke(CommentEvent.OnRemoveCommentClicked(comment))
             }

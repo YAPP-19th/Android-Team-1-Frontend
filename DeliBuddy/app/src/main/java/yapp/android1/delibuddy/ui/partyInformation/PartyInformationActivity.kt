@@ -4,6 +4,8 @@ import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.view.animation.AnimationUtils
+import android.view.animation.TranslateAnimation
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
@@ -146,6 +148,9 @@ class PartyInformationActivity : AppCompatActivity() {
                         toolbarContainer.tvTitle.animate().alpha(1F).setDuration(100)
                         toolbarContainer.tvLocation.animate().alpha(1F).setDuration(100)
                         clBackground.animate().alpha(0F).setDuration(100)
+
+                        clInputCommentContainer.animate().alpha(1F).setDuration(250)
+                        clInputCommentContainer.show()
                     }
                     State.EXPANDED -> {
                         toolbarContainer.tvTitle.visibility = View.INVISIBLE
@@ -153,6 +158,9 @@ class PartyInformationActivity : AppCompatActivity() {
                         toolbarContainer.tvTitle.animate().alpha(0f).setDuration(250)
                         toolbarContainer.tvLocation.animate().alpha(0F).setDuration(250)
                         clBackground.animate().alpha(1F).setDuration(250)
+
+                        clInputCommentContainer.animate().alpha(0F).setDuration(250)
+                        clInputCommentContainer.hide()
                     }
                     State.IDLE -> Unit
                 }
