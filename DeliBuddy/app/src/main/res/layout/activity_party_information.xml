@@ -256,7 +256,7 @@
                     android:transitionName="tv_title"
                     app:layout_constraintStart_toStartOf="@+id/iv_location_icon"
                     app:layout_constraintTop_toBottomOf="@+id/tv_party_location"
-                    tools:text="유로코 피자 4인\n차카타파" />
+                    tools:text="유로코 피자 4인 너 오면 바로 고 빨리 좀 오세요 제발" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
