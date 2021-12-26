@@ -19,10 +19,16 @@ import yapp.android1.delibuddy.util.dpToPx
 class PartiesAdapter(private val onClick: (IncludeLayoutPartyItemBinding, Party) -> Unit) :
     ListAdapter<Party, PartiesAdapter.PartiesViewHolder>(PartiesDiffCallback) {
 
+    companion object {
+        const val PARTY_STATUS_ON_ORDER = 1
+        const val PARTY_STATUS_COMPLETED = 2
+    }
+
     inner class PartiesViewHolder(
         private val binding: IncludeLayoutPartyItemBinding,
         val onClick: (IncludeLayoutPartyItemBinding, Party) -> Unit,
     ) : RecyclerView.ViewHolder(binding.root) {
+
         private val context = binding.root.context
         private var currentParty: Party? = null
 
@@ -84,8 +90,8 @@ class PartiesAdapter(private val onClick: (IncludeLayoutPartyItemBinding, Party)
         private fun setUiBasedStatus(party: Party) {
             with(party) {
                 when (status) {
-                    allStatuses[1] -> setOrderingStatusLabel()
-                    allStatuses[2] -> setDisabledUI()
+                    allStatuses[PARTY_STATUS_ON_ORDER] -> setOrderingStatusLabel()
+                    allStatuses[PARTY_STATUS_COMPLETED] -> setDisabledUI()
                 }
             }
         }
