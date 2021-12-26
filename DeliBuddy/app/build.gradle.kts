@@ -123,8 +123,7 @@ dependencies {
     implementation(Libraries.LOTTIE)
     implementation(Libraries.GLIDE)
     kapt(Libraries.GLIDE_COMPILER)
-    implementation(Libraries.TED_PERMISSION)
-    implementation(Libraries.TED_PERMISSION_COROUTINE)
+    implementation("com.google.android.gms:play-services-location:19.0.0")
 
     implementation(Libraries.NAVER_MAP)
     implementation(Libraries.KAKAO_LOGIN)

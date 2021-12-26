@@ -10,6 +10,14 @@ import yapp.android1.delibuddy.util.sharedpreferences.SharedPreferenceHelper.set
 class SharedPreferencesManager(context: Context) {
     private val prefs: SharedPreferences = SharedPreferenceHelper.getDefaultPrefs(context)
 
+    fun saveIsFirstLaunch(isFirstLaunch: Boolean) {
+        prefs["isFirstLaunch"] = isFirstLaunch
+    }
+
+    fun getIsFirstLaunch(): Boolean {
+        return prefs["isFirstLaunch", true]
+    }
+
     fun saveUserAddress(address: Address) {
         prefs["addressName"] = address.addressName
         prefs["address"] = address.address

@@ -14,8 +14,10 @@ import kotlinx.coroutines.flow.collectLatest
 import yapp.android1.delibuddy.base.BaseFragment
 import yapp.android1.delibuddy.databinding.FragmentHomeBinding
 import yapp.android1.delibuddy.databinding.IncludeLayoutPartyItemBinding
+import yapp.android1.delibuddy.model.Address
 import yapp.android1.delibuddy.model.Party
 import yapp.android1.delibuddy.ui.address.AddressActivity
+import yapp.android1.delibuddy.ui.createparty.CreatePartyActivity
 import yapp.android1.delibuddy.ui.home.adapter.PartiesAdapter
 import yapp.android1.delibuddy.ui.home.viewmodel.PartiesViewModel
 import yapp.android1.delibuddy.ui.partyInformation.PartyInformationActivity
@@ -29,15 +31,20 @@ const val PARTY = "party"
 class HomeFragment : BaseFragment<FragmentHomeBinding>(
     FragmentHomeBinding::inflate
 ) {
-
     private val partiesViewModel: PartiesViewModel by viewModels()
 
-    private val launcherForAddressActivity =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { activityResult ->
-            if (activityResult.resultCode == AddressActivity.ADDRESS_ACTIVITY_RESULT_CODE) {
-                binding.textCurrentAddress.text = activityResult.data?.getStringExtra(AddressActivity.ADDRESS_ACTIVITY_USER_ADDRESS)
+    private val launcherForAddressActivity = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == AddressActivity.ADDRESS_ACTIVITY_RESULT_CODE) {
+            val data: Intent? = result.data
+            val selectedAddress =
+                data?.getParcelableExtra<Address>(AddressActivity.ADDRESS_ACTIVITY_USER_ADDRESS)
+            selectedAddress?.let { address ->
+                partiesViewModel.occurEvent(PartiesViewModel.PartiesEvent.SaveAddress(address))
             }
         }
+    }
 
     private val partiesAdapter: PartiesAdapter by lazy {
         PartiesAdapter { binding, party ->
@@ -60,13 +67,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
         }
 
         binding.groupCurrentAddress.setOnClickListener {
-            launcherForAddressActivity.launch(
-                Intent(requireContext(), AddressActivity::class.java)
-            )
+            val intent = Intent(requireContext(), AddressActivity::class.java)
+            launcherForAddressActivity.launch(intent)
         }
 
         binding.buttonAddParty.setOnClickListener {
-            //파티 추가화면
+            val intent = Intent(activity, CreatePartyActivity::class.java)
+            startActivity(intent)
         }
     }
 
@@ -96,7 +103,21 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
 
         repeatOnStarted {
             partiesViewModel.userAddress.collectLatest {
-                binding.textCurrentAddress.text = it
+                binding.tvUserAddress.text = it.addressName
+            }
+        }
+
+        repeatOnStarted {
+            partiesViewModel.saveAddressEvent.collectLatest { event ->
+                when (event) {
+                    is PartiesViewModel.SaveAddressEvent.Success -> {
+                        Toast.makeText(activity, "주소 변경에 성공하였습니다.", Toast.LENGTH_SHORT).show()
+                    }
+                    is PartiesViewModel.SaveAddressEvent.Failed -> {
+                        Toast.makeText(activity, "주소 변경에 실패하였습니다.\n다시 시도해 주세요.", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                }
             }
         }
     }
@@ -133,7 +154,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
             binding.partyScheduledTime.transitionName
         )
 
-        val optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(requireActivity(), pairFoodIcon,pairTitle,pairLocation,pairTime)
+        val optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
+            requireActivity(),
+            pairFoodIcon,
+            pairTitle,
+            pairLocation,
+            pairTime
+        )
 
         startActivity(intent, optionsCompat.toBundle())
     }
