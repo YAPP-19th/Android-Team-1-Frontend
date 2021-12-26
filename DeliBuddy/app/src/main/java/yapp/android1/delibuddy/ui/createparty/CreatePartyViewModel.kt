@@ -15,19 +15,23 @@ sealed class CreatePartyEvent : Event {
         val isValid: Boolean
     ) : CreatePartyEvent()
 
+    class SelectedAddressEvent(
+        val address: Address?
+    ) : CreatePartyEvent()
+
     object ClearAddressEvent : CreatePartyEvent()
     object CheckFlagsEvent : CreatePartyEvent()
     object CreatePartyClickEvent : CreatePartyEvent()
 }
 
 class CreatePartyViewModel : BaseViewModel<CreatePartyEvent>() {
-    private var _currentAddress = MutableStateFlow<Address?>(null)
+    private val _currentAddress = MutableStateFlow<Address?>(null)
     val currentAddress: StateFlow<Address?> = _currentAddress
 
-    private var _canCreateParty = MutableStateFlow<Boolean>(false)
+    private val _canCreateParty = MutableStateFlow<Boolean>(false)
     val canCreateParty: MutableStateFlow<Boolean> = _canCreateParty
 
-    private var _invalidElement = MutableStateFlow<PartyElement>(PartyElement.NONE)
+    private val _invalidElement = MutableStateFlow<PartyElement>(PartyElement.NONE)
     val invalidElement: MutableStateFlow<PartyElement> = _invalidElement
 
     private var createPartyFlags: MutableMap<PartyElement, Boolean> = mutableMapOf(
@@ -54,6 +58,10 @@ class CreatePartyViewModel : BaseViewModel<CreatePartyEvent>() {
                 clearAddress()
             }
 
+            is CreatePartyEvent.SelectedAddressEvent -> {
+                changeCurrentAddress(event.address)
+            }
+
             is CreatePartyEvent.ChangeFlagsEvent -> {
                 changeFlag(event.partyElement, event.isValid)
             }
@@ -70,6 +78,10 @@ class CreatePartyViewModel : BaseViewModel<CreatePartyEvent>() {
 
     private fun clearAddress() {
         _currentAddress.value = null
+    }
+
+    private fun changeCurrentAddress(newAddress: Address?) {
+        _currentAddress.value = newAddress
     }
 
     private fun changeFlag(partyElement: PartyElement, isValid: Boolean) {

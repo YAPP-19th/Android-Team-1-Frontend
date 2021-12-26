@@ -5,6 +5,8 @@ import yapp.android1.delibuddy.base.BaseViewModel
 import yapp.android1.delibuddy.base.RetryAction
 import yapp.android1.delibuddy.model.Auth
 import yapp.android1.delibuddy.model.Event
+import yapp.android1.delibuddy.util.user.KakaoLoginModule
+import yapp.android1.delibuddy.util.user.UserLoginManager
 import yapp.android1.delibuddy.util.EventFlow
 import yapp.android1.delibuddy.util.MutableEventFlow
 import yapp.android1.domain.NetworkResult
@@ -15,6 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class AuthViewModel @Inject constructor(
     private val fetchAuthUseCase: FetchAuthUseCase,
+    private val userManager: UserLoginManager,
 ) : BaseViewModel<Event>() {
 
     private val _tokenResult = MutableEventFlow<Auth>()
@@ -35,8 +38,8 @@ class AuthViewModel @Inject constructor(
     private suspend fun loginWithDelibuddyApi(token: String) {
         when (val result = fetchAuthUseCase.invoke(token)) {
             is NetworkResult.Success -> {
-                var token = result.data
-                var auth = Auth.mapToAuth(token)
+                val auth = Auth.mapToAuth(result.data)
+                userManager.setDeliBuddyAuth(auth)
                 _tokenResult.emit(auth)
             }
             is NetworkResult.Error -> handleError(result) {}
