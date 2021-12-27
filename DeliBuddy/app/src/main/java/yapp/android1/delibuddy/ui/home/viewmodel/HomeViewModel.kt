@@ -1,20 +1,40 @@
 package yapp.android1.delibuddy.ui.home.viewmodel
 
-import androidx.lifecycle.ViewModel
+import yapp.android1.delibuddy.base.BaseViewModel
+import yapp.android1.delibuddy.base.RetryAction
+import yapp.android1.delibuddy.model.Event
+import yapp.android1.delibuddy.util.EventFlow
+import yapp.android1.delibuddy.util.MutableEventFlow
+import yapp.android1.domain.NetworkResult
 
-class HomeViewModel : ViewModel() {
+class HomeViewModel : BaseViewModel<Event>() {
 
     private var backKeyPressedTime: Long? = null
     private val TIME_INTERVAL = 2000
 
-    fun judgeAppTerminate(): Boolean {
-        var currentTime = System.currentTimeMillis()
+    private val _isAppTerminate = MutableEventFlow<Boolean>()
+    val isAppTermiate: EventFlow<Boolean> = _isAppTerminate
 
-        return if (backKeyPressedTime == null || currentTime > backKeyPressedTime!! + TIME_INTERVAL) {
-            backKeyPressedTime = currentTime
-            false
-        } else {
-            true
+    sealed class HomeEvent : Event {
+        class JudgeAppTerminate() : HomeEvent()
+    }
+
+    override suspend fun handleEvent(event: Event) {
+        when (event) {
+            is HomeEvent.JudgeAppTerminate -> judgeAppTerminate()
         }
     }
+
+    private suspend fun judgeAppTerminate() {
+        var currentTime = System.currentTimeMillis()
+
+        if (backKeyPressedTime == null || currentTime > backKeyPressedTime!! + TIME_INTERVAL) {
+            backKeyPressedTime = currentTime
+            _isAppTerminate.emit(false)
+        } else {
+            _isAppTerminate.emit(true)
+        }
+    }
+
+    override suspend fun handleError(result: NetworkResult.Error, retryAction: RetryAction?) {}
 }

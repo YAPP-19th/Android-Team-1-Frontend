@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import dagger.hilt.android.AndroidEntryPoint
-import timber.log.Timber
+import kotlinx.coroutines.flow.collect
 import yapp.android1.delibuddy.R
 import yapp.android1.delibuddy.databinding.ActivityHomeBinding
 import yapp.android1.delibuddy.ui.alarm.AlarmFragment
@@ -15,6 +15,7 @@ import yapp.android1.delibuddy.ui.home.fragments.HomeFragment
 import yapp.android1.delibuddy.ui.home.viewmodel.HomeViewModel
 import yapp.android1.delibuddy.ui.mypage.MyPageFragment
 import yapp.android1.delibuddy.ui.myparty.MyPartyFragment
+import yapp.android1.delibuddy.util.extensions.repeatOnStarted
 
 @AndroidEntryPoint
 class HomeActivity: AppCompatActivity() {
@@ -36,6 +37,24 @@ class HomeActivity: AppCompatActivity() {
         if (savedInstanceState == null)
             initBottomNavigation()
         changeBottomNavigationItemByClick()
+        initObserve()
+    }
+
+    private fun initObserve() {
+        repeatOnStarted {
+            homeViewModel.isAppTermiate.collect { isAppTerminate ->
+                if (isAppTerminate) {
+                    finishAffinity()
+                } else {
+                    Toast.makeText(
+                        this@HomeActivity,
+                        R.string.home_back_button_once_toast,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        }
+
     }
 
     private fun initBottomNavigation() {
@@ -71,12 +90,7 @@ class HomeActivity: AppCompatActivity() {
     override fun onBackPressed() {
         binding.bottomNavigation.run {
             if (selectedItemId == R.id.home) {
-                if (homeViewModel.judgeAppTerminate()) {
-                    Toast.makeText(this@HomeActivity, R.string.home_back_button_twice_toast, Toast.LENGTH_SHORT).show()
-                    finishAffinity()
-                } else {
-                    Toast.makeText(this@HomeActivity, R.string.home_back_button_once_toast, Toast.LENGTH_SHORT).show()
-                }
+                homeViewModel.occurEvent(HomeViewModel.HomeEvent.JudgeAppTerminate())
             } else {
                 selectedItemId = R.id.home
             }
