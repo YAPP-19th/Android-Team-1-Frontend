@@ -13,7 +13,6 @@ import yapp.android1.delibuddy.DeliBuddyApplication
 import yapp.android1.delibuddy.databinding.ActivitySplashBinding
 import yapp.android1.delibuddy.ui.dialog.PermissionDialogFragment
 import yapp.android1.delibuddy.ui.home.HomeActivity
-import yapp.android1.delibuddy.ui.login.LoginActivity
 import yapp.android1.delibuddy.ui.login.viewmodel.AuthViewModel
 import yapp.android1.delibuddy.ui.permission.PermissionDescriptionActivity
 import yapp.android1.delibuddy.util.extensions.repeatOnStarted
@@ -21,7 +20,6 @@ import yapp.android1.delibuddy.util.intentTo
 import yapp.android1.delibuddy.util.permission.PermissionManager
 import yapp.android1.delibuddy.util.permission.PermissionState
 import yapp.android1.delibuddy.util.permission.PermissionType
-import yapp.android1.delibuddy.util.user.KakaoLoginModule
 import yapp.android1.delibuddy.util.user.UserLoginManager
 import javax.inject.Inject
 
@@ -60,21 +58,9 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private fun checkLoginAndIntent() {
-        userLoginManager.kakaoLogin { isLoginSuccess, _, kakaoToken ->
-            when (isLoginSuccess) {
-                true -> authViewModel.occurEvent(
-                    AuthViewModel.AuthEvent.OnKakaoLoginSuccess(
-                        kakaoToken!!
-                    )
-                )
-                false -> {
-                    intentJob = lifecycleScope.launch {
-                        delay(2000L)
-                        intentTo(LoginActivity::class.java)
-                    }
-                }
-            }
-        }
+        authViewModel.occurEvent(
+            AuthViewModel.AuthEvent.OnAuthTokenRefresh()
+        )
     }
 
     private fun initObserve() {
