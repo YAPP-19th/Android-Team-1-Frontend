@@ -96,6 +96,11 @@ class AddressSearchFragment :
         repeatOnStarted {
             viewModel.searchResults.collect {
                 addressAdapter.updateResult(it)
+                if (it.second.isNotEmpty()) {
+                    binding.ivSearchGuide.visibility = View.INVISIBLE
+                } else {
+                    binding.ivSearchGuide.visibility = View.VISIBLE
+                }
             }
         }
 
