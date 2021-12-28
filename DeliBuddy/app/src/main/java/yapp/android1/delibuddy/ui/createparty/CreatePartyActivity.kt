@@ -299,7 +299,7 @@ class CreatePartyActivity : AppCompatActivity() {
 
     private fun initCategorySpinnerAfterGetListFromServer() = with(binding) {
         // val categories = arrayOf("음식 카테고리", "한식", "일식", "양식", "중식")
-        val categories = listOf<String>("음식 카테고리") + viewModel.categoryList.value
+        val categories = listOf<String>("음식 카테고리") + viewModel.categoryList.value.map { it.name }
         val categorySpinnerAdapter = ArrayAdapter(
             this@CreatePartyActivity,
             android.R.layout.simple_spinner_dropdown_item,
