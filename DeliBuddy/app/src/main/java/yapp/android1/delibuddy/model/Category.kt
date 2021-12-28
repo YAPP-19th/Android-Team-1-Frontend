@@ -17,7 +17,7 @@ data class Category(
             name = ""
         )
 
-        fun toCategory(categoryEntity: CategoryEntity): Category {
+        fun mapToCategory(categoryEntity: CategoryEntity): Category {
             return Category(
                 backgroundColorCode = categoryEntity.backgroundColorCode,
                 iconUrl = categoryEntity.iconUrl,

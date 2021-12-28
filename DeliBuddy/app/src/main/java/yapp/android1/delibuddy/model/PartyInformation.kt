@@ -69,7 +69,7 @@ data class PartyInformation(
             return PartyInformation(
                 allStatuses = partyEntity.allStatuses,
                 body = partyEntity.body,
-                category = Category.toCategory(partyEntity.category),
+                category = Category.mapToCategory(partyEntity.category),
                 coordinate = partyEntity.coordinate,
                 currentUserCount = partyEntity.currentUserCount,
                 id = partyEntity.id,

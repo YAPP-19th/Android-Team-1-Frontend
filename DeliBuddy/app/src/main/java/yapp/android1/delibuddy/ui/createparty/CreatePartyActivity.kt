@@ -1,6 +1,5 @@
 package yapp.android1.delibuddy.ui.createparty
 
-
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Intent
@@ -18,15 +17,16 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import timber.log.Timber
 import yapp.android1.delibuddy.databinding.ActivityCreatePartyBinding
 import yapp.android1.delibuddy.model.Address
 import yapp.android1.delibuddy.ui.address.AddressActivity
-import yapp.android1.delibuddy.ui.home.HomeActivity
 import yapp.android1.delibuddy.util.extensions.repeatOnStarted
-import yapp.android1.delibuddy.util.intentTo
+import yapp.android1.domain.entity.PartyCreationRequestEntity
 
+@AndroidEntryPoint
 class CreatePartyActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCreatePartyBinding
     private val viewModel: CreatePartyViewModel by viewModels()
@@ -36,6 +36,9 @@ class CreatePartyActivity : AppCompatActivity() {
     private val selectedTimes = arrayOf<Int>(0, 0, 0, 0, 0)
     private var dateFormat = SimpleDateFormat("yyyy-MM-dd hh:mm:ss")
 
+    private var selectedMember = 0
+    private var selectedCategoryId = 0
+
     private val MAX_TITLE = 10
     private val MAX_BODY = 255
 
@@ -44,7 +47,8 @@ class CreatePartyActivity : AppCompatActivity() {
     ) { result ->
         if (result.resultCode == AddressActivity.ADDRESS_ACTIVITY_RESULT_CODE) {
             val data: Intent = result.data!!
-            val selectedAddress = data.getParcelableExtra<Address>(AddressActivity.ADDRESS_ACTIVITY_USER_ADDRESS)
+            val selectedAddress =
+                data.getParcelableExtra<Address>(AddressActivity.ADDRESS_ACTIVITY_USER_ADDRESS)
             viewModel.occurEvent(CreatePartyEvent.SelectedAddressEvent(selectedAddress))
         }
     }
@@ -75,7 +79,7 @@ class CreatePartyActivity : AppCompatActivity() {
 
     private fun initView() = with(binding) {
         tvCreateParty.setOnClickListener {
-            viewModel.occurEvent(CreatePartyEvent.CreatePartyClickEvent)
+            createParty()
         }
 
         tvPartyDate.text =
@@ -93,7 +97,7 @@ class CreatePartyActivity : AppCompatActivity() {
         }
 
         ivIconExit.setOnClickListener {
-            intentTo(HomeActivity::class.java)
+            finish()
         }
 
         initTitleTextWatcher()
@@ -101,7 +105,6 @@ class CreatePartyActivity : AppCompatActivity() {
         initBodyTextWatcher()
         initDatePicker()
         initTimePicker()
-        initCategorySpinner()
         initMemberSpinner()
     }
 
@@ -294,9 +297,9 @@ class CreatePartyActivity : AppCompatActivity() {
         return targetTime.time.time - selectedDate.time > 0
     }
 
-    private fun initCategorySpinner() = with(binding) {
-        // TODO: Get Category List From Server
-        val categories = arrayOf("음식 카테고리", "한식", "일식", "양식", "중식")
+    private fun initCategorySpinnerAfterGetListFromServer() = with(binding) {
+        // val categories = arrayOf("음식 카테고리", "한식", "일식", "양식", "중식")
+        val categories = listOf<String>("음식 카테고리") + viewModel.categoryList.value.map { it.name }
         val categorySpinnerAdapter = ArrayAdapter(
             this@CreatePartyActivity,
             android.R.layout.simple_spinner_dropdown_item,
@@ -323,6 +326,7 @@ class CreatePartyActivity : AppCompatActivity() {
                             CreatePartyEvent.ChangeFlagsEvent(PartyElement.CATEGORY, true)
                         )
                         tvPartyCategoryError.visibility = View.GONE
+                        selectedCategoryId = viewModel.categoryList.value[position - 1].id
                     }
                 }
             }
@@ -366,12 +370,36 @@ class CreatePartyActivity : AppCompatActivity() {
                             )
                         )
                         tvPartyMemberError.visibility = View.GONE
+                        selectedMember = position + 1
                     }
                 }
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
+    }
+
+    private fun createParty() = with(binding) {
+        val partyAddress = viewModel.currentAddress.value!!
+        val coordString = "POINT (${partyAddress.lng} ${partyAddress.lat})"
+        val orderTimeString =
+            "20" + "%02d".format(selectedTimes[PartyTimeElement.MONTH.ordinal]) + "-" +
+                    "%02d".format(selectedTimes[PartyTimeElement.MONTH.ordinal]) + "-" +
+                    "%02d".format(selectedTimes[PartyTimeElement.DAY.ordinal]) + " " +
+                    "%02d".format(selectedTimes[PartyTimeElement.HOUR.ordinal]) + ":" +
+                    "%02d".format(selectedTimes[PartyTimeElement.MINUTE.ordinal]) + ":00"
+        val newParty = PartyCreationRequestEntity(
+            body = etPartyBody.text.toString(),
+            categoryId = selectedCategoryId,
+            coordinate = coordString,
+            openKakaoUrl = etChatUrl.text.toString(),
+            orderTime = orderTimeString,
+            placeName = partyAddress.addressName,
+            placeNameDetail = partyAddress.addressDetail,
+            targetUserCount = selectedMember,
+            title = etPartyTitle.text.toString()
+        )
+        viewModel.occurEvent(CreatePartyEvent.CreatePartyClickEvent(newParty))
     }
 
     private fun initObserve() = with(binding) {
@@ -444,6 +472,18 @@ class CreatePartyActivity : AppCompatActivity() {
                     PartyElement.NONE -> {
                     }
                 }
+            }
+        }
+
+        repeatOnStarted {
+            viewModel.categoryList.collect {
+                initCategorySpinnerAfterGetListFromServer()
+            }
+        }
+
+        repeatOnStarted {
+            viewModel.isSuccessToCreateParty.collect { isSuccessToCreateParty ->
+                if (isSuccessToCreateParty) finish()
             }
         }
     }
