@@ -162,9 +162,11 @@ class PartyInformationActivity : AppCompatActivity() {
 
     private fun switchViewState(isOwner: Boolean) = with(binding) {
         if(!isOwner) {
+            toolbarContainer.btnMoreOptions.hide()
             tvStatus.hide()
             tvStatusChange.show()
         } else {
+            toolbarContainer.btnMoreOptions.show()
             tvStatus.show()
             tvStatusChange.hide()
         }
