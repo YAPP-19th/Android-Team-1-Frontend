@@ -1,13 +1,27 @@
 package yapp.android1.delibuddy.ui.createparty
 
+import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
+import timber.log.Timber
+import yapp.android1.data.entity.PartyCreationRequestModel
 import yapp.android1.delibuddy.DeliBuddyApplication
 import yapp.android1.delibuddy.base.BaseViewModel
 import yapp.android1.delibuddy.base.RetryAction
 import yapp.android1.delibuddy.model.Address
+import yapp.android1.delibuddy.model.Category
 import yapp.android1.delibuddy.model.Event
+import yapp.android1.delibuddy.model.PartyInformation
+import yapp.android1.delibuddy.util.MutableEventFlow
 import yapp.android1.domain.NetworkResult
+import yapp.android1.domain.entity.NetworkError
+import yapp.android1.domain.entity.PartyCreationRequestEntity
+import yapp.android1.domain.interactor.usecase.CategoryListUseCase
+import yapp.android1.domain.interactor.usecase.CreatePartyUseCase
+import javax.inject.Inject
 
 sealed class CreatePartyEvent : Event {
     class ChangeFlagsEvent(
@@ -21,10 +35,18 @@ sealed class CreatePartyEvent : Event {
 
     object ClearAddressEvent : CreatePartyEvent()
     object CheckFlagsEvent : CreatePartyEvent()
-    object CreatePartyClickEvent : CreatePartyEvent()
+    class CreatePartyClickEvent(
+        val newParty: PartyCreationRequestEntity
+    ) : CreatePartyEvent()
 }
 
-class CreatePartyViewModel : BaseViewModel<CreatePartyEvent>() {
+@HiltViewModel
+class CreatePartyViewModel @Inject constructor(
+    private val categoryListUseCase: CategoryListUseCase,
+    private val createPartyUseCase: CreatePartyUseCase,
+) : BaseViewModel<CreatePartyEvent>() {
+    private var job: Job? = null
+
     private val _currentAddress = MutableStateFlow<Address?>(null)
     val currentAddress: StateFlow<Address?> = _currentAddress
 
@@ -33,6 +55,12 @@ class CreatePartyViewModel : BaseViewModel<CreatePartyEvent>() {
 
     private val _invalidElement = MutableStateFlow<PartyElement>(PartyElement.NONE)
     val invalidElement: MutableStateFlow<PartyElement> = _invalidElement
+
+    private val _categoryList = MutableStateFlow<List<Category>>(listOf())
+    val categoryList: MutableStateFlow<List<Category>> = _categoryList
+
+    private val _isSuccessToCreateParty = MutableEventFlow<Boolean>()
+    val isSuccessToCreateParty: MutableEventFlow<Boolean> = _isSuccessToCreateParty
 
     private var createPartyFlags: MutableMap<PartyElement, Boolean> = mutableMapOf(
         PartyElement.TITLE to false,
@@ -46,10 +74,30 @@ class CreatePartyViewModel : BaseViewModel<CreatePartyEvent>() {
 
     init {
         initCurrentAddress()
+        getCategoryListFromServer()
     }
 
     private fun initCurrentAddress() {
         _currentAddress.value = DeliBuddyApplication.prefs.getCurrentUserAddress()
+    }
+
+    private fun getCategoryListFromServer() {
+        job?.cancel()
+        job = viewModelScope.launch {
+            when (val result = categoryListUseCase.invoke()) {
+                is NetworkResult.Success -> {
+                    val categoryList = result.data.map {
+                        Category.mapToCategory(it)
+                    }
+                    _categoryList.value = categoryList
+                    Timber.w("categoryList: ${_categoryList.value}")
+                }
+
+                is NetworkResult.Error -> handleError(result) {
+
+                }
+            }
+        }
     }
 
     override suspend fun handleEvent(event: CreatePartyEvent) {
@@ -71,7 +119,7 @@ class CreatePartyViewModel : BaseViewModel<CreatePartyEvent>() {
             }
 
             is CreatePartyEvent.CreatePartyClickEvent -> {
-                checkAndCreate()
+                checkAndCreate(event.newParty)
             }
         }
     }
@@ -100,18 +148,52 @@ class CreatePartyViewModel : BaseViewModel<CreatePartyEvent>() {
         return PartyElement.NONE
     }
 
-    private suspend fun checkAndCreate() {
+    private suspend fun checkAndCreate(newParty: PartyCreationRequestEntity) {
         val i = checkCanCreateParty()
 
         if (i == PartyElement.NONE) {
-            showToast("성공")
+            Timber.w("new party: ${newParty.toString()}")
+            createParty(newParty)
         } else {
             _invalidElement.value = i
             showToast("파티글 생성에 실패하였습니다")
         }
     }
 
+    private fun createParty(newParty: PartyCreationRequestEntity) {
+        job?.cancel()
+        job = viewModelScope.launch {
+            when (val result = createPartyUseCase.invoke(newParty)) {
+                is NetworkResult.Success -> {
+                    val resultParty = PartyInformation.toPartyInformation(result.data)
+                    Timber.w("resultParty: ${resultParty.title}")
+                    showToast("파티글 생성에 성공하였습니다")
+                    _isSuccessToCreateParty.emit(true)
+                }
+
+                is NetworkResult.Error -> handleError(result) {
+
+                }
+            }
+        }
+    }
+
     override suspend fun handleError(result: NetworkResult.Error, retryAction: RetryAction?) {
-        // TODO("Not yet implemented")
+        when (result.errorType) {
+            is NetworkError.Unknown -> {
+                showToast("알 수 없는 에러가 발생했습니다.")
+            }
+            is NetworkError.Timeout -> {
+                showToast("타임 아웃 에러가 발생했습니다.")
+            }
+            is NetworkError.InternalServer -> {
+                showToast("내부 서버에서 오류가 발생했습니다.")
+            }
+            is NetworkError.BadRequest -> {
+                val code = (result.errorType as NetworkError.BadRequest).code
+                val msg = (result.errorType as NetworkError.BadRequest).message
+                showToast("에러 코드 ${code}, $msg")
+            }
+        }
     }
 }

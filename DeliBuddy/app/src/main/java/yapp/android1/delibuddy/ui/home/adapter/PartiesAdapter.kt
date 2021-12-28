@@ -19,10 +19,16 @@ import yapp.android1.delibuddy.util.dpToPx
 class PartiesAdapter(private val onClick: (IncludeLayoutPartyItemBinding, Party) -> Unit) :
     ListAdapter<Party, PartiesAdapter.PartiesViewHolder>(PartiesDiffCallback) {
 
+    companion object {
+        const val PARTY_STATUS_ON_ORDER = 1
+        const val PARTY_STATUS_COMPLETED = 2
+    }
+
     inner class PartiesViewHolder(
         private val binding: IncludeLayoutPartyItemBinding,
         val onClick: (IncludeLayoutPartyItemBinding, Party) -> Unit,
     ) : RecyclerView.ViewHolder(binding.root) {
+
         private val context = binding.root.context
         private var currentParty: Party? = null
 
@@ -52,19 +58,16 @@ class PartiesAdapter(private val onClick: (IncludeLayoutPartyItemBinding, Party)
         }
 
         private fun setMemberIcon(targetUserCount: Int, currentUserCount: Int) {
-            val params = LinearLayout.LayoutParams(
+            binding.memberIcon.removeAllViewsInLayout()
+
+            var params = LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
             )
             params.setMargins(0, 0, context.dpToPx(8).toInt(), 0)
 
             makeMemberIcon(context, params, R.drawable.icon_party_member_presence, currentUserCount)
-            makeMemberIcon(
-                context,
-                params,
-                R.drawable.icon_party_member_absence,
-                targetUserCount - currentUserCount
-            )
+            makeMemberIcon(context, params, R.drawable.icon_party_member_absence, targetUserCount - currentUserCount)
         }
 
         private fun makeMemberIcon(
@@ -84,8 +87,8 @@ class PartiesAdapter(private val onClick: (IncludeLayoutPartyItemBinding, Party)
         private fun setUiBasedStatus(party: Party) {
             with(party) {
                 when (status) {
-                    allStatuses[1] -> setOrderingStatusLabel()
-                    allStatuses[2] -> setDisabledUI()
+                    allStatuses[PARTY_STATUS_ON_ORDER] -> setOrderingStatusLabel()
+                    allStatuses[PARTY_STATUS_COMPLETED] -> setDisabledUI()
                 }
             }
         }

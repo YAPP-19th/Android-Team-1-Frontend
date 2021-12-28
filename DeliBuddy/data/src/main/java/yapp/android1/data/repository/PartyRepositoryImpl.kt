@@ -36,17 +36,10 @@ class PartyRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun createParty(request: PartyCreationRequestEntity): NetworkResult<List<PartyEntity>> {
+    override suspend fun createParty(request: PartyCreationRequestEntity): NetworkResult<PartyInformationEntity> {
         return try {
-            val response = api.createParty(
-                PartyCreationRequestModel.fromPartyCreationRequest(request)
-            )
-
-            NetworkResult.Success(
-                response.map {
-                    PartyModel.toPartyEntity(it)
-                }
-            )
+            val response = api.createParty(PartyCreationRequestModel.fromPartyCreationRequest(request))
+            NetworkResult.Success(PartyInformationModel.toPartyInformationEntity(response))
         } catch (e: Exception) {
             val errorType = deliBuddyNetworkErrorHandler.getError(exception = e)
             return NetworkResult.Error(errorType)
