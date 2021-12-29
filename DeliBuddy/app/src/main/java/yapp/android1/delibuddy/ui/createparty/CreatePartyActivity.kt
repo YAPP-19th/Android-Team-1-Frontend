@@ -405,7 +405,24 @@ class CreatePartyActivity : AppCompatActivity() {
     private fun initObserve() = with(binding) {
         repeatOnStarted {
             viewModel.currentAddress.collect { address ->
-                if (address == null) {
+                val isAvailable = when {
+                    address == null -> false
+                    address.addressName == "주소를 입력해 주세요" -> false
+                    else -> true
+                }
+
+                if (isAvailable) {
+                    viewModel.occurEvent(
+                        CreatePartyEvent.ChangeFlagsEvent(
+                            PartyElement.ADDRESS,
+                            true
+                        )
+                    )
+                    tvPartyAddress.text = address!!.addressName
+                    tvPartyAddress.typeface = Typeface.DEFAULT_BOLD
+                    tvPartyAddressError.visibility = View.GONE
+                    ivReset.visibility = View.VISIBLE
+                } else {
                     viewModel.occurEvent(
                         CreatePartyEvent.ChangeFlagsEvent(
                             PartyElement.ADDRESS,
@@ -416,20 +433,10 @@ class CreatePartyActivity : AppCompatActivity() {
                     tvPartyAddress.typeface = Typeface.DEFAULT
                     tvPartyAddressError.visibility = View.VISIBLE
                     ivReset.visibility = View.GONE
-                } else {
-                    viewModel.occurEvent(
-                        CreatePartyEvent.ChangeFlagsEvent(
-                            PartyElement.ADDRESS,
-                            true
-                        )
-                    )
-                    tvPartyAddress.text = address.addressName
-                    tvPartyAddress.typeface = Typeface.DEFAULT_BOLD
-                    tvPartyAddressError.visibility = View.GONE
-                    ivReset.visibility = View.VISIBLE
                 }
             }
         }
+
 
         repeatOnStarted {
             viewModel.canCreateParty.collect {
@@ -488,3 +495,4 @@ class CreatePartyActivity : AppCompatActivity() {
         }
     }
 }
+
