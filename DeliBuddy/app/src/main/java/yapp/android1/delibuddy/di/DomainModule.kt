@@ -5,9 +5,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import yapp.android1.domain.interactor.usecase.*
-import yapp.android1.domain.repository.AuthRepository
-import yapp.android1.domain.repository.CommentRepository
-import yapp.android1.domain.repository.PartyRepository
+import yapp.android1.domain.repository.*
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -35,5 +33,25 @@ object DomainModule {
     @Provides
     fun provideFetchPartyInformationUseCase(partyRepository: PartyRepository): FetchPartyInformationUseCase {
         return FetchPartyInformationUseCase(partyRepository)
+    }
+
+    @Provides
+    fun provideSearchAddressUseCase(addressRepository: AddressRepository): SearchAddressUseCase {
+        return SearchAddressUseCase(addressRepository)
+    }
+
+    @Provides
+    fun provideCoordToAddressUseCase(coordToAddressRepository: CoordToAddressRepository): CoordToAddressUseCase {
+        return CoordToAddressUseCase(coordToAddressRepository)
+    }
+
+    @Provides
+    fun provideCategoryListUseCase(categoryListRepository: CategoryListRepository): CategoryListUseCase {
+        return CategoryListUseCase(categoryListRepository)
+    }
+
+    @Provides
+    fun provideCreatePartyUseCase(partyRepository: PartyRepository): CreatePartyUseCase {
+        return CreatePartyUseCase(partyRepository)
     }
 }

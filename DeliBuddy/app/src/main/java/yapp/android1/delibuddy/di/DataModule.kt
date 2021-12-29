@@ -4,14 +4,11 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import yapp.android1.data.remote.AuthApi
-import yapp.android1.data.remote.CommentApi
-import yapp.android1.data.repository.AuthRepositoryImpl
-import yapp.android1.data.repository.CommentRepositoryImpl
-import yapp.android1.domain.entity.CommentCreationRequestEntity
+import yapp.android1.data.remote.*
+import yapp.android1.data.repository.*
 import yapp.android1.domain.interactor.DeliBuddyNetworkErrorHandler
-import yapp.android1.domain.repository.AuthRepository
-import yapp.android1.domain.repository.CommentRepository
+import yapp.android1.domain.interactor.KakaoNetworkErrorHandler
+import yapp.android1.domain.repository.*
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -32,4 +29,27 @@ object DataModule {
         return CommentRepositoryImpl(commentApi, deliBuddyNetworkErrorHandler)
     }
 
+    @Provides
+    fun provideAddressRepository(
+        kakaoLocalApi: KakaoLocalApi,
+        kakaoNetworkErrorHandler: KakaoNetworkErrorHandler,
+    ): AddressRepository {
+        return AddressRepositoryImpl(kakaoLocalApi, kakaoNetworkErrorHandler)
+    }
+
+    @Provides
+    fun provideCoordToAddressRepository(
+        kakaoLocalApi: KakaoLocalApi,
+        kakaoNetworkErrorHandler: KakaoNetworkErrorHandler,
+    ): CoordToAddressRepository {
+        return CoordToAddressRepositoryImpl(kakaoLocalApi, kakaoNetworkErrorHandler)
+    }
+
+    @Provides
+    fun provideCategoryListRepository(
+        categoryListApi: CategoryListApi,
+        deliBuddyNetworkErrorHandler: DeliBuddyNetworkErrorHandler
+    ): CategoryListRepository {
+        return CategoryListRepositoryImpl(categoryListApi, deliBuddyNetworkErrorHandler)
+    }
 }

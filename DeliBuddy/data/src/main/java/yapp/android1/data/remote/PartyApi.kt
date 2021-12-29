@@ -19,7 +19,8 @@ interface PartyApi : DeliBuddyApi {
     @POST("api/v1/parties")
     suspend fun createParty(
         @Body partyCreationRequest: PartyCreationRequestModel,
-    ): List<PartyModel>
+        @Header("Content-Type") content_type: String = "application/json"
+    ): PartyInformationModel
 
     // "okay": true 만 오는 경우, 우선은 Unit 으로 대체하고 추후에 한번에 고치기 !
     @PUT("api/v1/parties/{id}")

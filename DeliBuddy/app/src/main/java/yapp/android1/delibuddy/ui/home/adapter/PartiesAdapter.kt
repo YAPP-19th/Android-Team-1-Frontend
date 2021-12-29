@@ -58,19 +58,16 @@ class PartiesAdapter(private val onClick: (IncludeLayoutPartyItemBinding, Party)
         }
 
         private fun setMemberIcon(targetUserCount: Int, currentUserCount: Int) {
-            val params = LinearLayout.LayoutParams(
+            binding.memberIcon.removeAllViewsInLayout()
+
+            var params = LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
             )
             params.setMargins(0, 0, context.dpToPx(8).toInt(), 0)
 
             makeMemberIcon(context, params, R.drawable.icon_party_member_presence, currentUserCount)
-            makeMemberIcon(
-                context,
-                params,
-                R.drawable.icon_party_member_absence,
-                targetUserCount - currentUserCount
-            )
+            makeMemberIcon(context, params, R.drawable.icon_party_member_absence, targetUserCount - currentUserCount)
         }
 
         private fun makeMemberIcon(

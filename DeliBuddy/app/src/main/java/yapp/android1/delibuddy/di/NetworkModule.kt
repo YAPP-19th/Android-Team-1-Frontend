@@ -110,6 +110,11 @@ object NetworkModule {
     }
 
     @Provides
+    fun provideCategoryListApiService(@DeliBuddyRetrofit retrofit: Retrofit): CategoryListApi {
+        return retrofit.create(CategoryListApi::class.java)
+    }
+
+    @Provides
     fun provideKakaoApiService(@KakaoRetrofit retrofit: Retrofit): KakaoLocalApi {
         return retrofit.create(KakaoLocalApi::class.java)
     }

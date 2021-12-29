@@ -9,7 +9,7 @@ import yapp.android1.domain.entity.PartyInformationEntity
 interface PartyRepository {
     suspend fun getPartiesInCircle(point: String, distance: Int): NetworkResult<List<PartyEntity>>
     suspend fun getPartiesInGeom(): NetworkResult<Unit>
-    suspend fun createParty(request: PartyCreationRequestEntity): NetworkResult<List<PartyEntity>>
+    suspend fun createParty(request: PartyCreationRequestEntity): NetworkResult<PartyInformationEntity>
     suspend fun getPartyInformation(id: Int): NetworkResult<PartyInformationEntity>
     suspend fun editParty(id: String): NetworkResult<Unit>
     suspend fun deleteParty(id: String): NetworkResult<Unit>
