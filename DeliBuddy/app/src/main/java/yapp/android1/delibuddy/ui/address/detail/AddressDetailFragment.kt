@@ -182,7 +182,7 @@ class AddressDetailFragment :
     private fun activateAddressView(address: Address) = with(binding) {
         tvAddressDetailName.text = address.addressName
 
-        if (address.roadAddress?.isNullOrBlank() == true) {
+        if (address.roadAddress.isNullOrBlank()) {
             tvAddress.text = address.address
         } else {
             tvAddress.text = address.roadAddress
