@@ -1,14 +1,13 @@
 package yapp.android1.delibuddy.ui.login.viewmodel
 
 import dagger.hilt.android.lifecycle.HiltViewModel
-import timber.log.Timber
 import yapp.android1.delibuddy.base.BaseViewModel
 import yapp.android1.delibuddy.base.RetryAction
 import yapp.android1.delibuddy.model.Auth
 import yapp.android1.delibuddy.model.Event
 import yapp.android1.delibuddy.util.EventFlow
 import yapp.android1.delibuddy.util.MutableEventFlow
-import yapp.android1.delibuddy.util.user.UserLoginManager
+import yapp.android1.delibuddy.util.user.UserAuthManager
 import yapp.android1.domain.NetworkResult
 import yapp.android1.domain.entity.NetworkError
 import yapp.android1.domain.interactor.usecase.FetchAuthUseCase
@@ -19,7 +18,7 @@ import javax.inject.Inject
 class AuthViewModel @Inject constructor(
     private val fetchAuthUseCase: FetchAuthUseCase,
     private val refreshAuthUseCase: RefreshAuthUseCase,
-    private val userManager: UserLoginManager,
+    private val userAuthManager: UserAuthManager,
 ) : BaseViewModel<Event>() {
 
     private val _tokenResult = MutableEventFlow<Auth>()
@@ -43,7 +42,6 @@ class AuthViewModel @Inject constructor(
         when (val result = fetchAuthUseCase.invoke(token)) {
             is NetworkResult.Success -> {
                 val auth = Auth.mapToAuth(result.data)
-                userManager.setDeliBuddyAuth(auth)
                 _tokenResult.emit(auth)
             }
             is NetworkResult.Error -> handleError(result) {}
@@ -54,7 +52,7 @@ class AuthViewModel @Inject constructor(
         when (val result = refreshAuthUseCase.invoke(Unit)) {
             is NetworkResult.Success -> {
                 val auth = Auth.mapToAuth(result.data)
-                Timber.d("auth $auth")
+                _tokenResult.emit(auth)
             }
             is NetworkResult.Error -> handleError(result) {}
         }
