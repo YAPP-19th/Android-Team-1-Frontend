@@ -117,28 +117,19 @@ class CreatePartyActivity : AppCompatActivity() {
                     when {
                         title.isBlank() -> {
                             viewModel.occurEvent(
-                                CreatePartyEvent.ChangeFlagsEvent(
-                                    PartyElement.TITLE,
-                                    false
-                                )
+                                CreatePartyEvent.ChangeFlagsEvent(PartyElement.TITLE, false)
                             )
                             tvPartyTitleError.visibility = View.VISIBLE
                         }
                         title.length > MAX_TITLE -> {
                             viewModel.occurEvent(
-                                CreatePartyEvent.ChangeFlagsEvent(
-                                    PartyElement.TITLE,
-                                    false
-                                )
+                                CreatePartyEvent.ChangeFlagsEvent(PartyElement.TITLE, false)
                             )
                             tvPartyTitleError.visibility = View.VISIBLE
                         }
                         else -> {
                             viewModel.occurEvent(
-                                CreatePartyEvent.ChangeFlagsEvent(
-                                    PartyElement.TITLE,
-                                    true
-                                )
+                                CreatePartyEvent.ChangeFlagsEvent(PartyElement.TITLE, true)
                             )
                             tvPartyTitleError.visibility = View.GONE
                         }
@@ -157,28 +148,19 @@ class CreatePartyActivity : AppCompatActivity() {
                     when {
                         title.isBlank() -> {
                             viewModel.occurEvent(
-                                CreatePartyEvent.ChangeFlagsEvent(
-                                    PartyElement.BODY,
-                                    false
-                                )
+                                CreatePartyEvent.ChangeFlagsEvent(PartyElement.BODY, false)
                             )
                             tvPartyBodyError.visibility = View.VISIBLE
                         }
                         title.length > MAX_BODY -> {
                             viewModel.occurEvent(
-                                CreatePartyEvent.ChangeFlagsEvent(
-                                    PartyElement.BODY,
-                                    false
-                                )
+                                CreatePartyEvent.ChangeFlagsEvent(PartyElement.BODY, false)
                             )
                             tvPartyBodyError.visibility = View.VISIBLE
                         }
                         else -> {
                             viewModel.occurEvent(
-                                CreatePartyEvent.ChangeFlagsEvent(
-                                    PartyElement.BODY,
-                                    true
-                                )
+                                CreatePartyEvent.ChangeFlagsEvent(PartyElement.BODY, true)
                             )
                             tvPartyBodyError.visibility = View.GONE
                         }
@@ -199,28 +181,19 @@ class CreatePartyActivity : AppCompatActivity() {
                     when {
                         title.isBlank() -> {
                             viewModel.occurEvent(
-                                CreatePartyEvent.ChangeFlagsEvent(
-                                    PartyElement.CHAT_URL,
-                                    false
-                                )
+                                CreatePartyEvent.ChangeFlagsEvent(PartyElement.CHAT_URL, false)
                             )
                             tvChatUrlError.visibility = View.VISIBLE
                         }
                         !isMatchWithRule -> {
                             viewModel.occurEvent(
-                                CreatePartyEvent.ChangeFlagsEvent(
-                                    PartyElement.CHAT_URL,
-                                    false
-                                )
+                                CreatePartyEvent.ChangeFlagsEvent(PartyElement.CHAT_URL, false)
                             )
                             tvChatUrlError.visibility = View.VISIBLE
                         }
                         else -> {
                             viewModel.occurEvent(
-                                CreatePartyEvent.ChangeFlagsEvent(
-                                    PartyElement.CHAT_URL,
-                                    true
-                                )
+                                CreatePartyEvent.ChangeFlagsEvent(PartyElement.CHAT_URL, true)
                             )
                             tvChatUrlError.visibility = View.GONE
                         }
@@ -355,19 +328,13 @@ class CreatePartyActivity : AppCompatActivity() {
                 when (position) {
                     0 -> {
                         viewModel.occurEvent(
-                            CreatePartyEvent.ChangeFlagsEvent(
-                                PartyElement.MEMBER,
-                                false
-                            )
+                            CreatePartyEvent.ChangeFlagsEvent(PartyElement.MEMBER, false)
                         )
                         tvPartyMemberError.visibility = View.VISIBLE
                     }
                     else -> {
                         viewModel.occurEvent(
-                            CreatePartyEvent.ChangeFlagsEvent(
-                                PartyElement.MEMBER,
-                                true
-                            )
+                            CreatePartyEvent.ChangeFlagsEvent(PartyElement.MEMBER, true)
                         )
                         tvPartyMemberError.visibility = View.GONE
                         selectedMember = position + 1
@@ -413,10 +380,7 @@ class CreatePartyActivity : AppCompatActivity() {
 
                 if (isAvailable) {
                     viewModel.occurEvent(
-                        CreatePartyEvent.ChangeFlagsEvent(
-                            PartyElement.ADDRESS,
-                            true
-                        )
+                        CreatePartyEvent.ChangeFlagsEvent(PartyElement.ADDRESS, true)
                     )
                     tvPartyAddress.text = address!!.addressName
                     tvPartyAddress.typeface = Typeface.DEFAULT_BOLD
@@ -424,10 +388,7 @@ class CreatePartyActivity : AppCompatActivity() {
                     ivReset.visibility = View.VISIBLE
                 } else {
                     viewModel.occurEvent(
-                        CreatePartyEvent.ChangeFlagsEvent(
-                            PartyElement.ADDRESS,
-                            false
-                        )
+                        CreatePartyEvent.ChangeFlagsEvent(PartyElement.ADDRESS, false)
                     )
                     tvPartyAddress.text = "위치 추가"
                     tvPartyAddress.typeface = Typeface.DEFAULT

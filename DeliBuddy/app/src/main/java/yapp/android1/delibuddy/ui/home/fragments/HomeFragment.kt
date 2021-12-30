@@ -60,9 +60,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
                 data?.getParcelableExtra<Address>(AddressActivity.ADDRESS_ACTIVITY_USER_ADDRESS)
             selectedAddress?.let { address ->
                 partiesViewModel.occurEvent(
-                    PartiesViewModel.UserAddressEvent.SaveUserAddressEvent(
-                        address
-                    )
+                    PartiesViewModel.UserAddressEvent.SaveUserAddress(address)
                 )
             }
         }
@@ -76,9 +74,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        Timber.w("on view created")
-
         initViews()
         initObserve()
         getPartiesInCircle()
@@ -128,8 +123,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
         repeatOnStarted {
             partiesViewModel.userAddress.collectLatest {
                 if (it.addressName == "주소를 입력해 주세요") {
-                    Timber.w("collect user address")
-                    getCurrentLatLng()
+                    getCurrentAddress()
                 } else {
                     binding.tvUserAddress.text = it.addressName
                 }
@@ -193,10 +187,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
         startActivity(intent, optionsCompat.toBundle())
     }
 
-    private fun getCurrentLatLng() {
-        Timber.w("getCurrentLatLng")
+    private fun getCurrentAddress() {
         PermissionManager.checkPermission(
-            requireActivity() as AppCompatActivity, PermissionType.LOCATION
+            requireActivity() as AppCompatActivity,
+            PermissionType.LOCATION
         ) {
             when (it) {
                 PermissionState.GRANTED -> {
@@ -209,11 +203,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
                     currentLocationTask.addOnCompleteListener { task: Task<Location> ->
                         if (task.isSuccessful) {
                             val result: Location = task.result
-                            Timber.w("Location Success: ${result.latitude}, ${result.longitude}")
-
                             val currentLatLng = Pair(result.latitude, result.longitude)
                             partiesViewModel.occurEvent(
-                                PartiesViewModel.UserAddressEvent.GetCurrentAddressEvent(currentLatLng)
+                                PartiesViewModel.UserAddressEvent.GetCurrentAddress(currentLatLng)
                             )
                         } else {
                             val exception = task.exception
@@ -233,5 +225,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
             }
         }
         permissionDialog.show(parentFragmentManager, null)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        cancellationTokenSource.cancel()
     }
 }

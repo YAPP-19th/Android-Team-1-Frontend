@@ -40,8 +40,8 @@ class PartiesViewModel @Inject constructor(
     }
 
     sealed class UserAddressEvent : Event {
-        class SaveUserAddressEvent(val address: Address) : UserAddressEvent()
-        class GetCurrentAddressEvent(val currentLatLng: Pair<Double, Double>) : UserAddressEvent()
+        class SaveUserAddress(val address: Address) : UserAddressEvent()
+        class GetCurrentAddress(val currentLatLng: Pair<Double, Double>) : UserAddressEvent()
     }
 
     sealed class SaveAddressEvent : Event {
@@ -60,8 +60,8 @@ class PartiesViewModel @Inject constructor(
     override suspend fun handleEvent(event: Event) {
         when (event) {
             is PartiesEvent.GetPartiesInCircle -> getPartiesInCircle(event.locationRange)
-            is UserAddressEvent.SaveUserAddressEvent -> saveAddress(event.address)
-            is UserAddressEvent.GetCurrentAddressEvent -> convertCoordToAddress(event.currentLatLng)
+            is UserAddressEvent.SaveUserAddress -> saveAddress(event.address)
+            is UserAddressEvent.GetCurrentAddress -> convertCoordToAddress(event.currentLatLng)
         }
     }
 
@@ -84,18 +84,14 @@ class PartiesViewModel @Inject constructor(
     private suspend fun convertCoordToAddress(latLng: Pair<Double, Double>) {
         viewModelScope.launch {
             Timber.w("latLng: $latLng")
-            //when (val result = convertCoordToAddressUseCase(Pair(37.5463968, 127.0727856))) {
             when (val result = convertCoordToAddressUseCase(latLng)) {
                 is NetworkResult.Success -> {
-                    Timber.w("success to convert")
                     _userAddress.value = Address.mapToAddress(result.data)
                     saveAddress(_userAddress.value)
                 }
 
                 is NetworkResult.Error -> {
-                    //_isActivate.emit(false)
-                    Timber.w("fail to convert")
-                    showToast("현재 주소를 가져올 수 없습니다 주소를 지정해 주세요")
+                    showToast("현재 주소를 가져올 수 없습니다 주소를 설정해 주세요")
                     Timber.w("errorType: ${result.errorType}")
                 }
             }
