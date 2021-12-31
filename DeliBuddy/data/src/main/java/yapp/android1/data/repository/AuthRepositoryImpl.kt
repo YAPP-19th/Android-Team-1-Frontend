@@ -26,4 +26,17 @@ class AuthRepositoryImpl @Inject constructor(
         }
 
     }
+
+    override suspend fun refreshAuthToken(): NetworkResult<AuthEntity> {
+        return try {
+            val response = api.refreshAuthToken()
+
+            NetworkResult.Success(
+                MapAuth.map(response)
+            )
+        } catch (exception: Exception) {
+            val error = deliBuddyNetworkErrorHandler.getError(exception)
+            NetworkResult.Error(error)
+        }
+    }
 }

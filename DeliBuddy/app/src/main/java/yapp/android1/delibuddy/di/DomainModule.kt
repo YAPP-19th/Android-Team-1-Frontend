@@ -16,6 +16,11 @@ object DomainModule {
     }
 
     @Provides
+    fun provideRefreshAuthUseCase(authRepository: AuthRepository): RefreshAuthUseCase {
+        return RefreshAuthUseCase(authRepository)
+    }
+
+    @Provides
     fun provideGetPartiesInCircleUseCase(partyRepository: PartyRepository): GetPartiesInCircleUseCase {
         return GetPartiesInCircleUseCase(partyRepository)
     }

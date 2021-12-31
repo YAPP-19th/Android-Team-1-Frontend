@@ -5,19 +5,20 @@ import yapp.android1.delibuddy.base.BaseViewModel
 import yapp.android1.delibuddy.base.RetryAction
 import yapp.android1.delibuddy.model.Auth
 import yapp.android1.delibuddy.model.Event
-import yapp.android1.delibuddy.util.user.KakaoLoginModule
-import yapp.android1.delibuddy.util.user.UserLoginManager
 import yapp.android1.delibuddy.util.EventFlow
 import yapp.android1.delibuddy.util.MutableEventFlow
+import yapp.android1.delibuddy.util.user.UserAuthManager
 import yapp.android1.domain.NetworkResult
 import yapp.android1.domain.entity.NetworkError
 import yapp.android1.domain.interactor.usecase.FetchAuthUseCase
+import yapp.android1.domain.interactor.usecase.RefreshAuthUseCase
 import javax.inject.Inject
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(
     private val fetchAuthUseCase: FetchAuthUseCase,
-    private val userManager: UserLoginManager,
+    private val refreshAuthUseCase: RefreshAuthUseCase,
+    private val userAuthManager: UserAuthManager,
 ) : BaseViewModel<Event>() {
 
     private val _tokenResult = MutableEventFlow<Auth>()
@@ -26,12 +27,14 @@ class AuthViewModel @Inject constructor(
     sealed class AuthEvent : Event {
         class OnKakaoLoginSuccess(val token: String) : AuthEvent()
         class OnKakaoLoginFailed(val message: String) : AuthEvent()
+        class OnAuthTokenRefresh() : AuthEvent()
     }
 
     override suspend fun handleEvent(event: Event) {
         when (event) {
             is AuthEvent.OnKakaoLoginSuccess -> loginWithDelibuddyApi(token = event.token)
             is AuthEvent.OnKakaoLoginFailed -> showToast(message = event.message)
+            is AuthEvent.OnAuthTokenRefresh -> refreshAuthTokenApi()
         }
     }
 
@@ -39,7 +42,16 @@ class AuthViewModel @Inject constructor(
         when (val result = fetchAuthUseCase.invoke(token)) {
             is NetworkResult.Success -> {
                 val auth = Auth.mapToAuth(result.data)
-                userManager.setDeliBuddyAuth(auth)
+                _tokenResult.emit(auth)
+            }
+            is NetworkResult.Error -> handleError(result) {}
+        }
+    }
+
+    private suspend fun refreshAuthTokenApi() {
+        when (val result = refreshAuthUseCase.invoke(Unit)) {
+            is NetworkResult.Success -> {
+                val auth = Auth.mapToAuth(result.data)
                 _tokenResult.emit(auth)
             }
             is NetworkResult.Error -> handleError(result) {}
