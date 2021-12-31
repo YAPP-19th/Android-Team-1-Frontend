@@ -1,10 +1,7 @@
 package yapp.android1.data.remote
 
 import retrofit2.http.*
-import yapp.android1.data.entity.PartyBanRequestModel
-import yapp.android1.data.entity.PartyCreationRequestModel
-import yapp.android1.data.entity.PartyInformationModel
-import yapp.android1.data.entity.PartyModel
+import yapp.android1.data.entity.*
 
 interface PartyApi : DeliBuddyApi {
     @GET("api/v1/parties/circle")
@@ -41,13 +38,19 @@ interface PartyApi : DeliBuddyApi {
 
     @POST("api/v1/parties/{id}/join")
     suspend fun joinParty(
-        @Path("id") id: String,
-    ): Unit
+        @Path("id") id: Int,
+    ): PostResponseModel
 
     @POST("api/v1/parties/{id}/leave")
     suspend fun leaveParty(
         @Path("id") id: String,
     ): Unit
+
+    @PUT("api/v1/parties/{id}/status")
+    suspend fun changeStatus(
+        @Path("id") id: Int,
+        @Body statusChangeRequestModel: StatusChangeRequestModel
+    ): PostResponseModel
 
     @GET("api/v1/parties/{id}")
     suspend fun getPartyInformation(

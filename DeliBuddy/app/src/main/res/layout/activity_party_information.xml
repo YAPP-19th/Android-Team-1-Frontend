@@ -39,20 +39,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_party_owner_profile"
                 app:layout_constraintStart_toEndOf="@+id/iv_party_owner_profile"
                 app:layout_constraintTop_toTopOf="@+id/iv_party_owner_profile"
                 tools:text="홍길동" />
-
-            <TextView
-                android:id="@+id/tv_party_owner_address"
-                style="@style/RobotoRegular12"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:textColor="@color/text_grey"
-                app:layout_constraintStart_toStartOf="@+id/tv_party_owner_name"
-                app:layout_constraintTop_toBottomOf="@+id/tv_party_owner_name"
-                tools:text="인천 남동구 논현동" />
 
             <TextView
                 android:id="@+id/tv_status_change"
@@ -105,7 +95,7 @@
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="24dp"
                 android:background="@color/divider_grey"
-                app:layout_constraintTop_toBottomOf="@+id/tv_party_owner_address"
+                app:layout_constraintTop_toBottomOf="@+id/iv_party_owner_profile"
                 tools:layout_editor_absoluteX="20dp" />
 
             <View
@@ -174,8 +164,8 @@
                 android:id="@+id/cl_background"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingBottom="30dp"
-                android:background="#FFE3D8">
+                android:background="#FFE3D8"
+                android:paddingBottom="30dp">
 
                 <ImageView
                     android:id="@+id/iv_location_icon"
@@ -203,8 +193,9 @@
                     android:layout_width="180dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:lineSpacingExtra="-2dp"
                     android:layout_marginTop="-2dp"
+                    android:letterSpacing="-0.02"
+                    android:lineSpacingExtra="-2dp"
                     android:maxLines="2"
                     android:textColor="@color/black"
                     android:transitionName="tv_location"
@@ -218,7 +209,9 @@
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
+                    android:bufferType="spannable"
                     android:ellipsize="end"
+                    android:letterSpacing="-0.02"
                     android:maxLines="2"
                     android:textColor="@color/black"
                     android:transitionName="tv_time"
@@ -245,15 +238,15 @@
                     style="@style/RobotoBold20"
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
                     android:ellipsize="end"
-                    android:maxLines="2"
                     android:lineSpacingExtra="-4dp"
+                    android:maxLines="2"
                     android:textColor="@color/black"
                     android:transitionName="tv_title"
-                    android:layout_marginTop="16dp"
                     app:layout_constraintStart_toStartOf="@+id/iv_location_icon"
                     app:layout_constraintTop_toBottomOf="@+id/tv_party_location"
-                    tools:text="유로코 피자 4인\n차카타파" />
+                    tools:text="유로코 피자 4인 너 오면 바로 고 빨리 좀 오세요 제발" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -270,8 +263,7 @@
                     layout="@layout/view_custom_toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    app:layout_collapseMode="pin"
-                    />
+                    app:layout_collapseMode="pin" />
 
             </com.google.android.material.appbar.MaterialToolbar>
 
@@ -285,11 +277,11 @@
         android:id="@+id/cl_input_comment_container"
         android:layout_width="match_parent"
         android:layout_height="56dp"
+        android:layout_gravity="bottom"
         android:background="@color/white"
         android:elevation="20dp"
         android:outlineSpotShadowColor="@color/shadow_grey"
         android:visibility="visible"
-        android:layout_gravity="bottom"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 

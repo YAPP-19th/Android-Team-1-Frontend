@@ -14,12 +14,11 @@ class AuthManagementModule {
     }
 
     fun checkAuthStatus(token: String, callback: (Int) -> Unit) {
-        var status = AUTH_TOKEN_AVAILABLE_STATUS
-
         val jwt = JWT(token)
         val todayTime = Date().time
         val diffTime = jwt.expiresAt?.time?.minus(todayTime)
 
+        var status = AUTH_TOKEN_AVAILABLE_STATUS
         if (diffTime != null) {
             if (diffTime <= REMAINING_PERIOD * 1000) {
                 status = AUTH_TOKEN_REFRESH_REQUIRED_STATUS
@@ -27,6 +26,7 @@ class AuthManagementModule {
                 status = AUTH_TOKEN_EXPIRED_STATUS
             }
         }
+
         callback(status)
     }
 }
