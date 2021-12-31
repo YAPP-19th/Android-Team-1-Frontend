@@ -101,6 +101,7 @@ class PartyInformationActivity : AppCompatActivity() {
         tvPartyLocation.text = "${party.placeName} \n${party.placeNameDetail}"
         tvPartyTitle.text    = party.title
         tvPartyContent.text  = party.body
+
         tvOrderTime.text     = party.orderTime + " 주문 예정"
         val span = tvOrderTime.text as Spannable
         span.setSpan(ForegroundColorSpan(getColor(R.color.text_grey)), tvOrderTime.text.lastIndex - 4, tvOrderTime.text.lastIndex + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -164,11 +165,11 @@ class PartyInformationActivity : AppCompatActivity() {
         if(!isOwner) {
             toolbarContainer.btnMoreOptions.hide()
             tvStatus.hide()
-            tvStatusChange.show()
+            tvStatusChange.hide()
         } else {
             toolbarContainer.btnMoreOptions.show()
             tvStatus.show()
-            tvStatusChange.hide()
+            tvStatusChange.show()
         }
     }
 
