@@ -25,8 +25,8 @@ class UserAuthManager(
         kakaoLoginModule.kakaoLogin(call)
     }
 
-    fun checkAuthRefreshRequired(call: (Boolean) -> Unit) {
-        authManagementModule.checkAuthRefreshRequired(getDeliBuddyUserToken(), call)
+    fun checkAuthStatus(callback: (Int) -> Unit) {
+        authManagementModule.checkAuthStatus(getDeliBuddyUserToken(), callback)
     }
 
     fun setDeliBuddyAuth(auth: Auth) {

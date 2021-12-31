@@ -1,17 +1,32 @@
 package yapp.android1.delibuddy.util.user
 
 import com.auth0.android.jwt.JWT
-import timber.log.Timber
+import java.util.*
 
 class AuthManagementModule {
 
-    val REMAINING_PERIOD = 259200L
+    companion object {
+        const val REMAINING_PERIOD = 259200L // 3 days
 
-    fun checkAuthRefreshRequired(token: String, call: (Boolean) -> Unit) {
+        const val AUTH_TOKEN_EXPIRED_STATUS = -1
+        const val AUTH_TOKEN_REFRESH_REQUIRED_STATUS = 0
+        const val AUTH_TOKEN_AVAILABLE_STATUS = 1
+    }
+
+    fun checkAuthStatus(token: String, callback: (Int) -> Unit) {
+        var status = AUTH_TOKEN_AVAILABLE_STATUS
+
         val jwt = JWT(token)
-        Timber.d("jwt ${jwt.expiresAt}")
-        val isExpired = jwt.isExpired(REMAINING_PERIOD)
-        Timber.d("jwt $isExpired")
-        call(isExpired)
+        val todayTime = Date().time
+        val diffTime = jwt.expiresAt?.time?.minus(todayTime)
+
+        if (diffTime != null) {
+            if (diffTime <= REMAINING_PERIOD * 1000) {
+                status = AUTH_TOKEN_REFRESH_REQUIRED_STATUS
+            } else if (diffTime < 0) {
+                status = AUTH_TOKEN_EXPIRED_STATUS
+            }
+        }
+        callback(status)
     }
 }

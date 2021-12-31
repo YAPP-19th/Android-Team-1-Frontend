@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import yapp.android1.delibuddy.DeliBuddyApplication
 import yapp.android1.delibuddy.databinding.ActivitySplashBinding
+import yapp.android1.delibuddy.model.Auth
 import yapp.android1.delibuddy.ui.dialog.PermissionDialogFragment
 import yapp.android1.delibuddy.ui.home.HomeActivity
 import yapp.android1.delibuddy.ui.login.LoginActivity
@@ -21,6 +22,7 @@ import yapp.android1.delibuddy.util.intentTo
 import yapp.android1.delibuddy.util.permission.PermissionManager
 import yapp.android1.delibuddy.util.permission.PermissionState
 import yapp.android1.delibuddy.util.permission.PermissionType
+import yapp.android1.delibuddy.util.user.AuthManagementModule
 import yapp.android1.delibuddy.util.user.UserAuthManager
 import javax.inject.Inject
 
@@ -62,16 +64,24 @@ class SplashActivity : AppCompatActivity() {
         if (!userAuthManager.getDeliBuddyAuth().isAvailable()) {
             intentTo(LoginActivity::class.java)
         } else {
-            userAuthManager.checkAuthRefreshRequired { isRequired ->
-                if (isRequired) {
-                    authViewModel.occurEvent(
-                        AuthViewModel.AuthEvent.OnAuthTokenRefresh()
-                    )
-                } else {
-                    intentTo(HomeActivity::class.java)
+            userAuthManager.checkAuthStatus { status ->
+                when (status) {
+                    AuthManagementModule.AUTH_TOKEN_EXPIRED_STATUS -> {
+                        userAuthManager.setDeliBuddyAuth(Auth.EMPTY)
+                        intentTo(LoginActivity::class.java)
+                    }
+                    AuthManagementModule.AUTH_TOKEN_REFRESH_REQUIRED_STATUS -> {
+                        authViewModel.occurEvent(
+                            AuthViewModel.AuthEvent.OnAuthTokenRefresh()
+                        )
+                    }
+                    AuthManagementModule.AUTH_TOKEN_AVAILABLE_STATUS -> {
+                        intentTo(HomeActivity::class.java)
+                    }
                 }
             }
         }
+
     }
 
     private fun initObserve() {
