@@ -12,7 +12,7 @@ data class Comment(
     val writer: Writer?,
     val body: String,
     val createdAt: String,
-    val children: List<Comment> = emptyList()
+    val children: Comments = Comments.EMPTY
 ) {
     data class Writer(
         val nickName: String,
@@ -31,7 +31,7 @@ data class Comment(
     val viewType = if(parentId == null) PARENT else CHILD
 
     fun hasChildComments(): Boolean {
-        return children.isNotEmpty()
+        return children.value.isNotEmpty()
     }
 
     companion object {
@@ -46,7 +46,7 @@ data class Comment(
                 writer = if(entity.writer == null) null else Writer.fromWriterEntity(entity.writer!!),
                 body = entity.body,
                 createdAt = parseCommentDate(entity.createdAt),
-                children = entity.children.map { Comment.fromCommentEntity(it) }
+                children = Comments( entity.children.map { Comment.fromCommentEntity(it) } )
             )
         }
     }

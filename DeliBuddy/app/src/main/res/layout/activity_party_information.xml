@@ -301,7 +301,7 @@
             tools:text="저도 참여하고 싶은데" />
 
         <ImageView
-            android:id="@+id/btn_send_comment"
+            android:id="@+id/btn_create_comment"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:src="@drawable/icon_send_comment"

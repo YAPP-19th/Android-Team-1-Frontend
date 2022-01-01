@@ -7,20 +7,15 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import yapp.android1.delibuddy.base.BaseViewModel
 import yapp.android1.delibuddy.base.RetryAction
-import yapp.android1.delibuddy.model.Comment
-import yapp.android1.delibuddy.model.Event
-import yapp.android1.delibuddy.model.Party
-import yapp.android1.delibuddy.model.PartyInformation
-import yapp.android1.delibuddy.ui.partyInformation.PartyInformationViewModel.PartyInformationEvent
+import yapp.android1.delibuddy.model.*
+import yapp.android1.delibuddy.ui.partyInformation.PartyInformationViewModel.PartyInformationAction
 import yapp.android1.delibuddy.ui.partyInformation.model.PartyStatus
 import yapp.android1.delibuddy.util.MutableEventFlow
 import yapp.android1.delibuddy.util.asEventFlow
 import yapp.android1.domain.NetworkResult
+import yapp.android1.domain.entity.CommentCreationRequestEntity
 import yapp.android1.domain.entity.NetworkError
-import yapp.android1.domain.interactor.usecase.ChangeStatusUseCase
-import yapp.android1.domain.interactor.usecase.FetchPartyCommentsUseCase
-import yapp.android1.domain.interactor.usecase.FetchPartyInformationUseCase
-import yapp.android1.domain.interactor.usecase.JoinPartyUseCase
+import yapp.android1.domain.interactor.usecase.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -28,11 +23,12 @@ class PartyInformationViewModel @Inject constructor(
     private val fetchPartyInformationUseCase: FetchPartyInformationUseCase,
     private val fetchPartyCommentsUseCase: FetchPartyCommentsUseCase,
     private val jointPartyUseCase: JoinPartyUseCase,
-    private val changeStatusUseCase: ChangeStatusUseCase
-) : BaseViewModel<PartyInformationEvent>() {
+    private val changeStatusUseCase: ChangeStatusUseCase,
+    private val createCommentUseCase: CreateCommentUseCase
+) : BaseViewModel<PartyInformationAction>() {
 
-    private val _joinPartyEvent = MutableEventFlow<Boolean>()
-    val joinPartEvent = _joinPartyEvent.asEventFlow()
+    private val _event = MutableEventFlow<PartyInformationEvent>()
+    val event = _event.asEventFlow()
 
     private val _hasJoined = MutableStateFlow<Boolean>(false)
     val hasJoined = _hasJoined.asStateFlow()
@@ -43,41 +39,54 @@ class PartyInformationViewModel @Inject constructor(
     private val _party = MutableStateFlow<PartyInformation>(PartyInformation.EMPTY)
     val party = _party.asStateFlow()
 
-    private val _comments = MutableStateFlow<List<Comment>>(emptyList())
+    private val _comments = MutableStateFlow<Comments>(Comments.EMPTY)
     val comments = _comments.asStateFlow()
 
     private var currentUserId = -1
 
-    sealed class PartyInformationEvent : Event {
-        class OnIntent(val data: Party, val currentUserId: Int) : PartyInformationEvent()
-        class OnStatusChanged(val status: PartyStatus) : PartyInformationEvent()
-        object OnJointPartyClicked : PartyInformationEvent()
+    sealed class PartyInformationAction : Event {
+        class OnIntent(val data: Party, val currentUserId: Int) : PartyInformationAction()
+        class OnStatusChanged(val status: PartyStatus) : PartyInformationAction()
+        object OnJointPartyClicked : PartyInformationAction()
+        class OnWriteParentComment(val body: String) : PartyInformationAction()
     }
 
-    override suspend fun handleEvent(event: PartyInformationEvent) {
-        when(event) {
-            is PartyInformationEvent.OnIntent -> {
-                currentUserId = event.currentUserId
-                setPartyWithoutLeader(event.data)
+    sealed class PartyInformationEvent : Event {
+        object OnPartyJoinSuccess : PartyInformationEvent()
+        object OnPartyJoinFailed : PartyInformationEvent()
+        object OnCreateCommentSuccess : PartyInformationEvent()
+        object OnCreateCommentFailed : PartyInformationEvent()
+    }
+
+    override suspend fun handleEvent(action: PartyInformationAction) {
+        when(action) {
+            is PartyInformationAction.OnIntent -> {
+                currentUserId = action.currentUserId
+                setPartyWithoutLeader(action.data)
                 fetchPartyInformation(_party.value.id)
                 fetchPartyComments(_party.value.id)
             }
 
-            is PartyInformationEvent.OnStatusChanged -> {
+            is PartyInformationAction.OnStatusChanged -> {
                 val currentStatus = party.value.status.value
-                val changedStatus = event.status.value
+                val changedStatus = action.status.value
 
                 if(currentStatus != changedStatus) {
-                    changeParty(_party.value.id, changedStatus)
+                    changePartyStatus(_party.value.id, changedStatus)
                 }
             }
 
-            is PartyInformationEvent.OnJointPartyClicked -> {
+            is PartyInformationAction.OnJointPartyClicked -> {
                 if(_hasJoined.value == false) {
                     _hasJoined.value = true
                     joinParty()
                 }
             }
+
+            is PartyInformationAction.OnWriteParentComment -> {
+                createComment(action.body)
+            }
+
         }
     }
 
@@ -100,7 +109,24 @@ class PartyInformationViewModel @Inject constructor(
         )
     }
 
-    private fun changeParty(partyId: Int, changedStatus: String) = viewModelScope.launch {
+    private fun createComment(body: String, parentId: Int? = null) = viewModelScope.launch {
+        val params = CommentCreationRequestEntity(body = body, parentId = parentId, partyId = _party.value.id)
+        val result = createCommentUseCase.invoke(
+            CreateCommentUseCase.Params(requestEntity = params)
+        )
+        when(result) {
+            is NetworkResult.Success -> {
+                val comment = Comment.fromCommentEntity(result.data)
+                _comments.value = _comments.value.addComment(newComment = comment)
+                _event.emit(PartyInformationEvent.OnCreateCommentSuccess)
+            }
+            is NetworkResult.Error -> {
+                handleError(result, null)
+            }
+        }
+    }
+
+    private fun changePartyStatus(partyId: Int, changedStatus: String) = viewModelScope.launch {
         val result = changeStatusUseCase.invoke(
             params = ChangeStatusUseCase.Params(
                 partyId = partyId,
@@ -129,10 +155,10 @@ class PartyInformationViewModel @Inject constructor(
         when(val result = jointPartyUseCase.invoke(_party.value.id)) {
             is NetworkResult.Success -> {
                 if(result.data == true) {
-                    _joinPartyEvent.emit(result.data)
+                    _event.emit(PartyInformationEvent.OnPartyJoinSuccess)
                 } else {
                     _hasJoined.value = false
-                    _joinPartyEvent.emit(result.data)
+                    _event.emit(PartyInformationEvent.OnPartyJoinFailed)
                 }
             }
             is NetworkResult.Error -> {
@@ -167,7 +193,7 @@ class PartyInformationViewModel @Inject constructor(
                 val comments = result.data.map { comment ->
                     Comment.fromCommentEntity(comment)
                 }
-                _comments.value = comments
+                _comments.value = Comments(comments)
             }
             is NetworkResult.Error -> {
                 handleError(result, null)

@@ -7,8 +7,6 @@ import android.text.Spannable
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
 import android.view.View
-import android.view.animation.AnimationUtils
-import android.view.animation.TranslateAnimation
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
@@ -17,13 +15,16 @@ import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
+import timber.log.Timber
 import yapp.android1.delibuddy.R
 import yapp.android1.delibuddy.adapter.CommunityViewPagerAdapter
 import yapp.android1.delibuddy.databinding.ActivityPartyInformationBinding
+import yapp.android1.delibuddy.model.Event
 import yapp.android1.delibuddy.model.Party
 import yapp.android1.delibuddy.model.PartyInformation
+import yapp.android1.delibuddy.ui.partyInformation.PartyInformationViewModel.PartyInformationAction
+import yapp.android1.delibuddy.ui.partyInformation.PartyInformationViewModel.PartyInformationAction.OnIntent
 import yapp.android1.delibuddy.ui.partyInformation.PartyInformationViewModel.PartyInformationEvent
-import yapp.android1.delibuddy.ui.partyInformation.PartyInformationViewModel.PartyInformationEvent.OnIntent
 import yapp.android1.delibuddy.ui.partyInformation.model.PartyStatus
 import yapp.android1.delibuddy.ui.partyInformation.view.AppBarStateChangeListener
 import yapp.android1.delibuddy.ui.partyInformation.view.StatusBottomSheetDialog
@@ -86,13 +87,28 @@ class PartyInformationActivity : AppCompatActivity() {
         }
 
         repeatOnStarted {
-            viewModel.joinPartEvent.collect { isSuccess ->
-                if(isSuccess) {
-                    Toast.makeText(this@PartyInformationActivity, "파티 참가 성공", Toast.LENGTH_SHORT).show()
-                } else {
-                    Toast.makeText(this@PartyInformationActivity, "파티 인원이 다 찼습니다.", Toast.LENGTH_SHORT).show()
-                }
+            viewModel.event.collect { event ->
+                handleEvent(event)
             }
+        }
+    }
+
+    private fun handleEvent(event: PartyInformationEvent) {
+        when(event) {
+            is PartyInformationEvent.OnPartyJoinSuccess -> {
+                Toast.makeText(this, "파티 참가 성공", Toast.LENGTH_SHORT).show()
+            }
+            is PartyInformationEvent.OnPartyJoinFailed -> {
+                Toast.makeText(this, "파티 인원이 다 찼습니다.", Toast.LENGTH_SHORT).show()
+            }
+            is PartyInformationEvent.OnCreateCommentSuccess -> {
+                binding.etInputComment.setText("")
+                Toast.makeText(this, "댓글이 정상적으로 등록되었습니다", Toast.LENGTH_SHORT).show()
+            }
+            is PartyInformationEvent.OnCreateCommentFailed -> {
+                Toast.makeText(this, "댓글 작성에 실패했습니다 다시 시도해 주세요", Toast.LENGTH_SHORT).show()
+            }
+            else -> Unit
         }
     }
 
@@ -157,7 +173,11 @@ class PartyInformationActivity : AppCompatActivity() {
         }
 
         btnJoinParty.setOnClickListener {
-            viewModel.occurEvent(PartyInformationEvent.OnJointPartyClicked)
+            viewModel.occurEvent(PartyInformationAction.OnJointPartyClicked)
+        }
+
+        btnCreateComment.setOnClickListener {
+            viewModel.occurEvent(PartyInformationAction.OnWriteParentComment(etInputComment.text.toString()))
         }
     }
 

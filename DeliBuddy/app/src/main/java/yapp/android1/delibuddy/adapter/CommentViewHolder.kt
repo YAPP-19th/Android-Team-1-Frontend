@@ -38,7 +38,7 @@ class ParentCommentViewHolder(
             }
 
             if (comment.hasChildComments()) {
-                setChildCommentRecyclerView(comment.children, listener)
+                setChildCommentRecyclerView(comment.children.value, listener)
             }
 
             if(isOwner) {

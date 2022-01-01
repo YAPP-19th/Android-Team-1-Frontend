@@ -19,6 +19,7 @@ import yapp.android1.delibuddy.base.BaseFragment
 import yapp.android1.delibuddy.databinding.FragmentCommentTabBinding
 import yapp.android1.delibuddy.model.Comment
 import yapp.android1.delibuddy.ui.partyInformation.PartyInformationViewModel
+import yapp.android1.delibuddy.ui.partyInformation.PartyInformationViewModel.PartyInformationEvent
 import yapp.android1.delibuddy.util.extensions.repeatOnStarted
 import yapp.android1.delibuddy.util.sharedpreferences.SharedPreferenceHelper
 import yapp.android1.delibuddy.util.sharedpreferences.SharedPreferencesManager
@@ -51,10 +52,9 @@ class CommentTabFragment : BaseFragment<FragmentCommentTabBinding>(FragmentComme
 
     private fun collectComments() {
         repeatOnStarted {
-
             viewModel.value.comments.collect { comments ->
                 Timber.tag("[TAG]").d("$comments")
-                commentAdapter.submitList(comments)
+                commentAdapter.submitList(comments.value)
             }
         }
 
@@ -62,6 +62,18 @@ class CommentTabFragment : BaseFragment<FragmentCommentTabBinding>(FragmentComme
             viewModel.value.showToast.collect {
                 Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
             }
+        }
+
+        repeatOnStarted {
+            viewModel.value.event.collect { event ->
+                handleEvent(event)
+            }
+        }
+    }
+
+    private fun handleEvent(event: PartyInformationEvent) {
+        when(event) {
+            else -> Unit
         }
     }
 
