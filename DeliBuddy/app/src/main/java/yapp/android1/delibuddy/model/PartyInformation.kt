@@ -1,5 +1,6 @@
 package yapp.android1.delibuddy.model
 
+import yapp.android1.delibuddy.ui.partyInformation.model.PartyStatus
 import yapp.android1.delibuddy.util.parseDate
 import yapp.android1.domain.entity.PartyInformationEntity
 import java.io.Serializable
@@ -16,7 +17,7 @@ data class PartyInformation(
     val orderTime: String,
     val placeName: String?,
     val placeNameDetail: String?,
-    val status: String,
+    val status: PartyStatus,
     val targetUserCount: Int,
     val title: String,
     val leader: Leader
@@ -59,7 +60,7 @@ data class PartyInformation(
             orderTime = "",
             placeName = "",
             placeNameDetail = "",
-            status = "",
+            status = PartyStatus.RECRUIT,
             targetUserCount = -1,
             title = "",
             leader = Leader.EMPTY
@@ -77,7 +78,7 @@ data class PartyInformation(
                 orderTime = parseDate(partyEntity.orderTime),
                 placeName = partyEntity.placeName,
                 placeNameDetail = partyEntity.placeNameDetail,
-                status = partyEntity.status,
+                status = PartyStatus.of(partyEntity.status),
                 targetUserCount = partyEntity.targetUserCount,
                 title = partyEntity.title,
                 leader = Leader.toLeader(partyEntity.leader)

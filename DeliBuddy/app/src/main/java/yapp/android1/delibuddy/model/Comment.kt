@@ -1,5 +1,7 @@
 package yapp.android1.delibuddy.model
 
+import yapp.android1.delibuddy.util.parseCommentDate
+import yapp.android1.delibuddy.util.parseDate
 import yapp.android1.domain.entity.CommentEntity
 
 
@@ -43,7 +45,7 @@ data class Comment(
                 partyId = entity.partyId,
                 writer = if(entity.writer == null) null else Writer.fromWriterEntity(entity.writer!!),
                 body = entity.body,
-                createdAt = entity.createdAt,
+                createdAt = parseCommentDate(entity.createdAt),
                 children = entity.children.map { Comment.fromCommentEntity(it) }
             )
         }

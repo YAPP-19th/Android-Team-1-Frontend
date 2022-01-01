@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import yapp.android1.delibuddy.DeliBuddyApplication
 import yapp.android1.delibuddy.databinding.ActivitySplashBinding
+import yapp.android1.delibuddy.model.Auth
 import yapp.android1.delibuddy.ui.dialog.PermissionDialogFragment
 import yapp.android1.delibuddy.ui.home.HomeActivity
 import yapp.android1.delibuddy.ui.login.LoginActivity
@@ -21,8 +22,8 @@ import yapp.android1.delibuddy.util.intentTo
 import yapp.android1.delibuddy.util.permission.PermissionManager
 import yapp.android1.delibuddy.util.permission.PermissionState
 import yapp.android1.delibuddy.util.permission.PermissionType
-import yapp.android1.delibuddy.util.user.KakaoLoginModule
-import yapp.android1.delibuddy.util.user.UserLoginManager
+import yapp.android1.delibuddy.util.user.AuthManagementModule
+import yapp.android1.delibuddy.util.user.UserAuthManager
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -32,7 +33,7 @@ class SplashActivity : AppCompatActivity() {
     private val authViewModel: AuthViewModel by viewModels()
 
     @Inject
-    lateinit var userLoginManager: UserLoginManager
+    lateinit var userAuthManager: UserAuthManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,27 +61,35 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private fun checkLoginAndIntent() {
-        userLoginManager.kakaoLogin { isLoginSuccess, _, kakaoToken ->
-            when (isLoginSuccess) {
-                true -> authViewModel.occurEvent(
-                    AuthViewModel.AuthEvent.OnKakaoLoginSuccess(
-                        kakaoToken!!
-                    )
-                )
-                false -> {
-                    intentJob = lifecycleScope.launch {
-                        delay(2000L)
+        if (!userAuthManager.getDeliBuddyAuth().isAvailable()) {
+            intentTo(LoginActivity::class.java)
+        } else {
+            userAuthManager.checkAuthStatus { status ->
+                when (status) {
+                    AuthManagementModule.AUTH_TOKEN_EXPIRED_STATUS -> {
+                        userAuthManager.setDeliBuddyAuth(Auth.EMPTY)
                         intentTo(LoginActivity::class.java)
+                    }
+                    AuthManagementModule.AUTH_TOKEN_REFRESH_REQUIRED_STATUS -> {
+                        authViewModel.occurEvent(
+                            AuthViewModel.AuthEvent.OnAuthTokenRefresh()
+                        )
+                    }
+                    AuthManagementModule.AUTH_TOKEN_AVAILABLE_STATUS -> {
+                        intentTo(HomeActivity::class.java)
                     }
                 }
             }
         }
+
     }
 
     private fun initObserve() {
         repeatOnStarted {
             authViewModel.tokenResult.collect { auth ->
                 if (auth.isAvailable()) {
+                    userAuthManager.setDeliBuddyAuth(auth)
+
                     intentJob = lifecycleScope.launch {
                         delay(2000L)
                         intentTo(HomeActivity::class.java)

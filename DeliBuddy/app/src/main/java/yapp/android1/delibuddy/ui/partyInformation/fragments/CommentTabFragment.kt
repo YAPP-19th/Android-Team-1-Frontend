@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.collect
 import timber.log.Timber
 import yapp.android1.delibuddy.R
 import yapp.android1.delibuddy.adapter.CommentAdapter
+import yapp.android1.delibuddy.adapter.CommentEvent
 import yapp.android1.delibuddy.base.BaseFragment
 import yapp.android1.delibuddy.databinding.FragmentCommentTabBinding
 import yapp.android1.delibuddy.model.Comment
@@ -27,8 +28,6 @@ class CommentTabFragment : BaseFragment<FragmentCommentTabBinding>(FragmentComme
 
     private val viewModel = activityViewModels<PartyInformationViewModel>()
 
-    private val sharedPreferencesManager by lazy { SharedPreferencesManager(requireContext()) }
-
     private lateinit var commentAdapter: CommentAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -39,15 +38,14 @@ class CommentTabFragment : BaseFragment<FragmentCommentTabBinding>(FragmentComme
     }
 
     private fun initializeRecyclerView() = with(binding) {
-        val currentUserId = sharedPreferencesManager.getUserId()
-        commentAdapter = CommentAdapter(currentUserId)
+        commentAdapter = CommentAdapter(viewModel.value.isOwner.value)
 
         rvComment.adapter = commentAdapter
         rvComment.setHasFixedSize(true)
         rvComment.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
-        commentAdapter.setWriteReplyListener { comment ->
-            Toast.makeText(requireContext(), comment.writer?.nickName, Toast.LENGTH_SHORT).show()
+        commentAdapter.setCommentEventListener { commentEvent ->
+            handleCommentEvent(commentEvent)
         }
     }
 
@@ -64,6 +62,13 @@ class CommentTabFragment : BaseFragment<FragmentCommentTabBinding>(FragmentComme
             viewModel.value.showToast.collect {
                 Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
             }
+        }
+    }
+
+    private fun handleCommentEvent(event: CommentEvent) {
+        when(event) {
+            is CommentEvent.OnWriteCommentClicked -> Unit
+            is CommentEvent.OnRemoveCommentClicked -> Unit
         }
     }
 }

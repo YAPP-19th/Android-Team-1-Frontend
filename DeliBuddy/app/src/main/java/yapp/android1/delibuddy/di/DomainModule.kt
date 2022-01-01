@@ -16,6 +16,11 @@ object DomainModule {
     }
 
     @Provides
+    fun provideRefreshAuthUseCase(authRepository: AuthRepository): RefreshAuthUseCase {
+        return RefreshAuthUseCase(authRepository)
+    }
+
+    @Provides
     fun provideGetPartiesInCircleUseCase(partyRepository: PartyRepository): GetPartiesInCircleUseCase {
         return GetPartiesInCircleUseCase(partyRepository)
     }
@@ -48,5 +53,10 @@ object DomainModule {
     @Provides
     fun provideCreatePartyUseCase(partyRepository: PartyRepository): CreatePartyUseCase {
         return CreatePartyUseCase(partyRepository)
+    }
+
+    @Provides
+    fun provideJoinPartyUseCase(partyRepository: PartyRepository): JoinPartyUseCase {
+        return JoinPartyUseCase(partyRepository)
     }
 }

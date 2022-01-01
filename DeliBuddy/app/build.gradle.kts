@@ -124,6 +124,7 @@ dependencies {
     implementation(Libraries.GLIDE)
     kapt(Libraries.GLIDE_COMPILER)
     implementation("com.google.android.gms:play-services-location:19.0.0")
+    implementation(Libraries.JWT_DECODE)
 
     implementation(Libraries.NAVER_MAP)
     implementation(Libraries.KAKAO_LOGIN)
