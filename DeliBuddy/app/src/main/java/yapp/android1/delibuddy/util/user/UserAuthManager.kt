@@ -6,9 +6,10 @@ import yapp.android1.delibuddy.model.Auth
 import yapp.android1.delibuddy.model.User
 import yapp.android1.delibuddy.util.sharedpreferences.SharedPreferencesManager
 
-class UserLoginManager(
+class UserAuthManager(
     private val context: Context,
     private val kakaoLoginModule: KakaoLoginModule,
+    private val authManagementModule: AuthManagementModule,
     private val prefs: SharedPreferencesManager,
 ) {
     var user: User? = null
@@ -24,6 +25,10 @@ class UserLoginManager(
         kakaoLoginModule.kakaoLogin(call)
     }
 
+    fun checkAuthStatus(callback: (Int) -> Unit) {
+        authManagementModule.checkAuthStatus(getDeliBuddyUserToken(), callback)
+    }
+
     fun setDeliBuddyAuth(auth: Auth) {
         prefs.saveAuthData(auth)
     }
@@ -32,7 +37,7 @@ class UserLoginManager(
         return prefs.getAuth()
     }
 
-    fun getDeliBuddyToken(): String {
+    fun getDeliBuddyUserToken(): String {
         return prefs.getUserToken()
     }
 

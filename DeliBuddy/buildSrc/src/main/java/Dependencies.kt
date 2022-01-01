@@ -44,6 +44,8 @@ object Libraries {
     const val TIMBER                     = "com.jakewharton.timber:timber:${Versions.TIMBER}"
 
     const val LOTTIE                     = "com.airbnb.android:lottie:${Versions.LOTTIE}"
+
+    const val JWT_DECODE                 = "com.auth0.android:jwtdecode:${Versions.JWT_DECODE}"
     
     const val NAVER_MAP                  = "com.naver.maps:map-sdk:${Versions.NAVER_MAP}"
     const val KAKAO_LOGIN                = "com.kakao.sdk:v2-user:${Versions.KAKAO_LOGIN}"

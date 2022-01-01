@@ -9,4 +9,7 @@ interface AuthApi: DeliBuddyApi {
     suspend fun fetchAuthToken(
         @Body token: String,
     ): AuthModel
+
+    @POST("api/v1/auth/refresh")
+    suspend fun refreshAuthToken(): AuthModel
 }

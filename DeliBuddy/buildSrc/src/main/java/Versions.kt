@@ -32,6 +32,7 @@ object Versions {
     const val TIMBER    = "5.0.1"
     const val GLIDE     = "4.11.0"
     const val LOTTIE    = "4.0.0"
+    const val JWT_DECODE = "2.0.1"
     const val NAVER_MAP = "3.12.0"
     const val TED_PERMISSION = "3.3.0"
     const val KAKAO_LOGIN = "2.8.3"
