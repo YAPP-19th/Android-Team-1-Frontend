@@ -172,11 +172,6 @@ class PartyInformationActivity : AppCompatActivity() {
     }
 
     private fun initializeView() = with(binding) {
-
-        binding.root.rootView.setOnClickListener {
-            viewModel.occurEvent(PartyInformationAction.OnTouchBackground)
-        }
-
         toolbarContainer.btnBack.setOnClickListener {
             onBackPressed()
         }
@@ -204,11 +199,11 @@ class PartyInformationActivity : AppCompatActivity() {
     private fun switchViewState(isOwner: Boolean) = with(binding) {
         if(!isOwner) {
             toolbarContainer.btnMoreOptions.hide()
-            tvStatus.hide()
+            tvStatus.show()
             tvStatusChange.hide()
         } else {
             toolbarContainer.btnMoreOptions.show()
-            tvStatus.show()
+            tvStatus.hide()
             tvStatusChange.show()
         }
     }
