@@ -49,6 +49,7 @@ class PartyInformationViewModel @Inject constructor(
         class OnStatusChanged(val status: PartyStatus) : PartyInformationAction()
         object OnJointPartyClicked : PartyInformationAction()
         class OnWriteParentComment(val body: String) : PartyInformationAction()
+        class OnCommentWriteTextViewClicked(val comment: Comment) : PartyInformationAction()
     }
 
     sealed class PartyInformationEvent : Event {
@@ -56,10 +57,11 @@ class PartyInformationViewModel @Inject constructor(
         object OnPartyJoinFailed : PartyInformationEvent()
         object OnCreateCommentSuccess : PartyInformationEvent()
         object OnCreateCommentFailed : PartyInformationEvent()
+        class PopUpTargetComment(val comment: Comment) : PartyInformationEvent()
     }
 
     override suspend fun handleEvent(action: PartyInformationAction) {
-        when(action) {
+        when (action) {
             is PartyInformationAction.OnIntent -> {
                 currentUserId = action.currentUserId
                 setPartyWithoutLeader(action.data)
@@ -71,13 +73,13 @@ class PartyInformationViewModel @Inject constructor(
                 val currentStatus = party.value.status.value
                 val changedStatus = action.status.value
 
-                if(currentStatus != changedStatus) {
+                if (currentStatus != changedStatus) {
                     changePartyStatus(_party.value.id, changedStatus)
                 }
             }
 
             is PartyInformationAction.OnJointPartyClicked -> {
-                if(_hasJoined.value == false) {
+                if (_hasJoined.value == false) {
                     _hasJoined.value = true
                     joinParty()
                 }
@@ -87,34 +89,42 @@ class PartyInformationViewModel @Inject constructor(
                 createComment(action.body)
             }
 
+            is PartyInformationAction.OnCommentWriteTextViewClicked -> {
+                _event.emit(PartyInformationEvent.PopUpTargetComment(action.comment))
+            }
+
         }
     }
 
     private fun setPartyWithoutLeader(party: Party) {
         _party.value = PartyInformation(
-            id               = party.id,
-            allStatuses      = party.allStatuses,
-            body             = party.body,
-            category         = party.category,
-            coordinate       = party.coordinate,
+            id = party.id,
+            allStatuses = party.allStatuses,
+            body = party.body,
+            category = party.category,
+            coordinate = party.coordinate,
             currentUserCount = party.currentUserCount,
-            openKakaoUrl     = party.openKakaoUrl,
-            orderTime        = party.orderTime,
-            placeName        = party.placeName,
-            placeNameDetail  = party.placeNameDetail,
-            status           = PartyStatus.of(party.status),
-            targetUserCount  = party.targetUserCount,
-            title            = party.title,
-            leader           = PartyInformation.Leader.EMPTY
+            openKakaoUrl = party.openKakaoUrl,
+            orderTime = party.orderTime,
+            placeName = party.placeName,
+            placeNameDetail = party.placeNameDetail,
+            status = PartyStatus.of(party.status),
+            targetUserCount = party.targetUserCount,
+            title = party.title,
+            leader = PartyInformation.Leader.EMPTY
         )
     }
 
     private fun createComment(body: String, parentId: Int? = null) = viewModelScope.launch {
-        val params = CommentCreationRequestEntity(body = body, parentId = parentId, partyId = _party.value.id)
+        val params = CommentCreationRequestEntity(
+            body = body,
+            parentId = parentId,
+            partyId = _party.value.id
+        )
         val result = createCommentUseCase.invoke(
             CreateCommentUseCase.Params(requestEntity = params)
         )
-        when(result) {
+        when (result) {
             is NetworkResult.Success -> {
                 val comment = Comment.fromCommentEntity(result.data)
                 _comments.value = _comments.value.addComment(newComment = comment)
@@ -134,9 +144,9 @@ class PartyInformationViewModel @Inject constructor(
             )
         )
 
-        when(result) {
+        when (result) {
             is NetworkResult.Success -> {
-                if(result.data == true) {
+                if (result.data == true) {
                     _party.value = _party.value.copy(
                         status = PartyStatus.of(changedStatus)
                     )
@@ -152,9 +162,9 @@ class PartyInformationViewModel @Inject constructor(
     }
 
     private fun joinParty() = viewModelScope.launch {
-        when(val result = jointPartyUseCase.invoke(_party.value.id)) {
+        when (val result = jointPartyUseCase.invoke(_party.value.id)) {
             is NetworkResult.Success -> {
-                if(result.data == true) {
+                if (result.data == true) {
                     _event.emit(PartyInformationEvent.OnPartyJoinSuccess)
                 } else {
                     _hasJoined.value = false
@@ -169,26 +179,26 @@ class PartyInformationViewModel @Inject constructor(
 
     private fun fetchPartyInformation(partyId: Int) = viewModelScope.launch {
         val result = fetchPartyInformationUseCase.invoke(partyId)
-        when(result) {
+        when (result) {
             is NetworkResult.Success -> {
                 _party.value = PartyInformation.toPartyInformation(result.data)
                 setPartyOwnerState(party.value.leader.id)
             }
             is NetworkResult.Error -> {
-               handleError(result, null)
+                handleError(result, null)
             }
         }
     }
 
     private fun setPartyOwnerState(ownerId: Int) {
-        if(currentUserId == ownerId) {
+        if (currentUserId == ownerId) {
             _isOwner.value = true
         }
     }
 
     private fun fetchPartyComments(partyId: Int) = viewModelScope.launch {
         val result = fetchPartyCommentsUseCase.invoke(partyId)
-        when(result) {
+        when (result) {
             is NetworkResult.Success -> {
                 val comments = result.data.map { comment ->
                     Comment.fromCommentEntity(comment)
@@ -202,7 +212,7 @@ class PartyInformationViewModel @Inject constructor(
     }
 
     override suspend fun handleError(result: NetworkResult.Error, retryAction: RetryAction?) {
-        when(result.errorType) {
+        when (result.errorType) {
             is NetworkError.Unknown -> {
                 showToast("알 수 없는 에러가 발생했습니다.")
             }

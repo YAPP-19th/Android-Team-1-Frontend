@@ -79,7 +79,7 @@ class CommentTabFragment : BaseFragment<FragmentCommentTabBinding>(FragmentComme
 
     private fun handleCommentEvent(event: CommentEvent) {
         when(event) {
-            is CommentEvent.OnWriteCommentClicked -> Unit
+            is CommentEvent.OnWriteCommentClicked -> viewModel.value.occurEvent(PartyInformationViewModel.PartyInformationAction.OnCommentWriteTextViewClicked(event.comment))
             is CommentEvent.OnRemoveCommentClicked -> Unit
         }
     }

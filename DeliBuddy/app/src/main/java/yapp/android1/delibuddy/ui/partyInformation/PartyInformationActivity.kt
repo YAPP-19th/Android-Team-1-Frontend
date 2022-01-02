@@ -108,6 +108,13 @@ class PartyInformationActivity : AppCompatActivity() {
             is PartyInformationEvent.OnCreateCommentFailed -> {
                 Toast.makeText(this, "댓글 작성에 실패했습니다 다시 시도해 주세요", Toast.LENGTH_SHORT).show()
             }
+
+            is PartyInformationEvent.PopUpTargetComment -> {
+                binding.tvTargetCommentWriter.text = event.comment.writer?.nickName + " 님에게 답장"
+                binding.tvTargetCommentBody.text = event.comment.body
+                binding.clTargetCommentContainer.show()
+            }
+
             else -> Unit
         }
     }

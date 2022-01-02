@@ -114,8 +114,10 @@
                 android:paddingVertical="12dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider_second" />
+                app:layout_constraintTop_toBottomOf="@+id/divider_second"
+                app:layout_constraintVertical_bias="0.0" />
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tl_community"
@@ -270,6 +272,55 @@
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_target_comment_container"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_gravity="bottom"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginBottom="56dp"
+        android:background="@drawable/shape_rounded_grey_edittext"
+        android:paddingHorizontal="12dp"
+        android:visibility="invisible">
+
+        <ImageView
+            android:id="@+id/iv_icon_reply"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:src="@drawable/icon_reply"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_target_comment_writer"
+            style="@style/RobotoRegular10"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="김선달 님에게 답장"
+            android:textColor="#686868"
+            app:layout_constraintBottom_toTopOf="@+id/tv_target_comment_body"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/iv_icon_reply"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <TextView
+            android:id="@+id/tv_target_comment_body"
+            style="@style/RobotoRegular10"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:text="저 참여해도 되나요??"
+            android:textColor="#B8B8B8"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/tv_target_comment_writer"
+            app:layout_constraintTop_toBottomOf="@+id/tv_target_comment_writer" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!-- Input Comment -->
 

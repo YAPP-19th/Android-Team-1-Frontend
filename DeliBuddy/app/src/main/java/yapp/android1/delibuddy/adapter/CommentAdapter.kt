@@ -7,10 +7,11 @@ import androidx.recyclerview.widget.ListAdapter
 import yapp.android1.delibuddy.databinding.ItemChildCommentBinding
 import yapp.android1.delibuddy.databinding.ItemParentCommentBinding
 import yapp.android1.delibuddy.model.Comment
+import yapp.android1.delibuddy.model.Event
 
 typealias CommentEventListener = (CommentEvent) -> Unit
 
-sealed class CommentEvent {
+sealed class CommentEvent : Event {
     class OnWriteCommentClicked(val comment: Comment) : CommentEvent()
     class OnRemoveCommentClicked(val comment: Comment) : CommentEvent()
 }
