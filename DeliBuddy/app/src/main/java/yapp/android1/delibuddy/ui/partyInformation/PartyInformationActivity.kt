@@ -107,10 +107,16 @@ class PartyInformationActivity : AppCompatActivity() {
                 Toast.makeText(this, "댓글 작성에 실패했습니다 다시 시도해 주세요", Toast.LENGTH_SHORT).show()
             }
 
-            is PartyInformationEvent.PopUpParentComment -> {
+            is PartyInformationEvent.ShowTargetParentComment -> {
                 binding.tvParentCommentWriter.text = event.parentComment.writer?.nickName + " 님에게 답장"
                 binding.tvParentCommentBody.text = event.parentComment.body
                 binding.clTargetCommentContainer.show()
+            }
+
+            is PartyInformationEvent.HideTargetParentComment -> {
+                binding.tvParentCommentWriter.text = ""
+                binding.tvParentCommentBody.text = ""
+                binding.clTargetCommentContainer.hide()
             }
 
             else -> Unit
@@ -166,6 +172,11 @@ class PartyInformationActivity : AppCompatActivity() {
     }
 
     private fun initializeView() = with(binding) {
+
+        binding.root.rootView.setOnClickListener {
+            viewModel.occurEvent(PartyInformationAction.OnTouchBackground)
+        }
+
         toolbarContainer.btnBack.setOnClickListener {
             onBackPressed()
         }

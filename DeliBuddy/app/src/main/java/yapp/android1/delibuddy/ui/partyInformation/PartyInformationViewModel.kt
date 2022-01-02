@@ -53,6 +53,7 @@ class PartyInformationViewModel @Inject constructor(
         object OnJointPartyClicked : PartyInformationAction()
         class OnWriteParentComment(val body: String) : PartyInformationAction()
         class OnCommentWriteTextViewClicked(val parentComment: Comment) : PartyInformationAction()
+        object OnTouchBackground : PartyInformationAction()
     }
 
     sealed class PartyInformationEvent : Event {
@@ -60,7 +61,8 @@ class PartyInformationViewModel @Inject constructor(
         object OnPartyJoinFailed : PartyInformationEvent()
         object OnCreateCommentSuccess : PartyInformationEvent()
         object OnCreateCommentFailed : PartyInformationEvent()
-        class PopUpParentComment(val parentComment: Comment) : PartyInformationEvent()
+        class ShowTargetParentComment(val parentComment: Comment) : PartyInformationEvent()
+        object HideTargetParentComment : PartyInformationEvent()
     }
 
     override suspend fun handleEvent(action: PartyInformationAction) {
@@ -89,11 +91,20 @@ class PartyInformationViewModel @Inject constructor(
             }
 
             is PartyInformationAction.OnWriteParentComment -> {
+                if(isWritingChildComment()) {
+                    createComment(action.body, _targetParentComment.value?.id)
+                }
                 createComment(action.body)
             }
 
             is PartyInformationAction.OnCommentWriteTextViewClicked -> {
-                _event.emit(PartyInformationEvent.PopUpParentComment(action.parentComment))
+                _targetParentComment.value = action.parentComment
+                _event.emit(PartyInformationEvent.ShowTargetParentComment(action.parentComment))
+            }
+
+            is PartyInformationAction.OnTouchBackground -> {
+                _targetParentComment.value = null
+                _event.emit(PartyInformationEvent.HideTargetParentComment)
             }
 
         }
@@ -118,6 +129,8 @@ class PartyInformationViewModel @Inject constructor(
         )
     }
 
+    private fun isWritingChildComment() = _targetParentComment.value != null
+
     private fun createComment(body: String, parentId: Int? = null) = viewModelScope.launch {
         val params = CommentCreationRequestEntity(
             body = body,
@@ -129,8 +142,7 @@ class PartyInformationViewModel @Inject constructor(
         )
         when (result) {
             is NetworkResult.Success -> {
-                val comment = Comment.fromCommentEntity(result.data)
-                _comments.value = _comments.value.addComment(newComment = comment)
+                fetchPartyComments(_party.value.id)
                 _event.emit(PartyInformationEvent.OnCreateCommentSuccess)
             }
             is NetworkResult.Error -> {
