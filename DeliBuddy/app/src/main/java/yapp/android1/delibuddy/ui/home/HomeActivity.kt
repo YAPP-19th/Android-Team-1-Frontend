@@ -18,7 +18,7 @@ import yapp.android1.delibuddy.ui.myparty.MyPartyFragment
 import yapp.android1.delibuddy.util.extensions.repeatOnStarted
 
 @AndroidEntryPoint
-class HomeActivity: AppCompatActivity() {
+class HomeActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityHomeBinding
 
@@ -54,7 +54,6 @@ class HomeActivity: AppCompatActivity() {
                 }
             }
         }
-
     }
 
     private fun initBottomNavigation() {
@@ -70,20 +69,20 @@ class HomeActivity: AppCompatActivity() {
         binding.bottomNavigation.run {
             setOnItemSelectedListener { item ->
                 when (item.itemId) {
-                    R.id.home -> changeFragment(homeFragment, R.string.navigation_home)
-                    R.id.myparty -> changeFragment(myPartyFragment, R.string.navigation_myparty)
-                    R.id.alarm -> changeFragment(alarmFragment, R.string.navigation_alarm)
-                    R.id.mypage -> changeFragment(myPageFragment, R.string.navigation_mypage)
+                    R.id.home -> changeFragment(homeFragment)
+                    R.id.myparty -> changeFragment(myPartyFragment)
+                    R.id.alarm -> changeFragment(alarmFragment)
+                    R.id.mypage -> changeFragment(myPageFragment)
                 }
                 true
             }
         }
     }
 
-    private fun changeFragment(fragment: Fragment, nameId: Int) {
+    private fun changeFragment(fragment: Fragment) {
         supportFragmentManager.commit {
+            setReorderingAllowed(true)
             replace(R.id.fragment_container, fragment)
-            addToBackStack(resources.getString(nameId))
         }
     }
 
