@@ -93,8 +93,9 @@ class PartyInformationViewModel @Inject constructor(
             is PartyInformationAction.OnWriteParentComment -> {
                 if(isWritingChildComment()) {
                     createComment(action.body, _targetParentComment.value?.id)
+                } else {
+                    createComment(action.body)
                 }
-                createComment(action.body)
             }
 
             is PartyInformationAction.OnCommentWriteTextViewClicked -> {
