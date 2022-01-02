@@ -108,6 +108,7 @@
                         android:layout_height="32dp"
                         android:layout_marginStart="20dp"
                         app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
                         tools:src="@drawable/icon_user_profile_blue" />
 
                     <TextView
