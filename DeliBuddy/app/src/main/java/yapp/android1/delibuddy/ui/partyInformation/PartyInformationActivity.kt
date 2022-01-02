@@ -182,7 +182,11 @@ class PartyInformationActivity : AppCompatActivity() {
         }
 
         btnCreateComment.setOnClickListener {
-            viewModel.occurEvent(PartyInformationAction.OnWriteParentComment(etInputComment.text.toString()))
+            if(etInputComment.text.toString() != "") {
+                viewModel.occurEvent(PartyInformationAction.OnWriteParentComment(etInputComment.text.toString()))
+            } else {
+                Toast.makeText(this@PartyInformationActivity, "댓글 내용을 입력해주세요", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
