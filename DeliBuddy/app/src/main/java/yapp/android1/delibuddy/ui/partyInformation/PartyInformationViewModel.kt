@@ -42,6 +42,9 @@ class PartyInformationViewModel @Inject constructor(
     private val _comments = MutableStateFlow<Comments>(Comments.EMPTY)
     val comments = _comments.asStateFlow()
 
+    private val _targetParentComment = MutableStateFlow<Comment?>(null)
+    val targetParentComment = _targetParentComment.asStateFlow()
+
     private var currentUserId = -1
 
     sealed class PartyInformationAction : Event {
@@ -49,7 +52,7 @@ class PartyInformationViewModel @Inject constructor(
         class OnStatusChanged(val status: PartyStatus) : PartyInformationAction()
         object OnJointPartyClicked : PartyInformationAction()
         class OnWriteParentComment(val body: String) : PartyInformationAction()
-        class OnCommentWriteTextViewClicked(val comment: Comment) : PartyInformationAction()
+        class OnCommentWriteTextViewClicked(val parentComment: Comment) : PartyInformationAction()
     }
 
     sealed class PartyInformationEvent : Event {
@@ -57,7 +60,7 @@ class PartyInformationViewModel @Inject constructor(
         object OnPartyJoinFailed : PartyInformationEvent()
         object OnCreateCommentSuccess : PartyInformationEvent()
         object OnCreateCommentFailed : PartyInformationEvent()
-        class PopUpTargetComment(val comment: Comment) : PartyInformationEvent()
+        class PopUpParentComment(val parentComment: Comment) : PartyInformationEvent()
     }
 
     override suspend fun handleEvent(action: PartyInformationAction) {
@@ -90,7 +93,7 @@ class PartyInformationViewModel @Inject constructor(
             }
 
             is PartyInformationAction.OnCommentWriteTextViewClicked -> {
-                _event.emit(PartyInformationEvent.PopUpTargetComment(action.comment))
+                _event.emit(PartyInformationEvent.PopUpParentComment(action.parentComment))
             }
 
         }

@@ -15,11 +15,9 @@ import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
-import timber.log.Timber
 import yapp.android1.delibuddy.R
 import yapp.android1.delibuddy.adapter.CommunityViewPagerAdapter
 import yapp.android1.delibuddy.databinding.ActivityPartyInformationBinding
-import yapp.android1.delibuddy.model.Event
 import yapp.android1.delibuddy.model.Party
 import yapp.android1.delibuddy.model.PartyInformation
 import yapp.android1.delibuddy.ui.partyInformation.PartyInformationViewModel.PartyInformationAction
@@ -109,9 +107,9 @@ class PartyInformationActivity : AppCompatActivity() {
                 Toast.makeText(this, "댓글 작성에 실패했습니다 다시 시도해 주세요", Toast.LENGTH_SHORT).show()
             }
 
-            is PartyInformationEvent.PopUpTargetComment -> {
-                binding.tvTargetCommentWriter.text = event.comment.writer?.nickName + " 님에게 답장"
-                binding.tvTargetCommentBody.text = event.comment.body
+            is PartyInformationEvent.PopUpParentComment -> {
+                binding.tvParentCommentWriter.text = event.parentComment.writer?.nickName + " 님에게 답장"
+                binding.tvParentCommentBody.text = event.parentComment.body
                 binding.clTargetCommentContainer.show()
             }
 
