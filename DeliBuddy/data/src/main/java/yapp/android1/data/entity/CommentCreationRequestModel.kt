@@ -6,7 +6,7 @@ import yapp.android1.domain.entity.CommentCreationRequestEntity
 
 data class CommentCreationRequestModel(
     val body: String,
-    val parentId: Int,
+    val parentId: Int?,
     val partyId: Int
 ) {
     companion object {

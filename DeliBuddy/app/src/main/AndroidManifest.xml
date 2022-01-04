@@ -24,7 +24,7 @@
             android:exported="false" />
         <activity
             android:name=".ui.partyInformation.PartyInformationActivity"
-            android:windowSoftInputMode="adjustPan"
+            android:windowSoftInputMode="stateAlwaysVisible|stateAlwaysHidden"
             android:exported="false" />
         <activity
             android:name=".ui.splash.SplashActivity"
