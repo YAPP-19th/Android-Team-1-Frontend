@@ -49,7 +49,7 @@ class CreatePartyActivity : AppCompatActivity() {
             val data: Intent = result.data!!
             val selectedAddress =
                 data.getParcelableExtra<Address>(AddressActivity.ADDRESS_ACTIVITY_USER_ADDRESS)
-            viewModel.occurEvent(CreatePartyEvent.SelectedAddressEvent(selectedAddress))
+            viewModel.occurEvent(CreatePartyEvent.SelectedAddress(selectedAddress))
         }
     }
 
@@ -61,6 +61,11 @@ class CreatePartyActivity : AppCompatActivity() {
         initTime()
         initView()
         initObserve()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.spinnerCategory.setSelection(viewModel.currentCategoryIndex.value, false)
     }
 
     private fun initTime() {
@@ -88,7 +93,7 @@ class CreatePartyActivity : AppCompatActivity() {
             "${targetTimes[PartyTimeElement.HOUR.ordinal]}시 ${targetTimes[PartyTimeElement.MINUTE.ordinal]}분"
 
         ivReset.setOnClickListener {
-            viewModel.occurEvent(CreatePartyEvent.ClearAddressEvent)
+            viewModel.occurEvent(CreatePartyEvent.ClearAddress)
         }
 
         tvPartyAddress.setOnClickListener {
@@ -117,28 +122,19 @@ class CreatePartyActivity : AppCompatActivity() {
                     when {
                         title.isBlank() -> {
                             viewModel.occurEvent(
-                                CreatePartyEvent.ChangeFlagsEvent(
-                                    PartyElement.TITLE,
-                                    false
-                                )
+                                CreatePartyEvent.ChangeFlags(PartyElement.TITLE, false)
                             )
                             tvPartyTitleError.visibility = View.VISIBLE
                         }
                         title.length > MAX_TITLE -> {
                             viewModel.occurEvent(
-                                CreatePartyEvent.ChangeFlagsEvent(
-                                    PartyElement.TITLE,
-                                    false
-                                )
+                                CreatePartyEvent.ChangeFlags(PartyElement.TITLE, false)
                             )
                             tvPartyTitleError.visibility = View.VISIBLE
                         }
                         else -> {
                             viewModel.occurEvent(
-                                CreatePartyEvent.ChangeFlagsEvent(
-                                    PartyElement.TITLE,
-                                    true
-                                )
+                                CreatePartyEvent.ChangeFlags(PartyElement.TITLE, true)
                             )
                             tvPartyTitleError.visibility = View.GONE
                         }
@@ -157,28 +153,19 @@ class CreatePartyActivity : AppCompatActivity() {
                     when {
                         title.isBlank() -> {
                             viewModel.occurEvent(
-                                CreatePartyEvent.ChangeFlagsEvent(
-                                    PartyElement.BODY,
-                                    false
-                                )
+                                CreatePartyEvent.ChangeFlags(PartyElement.BODY, false)
                             )
                             tvPartyBodyError.visibility = View.VISIBLE
                         }
                         title.length > MAX_BODY -> {
                             viewModel.occurEvent(
-                                CreatePartyEvent.ChangeFlagsEvent(
-                                    PartyElement.BODY,
-                                    false
-                                )
+                                CreatePartyEvent.ChangeFlags(PartyElement.BODY, false)
                             )
                             tvPartyBodyError.visibility = View.VISIBLE
                         }
                         else -> {
                             viewModel.occurEvent(
-                                CreatePartyEvent.ChangeFlagsEvent(
-                                    PartyElement.BODY,
-                                    true
-                                )
+                                CreatePartyEvent.ChangeFlags(PartyElement.BODY, true)
                             )
                             tvPartyBodyError.visibility = View.GONE
                         }
@@ -199,28 +186,19 @@ class CreatePartyActivity : AppCompatActivity() {
                     when {
                         title.isBlank() -> {
                             viewModel.occurEvent(
-                                CreatePartyEvent.ChangeFlagsEvent(
-                                    PartyElement.CHAT_URL,
-                                    false
-                                )
+                                CreatePartyEvent.ChangeFlags(PartyElement.CHAT_URL, false)
                             )
                             tvChatUrlError.visibility = View.VISIBLE
                         }
                         !isMatchWithRule -> {
                             viewModel.occurEvent(
-                                CreatePartyEvent.ChangeFlagsEvent(
-                                    PartyElement.CHAT_URL,
-                                    false
-                                )
+                                CreatePartyEvent.ChangeFlags(PartyElement.CHAT_URL, false)
                             )
                             tvChatUrlError.visibility = View.VISIBLE
                         }
                         else -> {
                             viewModel.occurEvent(
-                                CreatePartyEvent.ChangeFlagsEvent(
-                                    PartyElement.CHAT_URL,
-                                    true
-                                )
+                                CreatePartyEvent.ChangeFlags(PartyElement.CHAT_URL, true)
                             )
                             tvChatUrlError.visibility = View.GONE
                         }
@@ -277,10 +255,10 @@ class CreatePartyActivity : AppCompatActivity() {
 
     private fun validateTime() = with(binding) {
         if (isSelectedDatePast()) {
-            viewModel.occurEvent(CreatePartyEvent.ChangeFlagsEvent(PartyElement.TIME, false))
+            viewModel.occurEvent(CreatePartyEvent.ChangeFlags(PartyElement.TIME, false))
             tvPartyTimeError.visibility = View.VISIBLE
         } else {
-            viewModel.occurEvent(CreatePartyEvent.ChangeFlagsEvent(PartyElement.TIME, true))
+            viewModel.occurEvent(CreatePartyEvent.ChangeFlags(PartyElement.TIME, true))
             tvPartyTimeError.visibility = View.GONE
         }
     }
@@ -317,16 +295,17 @@ class CreatePartyActivity : AppCompatActivity() {
                 when (position) {
                     0 -> {
                         viewModel.occurEvent(
-                            CreatePartyEvent.ChangeFlagsEvent(PartyElement.CATEGORY, false)
+                            CreatePartyEvent.ChangeFlags(PartyElement.CATEGORY, false)
                         )
                         tvPartyCategoryError.visibility = View.VISIBLE
                     }
                     else -> {
                         viewModel.occurEvent(
-                            CreatePartyEvent.ChangeFlagsEvent(PartyElement.CATEGORY, true)
+                            CreatePartyEvent.ChangeFlags(PartyElement.CATEGORY, true)
                         )
                         tvPartyCategoryError.visibility = View.GONE
                         selectedCategoryId = viewModel.categoryList.value[position - 1].id
+                        viewModel.occurEvent(CreatePartyEvent.SelectedCategory(position))
                     }
                 }
             }
@@ -355,19 +334,13 @@ class CreatePartyActivity : AppCompatActivity() {
                 when (position) {
                     0 -> {
                         viewModel.occurEvent(
-                            CreatePartyEvent.ChangeFlagsEvent(
-                                PartyElement.MEMBER,
-                                false
-                            )
+                            CreatePartyEvent.ChangeFlags(PartyElement.MEMBER, false)
                         )
                         tvPartyMemberError.visibility = View.VISIBLE
                     }
                     else -> {
                         viewModel.occurEvent(
-                            CreatePartyEvent.ChangeFlagsEvent(
-                                PartyElement.MEMBER,
-                                true
-                            )
+                            CreatePartyEvent.ChangeFlags(PartyElement.MEMBER, true)
                         )
                         tvPartyMemberError.visibility = View.GONE
                         selectedMember = position + 1
@@ -399,37 +372,38 @@ class CreatePartyActivity : AppCompatActivity() {
             targetUserCount = selectedMember,
             title = etPartyTitle.text.toString()
         )
-        viewModel.occurEvent(CreatePartyEvent.CreatePartyClickEvent(newParty))
+        viewModel.occurEvent(CreatePartyEvent.CreatePartyClick(newParty))
     }
 
     private fun initObserve() = with(binding) {
         repeatOnStarted {
             viewModel.currentAddress.collect { address ->
-                if (address == null) {
+                val isAvailable = when {
+                    address == null -> false
+                    address.addressName == "주소를 입력해 주세요" -> false
+                    else -> true
+                }
+
+                if (isAvailable) {
                     viewModel.occurEvent(
-                        CreatePartyEvent.ChangeFlagsEvent(
-                            PartyElement.ADDRESS,
-                            false
-                        )
+                        CreatePartyEvent.ChangeFlags(PartyElement.ADDRESS, true)
+                    )
+                    tvPartyAddress.text = address!!.addressName
+                    tvPartyAddress.typeface = Typeface.DEFAULT_BOLD
+                    tvPartyAddressError.visibility = View.GONE
+                    ivReset.visibility = View.VISIBLE
+                } else {
+                    viewModel.occurEvent(
+                        CreatePartyEvent.ChangeFlags(PartyElement.ADDRESS, false)
                     )
                     tvPartyAddress.text = "위치 추가"
                     tvPartyAddress.typeface = Typeface.DEFAULT
                     tvPartyAddressError.visibility = View.VISIBLE
                     ivReset.visibility = View.GONE
-                } else {
-                    viewModel.occurEvent(
-                        CreatePartyEvent.ChangeFlagsEvent(
-                            PartyElement.ADDRESS,
-                            true
-                        )
-                    )
-                    tvPartyAddress.text = address.addressName
-                    tvPartyAddress.typeface = Typeface.DEFAULT_BOLD
-                    tvPartyAddressError.visibility = View.GONE
-                    ivReset.visibility = View.VISIBLE
                 }
             }
         }
+
 
         repeatOnStarted {
             viewModel.canCreateParty.collect {
@@ -488,3 +462,4 @@ class CreatePartyActivity : AppCompatActivity() {
         }
     }
 }
+
