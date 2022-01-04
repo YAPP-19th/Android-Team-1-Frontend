@@ -1,16 +1,24 @@
 package yapp.android1.delibuddy.ui.home.fragments
 
 import android.content.Intent
+import android.location.Location
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityOptionsCompat
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.tasks.CancellationTokenSource
+import com.google.android.gms.tasks.Task
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
+import timber.log.Timber
 import yapp.android1.delibuddy.base.BaseFragment
 import yapp.android1.delibuddy.databinding.FragmentHomeBinding
 import yapp.android1.delibuddy.databinding.IncludeLayoutPartyItemBinding
@@ -18,10 +26,14 @@ import yapp.android1.delibuddy.model.Address
 import yapp.android1.delibuddy.model.Party
 import yapp.android1.delibuddy.ui.address.AddressActivity
 import yapp.android1.delibuddy.ui.createparty.CreatePartyActivity
+import yapp.android1.delibuddy.ui.dialog.PermissionDialogFragment
 import yapp.android1.delibuddy.ui.home.adapter.PartiesAdapter
 import yapp.android1.delibuddy.ui.home.viewmodel.PartiesViewModel
 import yapp.android1.delibuddy.ui.partyInformation.PartyInformationActivity
 import yapp.android1.delibuddy.util.extensions.repeatOnStarted
+import yapp.android1.delibuddy.util.permission.PermissionManager
+import yapp.android1.delibuddy.util.permission.PermissionState
+import yapp.android1.delibuddy.util.permission.PermissionType
 
 typealias LocationRange = Pair<String, Int>
 
@@ -33,6 +45,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
 ) {
     private val partiesViewModel: PartiesViewModel by viewModels()
 
+    private val fusedLocationClient: FusedLocationProviderClient by lazy {
+        LocationServices.getFusedLocationProviderClient(requireActivity())
+    }
+
+    private var cancellationTokenSource = CancellationTokenSource()
+
     private val launcherForAddressActivity = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
@@ -41,7 +59,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
             val selectedAddress =
                 data?.getParcelableExtra<Address>(AddressActivity.ADDRESS_ACTIVITY_USER_ADDRESS)
             selectedAddress?.let { address ->
-                partiesViewModel.occurEvent(PartiesViewModel.PartiesEvent.SaveAddress(address))
+                partiesViewModel.occurEvent(
+                    PartiesViewModel.UserAddressEvent.SaveUserAddress(address)
+                )
             }
         }
     }
@@ -54,7 +74,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         initViews()
         initObserve()
         getPartiesInCircle()
@@ -103,7 +122,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
 
         repeatOnStarted {
             partiesViewModel.userAddress.collectLatest {
-                binding.tvUserAddress.text = it.addressName
+                if (it.addressName == "주소를 입력해 주세요") {
+                    getCurrentAddress()
+                } else {
+                    binding.tvUserAddress.text = it.addressName
+                }
             }
         }
 
@@ -162,5 +185,50 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
         )
 
         startActivity(intent, optionsCompat.toBundle())
+    }
+
+    private fun getCurrentAddress() {
+        PermissionManager.checkPermission(
+            requireActivity() as AppCompatActivity,
+            PermissionType.LOCATION
+        ) {
+            when (it) {
+                PermissionState.GRANTED -> {
+                    val currentLocationTask: Task<Location> =
+                        fusedLocationClient.getCurrentLocation(
+                            PRIORITY_HIGH_ACCURACY,
+                            cancellationTokenSource.token
+                        )
+
+                    currentLocationTask.addOnCompleteListener { task: Task<Location> ->
+                        if (task.isSuccessful) {
+                            val result: Location = task.result
+                            val currentLatLng = Pair(result.latitude, result.longitude)
+                            partiesViewModel.occurEvent(
+                                PartiesViewModel.UserAddressEvent.GetCurrentAddress(currentLatLng)
+                            )
+                        } else {
+                            val exception = task.exception
+                            Timber.w("Location Failure: $exception")
+                        }
+                    }
+                }
+                else -> showPermissionDeniedDialog()
+            }
+        }
+    }
+
+    private fun showPermissionDeniedDialog() {
+        val permissionDialog = PermissionDialogFragment(requireActivity()).apply {
+            negativeCallback = {
+                Toast.makeText(context, "위치 권한이 없어 실행할 수 없습니다.", Toast.LENGTH_SHORT).show()
+            }
+        }
+        permissionDialog.show(parentFragmentManager, null)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        cancellationTokenSource.cancel()
     }
 }

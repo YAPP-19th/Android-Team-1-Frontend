@@ -4,13 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import yapp.android1.delibuddy.R
 import yapp.android1.delibuddy.databinding.FragmentStatusBottomSheetDialogBinding
 import yapp.android1.delibuddy.ui.partyInformation.PartyInformationViewModel
-import yapp.android1.delibuddy.ui.partyInformation.PartyInformationViewModel.PartyInformationEvent.*
+import yapp.android1.delibuddy.ui.partyInformation.PartyInformationViewModel.PartyInformationAction.*
 import yapp.android1.delibuddy.ui.partyInformation.model.PartyStatus
 
 
