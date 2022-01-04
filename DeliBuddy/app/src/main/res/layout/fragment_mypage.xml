@@ -35,7 +35,7 @@
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:adjustViewBounds="true"
-                android:background="@color/sub_yellow"
+                android:background="@drawable/icon_user_profile_yellow"
                 android:scaleType="centerInside"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -88,6 +88,15 @@
                 android:background="@drawable/delibuddy_mypage_banner_radius"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_marginStart="-12dp"
+                android:layout_marginBottom="-12dp"
+                android:background="@drawable/mypage_banner_left_img"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent" />
 
             <androidx.appcompat.widget.AppCompatTextView
