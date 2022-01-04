@@ -1,5 +1,6 @@
 package yapp.android1.delibuddy.ui.login
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -9,6 +10,7 @@ import kotlinx.coroutines.flow.collect
 import yapp.android1.delibuddy.databinding.ActivityLoginBinding
 import yapp.android1.delibuddy.ui.home.HomeActivity
 import yapp.android1.delibuddy.ui.login.viewmodel.AuthViewModel
+import yapp.android1.delibuddy.ui.terms.TermsActivity
 import yapp.android1.delibuddy.util.extensions.repeatOnStarted
 import yapp.android1.delibuddy.util.intentTo
 import yapp.android1.delibuddy.util.user.UserAuthManager
@@ -27,8 +29,25 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        initView()
         collectData()
         loginWithKakaoApi()
+    }
+
+    private fun initView() {
+        binding.policyInfoTermsOfService.setOnClickListener {
+            intentToTerms(TermsActivity.FILE_TERMS_OF_SERVICE)
+        }
+
+        binding.policyInfoPrivacyPolicy.setOnClickListener {
+            intentToTerms(TermsActivity.PRIVACY_POLICY)
+        }
+    }
+
+    private fun intentToTerms(termsIndex: Int) {
+        val intent = Intent(this, TermsActivity::class.java)
+        intent.putExtra(TermsActivity.EXTRA_TERMS, termsIndex)
+        startActivity(intent)
     }
 
     private fun collectData() {
@@ -63,6 +82,8 @@ class LoginActivity : AppCompatActivity() {
                 }
             }
         }
+
     }
+
 }
 
