@@ -29,9 +29,7 @@ class MyPageViewModel @Inject constructor(
     private val _currentAddress = MutableStateFlow<Address?>(null)
     val currentAddress: StateFlow<Address?> = _currentAddress
 
-    sealed class MyPageEvent : Event {
-
-    }
+    sealed class MyPageEvent : Event
 
     init {
         fetchData()
@@ -52,9 +50,6 @@ class MyPageViewModel @Inject constructor(
         }
     }
 
-    override suspend fun handleEvent(event: MyPageEvent) {
-        TODO("Not yet implemented")
-    }
-
+    override suspend fun handleEvent(event: MyPageEvent) {}
     override suspend fun handleError(result: NetworkResult.Error, retryAction: RetryAction?) {}
 }
