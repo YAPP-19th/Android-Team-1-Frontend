@@ -1,17 +1,20 @@
 package yapp.android1.delibuddy.ui.home.viewmodel
 
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
+import timber.log.Timber
 import yapp.android1.delibuddy.DeliBuddyApplication
 import yapp.android1.delibuddy.base.BaseViewModel
 import yapp.android1.delibuddy.base.RetryAction
 import yapp.android1.delibuddy.model.Address
 import yapp.android1.delibuddy.model.Event
 import yapp.android1.delibuddy.model.Party
-import yapp.android1.delibuddy.ui.address.AddressSharedEvent
 import yapp.android1.domain.NetworkResult
 import yapp.android1.domain.entity.NetworkError
+import yapp.android1.domain.interactor.usecase.CoordToAddressUseCase
 import yapp.android1.domain.interactor.usecase.GetPartiesInCircleUseCase
 import javax.inject.Inject
 
@@ -19,7 +22,8 @@ typealias LocationRange = Pair<String, Int>
 
 @HiltViewModel
 class PartiesViewModel @Inject constructor(
-    private val getPartiesInCircleUseCase: GetPartiesInCircleUseCase
+    private val getPartiesInCircleUseCase: GetPartiesInCircleUseCase,
+    private val convertCoordToAddressUseCase: CoordToAddressUseCase
 ) : BaseViewModel<Event>() {
 
     private val _partiesResult = MutableStateFlow<List<Party>>(emptyList())
@@ -33,7 +37,11 @@ class PartiesViewModel @Inject constructor(
 
     sealed class PartiesEvent : Event {
         class GetPartiesInCircle(val locationRange: LocationRange) : PartiesEvent()
-        class SaveAddress(val address: Address) : PartiesEvent()
+    }
+
+    sealed class UserAddressEvent : Event {
+        class SaveUserAddress(val address: Address) : UserAddressEvent()
+        class GetCurrentAddress(val currentLatLng: Pair<Double, Double>) : UserAddressEvent()
     }
 
     sealed class SaveAddressEvent : Event {
@@ -44,6 +52,7 @@ class PartiesViewModel @Inject constructor(
 
     init {
         DeliBuddyApplication.prefs.getCurrentUserAddress()?.let {
+            Timber.w("init user address")
             _userAddress.value = it
         }
     }
@@ -51,10 +60,8 @@ class PartiesViewModel @Inject constructor(
     override suspend fun handleEvent(event: Event) {
         when (event) {
             is PartiesEvent.GetPartiesInCircle -> getPartiesInCircle(event.locationRange)
-
-            is PartiesEvent.SaveAddress -> {
-                saveAddress(event.address)
-            }
+            is UserAddressEvent.SaveUserAddress -> saveAddress(event.address)
+            is UserAddressEvent.GetCurrentAddress -> convertCoordToAddress(event.currentLatLng)
         }
     }
 
@@ -72,6 +79,23 @@ class PartiesViewModel @Inject constructor(
         )
         _userAddress.value = address
         showToast("주소 변경에 성공하였습니다.")
+    }
+
+    private suspend fun convertCoordToAddress(latLng: Pair<Double, Double>) {
+        viewModelScope.launch {
+            Timber.w("latLng: $latLng")
+            when (val result = convertCoordToAddressUseCase(latLng)) {
+                is NetworkResult.Success -> {
+                    _userAddress.value = Address.mapToAddress(result.data)
+                    saveAddress(_userAddress.value)
+                }
+
+                is NetworkResult.Error -> {
+                    showToast("현재 주소를 가져올 수 없습니다 주소를 설정해 주세요")
+                    Timber.w("errorType: ${result.errorType}")
+                }
+            }
+        }
     }
 
     private suspend fun getPartiesInCircle(locationRange: LocationRange) {
