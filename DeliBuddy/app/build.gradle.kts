@@ -8,6 +8,7 @@ plugins {
     id("dagger.hilt.android.plugin")
     id("com.google.firebase.appdistribution")
     id("com.google.gms.google-services")
+    id("com.google.android.gms.oss-licenses-plugin")
 }
 
 val appDistributionApkPath: String = System.getenv("BITRISE_SIGNED_APK_PATH") ?: "EMPTY"

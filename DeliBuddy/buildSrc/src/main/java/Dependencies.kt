@@ -51,6 +51,8 @@ object Libraries {
     
     const val NAVER_MAP                  = "com.naver.maps:map-sdk:${Versions.NAVER_MAP}"
     const val KAKAO_LOGIN                = "com.kakao.sdk:v2-user:${Versions.KAKAO_LOGIN}"
+
+    const val OSS_LICENSE                = "com.google.android.gms:play-services-oss-licenses:${Versions.OSS_LICENSE}"
 }
 
 object UnitTest {

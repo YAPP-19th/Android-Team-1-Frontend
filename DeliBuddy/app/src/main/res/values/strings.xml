@@ -22,6 +22,8 @@
     <string name="navigation_mypage_title">마이페이지</string>
     <string name="navigation_mypage_service">서비스 약관</string>
     <string name="navigation_mypage_license">라이센스</string>
+    <string name="navigation_mypage_banner_title">버디와 함께 한 식사 횟수</string>
+    <string name="navigation_mypage_count">%d번</string>
 
     <string name="login_info">효율적인 음식 배달,\n지금 바로 딜리버디로\n시작해볼까요?</string>
     <string name="kakao_login">카카오로 시작하기</string>
