@@ -8,6 +8,7 @@ plugins {
     id("dagger.hilt.android.plugin")
     id("com.google.firebase.appdistribution")
     id("com.google.gms.google-services")
+    id("com.google.android.gms.oss-licenses-plugin")
 }
 
 val appDistributionApkPath: String = System.getenv("BITRISE_SIGNED_APK_PATH") ?: "EMPTY"
@@ -124,6 +125,7 @@ dependencies {
     implementation(Libraries.GLIDE)
     kapt(Libraries.GLIDE_COMPILER)
     implementation("com.google.android.gms:play-services-location:19.0.0")
+    implementation(Libraries.OSS_LICENSE)
     implementation(Libraries.JWT_DECODE)
 
     implementation(Libraries.NAVER_MAP)
