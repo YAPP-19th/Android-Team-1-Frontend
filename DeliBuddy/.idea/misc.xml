@@ -29,21 +29,23 @@
         <entry key="app/src/main/res/font/roboto.xml" value="0.23645833333333333" />
         <entry key="app/src/main/res/layout/activity_create_party.xml" value="0.37392373923739236" />
         <entry key="app/src/main/res/layout/activity_home.xml" value="0.203125" />
+        <entry key="app/src/main/res/layout/activity_login.xml" value="0.5" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.4194453423628242" />
         <entry key="app/src/main/res/layout/activity_party_detail.xml" value="0.22604166666666667" />
-        <entry key="app/src/main/res/layout/activity_party_information.xml" value="0.225" />
+        <entry key="app/src/main/res/layout/activity_party_information.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_permission.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_permission_description.xml" value="0.22" />
         <entry key="app/src/main/res/layout/activity_splash.xml" value="0.11979166666666667" />
+        <entry key="app/src/main/res/layout/activity_terms.xml" value="0.16822916666666668" />
         <entry key="app/src/main/res/layout/fragment_address_detail.xml" value="0.13768115942028986" />
         <entry key="app/src/main/res/layout/fragment_alarm.xml" value="0.20625" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.21487869184194963" />
         <entry key="app/src/main/res/layout/fragment_mypage.xml" value="0.20625" />
         <entry key="app/src/main/res/layout/fragment_myparty.xml" value="0.20625" />
-        <entry key="app/src/main/res/layout/fragment_status_bottom_sheet_dialog.xml" value="0.225" />
         <entry key="app/src/main/res/layout/include_layout_home_empty_view.xml" value="0.146875" />
         <entry key="app/src/main/res/layout/include_layout_parties_empty_view.xml" value="0.375" />
         <entry key="app/src/main/res/layout/include_layout_party_item.xml" value="0.4582763337893297" />
+        <entry key="app/src/main/res/layout/view_custom_toolbar.xml" value="0.16510416666666666" />
         <entry key="app/src/main/res/layout/view_holder_myparty_item.xml" value="0.25" />
         <entry key="app/src/main/res/menu/bottom_navigation_menu.xml" value="0.20625" />
       </map>

@@ -49,6 +49,7 @@
             app:layout_constraintTop_toBottomOf="@id/text_login_info" />
 
         <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/text_policy_info"
             style="@style/RobotoRegular11"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -59,6 +60,40 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/button_kakao_login" />
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/text_policy_info">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/policy_info_terms_of_service"
+                style="@style/RobotoRegular11"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/policy_info_terms_of_service"
+                android:textColor="@color/text_grey" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                style="@style/RobotoRegular11"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="2dp"
+                android:text="@string/policy_info_or"
+                android:textColor="@color/text_grey" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/policy_info_privacy_policy"
+                style="@style/RobotoRegular11"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/policy_info_privacy_policy"
+                android:textColor="@color/text_grey" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

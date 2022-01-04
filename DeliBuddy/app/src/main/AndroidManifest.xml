@@ -67,5 +67,9 @@
         <activity
             android:name=".ui.login.LoginActivity"
             android:exported="true" />
+
+        <activity
+            android:name=".ui.terms.TermsActivity"
+            android:exported="true" />
     </application>
 </manifest>
