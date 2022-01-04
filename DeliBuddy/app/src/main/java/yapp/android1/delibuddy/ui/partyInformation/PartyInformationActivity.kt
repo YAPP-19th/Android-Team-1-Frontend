@@ -1,22 +1,21 @@
 package yapp.android1.delibuddy.ui.partyInformation
 
 import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Spannable
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
 import android.view.View
-import android.view.animation.AnimationUtils
-import android.view.animation.TranslateAnimation
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
+import timber.log.Timber
 import yapp.android1.delibuddy.R
 import yapp.android1.delibuddy.adapter.CommunityViewPagerAdapter
 import yapp.android1.delibuddy.databinding.ActivityPartyInformationBinding
@@ -54,8 +53,18 @@ class PartyInformationActivity : AppCompatActivity() {
     }
 
     private fun receiverIntent() {
-        val intentData = intent.getSerializableExtra("party") as Party
-        viewModel.occurEvent(OnIntent(intentData, sharedPreferencesManager.getUserId()))
+        val intentData = intent.getSerializableExtra("party")
+        intentData?.let {
+            viewModel.occurEvent(OnIntent(it as Party, sharedPreferencesManager.getUserId()))
+        } ?: kotlin.run {
+            val partyId = intent.getIntExtra("partyId", -1)
+            viewModel.occurEvent(
+                PartyInformationEvent.OnIntentWithPartyId(
+                    partyId,
+                    sharedPreferencesManager.getUserId()
+                )
+            )
+        }
     }
 
     private fun collectData() {
@@ -73,24 +82,45 @@ class PartyInformationActivity : AppCompatActivity() {
 
         repeatOnStarted {
             viewModel.hasJoined.collect { hasJoined ->
-                if(hasJoined) {
+                if (hasJoined) {
                     binding.btnJoinParty.text = "참가중"
-                    binding.btnJoinParty.backgroundTintList = ContextCompat.getColorStateList(this@PartyInformationActivity, R.color.sub_grey)
-                    binding.btnJoinParty.setTextColor(ContextCompat.getColor(this@PartyInformationActivity, R.color.text_black))
+                    binding.btnJoinParty.backgroundTintList = ContextCompat.getColorStateList(
+                        this@PartyInformationActivity,
+                        R.color.sub_grey
+                    )
+                    binding.btnJoinParty.setTextColor(
+                        ContextCompat.getColor(
+                            this@PartyInformationActivity,
+                            R.color.text_black
+                        )
+                    )
                 } else {
                     binding.btnJoinParty.text = "파티 참가"
-                    binding.btnJoinParty.backgroundTintList = ContextCompat.getColorStateList(this@PartyInformationActivity, R.color.main_orange)
-                    binding.btnJoinParty.setTextColor(ContextCompat.getColor(this@PartyInformationActivity, R.color.white))
+                    binding.btnJoinParty.backgroundTintList = ContextCompat.getColorStateList(
+                        this@PartyInformationActivity,
+                        R.color.main_orange
+                    )
+                    binding.btnJoinParty.setTextColor(
+                        ContextCompat.getColor(
+                            this@PartyInformationActivity,
+                            R.color.white
+                        )
+                    )
                 }
             }
         }
 
         repeatOnStarted {
             viewModel.joinPartEvent.collect { isSuccess ->
-                if(isSuccess) {
-                    Toast.makeText(this@PartyInformationActivity, "파티 참가 성공", Toast.LENGTH_SHORT).show()
+                if (isSuccess) {
+                    Toast.makeText(this@PartyInformationActivity, "파티 참가 성공", Toast.LENGTH_SHORT)
+                        .show()
                 } else {
-                    Toast.makeText(this@PartyInformationActivity, "파티 인원이 다 찼습니다.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this@PartyInformationActivity,
+                        "파티 인원이 다 찼습니다.",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         }
@@ -99,21 +129,26 @@ class PartyInformationActivity : AppCompatActivity() {
     private fun settingPartyInformationViews(party: PartyInformation) = with(binding) {
         // [Header]
         tvPartyLocation.text = "${party.placeName} \n${party.placeNameDetail}"
-        tvPartyTitle.text    = party.title
-        tvPartyContent.text  = party.body
+        tvPartyTitle.text = party.title
+        tvPartyContent.text = party.body
 
-        tvOrderTime.text     = party.orderTime + " 주문 예정"
+        tvOrderTime.text = party.orderTime + " 주문 예정"
         val span = tvOrderTime.text as Spannable
-        span.setSpan(ForegroundColorSpan(getColor(R.color.text_grey)), tvOrderTime.text.lastIndex - 4, tvOrderTime.text.lastIndex + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        span.setSpan(
+            ForegroundColorSpan(getColor(R.color.text_grey)),
+            tvOrderTime.text.lastIndex - 4,
+            tvOrderTime.text.lastIndex + 1,
+            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
 
         Glide.with(this@PartyInformationActivity)
             .load(party.category.iconUrl)
             .into(ivPartyFoodType)
 
         // [PartyStatus]
-        tvStatus.backgroundTintList = when(party.status) {
+        tvStatus.backgroundTintList = when (party.status) {
             PartyStatus.RECRUIT -> {
-                 ContextCompat.getColorStateList(this@PartyInformationActivity, R.color.sub_yellow)
+                ContextCompat.getColorStateList(this@PartyInformationActivity, R.color.sub_yellow)
             }
             PartyStatus.ORDER -> {
                 ContextCompat.getColorStateList(this@PartyInformationActivity, R.color.sub_purple)
@@ -124,10 +159,10 @@ class PartyInformationActivity : AppCompatActivity() {
         }
 
         tvStatus.text = party.status.value
-        tvStatusChange.text  = party.status.value
+        tvStatusChange.text = party.status.value
 
         // [ Toolbar ]
-        toolbarContainer.tvTitle.text    = party.title
+        toolbarContainer.tvTitle.text = party.title
         toolbarContainer.tvLocation.text = "${party.placeName} ${party.placeNameDetail}"
 
         // [Party Owner]
@@ -162,7 +197,7 @@ class PartyInformationActivity : AppCompatActivity() {
     }
 
     private fun switchViewState(isOwner: Boolean) = with(binding) {
-        if(!isOwner) {
+        if (!isOwner) {
             toolbarContainer.btnMoreOptions.hide()
             tvStatus.hide()
             tvStatusChange.hide()
@@ -202,7 +237,7 @@ class PartyInformationActivity : AppCompatActivity() {
         vpCommunity.adapter = CommunityViewPagerAdapter(this@PartyInformationActivity)
 
         TabLayoutMediator(tlCommunity, vpCommunity) { tab, position ->
-            when(position) {
+            when (position) {
                 0 -> tab.text = "댓글"
                 1 -> tab.text = "파티인원"
             }

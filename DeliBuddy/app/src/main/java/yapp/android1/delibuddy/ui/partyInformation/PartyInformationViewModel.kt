@@ -52,6 +52,8 @@ class PartyInformationViewModel @Inject constructor(
         class OnIntent(val data: Party, val currentUserId: Int) : PartyInformationEvent()
         class OnStatusChanged(val status: PartyStatus) : PartyInformationEvent()
         object OnJointPartyClicked : PartyInformationEvent()
+
+        class OnIntentWithPartyId(val partyId: Int, val currentUserId: Int) : PartyInformationEvent()
     }
 
     override suspend fun handleEvent(event: PartyInformationEvent) {
@@ -73,10 +75,16 @@ class PartyInformationViewModel @Inject constructor(
             }
 
             is PartyInformationEvent.OnJointPartyClicked -> {
-                if(_hasJoined.value == false) {
+                if(!_hasJoined.value) {
                     _hasJoined.value = true
                     joinParty()
                 }
+            }
+
+            is PartyInformationEvent.OnIntentWithPartyId -> {
+                currentUserId = event.currentUserId
+                fetchPartyInformation(event.partyId)
+                fetchPartyComments(event.partyId)
             }
         }
     }
@@ -110,7 +118,7 @@ class PartyInformationViewModel @Inject constructor(
 
         when(result) {
             is NetworkResult.Success -> {
-                if(result.data == true) {
+                if(result.data) {
                     _party.value = _party.value.copy(
                         status = PartyStatus.of(changedStatus)
                     )
@@ -128,7 +136,7 @@ class PartyInformationViewModel @Inject constructor(
     private fun joinParty() = viewModelScope.launch {
         when(val result = jointPartyUseCase.invoke(_party.value.id)) {
             is NetworkResult.Success -> {
-                if(result.data == true) {
+                if(result.data) {
                     _joinPartyEvent.emit(result.data)
                 } else {
                     _hasJoined.value = false

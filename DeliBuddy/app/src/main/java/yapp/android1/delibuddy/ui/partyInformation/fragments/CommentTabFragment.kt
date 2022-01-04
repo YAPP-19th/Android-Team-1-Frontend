@@ -51,10 +51,23 @@ class CommentTabFragment : BaseFragment<FragmentCommentTabBinding>(FragmentComme
 
     private fun collectComments() {
         repeatOnStarted {
-
             viewModel.value.comments.collect { comments ->
                 Timber.tag("[TAG]").d("$comments")
                 commentAdapter.submitList(comments)
+
+                Timber.w("comments: $comments")
+
+                val commentId = requireActivity().intent.getIntExtra("commentId", -1)
+                Timber.w("commentId: $commentId")
+                if (commentId > -1) {
+                    comments.find { comment ->
+                        comment.id == commentId
+                    }?.let { matchedComment ->
+                        Timber.w("matchedComment: $matchedComment")
+                        Timber.w("scroll id: ${comments.indexOf(matchedComment)}")
+                        binding.rvComment.scrollToPosition(comments.indexOf(matchedComment))
+                    }
+                }
             }
         }
 

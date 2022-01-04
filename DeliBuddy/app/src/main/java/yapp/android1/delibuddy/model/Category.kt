@@ -11,7 +11,7 @@ data class Category(
 ) : Serializable {
     companion object {
         val EMPTY = Category(
-            backgroundColorCode = "",
+            backgroundColorCode = "000000",
             iconUrl = "",
             id = -1,
             name = ""
