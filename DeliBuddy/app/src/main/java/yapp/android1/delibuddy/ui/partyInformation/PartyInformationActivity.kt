@@ -18,6 +18,8 @@ import kotlinx.coroutines.flow.collect
 import yapp.android1.delibuddy.R
 import yapp.android1.delibuddy.adapter.CommunityViewPagerAdapter
 import yapp.android1.delibuddy.databinding.ActivityPartyInformationBinding
+import yapp.android1.delibuddy.model.Comment
+import yapp.android1.delibuddy.model.CommentType
 import yapp.android1.delibuddy.model.Party
 import yapp.android1.delibuddy.model.PartyInformation
 import yapp.android1.delibuddy.ui.partyInformation.PartyInformationViewModel.PartyInformationAction
@@ -26,9 +28,7 @@ import yapp.android1.delibuddy.ui.partyInformation.PartyInformationViewModel.Par
 import yapp.android1.delibuddy.ui.partyInformation.model.PartyStatus
 import yapp.android1.delibuddy.ui.partyInformation.view.AppBarStateChangeListener
 import yapp.android1.delibuddy.ui.partyInformation.view.StatusBottomSheetDialog
-import yapp.android1.delibuddy.util.extensions.hide
-import yapp.android1.delibuddy.util.extensions.repeatOnStarted
-import yapp.android1.delibuddy.util.extensions.show
+import yapp.android1.delibuddy.util.extensions.*
 import yapp.android1.delibuddy.util.sharedpreferences.SharedPreferencesManager
 
 @AndroidEntryPoint
@@ -102,25 +102,32 @@ class PartyInformationActivity : AppCompatActivity() {
             is PartyInformationEvent.OnCreateCommentSuccess -> {
                 binding.etInputComment.setText("")
                 Toast.makeText(this, "댓글이 정상적으로 등록되었습니다", Toast.LENGTH_SHORT).show()
+
+                binding.root.hideKeyboard()
+                hideTargetComment()
             }
             is PartyInformationEvent.OnCreateCommentFailed -> {
                 Toast.makeText(this, "댓글 작성에 실패했습니다 다시 시도해 주세요", Toast.LENGTH_SHORT).show()
             }
 
-            is PartyInformationEvent.ShowTargetParentComment -> {
-                binding.tvParentCommentWriter.text = event.parentComment.writer?.nickName + " 님에게 답장"
-                binding.tvParentCommentBody.text = event.parentComment.body
-                binding.clTargetCommentContainer.show()
-            }
+            is PartyInformationEvent.ShowTargetParentComment -> { showTargetComment(event.parentComment) }
 
-            is PartyInformationEvent.HideTargetParentComment -> {
-                binding.tvParentCommentWriter.text = ""
-                binding.tvParentCommentBody.text = ""
-                binding.clTargetCommentContainer.hide()
-            }
+            is PartyInformationEvent.HideTargetParentComment -> { hideTargetComment() }
 
             else -> Unit
         }
+    }
+
+    private fun showTargetComment(parentComment: Comment) = with(binding) {
+        tvParentCommentWriter.text = parentComment.writer?.nickName + " 님에게 답장"
+        tvParentCommentBody.text = parentComment.body
+        clTargetCommentContainer.show()
+    }
+
+    private fun hideTargetComment() = with(binding) {
+        tvParentCommentWriter.text = ""
+        tvParentCommentBody.text = ""
+        clTargetCommentContainer.hide()
     }
 
     private fun settingPartyInformationViews(party: PartyInformation) = with(binding) {
@@ -189,10 +196,14 @@ class PartyInformationActivity : AppCompatActivity() {
 
         btnCreateComment.setOnClickListener {
             if(etInputComment.text.toString() != "") {
-                viewModel.occurEvent(PartyInformationAction.OnWriteParentComment(etInputComment.text.toString()))
+                viewModel.occurEvent(PartyInformationAction.WriteComment(etInputComment.text.toString()))
             } else {
                 Toast.makeText(this@PartyInformationActivity, "댓글 내용을 입력해주세요", Toast.LENGTH_SHORT).show()
             }
+        }
+
+        etInputComment.setOnClickListener {
+            it.showKeyboard()
         }
     }
 

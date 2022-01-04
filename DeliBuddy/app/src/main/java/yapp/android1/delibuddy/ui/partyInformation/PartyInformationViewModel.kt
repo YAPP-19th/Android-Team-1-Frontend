@@ -39,7 +39,7 @@ class PartyInformationViewModel @Inject constructor(
     private val _party = MutableStateFlow<PartyInformation>(PartyInformation.EMPTY)
     val party = _party.asStateFlow()
 
-    private val _comments = MutableStateFlow<Comments>(Comments.EMPTY)
+    private val _comments = MutableStateFlow<List<Comment>>(emptyList())
     val comments = _comments.asStateFlow()
 
     private val _targetParentComment = MutableStateFlow<Comment?>(null)
@@ -51,7 +51,7 @@ class PartyInformationViewModel @Inject constructor(
         class OnIntent(val data: Party, val currentUserId: Int) : PartyInformationAction()
         class OnStatusChanged(val status: PartyStatus) : PartyInformationAction()
         object OnJointPartyClicked : PartyInformationAction()
-        class OnWriteParentComment(val body: String) : PartyInformationAction()
+        class WriteComment(val body: String) : PartyInformationAction()
         class OnCommentWriteTextViewClicked(val parentComment: Comment) : PartyInformationAction()
         object OnTouchBackground : PartyInformationAction()
     }
@@ -90,11 +90,11 @@ class PartyInformationViewModel @Inject constructor(
                 }
             }
 
-            is PartyInformationAction.OnWriteParentComment -> {
+            is PartyInformationAction.WriteComment -> {
                 if(isWritingChildComment()) {
-                    createComment(action.body, _targetParentComment.value?.id)
+                    createComment(body = action.body, parentId = (_targetParentComment.value as Comment).id)
                 } else {
-                    createComment(action.body)
+                    createComment(body = action.body)
                 }
             }
 
@@ -144,6 +144,7 @@ class PartyInformationViewModel @Inject constructor(
         when (result) {
             is NetworkResult.Success -> {
                 fetchPartyComments(_party.value.id)
+                _targetParentComment.value = null
                 _event.emit(PartyInformationEvent.OnCreateCommentSuccess)
             }
             is NetworkResult.Error -> {
@@ -212,14 +213,14 @@ class PartyInformationViewModel @Inject constructor(
         }
     }
 
-    private fun fetchPartyComments(partyId: Int) = viewModelScope.launch {
+    private suspend fun fetchPartyComments(partyId: Int) {
         val result = fetchPartyCommentsUseCase.invoke(partyId)
         when (result) {
             is NetworkResult.Success -> {
                 val comments = result.data.map { comment ->
                     Comment.fromCommentEntity(comment)
                 }
-                _comments.value = Comments(comments)
+                _comments.value = comments
             }
             is NetworkResult.Error -> {
                 handleError(result, null)
