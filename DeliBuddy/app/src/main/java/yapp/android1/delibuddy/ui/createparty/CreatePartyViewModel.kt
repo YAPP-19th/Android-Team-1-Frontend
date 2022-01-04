@@ -7,7 +7,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import yapp.android1.data.entity.PartyCreationRequestModel
 import yapp.android1.delibuddy.DeliBuddyApplication
 import yapp.android1.delibuddy.base.BaseViewModel
 import yapp.android1.delibuddy.base.RetryAction
@@ -24,18 +23,20 @@ import yapp.android1.domain.interactor.usecase.CreatePartyUseCase
 import javax.inject.Inject
 
 sealed class CreatePartyEvent : Event {
-    class ChangeFlagsEvent(
+    class ChangeFlags(
         val partyElement: PartyElement,
         val isValid: Boolean
     ) : CreatePartyEvent()
 
-    class SelectedAddressEvent(
+    class SelectedAddress(
         val address: Address?
     ) : CreatePartyEvent()
 
-    object ClearAddressEvent : CreatePartyEvent()
-    object CheckFlagsEvent : CreatePartyEvent()
-    class CreatePartyClickEvent(
+    class SelectedCategory(val index: Int) : CreatePartyEvent()
+
+    object ClearAddress : CreatePartyEvent()
+    object CheckFlags : CreatePartyEvent()
+    class CreatePartyClick(
         val newParty: PartyCreationRequestEntity
     ) : CreatePartyEvent()
 }
@@ -58,6 +59,9 @@ class CreatePartyViewModel @Inject constructor(
 
     private val _categoryList = MutableStateFlow<List<Category>>(listOf())
     val categoryList: MutableStateFlow<List<Category>> = _categoryList
+
+    private val _currentCategoryIndex = MutableStateFlow<Int>(0)
+    val currentCategoryIndex: MutableStateFlow<Int> = _currentCategoryIndex
 
     private val _isSuccessToCreateParty = MutableEventFlow<Boolean>()
     val isSuccessToCreateParty: MutableEventFlow<Boolean> = _isSuccessToCreateParty
@@ -102,25 +106,12 @@ class CreatePartyViewModel @Inject constructor(
 
     override suspend fun handleEvent(event: CreatePartyEvent) {
         when (event) {
-            is CreatePartyEvent.ClearAddressEvent -> {
-                clearAddress()
-            }
-
-            is CreatePartyEvent.SelectedAddressEvent -> {
-                changeCurrentAddress(event.address)
-            }
-
-            is CreatePartyEvent.ChangeFlagsEvent -> {
-                changeFlag(event.partyElement, event.isValid)
-            }
-
-            is CreatePartyEvent.CheckFlagsEvent -> {
-                checkCanCreateParty()
-            }
-
-            is CreatePartyEvent.CreatePartyClickEvent -> {
-                checkAndCreate(event.newParty)
-            }
+            is CreatePartyEvent.ClearAddress -> clearAddress()
+            is CreatePartyEvent.SelectedAddress -> changeCurrentAddress(event.address)
+            is CreatePartyEvent.ChangeFlags -> changeFlag(event.partyElement, event.isValid)
+            is CreatePartyEvent.CheckFlags -> checkCanCreateParty()
+            is CreatePartyEvent.CreatePartyClick -> checkAndCreate(event.newParty)
+            is CreatePartyEvent.SelectedCategory -> selectCategory(event.index)
         }
     }
 
@@ -176,6 +167,10 @@ class CreatePartyViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    private fun selectCategory(idx: Int) {
+        _currentCategoryIndex.value = idx
     }
 
     override suspend fun handleError(result: NetworkResult.Error, retryAction: RetryAction?) {
