@@ -49,6 +49,7 @@ object Libraries {
     
     const val NAVER_MAP                  = "com.naver.maps:map-sdk:${Versions.NAVER_MAP}"
     const val KAKAO_LOGIN                = "com.kakao.sdk:v2-user:${Versions.KAKAO_LOGIN}"
+    const val BALLOON                    = "com.github.skydoves:balloon:${Versions.BALLOON}"
 }
 
 object UnitTest {

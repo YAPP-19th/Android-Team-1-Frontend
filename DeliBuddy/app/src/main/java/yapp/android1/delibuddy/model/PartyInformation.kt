@@ -28,7 +28,7 @@ data class PartyInformation(
         val nickName: String,
         val partiesCnt: Int,
         val profileImage: String
-    ) {
+    ) : Serializable {
         companion object {
             val EMPTY = Leader(
                 id = -1,

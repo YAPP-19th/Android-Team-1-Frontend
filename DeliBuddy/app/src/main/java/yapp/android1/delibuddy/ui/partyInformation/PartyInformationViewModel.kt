@@ -54,6 +54,9 @@ class PartyInformationViewModel @Inject constructor(
         class WriteComment(val body: String) : PartyInformationAction()
         class OnCommentWriteTextViewClicked(val parentComment: Comment) : PartyInformationAction()
         object OnTouchBackground : PartyInformationAction()
+        object OnDeletePartyMenuClicked : PartyInformationAction()
+        class EditSuccess(val partyInformation: PartyInformation) : PartyInformationAction()
+        object EditFailed : PartyInformationAction()
     }
 
     sealed class PartyInformationEvent : Event {

@@ -128,6 +128,7 @@ dependencies {
 
     implementation(Libraries.NAVER_MAP)
     implementation(Libraries.KAKAO_LOGIN)
+    implementation(Libraries.BALLOON)
 
     testImplementation(UnitTest.JUNIT)
 

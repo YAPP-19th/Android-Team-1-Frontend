@@ -8,11 +8,14 @@ import android.text.Spanned
 import android.text.style.ForegroundColorSpan
 import android.view.View
 import android.widget.Toast
+import androidx.activity.result.registerForActivityResult
 import androidx.activity.viewModels
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import com.skydoves.balloon.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import yapp.android1.delibuddy.R
@@ -22,13 +25,16 @@ import yapp.android1.delibuddy.model.Comment
 import yapp.android1.delibuddy.model.CommentType
 import yapp.android1.delibuddy.model.Party
 import yapp.android1.delibuddy.model.PartyInformation
+import yapp.android1.delibuddy.ui.createparty.CreatePartyActivity
 import yapp.android1.delibuddy.ui.partyInformation.PartyInformationViewModel.PartyInformationAction
 import yapp.android1.delibuddy.ui.partyInformation.PartyInformationViewModel.PartyInformationAction.OnIntent
 import yapp.android1.delibuddy.ui.partyInformation.PartyInformationViewModel.PartyInformationEvent
 import yapp.android1.delibuddy.ui.partyInformation.model.PartyStatus
 import yapp.android1.delibuddy.ui.partyInformation.view.AppBarStateChangeListener
+import yapp.android1.delibuddy.ui.partyInformation.view.OptionsMenuBalloonFactory
 import yapp.android1.delibuddy.ui.partyInformation.view.StatusBottomSheetDialog
 import yapp.android1.delibuddy.util.extensions.*
+import yapp.android1.delibuddy.util.intentTo
 import yapp.android1.delibuddy.util.sharedpreferences.SharedPreferencesManager
 
 @AndroidEntryPoint
@@ -36,9 +42,15 @@ class PartyInformationActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPartyInformationBinding
 
+    private val optionsMenuBalloon by balloon<OptionsMenuBalloonFactory>()
+
     private val viewModel by viewModels<PartyInformationViewModel>()
 
     private val sharedPreferencesManager by lazy { SharedPreferencesManager(this) }
+
+    private val partyEditContract = registerForActivityResult(PartyInformationContract()) { resultAction ->
+        viewModel.occurEvent(resultAction)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -204,6 +216,22 @@ class PartyInformationActivity : AppCompatActivity() {
 
         etInputComment.setOnClickListener {
             it.showKeyboard()
+        }
+
+        toolbarContainer.btnMoreOptions.setOnClickListener { optionsButton ->
+            val editButton = optionsMenuBalloon.getContentView().findViewById<ConstraintLayout>(R.id.btn_edit)
+            val removeButton = optionsMenuBalloon.getContentView().findViewById<ConstraintLayout>(R.id.btn_remove)
+
+            editButton.setOnClickListener {
+                partyEditContract.launch(viewModel.party.value)
+            }
+
+            removeButton.setOnClickListener {
+                viewModel.occurEvent(PartyInformationAction.OnDeletePartyMenuClicked)
+                finish()
+            }
+
+            optionsMenuBalloon.showAlignBottom(optionsButton)
         }
     }
 
