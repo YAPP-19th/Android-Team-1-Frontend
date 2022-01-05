@@ -156,7 +156,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
         }
 
         repeatOnStarted {
-            partiesViewModel.saveAddressEvent.collect { event ->
+            partiesViewModel.saveAddressEvent.collectLatest { event ->
                 when (event) {
                     is PartiesViewModel.SaveAddressEvent.Success -> {
                         getCurrentAddressPartiesInCircle()
