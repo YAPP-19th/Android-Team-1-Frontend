@@ -144,7 +144,9 @@ class PartyInformationViewModel @Inject constructor(
             status = PartyStatus.of(party.status),
             targetUserCount = party.targetUserCount,
             title = party.title,
-            leader = PartyInformation.Leader.EMPTY
+            isIn = false,
+            leader = PartyInformation.Leader.EMPTY,
+            users = emptyList()
         )
     }
 

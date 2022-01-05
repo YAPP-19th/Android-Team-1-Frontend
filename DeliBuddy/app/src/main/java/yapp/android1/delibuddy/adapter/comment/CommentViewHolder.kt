@@ -72,6 +72,10 @@ class ChildCommentViewHolder(
             listener.invoke(CommentEvent.OnRemoveCommentClicked(comment))
         }
 
+        Glide.with(itemView)
+            .load(comment.writer?.profileImage)
+            .into(ivIconUser)
+
         setListener(comment, listener)
 
         if (isOwner) {

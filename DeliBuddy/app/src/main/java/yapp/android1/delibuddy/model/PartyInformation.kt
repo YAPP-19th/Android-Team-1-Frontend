@@ -20,7 +20,9 @@ data class PartyInformation(
     val status: PartyStatus,
     val targetUserCount: Int,
     val title: String,
-    val leader: Leader
+    val isIn: Boolean,
+    val leader: Leader,
+    val users: List<User>
 ) : Serializable {
 
     data class Leader(
@@ -48,6 +50,25 @@ data class PartyInformation(
         }
     }
 
+    data class User(
+        val id: Int,
+        val nickName: String,
+        val partiesCnt: Int,
+        val profileImage: String
+    ) {
+        companion object {
+            fun toUser(entity: PartyInformationEntity.UserEntity): User {
+                return User(
+                    id = entity.id,
+                    nickName = entity.nickName,
+                    partiesCnt = entity.partiesCnt,
+                    profileImage = entity.profileImage
+                )
+            }
+        }
+
+    }
+
     companion object {
         val EMPTY = PartyInformation(
             allStatuses = emptyList(),
@@ -63,7 +84,9 @@ data class PartyInformation(
             status = PartyStatus.RECRUIT,
             targetUserCount = -1,
             title = "",
-            leader = Leader.EMPTY
+            isIn = false,
+            leader = Leader.EMPTY,
+            users = emptyList()
         )
 
         fun toPartyInformation(partyEntity: PartyInformationEntity): PartyInformation {
@@ -81,7 +104,9 @@ data class PartyInformation(
                 status = PartyStatus.of(partyEntity.status),
                 targetUserCount = partyEntity.targetUserCount,
                 title = partyEntity.title,
-                leader = Leader.toLeader(partyEntity.leader)
+                isIn = partyEntity.isIn,
+                leader = Leader.toLeader(partyEntity.leader),
+                users = partyEntity.users.map { User.toUser(it) }
             )
         }
     }
