@@ -155,6 +155,8 @@ class PartyInformationActivity : AppCompatActivity() {
         tvParentCommentWriter.text = parentComment.writer?.nickName + " 님에게 답장"
         tvParentCommentBody.text = parentComment.body
         clTargetCommentContainer.show()
+
+        etInputComment.showKeyboard()
     }
 
     private fun hideTargetComment() = with(binding) {
