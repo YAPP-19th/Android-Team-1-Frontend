@@ -128,7 +128,6 @@ dependencies {
     implementation(Libraries.LOTTIE)
     implementation(Libraries.GLIDE)
     kapt(Libraries.GLIDE_COMPILER)
-    implementation(Libraries.OSS_LICENSE)
     implementation(Libraries.JWT_DECODE)
 
     implementation(Libraries.NAVER_MAP)
