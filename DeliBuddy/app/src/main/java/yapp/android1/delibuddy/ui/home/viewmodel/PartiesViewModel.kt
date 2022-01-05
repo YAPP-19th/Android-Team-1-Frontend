@@ -9,7 +9,6 @@ import yapp.android1.delibuddy.base.RetryAction
 import yapp.android1.delibuddy.model.Address
 import yapp.android1.delibuddy.model.Event
 import yapp.android1.delibuddy.model.Party
-import yapp.android1.delibuddy.ui.address.AddressSharedEvent
 import yapp.android1.domain.NetworkResult
 import yapp.android1.domain.entity.NetworkError
 import yapp.android1.domain.interactor.usecase.GetPartiesInCircleUseCase

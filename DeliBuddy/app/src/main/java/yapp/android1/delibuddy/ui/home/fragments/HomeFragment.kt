@@ -11,6 +11,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
+import timber.log.Timber
+import yapp.android1.delibuddy.DeliBuddyApplication
+import yapp.android1.delibuddy.R
 import yapp.android1.delibuddy.base.BaseFragment
 import yapp.android1.delibuddy.databinding.FragmentHomeBinding
 import yapp.android1.delibuddy.databinding.IncludeLayoutPartyItemBinding
@@ -57,7 +60,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
 
         initViews()
         initObserve()
-        getPartiesInCircle()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Timber.d("onResume")
+        getCurrentAddressPartiesInCircle()
     }
 
     private fun initViews() {
@@ -77,12 +85,30 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
         }
     }
 
-    private fun getPartiesInCircle() {
+    private fun getCurrentAddressPartiesInCircle() {
+        val address = DeliBuddyApplication.prefs.getCurrentUserAddress()
+
+        if (address != null) {
+            val point = "POINT (${address.lng} ${address.lat})"
+            getPartiesInCircle(
+                point,
+                2000
+            )
+        } else {
+            Toast.makeText(
+                activity,
+                R.string.address_call_fail,
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
+
+    private fun getPartiesInCircle(point: String, distance: Int) {
         partiesViewModel.occurEvent(
             PartiesViewModel.PartiesEvent.GetPartiesInCircle(
                 LocationRange(
-                    "POINT (127.027779 37.497830)",
-                    2000
+                    point,
+                    distance
                 )
             )
         )
@@ -108,13 +134,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
         }
 
         repeatOnStarted {
-            partiesViewModel.saveAddressEvent.collectLatest { event ->
+            partiesViewModel.saveAddressEvent.collect { event ->
                 when (event) {
                     is PartiesViewModel.SaveAddressEvent.Success -> {
-
+                        getCurrentAddressPartiesInCircle()
                     }
                     is PartiesViewModel.SaveAddressEvent.Failed -> {
-
                     }
                 }
             }
