@@ -55,7 +55,7 @@ data class PartyInformation(
         val nickName: String,
         val partiesCnt: Int,
         val profileImage: String
-    ) {
+    ) : Serializable {
         companion object {
             fun toUser(entity: PartyInformationEntity.UserEntity): User {
                 return User(
