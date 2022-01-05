@@ -32,6 +32,7 @@ object Google {
     const val FIREBASE_ANALYTICS         = "com.google.firebase:firebase-analytics-ktx"
     const val FIREBASE_MESSAGING         = "com.google.firebase:firebase-messaging-ktx"
     const val LOCATION                   = "com.google.android.gms:play-services-location:${Versions.LOCATION}"
+    const val OSS_LICENCE                = "com.google.android.gms:play-services-oss-licenses:${Versions.OSS_LICENSE}"
 }
 
 object Libraries {

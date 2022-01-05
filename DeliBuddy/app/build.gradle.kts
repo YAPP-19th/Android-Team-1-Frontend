@@ -118,6 +118,7 @@ dependencies {
     implementation(Google.FIREBASE_ANALYTICS)
     implementation(Google.FIREBASE_MESSAGING)
     implementation(Google.LOCATION)
+    implementation(Google.OSS_LICENCE)
 
     implementation(Libraries.RETROFIT)
     implementation(Libraries.RETROFIT_CONVERTER_GSON)
