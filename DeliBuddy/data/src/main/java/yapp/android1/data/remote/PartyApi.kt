@@ -27,7 +27,7 @@ interface PartyApi : DeliBuddyApi {
 
     @DELETE("api/v1/parties/{id}")
     suspend fun deleteParty(
-        @Query("id") id: Int,
+        @Path("id") id: Int,
     ): PostResponseModel
 
     @POST("api/v1/parties/{id}/ban")
