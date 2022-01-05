@@ -40,7 +40,7 @@ class PartyInformationViewModel @Inject constructor(
     private val _party = MutableStateFlow<PartyInformation>(PartyInformation.EMPTY)
     val party = _party.asStateFlow()
 
-    private val _comments = MutableStateFlow<List<Comment>>(emptyList())
+    private val _comments = MutableStateFlow<Comments>(Comments.EMPTY)
     val comments = _comments.asStateFlow()
 
     private val _targetParentComment = MutableStateFlow<Comment?>(null)
@@ -52,6 +52,7 @@ class PartyInformationViewModel @Inject constructor(
         class OnIntent(val data: Party, val currentUserId: Int) : PartyInformationAction()
         class OnStatusChanged(val status: PartyStatus) : PartyInformationAction()
         object OnJointPartyClicked : PartyInformationAction()
+        class DeleteComment(val commentId: Int) : PartyInformationAction()
         class WriteComment(val body: String) : PartyInformationAction()
         class OnCommentWriteTextViewClicked(val parentComment: Comment) : PartyInformationAction()
         object OnTouchBackground : PartyInformationAction()
@@ -102,6 +103,10 @@ class PartyInformationViewModel @Inject constructor(
                 } else {
                     createComment(body = action.body)
                 }
+            }
+
+            is PartyInformationAction.DeleteComment -> {
+                // TODO API 구현 필요
             }
 
             is PartyInformationAction.OnCommentWriteTextViewClicked -> {
@@ -242,10 +247,8 @@ class PartyInformationViewModel @Inject constructor(
         val result = fetchPartyCommentsUseCase.invoke(partyId)
         when (result) {
             is NetworkResult.Success -> {
-                val comments = result.data.map { comment ->
-                    Comment.fromCommentEntity(comment)
-                }
-                _comments.value = comments
+                val comments = result.data.map { entity -> Comment.fromCommentEntity(entity) }
+                _comments.value = Comments.of(comments)
             }
             is NetworkResult.Error -> {
                 handleError(result, null)

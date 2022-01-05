@@ -4,17 +4,19 @@ import yapp.android1.delibuddy.util.parseCommentDate
 import yapp.android1.delibuddy.util.parseDate
 import yapp.android1.domain.entity.CommentEntity
 
-interface CommentType
+abstract class CommentType(
+    open val id: Int
+)
 
 data class Comment(
-    val id: Int,
+    override val id: Int,
     val parentId: Int? = null,
     val partyId: Int,
     val writer: Writer?,
     val body: String,
     val createdAt: String,
     val children: List<ChildComment> = emptyList()
-) : CommentType {
+) : CommentType(id) {
     data class Writer(
         val nickName: String,
         val profileImage: String
@@ -27,10 +29,6 @@ data class Comment(
                 )
             }
         }
-    }
-
-    fun hasChildComments(): Boolean {
-        return children.isNotEmpty()
     }
 
     companion object {
@@ -52,13 +50,13 @@ data class Comment(
 }
 
 data class ChildComment(
-    val id: Int,
+    override val id: Int,
     val parentId: Int,
     val partyId: Int,
     val writer: Comment.Writer?,
     val body: String,
     val createdAt: String,
-) : CommentType{
+) : CommentType(id) {
     companion object {
         fun toChildComment(comment: Comment): ChildComment {
             return ChildComment(

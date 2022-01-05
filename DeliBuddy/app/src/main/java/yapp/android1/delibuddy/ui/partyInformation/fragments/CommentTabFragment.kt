@@ -5,6 +5,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.skydoves.balloon.balloon
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import timber.log.Timber
@@ -14,7 +15,9 @@ import yapp.android1.delibuddy.base.BaseFragment
 import yapp.android1.delibuddy.databinding.FragmentCommentTabBinding
 import yapp.android1.delibuddy.model.Comment
 import yapp.android1.delibuddy.ui.partyInformation.PartyInformationViewModel
+import yapp.android1.delibuddy.ui.partyInformation.PartyInformationViewModel.PartyInformationAction.*
 import yapp.android1.delibuddy.ui.partyInformation.PartyInformationViewModel.PartyInformationEvent
+import yapp.android1.delibuddy.ui.partyInformation.view.CommentOptionsBalloonFactory
 import yapp.android1.delibuddy.util.extensions.repeatOnStarted
 
 @AndroidEntryPoint
@@ -24,6 +27,8 @@ class CommentTabFragment : BaseFragment<FragmentCommentTabBinding>(FragmentComme
 
     private lateinit var commentAdapter: CommentAdapter
 
+    private val commentOptionsBalloon by balloon<CommentOptionsBalloonFactory>()
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -32,7 +37,8 @@ class CommentTabFragment : BaseFragment<FragmentCommentTabBinding>(FragmentComme
     }
 
     private fun initializeRecyclerView() = with(binding) {
-        commentAdapter = CommentAdapter(viewModel.value.isOwner.value)
+        commentAdapter = CommentAdapter(commentOptionsBalloon)
+        commentAdapter.setHasStableIds(false)
 
         rvComment.adapter = commentAdapter
         rvComment.setHasFixedSize(true)
@@ -44,10 +50,16 @@ class CommentTabFragment : BaseFragment<FragmentCommentTabBinding>(FragmentComme
     }
 
     private fun collectComments() {
+
+        repeatOnStarted {
+            viewModel.value.isOwner.collect { isOwner->
+                commentAdapter.isOwner = isOwner
+            }
+        }
+
         repeatOnStarted {
             viewModel.value.comments.collect { comments ->
-                Timber.tag("[Collect Comments]").d("$comments")
-                commentAdapter.submitList(comments)
+                commentAdapter.submitList(comments.value)
             }
         }
 
@@ -66,17 +78,14 @@ class CommentTabFragment : BaseFragment<FragmentCommentTabBinding>(FragmentComme
 
     private fun handleEvent(event: PartyInformationEvent) {
         when(event) {
-            is PartyInformationEvent.OnCreateCommentSuccess -> {
-
-            }
             else -> Unit
         }
     }
 
     private fun handleCommentEvent(event: CommentEvent) {
         when(event) {
-            is CommentEvent.OnWriteCommentClicked -> viewModel.value.occurEvent(PartyInformationViewModel.PartyInformationAction.OnCommentWriteTextViewClicked(event.comment as Comment))
-            is CommentEvent.OnRemoveCommentClicked -> Unit
+            is CommentEvent.OnWriteCommentClicked -> viewModel.value.occurEvent(OnCommentWriteTextViewClicked(event.comment as Comment))
+            is CommentEvent.OnRemoveCommentClicked -> viewModel.value.occurEvent(DeleteComment(event.comment.id))
         }
     }
 }
