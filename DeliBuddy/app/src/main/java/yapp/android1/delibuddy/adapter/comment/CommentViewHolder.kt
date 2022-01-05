@@ -18,11 +18,10 @@ import yapp.android1.delibuddy.util.extensions.show
 
 class ParentCommentViewHolder(
     private val binding: ItemParentCommentBinding,
-    private val isOwner: Boolean,
     private val commentOptionsBalloon: Balloon
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    fun onBind(comment: Comment, listener: CommentEventListener) = with(binding) {
+    fun onBind(comment: Comment, listener: CommentEventListener, isOwner: Boolean) = with(binding) {
         tvWriterNickname.text = comment.writer?.nickName
         tvBody.text = comment.body
         tvTimeAgo.text = comment.createdAt
@@ -49,6 +48,7 @@ class ParentCommentViewHolder(
             val removeButton = commentOptionsBalloon.getContentView().findViewById<ConstraintLayout>(R.id.btn_remove)
 
             removeButton.setOnClickListener {
+                commentOptionsBalloon.dismiss()
                 listener.invoke(CommentEvent.OnRemoveCommentClicked(comment))
             }
 
@@ -60,11 +60,10 @@ class ParentCommentViewHolder(
 
 class ChildCommentViewHolder(
     private val binding: ItemChildCommentBinding,
-    private val isOwner: Boolean,
     private val commentOptionsBalloon: Balloon
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    fun onBind(comment: ChildComment, listener: CommentEventListener) = with(binding) {
+    fun onBind(comment: ChildComment, listener: CommentEventListener, isOwner: Boolean) = with(binding) {
         tvWriterNickname.text = comment.writer?.nickName
         tvBody.text = comment.body
         tvTimeAgo.text = comment.createdAt
@@ -86,6 +85,7 @@ class ChildCommentViewHolder(
             val removeButton = commentOptionsBalloon.getContentView().findViewById<ConstraintLayout>(R.id.btn_remove)
 
             removeButton.setOnClickListener {
+                commentOptionsBalloon.dismiss()
                 listener.invoke(CommentEvent.OnRemoveCommentClicked(comment))
             }
 

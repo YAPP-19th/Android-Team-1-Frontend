@@ -110,6 +110,7 @@ dependencies {
     implementation(AndroidX.LIFECYCLE_RUNTIME_KTX)
 
     implementation(Google.HILT_ANDROID)
+    implementation("com.google.android.gms:play-services-oss-licenses:17.0.0")
     kapt(Google.HILT_ANDROID_COMPILER)
     kapt(Google.HILT_COMPILER)
     implementation(Google.MATERIAL)

@@ -25,7 +25,8 @@ class PartyInformationViewModel @Inject constructor(
     private val jointPartyUseCase: JoinPartyUseCase,
     private val changeStatusUseCase: ChangeStatusUseCase,
     private val createCommentUseCase: CreateCommentUseCase,
-    private val deletePartyUseCase: DeletePartyUseCase
+    private val deletePartyUseCase: DeletePartyUseCase,
+    private val deleteCommentUseCase: DeleteCommentUseCase
 ) : BaseViewModel<PartyInformationAction>() {
 
     private val _event = MutableEventFlow<PartyInformationEvent>()
@@ -70,6 +71,8 @@ class PartyInformationViewModel @Inject constructor(
         object HideTargetParentComment : PartyInformationEvent()
         object PartyDeleteSuccess : PartyInformationEvent()
         object PartyDeleteFailed : PartyInformationEvent()
+        object CommentDeleteSuccess : PartyInformationEvent()
+        object CommentDeleteFailed : PartyInformationEvent()
     }
 
     override suspend fun handleEvent(action: PartyInformationAction) {
@@ -106,7 +109,7 @@ class PartyInformationViewModel @Inject constructor(
             }
 
             is PartyInformationAction.DeleteComment -> {
-                // TODO API 구현 필요
+               deleteComment(action.commentId)
             }
 
             is PartyInformationAction.OnCommentWriteTextViewClicked -> {
@@ -168,6 +171,23 @@ class PartyInformationViewModel @Inject constructor(
         }
     }
 
+    private suspend fun deleteComment(commentId: Int) {
+        when(val result = deleteCommentUseCase.invoke(commentId)) {
+            is NetworkResult.Success -> {
+                if(result.data == true) {
+                    fetchPartyComments(_party.value.id)
+                    _event.emit(PartyInformationEvent.CommentDeleteSuccess)
+                } else {
+                    _event.emit(PartyInformationEvent.CommentDeleteFailed)
+                }
+            }
+
+            is NetworkResult.Error -> {
+                _event.emit(PartyInformationEvent.CommentDeleteFailed)
+            }
+        }
+    }
+
     private fun changePartyStatus(partyId: Int, changedStatus: String) = viewModelScope.launch {
         val result = changeStatusUseCase.invoke(
             params = ChangeStatusUseCase.Params(
@@ -224,7 +244,7 @@ class PartyInformationViewModel @Inject constructor(
         }
     }
 
-    private fun fetchPartyInformation(partyId: Int) = viewModelScope.launch {
+    private suspend fun fetchPartyInformation(partyId: Int) {
         val result = fetchPartyInformationUseCase.invoke(partyId)
         when (result) {
             is NetworkResult.Success -> {

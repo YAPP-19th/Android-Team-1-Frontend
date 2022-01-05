@@ -26,7 +26,7 @@ class CommentAdapter(
 
     var isOwner: Boolean = false
         set(value) {
-            field = true
+            field = value
             notifyDataSetChanged()
         }
 
@@ -38,12 +38,12 @@ class CommentAdapter(
         return when(viewType) {
             PARENT -> {
                 val binding = ItemParentCommentBinding.inflate(layoutInflater, parent, false)
-                ParentCommentViewHolder(binding, isOwner, commentOptionsBalloon)
+                ParentCommentViewHolder(binding, commentOptionsBalloon)
             }
 
             CHILD -> {
                 val binding = ItemChildCommentBinding.inflate(layoutInflater, parent, false)
-                ChildCommentViewHolder(binding, isOwner, commentOptionsBalloon)
+                ChildCommentViewHolder(binding, commentOptionsBalloon)
             }
 
             else -> throw IllegalArgumentException("올바르지 않은 CommentType입니다.")
@@ -58,11 +58,11 @@ class CommentAdapter(
         when(holder) {
             is ParentCommentViewHolder -> {
                 val item = currentList[position] as Comment
-                holder.onBind(item, commentEventListener!!)
+                holder.onBind(item, commentEventListener!!, isOwner)
             }
             is ChildCommentViewHolder -> {
                 val item = currentList[position] as ChildComment
-                holder.onBind(item, commentEventListener!!)
+                holder.onBind(item, commentEventListener!!, isOwner)
             }
         }
     }

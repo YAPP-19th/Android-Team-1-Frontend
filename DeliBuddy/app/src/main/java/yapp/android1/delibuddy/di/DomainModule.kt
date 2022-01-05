@@ -71,7 +71,13 @@ object DomainModule {
     }
 
     @Provides
-    fun provideDeletePartyUsecase(partyRepository: PartyRepository): DeletePartyUseCase {
+    fun provideDeletePartyUseCase(partyRepository: PartyRepository): DeletePartyUseCase {
         return DeletePartyUseCase(partyRepository)
     }
+
+    @Provides
+    fun provideDeleteCommentUseCase(commentRepository: CommentRepository): DeleteCommentUseCase {
+        return DeleteCommentUseCase(commentRepository)
+    }
+
 }

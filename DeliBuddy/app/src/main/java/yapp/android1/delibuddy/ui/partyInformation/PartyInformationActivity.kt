@@ -109,9 +109,11 @@ class PartyInformationActivity : AppCompatActivity() {
             is PartyInformationEvent.OnPartyJoinSuccess -> {
                 Toast.makeText(this, "파티 참가 성공", Toast.LENGTH_SHORT).show()
             }
+
             is PartyInformationEvent.OnPartyJoinFailed -> {
                 Toast.makeText(this, "파티 인원이 다 찼습니다.", Toast.LENGTH_SHORT).show()
             }
+
             is PartyInformationEvent.OnCreateCommentSuccess -> {
                 binding.etInputComment.setText("")
                 Toast.makeText(this, "댓글이 정상적으로 등록되었습니다", Toast.LENGTH_SHORT).show()
@@ -119,6 +121,7 @@ class PartyInformationActivity : AppCompatActivity() {
                 binding.root.hideKeyboard()
                 hideTargetComment()
             }
+
             is PartyInformationEvent.OnCreateCommentFailed -> {
                 Toast.makeText(this, "댓글 작성에 실패했습니다 다시 시도해 주세요", Toast.LENGTH_SHORT).show()
             }
@@ -131,6 +134,14 @@ class PartyInformationActivity : AppCompatActivity() {
 
             is PartyInformationEvent.PartyDeleteFailed -> {
                 Toast.makeText(this, "파티 삭제에 실패했습니다. 잠시 후 다시 시도해 주세요.", Toast.LENGTH_SHORT).show()
+            }
+
+            is PartyInformationEvent.CommentDeleteSuccess -> {
+                Toast.makeText(this, "댓글이 성공적으로 삭제됐습니다.", Toast.LENGTH_SHORT).show()
+            }
+
+            is PartyInformationEvent.CommentDeleteFailed -> {
+                Toast.makeText(this, "댓글 삭제에 실패했습니다. 잠시 후 다시 시도해 주세요.", Toast.LENGTH_SHORT).show()
             }
 
             else -> Unit
