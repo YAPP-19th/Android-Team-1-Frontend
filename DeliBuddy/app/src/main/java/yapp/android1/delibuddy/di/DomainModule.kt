@@ -69,4 +69,9 @@ object DomainModule {
     fun provideCreateCommentUseCase(commentRepository: CommentRepository): CreateCommentUseCase {
         return CreateCommentUseCase(commentRepository)
     }
+
+    @Provides
+    fun provideFcmUseCase(userRepository: UserRepository): FcmTokenUseCase {
+        return FcmTokenUseCase(userRepository)
+    }
 }

@@ -25,11 +25,10 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun setFcmToken(token: String): NetworkResult<Unit> {
+    override suspend fun setFcmToken(token: String): NetworkResult<Boolean> {
         return try {
-            //지히님 편한대로 수정하셔요!
-            api.setFcmToken()
-            NetworkResult.Success(Unit)
+            val response = api.setFcmToken(token)
+            NetworkResult.Success(response.okay)
         } catch (exception: Exception) {
             val error = deliBuddyNetworkErrorHandler.getError(exception)
             NetworkResult.Error(error)
