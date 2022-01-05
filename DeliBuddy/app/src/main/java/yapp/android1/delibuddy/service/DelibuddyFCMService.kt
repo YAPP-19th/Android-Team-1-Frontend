@@ -18,7 +18,8 @@ import yapp.android1.delibuddy.ui.splash.SplashActivity
 
 class DelibuddyFCMService : FirebaseMessagingService() {
     enum class Channel(val channelId: String, val channelName: String) {
-        COMMENT("delibuddy_comment", "comment")
+        COMMENT("delibuddy_comment", "comment"),
+        PARTY_STATUS("delibuddy_party_status", "comment")
     }
 
     override fun onMessageReceived(message: RemoteMessage) {

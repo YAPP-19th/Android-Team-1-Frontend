@@ -15,12 +15,10 @@ import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
-import timber.log.Timber
 import yapp.android1.delibuddy.R
 import yapp.android1.delibuddy.adapter.CommunityViewPagerAdapter
 import yapp.android1.delibuddy.databinding.ActivityPartyInformationBinding
 import yapp.android1.delibuddy.model.Comment
-import yapp.android1.delibuddy.model.CommentType
 import yapp.android1.delibuddy.model.Party
 import yapp.android1.delibuddy.model.PartyInformation
 import yapp.android1.delibuddy.ui.partyInformation.PartyInformationViewModel.PartyInformationAction
@@ -54,17 +52,27 @@ class PartyInformationActivity : AppCompatActivity() {
     }
 
     private fun receiverIntent() {
-        val intentData = intent.getSerializableExtra("party")
-        intentData?.let {
-            viewModel.occurEvent(OnIntent(it as Party, sharedPreferencesManager.getUserId()))
-        } ?: kotlin.run {
-            val partyId = intent.getIntExtra("partyId", -1)
-            viewModel.occurEvent(
-                PartyInformationAction.OnIntentWithPartyId(
-                    partyId,
-                    sharedPreferencesManager.getUserId()
+        val partyData = intent.getSerializableExtra("party")
+        val partyId = intent.getIntExtra("partyId", -1)
+
+        when {
+            partyData != null -> {
+                viewModel.occurEvent(
+                    OnIntent(
+                        partyData as Party,
+                        sharedPreferencesManager.getUserId()
+                    )
                 )
-            )
+            }
+
+            else -> {
+                viewModel.occurEvent(
+                    PartyInformationAction.OnIntentWithPartyId(
+                        partyId,
+                        sharedPreferencesManager.getUserId()
+                    )
+                )
+            }
         }
     }
 

@@ -85,6 +85,18 @@ class SplashActivity : AppCompatActivity() {
                     Toast.makeText(this, "존재하지 않는 게시글입니다", Toast.LENGTH_SHORT).show()
                 }
             }
+
+            "party" -> {
+                val partyId = uri.getQueryParameter("partyId")?.toInt() ?: -1
+                if (partyId > -1) {
+                    val intent = Intent(this, PartyInformationActivity::class.java)
+                    intent.putExtra("partyId", partyId)
+                    startActivity(intent)
+                    finish()
+                } else {
+                    Toast.makeText(this, "존재하지 않는 게시글입니다", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
 
