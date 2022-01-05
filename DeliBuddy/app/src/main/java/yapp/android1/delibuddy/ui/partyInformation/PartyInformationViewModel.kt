@@ -24,7 +24,8 @@ class PartyInformationViewModel @Inject constructor(
     private val fetchPartyCommentsUseCase: FetchPartyCommentsUseCase,
     private val jointPartyUseCase: JoinPartyUseCase,
     private val changeStatusUseCase: ChangeStatusUseCase,
-    private val createCommentUseCase: CreateCommentUseCase
+    private val createCommentUseCase: CreateCommentUseCase,
+    private val deletePartyUseCase: DeletePartyUseCase
 ) : BaseViewModel<PartyInformationAction>() {
 
     private val _event = MutableEventFlow<PartyInformationEvent>()
@@ -66,6 +67,8 @@ class PartyInformationViewModel @Inject constructor(
         object OnCreateCommentFailed : PartyInformationEvent()
         class ShowTargetParentComment(val parentComment: Comment) : PartyInformationEvent()
         object HideTargetParentComment : PartyInformationEvent()
+        object PartyDeleteSuccess : PartyInformationEvent()
+        object PartyDeleteFailed : PartyInformationEvent()
     }
 
     override suspend fun handleEvent(action: PartyInformationAction) {
@@ -109,6 +112,10 @@ class PartyInformationViewModel @Inject constructor(
             is PartyInformationAction.OnTouchBackground -> {
                 _targetParentComment.value = null
                 _event.emit(PartyInformationEvent.HideTargetParentComment)
+            }
+
+            is PartyInformationAction.OnDeletePartyMenuClicked -> {
+                deleteParty()
             }
 
         }
@@ -193,6 +200,21 @@ class PartyInformationViewModel @Inject constructor(
             }
             is NetworkResult.Error -> {
                 handleError(result, null)
+            }
+        }
+    }
+
+    private fun deleteParty() = viewModelScope.launch {
+        when(val result = deletePartyUseCase.invoke(_party.value.id)) {
+            is NetworkResult.Success -> {
+                if(result.data == true) {
+                    _event.emit(PartyInformationEvent.PartyDeleteSuccess)
+                } else {
+                    _event.emit(PartyInformationEvent.PartyDeleteFailed)
+                }
+            }
+            is NetworkResult.Error -> {
+                _event.emit(PartyInformationEvent.PartyDeleteFailed)
             }
         }
     }

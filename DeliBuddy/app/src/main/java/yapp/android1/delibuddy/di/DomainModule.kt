@@ -64,4 +64,9 @@ object DomainModule {
     fun provideCreateCommentUseCase(commentRepository: CommentRepository): CreateCommentUseCase {
         return CreateCommentUseCase(commentRepository)
     }
+
+    @Provides
+    fun provideDeletePartyUsecase(partyRepository: PartyRepository): DeletePartyUseCase {
+        return DeletePartyUseCase(partyRepository)
+    }
 }

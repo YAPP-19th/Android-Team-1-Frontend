@@ -54,3 +54,11 @@ class ChangeStatusUseCase @Inject constructor(
         val changedStatus: String
     )
 }
+
+class DeletePartyUseCase @Inject constructor(
+    private val partyRepository: PartyRepository
+) : BaseUseCase<NetworkResult<Boolean>, PartyId>() {
+    override suspend fun run(params: PartyId): NetworkResult<Boolean> {
+        return partyRepository.deleteParty(params)
+    }
+}
