@@ -7,6 +7,7 @@ import com.bumptech.glide.Glide
 import com.skydoves.balloon.Balloon
 import yapp.android1.delibuddy.R
 import yapp.android1.delibuddy.databinding.ItemChildCommentBinding
+import yapp.android1.delibuddy.databinding.ItemEmptyCommentBinding
 import yapp.android1.delibuddy.databinding.ItemParentCommentBinding
 import yapp.android1.delibuddy.model.ChildComment
 import yapp.android1.delibuddy.model.Comment
@@ -94,5 +95,9 @@ class ChildCommentViewHolder(
     }
 
 }
+
+class EmptyCommentViewHolder(
+    private val binding: ItemEmptyCommentBinding
+) : RecyclerView.ViewHolder(binding.root)
 
 

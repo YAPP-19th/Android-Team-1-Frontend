@@ -7,12 +7,9 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.skydoves.balloon.Balloon
 import yapp.android1.delibuddy.databinding.ItemChildCommentBinding
+import yapp.android1.delibuddy.databinding.ItemEmptyCommentBinding
 import yapp.android1.delibuddy.databinding.ItemParentCommentBinding
-import yapp.android1.delibuddy.model.ChildComment
-import yapp.android1.delibuddy.model.Comment
-import yapp.android1.delibuddy.model.CommentType
-import yapp.android1.delibuddy.model.Event
-
+import yapp.android1.delibuddy.model.*
 
 
 class CommentAdapter(
@@ -22,6 +19,7 @@ class CommentAdapter(
     companion object {
         private const val PARENT = 1
         private const val CHILD  = 2
+        private const val EMPTY  = 3
     }
 
     var isOwner: Boolean = false
@@ -46,12 +44,22 @@ class CommentAdapter(
                 ChildCommentViewHolder(binding, commentOptionsBalloon)
             }
 
+            EMPTY -> {
+                val binding = ItemEmptyCommentBinding.inflate(layoutInflater, parent, false)
+                EmptyCommentViewHolder(binding)
+            }
+
             else -> throw IllegalArgumentException("올바르지 않은 CommentType입니다.")
         }
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if(currentList[position] is Comment) PARENT else CHILD
+        return when(currentList[position]){
+            is Comment -> PARENT
+            is ChildComment -> CHILD
+            is EmptyComment -> EMPTY
+            else -> throw IllegalArgumentException("올바르지 않은 CommentType입니다.")
+        }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {

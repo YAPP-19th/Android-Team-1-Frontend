@@ -71,3 +71,7 @@ data class ChildComment(
     }
 }
 
+data class EmptyComment(
+    override val id: Int = -1
+) : CommentType(id)
+
