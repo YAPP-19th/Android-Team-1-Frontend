@@ -56,7 +56,17 @@ object DomainModule {
     }
 
     @Provides
+    fun provideGetMyInfoUseCase(userRepository: UserRepository): GetMyInfoUseCase {
+        return GetMyInfoUseCase(userRepository)
+    }
+
+    @Provides
     fun provideJoinPartyUseCase(partyRepository: PartyRepository): JoinPartyUseCase {
         return JoinPartyUseCase(partyRepository)
+    }
+
+    @Provides
+    fun provideCreateCommentUseCase(commentRepository: CommentRepository): CreateCommentUseCase {
+        return CreateCommentUseCase(commentRepository)
     }
 }

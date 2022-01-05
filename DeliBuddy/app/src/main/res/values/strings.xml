@@ -22,10 +22,15 @@
     <string name="navigation_mypage_title">마이페이지</string>
     <string name="navigation_mypage_service">서비스 약관</string>
     <string name="navigation_mypage_license">라이센스</string>
+    <string name="navigation_mypage_banner_title">버디와 함께 한 식사 횟수</string>
+    <string name="navigation_mypage_count">%d번</string>
 
     <string name="login_info">효율적인 음식 배달,\n지금 바로 딜리버디로\n시작해볼까요?</string>
     <string name="kakao_login">카카오로 시작하기</string>
-    <string name="policy_info">가입을 진행할 경우, 아래의 정책에 동의한 것으로 간주됩니다.\n서비스이용약관 및 개인정보처리방침</string>
+    <string name="policy_info">가입을 진행할 경우, 아래의 정책에 동의한 것으로 간주됩니다.</string>
+    <string name="policy_info_terms_of_service"><u>서비스 이용 약관</u></string>
+    <string name="policy_info_or">및</string>
+    <string name="policy_info_privacy_policy"><u>개인정보 처리 방침</u></string>
 
     <string name="parties_empty_title">근처 파티가 존재하지 않아요 :’(</string>
     <string name="parties_empty_sub">파티를 직접 만들어서\n근처 버디들과 음식을 나눠보세요!</string>
