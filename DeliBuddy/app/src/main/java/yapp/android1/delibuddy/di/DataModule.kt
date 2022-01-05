@@ -24,7 +24,7 @@ object DataModule {
     @Provides
     fun provideCommentRepository(
         commentApi: CommentApi,
-        deliBuddyNetworkErrorHandler: DeliBuddyNetworkErrorHandler
+        deliBuddyNetworkErrorHandler: DeliBuddyNetworkErrorHandler,
     ): CommentRepository {
         return CommentRepositoryImpl(commentApi, deliBuddyNetworkErrorHandler)
     }
@@ -38,6 +38,14 @@ object DataModule {
     }
 
     @Provides
+    fun provideUserRepository(
+        userApi: UserApi,
+        deliBuddyNetworkErrorHandler: DeliBuddyNetworkErrorHandler,
+    ): UserRepository {
+        return UserRepositoryImpl(userApi, deliBuddyNetworkErrorHandler)
+    }
+
+    @Provides
     fun provideCoordToAddressRepository(
         kakaoLocalApi: KakaoLocalApi,
         kakaoNetworkErrorHandler: KakaoNetworkErrorHandler,
@@ -48,7 +56,7 @@ object DataModule {
     @Provides
     fun provideCategoryListRepository(
         categoryListApi: CategoryListApi,
-        deliBuddyNetworkErrorHandler: DeliBuddyNetworkErrorHandler
+        deliBuddyNetworkErrorHandler: DeliBuddyNetworkErrorHandler,
     ): CategoryListRepository {
         return CategoryListRepositoryImpl(categoryListApi, deliBuddyNetworkErrorHandler)
     }

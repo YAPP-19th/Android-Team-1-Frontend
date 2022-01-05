@@ -110,6 +110,11 @@ object NetworkModule {
     }
 
     @Provides
+    fun provideUserApiService(@DeliBuddyRetrofit retrofit: Retrofit): UserApi {
+        return retrofit.create(UserApi::class.java)
+    }
+
+    @Provides
     fun provideCategoryListApiService(@DeliBuddyRetrofit retrofit: Retrofit): CategoryListApi {
         return retrofit.create(CategoryListApi::class.java)
     }
