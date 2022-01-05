@@ -1,11 +1,14 @@
 package yapp.android1.delibuddy.ui.partyInformation
 
 import android.graphics.Color
+import android.graphics.Typeface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Spannable
+import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
+import android.text.style.StyleSpan
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.registerForActivityResult
@@ -196,6 +199,10 @@ class PartyInformationActivity : AppCompatActivity() {
 
         // [Party Owner]
         tvPartyOwnerName.text = party.leader.nickName
+
+        tvPartyOwnerPartiesCount.text = "버디와 함께한 식사 ${party.leader.partiesCnt}번"
+        val tvPartyOwnerPartiesCountSpan = tvPartyOwnerPartiesCount.text as Spannable
+        tvPartyOwnerPartiesCountSpan.setSpan(StyleSpan(Typeface.BOLD), 11, tvPartyOwnerPartiesCount.text.lastIndex + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
 
         Glide.with(this@PartyInformationActivity)
             .load(party.leader.profileImage)
