@@ -58,8 +58,8 @@ class PartyInformationViewModel @Inject constructor(
         class OnCommentWriteTextViewClicked(val parentComment: Comment) : PartyInformationAction()
         object OnTouchBackground : PartyInformationAction()
         object OnDeletePartyMenuClicked : PartyInformationAction()
-        class EditSuccess(val partyInformation: PartyInformation) : PartyInformationAction()
-        object EditFailed : PartyInformationAction()
+        object PartyEditSuccess : PartyInformationAction()
+        object PartyEditFailed : PartyInformationAction()
     }
 
     sealed class PartyInformationEvent : Event {
@@ -101,15 +101,18 @@ class PartyInformationViewModel @Inject constructor(
             }
 
             is PartyInformationAction.WriteComment -> {
-                if(isWritingChildComment()) {
-                    createComment(body = action.body, parentId = (_targetParentComment.value as Comment).id)
+                if (isWritingChildComment()) {
+                    createComment(
+                        body = action.body,
+                        parentId = (_targetParentComment.value as Comment).id
+                    )
                 } else {
                     createComment(body = action.body)
                 }
             }
 
             is PartyInformationAction.DeleteComment -> {
-               deleteComment(action.commentId)
+                deleteComment(action.commentId)
             }
 
             is PartyInformationAction.OnCommentWriteTextViewClicked -> {
@@ -124,6 +127,10 @@ class PartyInformationViewModel @Inject constructor(
 
             is PartyInformationAction.OnDeletePartyMenuClicked -> {
                 deleteParty()
+            }
+
+            is PartyInformationAction.PartyEditSuccess -> {
+                fetchPartyInformation(_party.value.id)
             }
 
         }
@@ -152,7 +159,7 @@ class PartyInformationViewModel @Inject constructor(
 
     private fun isWritingChildComment() = _targetParentComment.value != null
 
-    private fun createComment(body: String, parentId: Int? = null) = viewModelScope.launch {
+    private suspend fun createComment(body: String, parentId: Int? = null) {
         val params = CommentCreationRequestEntity(
             body = body,
             parentId = parentId,
@@ -174,9 +181,9 @@ class PartyInformationViewModel @Inject constructor(
     }
 
     private suspend fun deleteComment(commentId: Int) {
-        when(val result = deleteCommentUseCase.invoke(commentId)) {
+        when (val result = deleteCommentUseCase.invoke(commentId)) {
             is NetworkResult.Success -> {
-                if(result.data == true) {
+                if (result.data == true) {
                     fetchPartyComments(_party.value.id)
                     _event.emit(PartyInformationEvent.CommentDeleteSuccess)
                 } else {
@@ -190,7 +197,7 @@ class PartyInformationViewModel @Inject constructor(
         }
     }
 
-    private fun changePartyStatus(partyId: Int, changedStatus: String) = viewModelScope.launch {
+    private suspend fun changePartyStatus(partyId: Int, changedStatus: String) {
         val result = changeStatusUseCase.invoke(
             params = ChangeStatusUseCase.Params(
                 partyId = partyId,
@@ -212,10 +219,9 @@ class PartyInformationViewModel @Inject constructor(
                 handleError(result, null)
             }
         }
-
     }
 
-    private fun joinParty() = viewModelScope.launch {
+    private suspend fun joinParty() {
         when (val result = jointPartyUseCase.invoke(_party.value.id)) {
             is NetworkResult.Success -> {
                 if (result.data == true) {
@@ -231,10 +237,10 @@ class PartyInformationViewModel @Inject constructor(
         }
     }
 
-    private fun deleteParty() = viewModelScope.launch {
-        when(val result = deletePartyUseCase.invoke(_party.value.id)) {
+    private suspend fun deleteParty() {
+        when (val result = deletePartyUseCase.invoke(_party.value.id)) {
             is NetworkResult.Success -> {
-                if(result.data == true) {
+                if (result.data == true) {
                     _event.emit(PartyInformationEvent.PartyDeleteSuccess)
                 } else {
                     _event.emit(PartyInformationEvent.PartyDeleteFailed)

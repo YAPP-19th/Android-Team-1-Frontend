@@ -15,12 +15,14 @@ import androidx.activity.result.registerForActivityResult
 import androidx.activity.viewModels
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.skydoves.balloon.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import yapp.android1.delibuddy.R
 import yapp.android1.delibuddy.adapter.CommunityViewPagerAdapter
 import yapp.android1.delibuddy.databinding.ActivityPartyInformationBinding
@@ -100,7 +102,7 @@ class PartyInformationActivity : AppCompatActivity() {
             }
         }
 
-        repeatOnStarted {
+        lifecycleScope.launch {
             viewModel.event.collect { event ->
                 handleEvent(event)
             }
@@ -121,7 +123,7 @@ class PartyInformationActivity : AppCompatActivity() {
                 binding.etInputComment.setText("")
                 Toast.makeText(this, "댓글이 정상적으로 등록되었습니다", Toast.LENGTH_SHORT).show()
 
-                binding.root.hideKeyboard()
+                binding.etInputComment.hideKeyboard()
                 hideTargetComment()
             }
 
@@ -250,10 +252,12 @@ class PartyInformationActivity : AppCompatActivity() {
             val removeButton = optionsMenuBalloon.getContentView().findViewById<ConstraintLayout>(R.id.btn_remove)
 
             editButton.setOnClickListener {
+                optionsMenuBalloon.dismiss()
                 partyEditContract.launch(viewModel.party.value)
             }
 
             removeButton.setOnClickListener {
+                optionsMenuBalloon.dismiss()
                 viewModel.occurEvent(PartyInformationAction.OnDeletePartyMenuClicked)
             }
 

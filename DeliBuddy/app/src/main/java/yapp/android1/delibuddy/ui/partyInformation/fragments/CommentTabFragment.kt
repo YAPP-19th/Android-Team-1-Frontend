@@ -4,10 +4,12 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.skydoves.balloon.balloon
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import yapp.android1.delibuddy.adapter.comment.CommentAdapter
 import yapp.android1.delibuddy.adapter.comment.CommentEvent

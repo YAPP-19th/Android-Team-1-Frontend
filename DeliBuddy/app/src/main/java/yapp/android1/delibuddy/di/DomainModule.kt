@@ -80,4 +80,9 @@ object DomainModule {
         return DeleteCommentUseCase(commentRepository)
     }
 
+    @Provides
+    fun provideEditPartyUseCase(partyRepository: PartyRepository): EditPartyUseCase {
+        return EditPartyUseCase(partyRepository)
+    }
+
 }
