@@ -18,7 +18,6 @@ import javax.inject.Inject
 class AuthViewModel @Inject constructor(
     private val fetchAuthUseCase: FetchAuthUseCase,
     private val refreshAuthUseCase: RefreshAuthUseCase,
-    private val userAuthManager: UserAuthManager,
 ) : BaseViewModel<Event>() {
 
     private val _tokenResult = MutableEventFlow<Auth>()
