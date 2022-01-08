@@ -1,5 +1,6 @@
 package yapp.android1.delibuddy.util.user
 
+import android.app.Activity
 import android.content.Context
 import com.kakao.sdk.user.UserApiClient
 import yapp.android1.delibuddy.model.Auth
@@ -21,8 +22,8 @@ class UserAuthManager(
         return UserApiClient.instance.isKakaoTalkLoginAvailable(context = context)
     }
 
-    fun kakaoLogin(call: (Boolean, String?, String?) -> Unit) {
-        kakaoLoginModule.kakaoLogin(call)
+    fun kakaoLogin(context: Activity, call: (Boolean, String?, String?) -> Unit) {
+        kakaoLoginModule.kakaoLogin(context, call)
     }
 
     fun checkAuthStatus(callback: (Int) -> Unit) {

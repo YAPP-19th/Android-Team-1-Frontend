@@ -65,7 +65,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun loginWithKakaoApi() {
         binding.buttonKakaoLogin.setOnClickListener {
-            userAuthManager.kakaoLogin { isLoginSuccess, errorMessage, kakaoToken ->
+            userAuthManager.kakaoLogin(this) { isLoginSuccess, errorMessage, kakaoToken ->
                 when (isLoginSuccess) {
                     true -> authViewModel.occurEvent(
                         AuthViewModel.AuthEvent.OnKakaoLoginSuccess(

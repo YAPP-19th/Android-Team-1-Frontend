@@ -34,10 +34,8 @@ object AppModule {
     }
 
     @Provides
-    fun provideKakaoLoginModule(
-        @ApplicationContext context: Context,
-    ): KakaoLoginModule {
-        return KakaoLoginModule(context)
+    fun provideKakaoLoginModule(): KakaoLoginModule {
+        return KakaoLoginModule()
     }
 
     @Provides
