@@ -35,15 +35,12 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/icon_logo" />
 
-        <androidx.appcompat.widget.AppCompatButton
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/button_kakao_login"
-            style="@style/RobotoBold14"
-            android:layout_width="320dp"
-            android:layout_height="45dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginTop="72dp"
-            android:background="@drawable/delibuddy_btn_radius"
-            android:backgroundTint="@color/kakao_yellow"
-            android:text="@string/kakao_login"
+            android:src="@drawable/image_kakao_login_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/text_login_info" />
@@ -53,7 +50,7 @@
             style="@style/RobotoRegular11"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="16dp"
             android:gravity="center"
             android:text="@string/policy_info"
             android:textColor="@color/text_grey"
