@@ -131,6 +131,7 @@ dependencies {
 
     implementation(Libraries.NAVER_MAP)
     implementation(Libraries.KAKAO_LOGIN)
+    implementation ("com.kakao.sdk:v2-link:2.8.4")
     implementation(Libraries.BALLOON)
 
     testImplementation(UnitTest.JUNIT)

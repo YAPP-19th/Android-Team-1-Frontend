@@ -1,7 +1,10 @@
 package yapp.android1.delibuddy.ui.partyInformation
 
+import android.content.ActivityNotFoundException
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Spannable
@@ -9,6 +12,7 @@ import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.registerForActivityResult
@@ -19,6 +23,11 @@ import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import com.kakao.sdk.common.util.KakaoCustomTabsClient
+import com.kakao.sdk.link.LinkClient
+import com.kakao.sdk.link.WebSharerClient
+import com.kakao.sdk.template.model.Link
+import com.kakao.sdk.template.model.TextTemplate
 import com.skydoves.balloon.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -232,7 +241,10 @@ class PartyInformationActivity : AppCompatActivity() {
         }
 
         btnJoinParty.setOnClickListener {
-            viewModel.occurEvent(PartyInformationAction.OnJointPartyClicked)
+            //viewModel.occurEvent(PartyInformationAction.OnJointPartyClicked)
+            //makeKakaoMessage()
+
+            openKakaoLink()
         }
 
         btnCreateComment.setOnClickListener {
@@ -311,6 +323,62 @@ class PartyInformationActivity : AppCompatActivity() {
                 1 -> tab.text = "파티인원"
             }
         }.attach()
+    }
+
+    private fun openKakaoLink() {
+        val browseLink = Intent(Intent.ACTION_VIEW, Uri.parse("https://open.kakao.com/o/gPA7PgTd"))
+        startActivity(browseLink)
+    }
+
+    private fun makeKakaoMessage() {
+        val text = TextTemplate(
+            text = """
+                ${viewModel.party.value.openKakaoUrl} 에 참가하세
+            """.trimIndent(),
+            link = Link(
+                webUrl = "https://open.kakao.com/o/gPA7PgTd",
+                mobileWebUrl = "https://open.kakao.com/o/gPA7PgTd"
+            )
+        )
+
+        val TAG = "[TAG]"
+
+        if (LinkClient.instance.isKakaoLinkAvailable(this)) {
+            // 카카오톡으로 카카오링크 공유 가능
+            LinkClient.instance.defaultTemplate(this, text) { linkResult, error ->
+                if (error != null) {
+                    Log.e(TAG, "카카오링크 보내기 실패", error)
+                }
+                else if (linkResult != null) {
+                    Log.d(TAG, "카카오링크 보내기 성공 ${linkResult.intent}")
+                    startActivity(linkResult.intent)
+
+                    // 카카오링크 보내기에 성공했지만 아래 경고 메시지가 존재할 경우 일부 컨텐츠가 정상 동작하지 않을 수 있습니다.
+                    Log.w(TAG, "Warning Msg: ${linkResult.warningMsg}")
+                    Log.w(TAG, "Argument Msg: ${linkResult.argumentMsg}")
+                }
+            }
+        } else {
+            // 카카오톡 미설치: 웹 공유 사용 권장
+            // 웹 공유 예시 코드
+            val sharerUrl = WebSharerClient.instance.defaultTemplateUri(text)
+
+            // CustomTabs으로 웹 브라우저 열기
+
+            // 1. CustomTabs으로 Chrome 브라우저 열기
+            try {
+                KakaoCustomTabsClient.openWithDefault(this, sharerUrl)
+            } catch(e: UnsupportedOperationException) {
+                // Chrome 브라우저가 없을 때 예외처리
+            }
+
+            // 2. CustomTabs으로 디바이스 기본 브라우저 열기
+            try {
+                KakaoCustomTabsClient.open(this, sharerUrl)
+            } catch (e: ActivityNotFoundException) {
+                // 인터넷 브라우저가 없을 때 예외처리
+            }
+        }
     }
 
 }
