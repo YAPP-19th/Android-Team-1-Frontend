@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -12,8 +11,8 @@
         android:id="@+id/card_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="8dp"
         app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="8dp"
         app:cardElevation="4dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -21,26 +20,37 @@
             android:layout_height="wrap_content">
 
             <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/iv_left_icon"
-                android:layout_width="117dp"
+                android:id="@+id/iv_left_background"
+                android:layout_width="88dp"
                 android:layout_height="0dp"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                tools:background="@color/black"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:background="@color/black" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/food_category_image"
+                android:layout_width="72dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="12dp"
+                android:transitionName="icon_food"
+                app:layout_constraintBottom_toBottomOf="@id/iv_left_background"
+                app:layout_constraintEnd_toEndOf="@id/iv_left_background"
+                app:layout_constraintStart_toStartOf="@id/iv_left_background"
+                app:layout_constraintTop_toTopOf="@id/iv_left_background"
                 tools:src="@drawable/icon_delibuddy_foreground" />
 
             <LinearLayout
                 android:id="@+id/linearLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="18dp"
                 android:layout_marginStart="18dp"
+                android:layout_marginTop="18dp"
                 android:layout_marginBottom="13dp"
                 android:orientation="horizontal"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/iv_left_icon"
-                app:layout_constraintBottom_toTopOf="@id/tv_content">
+                app:layout_constraintBottom_toTopOf="@id/party_title"
+                app:layout_constraintStart_toEndOf="@+id/iv_left_background"
+                app:layout_constraintTop_toTopOf="parent">
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/location_icon"
@@ -49,58 +59,77 @@
                     android:src="@drawable/icon_location" />
 
                 <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/party_location"
                     style="@style/RobotoRegular14"
-                    android:id="@+id/tv_location"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
+                    android:transitionName="tv_location"
                     tools:text="성복역 1번 출구" />
 
             </LinearLayout>
 
             <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/party_title"
                 style="@style/RobotoBold16"
-                android:id="@+id/tv_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="7dp"
-                app:layout_constraintTop_toBottomOf="@id/linearLayout"
-                app:layout_constraintStart_toStartOf="@+id/linearLayout"
-                app:layout_constraintEnd_toStartOf="@id/badge"
-                app:layout_constraintBottom_toTopOf="@+id/tv_date"
+                android:transitionName="tv_title"
+                app:layout_constraintBottom_toTopOf="@+id/party_scheduled_time"
+                app:layout_constraintEnd_toStartOf="@id/ordering_status_label"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="@+id/linearLayout"
+                app:layout_constraintTop_toBottomOf="@id/linearLayout"
                 tools:text="엽떡 크림 같이 먹어욥" />
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/badge"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                app:layout_constraintTop_toTopOf="@id/tv_content"
-                app:layout_constraintStart_toEndOf="@id/tv_content"
-                app:layout_constraintEnd_toStartOf="@id/iv_more_icon"
-                app:layout_constraintBottom_toBottomOf="@id/tv_content"
-                tools:text="주문중" />
+                android:id="@+id/ordering_status_label"
+                style="@style/RobotoRegular12"
+                android:layout_width="40dp"
+                android:layout_height="20dp"
+                android:layout_marginLeft="6dp"
+                android:background="@drawable/home_status_btn_radius"
+                android:gravity="center"
+                android:text="@string/party_status_onorder"
+                android:textColor="@color/white"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@id/party_title"
+                app:layout_constraintEnd_toStartOf="parent"
+                app:layout_constraintStart_toEndOf="@id/party_title"
+                app:layout_constraintTop_toTopOf="@id/party_title" />
 
             <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/party_scheduled_time"
                 style="@style/RobotoRegular14"
-                android:id="@+id/tv_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="18dp"
-                app:layout_constraintStart_toStartOf="@+id/linearLayout"
+                android:transitionName="tv_time"
                 app:layout_constraintBottom_toBottomOf="parent"
-                tools:text="10월 5일 10시 40분 주문 예정" />
+                app:layout_constraintStart_toStartOf="@+id/linearLayout"
+                tools:text="10월 5일 10시 40분" />
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/iv_more_icon"
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_date_info"
+                style="@style/RobotoRegular14"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="18dp"
-                android:background="@drawable/icon_options"
-                app:layout_constraintTop_toTopOf="@+id/linearLayout"
-                app:layout_constraintEnd_toEndOf="parent" />
+                android:layout_marginLeft="2dp"
+                android:text="@string/party_scheduled_time"
+                android:textColor="@color/text_grey"
+                app:layout_constraintStart_toEndOf="@id/party_scheduled_time"
+                app:layout_constraintTop_toTopOf="@id/party_scheduled_time" />
+
+            <!--            <androidx.appcompat.widget.AppCompatImageView-->
+            <!--                android:id="@+id/iv_more_icon"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_marginEnd="18dp"-->
+            <!--                android:background="@drawable/icon_options"-->
+            <!--                app:layout_constraintTop_toTopOf="@+id/linearLayout"-->
+            <!--                app:layout_constraintEnd_toEndOf="parent" />-->
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

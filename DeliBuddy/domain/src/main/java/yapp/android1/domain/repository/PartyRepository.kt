@@ -14,4 +14,5 @@ interface PartyRepository {
     suspend fun joinParty(id: Int): NetworkResult<Boolean>
     suspend fun leaveParty(id: String): NetworkResult<Unit>
     suspend fun changeStatus(id: Int, request: StatusChangeRequestEntity): NetworkResult<Boolean>
+    suspend fun getMyParties(): NetworkResult<List<PartyInformationEntity>>
 }

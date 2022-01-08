@@ -115,7 +115,11 @@ dependencies {
     kapt(Google.HILT_COMPILER)
     implementation(Google.MATERIAL)
     implementation(Google.GSON)
-    implementation(Google.FIREBASE_BOM)
+    implementation(platform(Google.FIREBASE_BOM))
+    implementation(Google.FIREBASE_ANALYTICS)
+    implementation(Google.FIREBASE_MESSAGING)
+    implementation(Google.LOCATION)
+    implementation(Google.OSS_LICENCE)
 
     implementation(Libraries.RETROFIT)
     implementation(Libraries.RETROFIT_CONVERTER_GSON)
@@ -125,7 +129,6 @@ dependencies {
     implementation(Libraries.LOTTIE)
     implementation(Libraries.GLIDE)
     kapt(Libraries.GLIDE_COMPILER)
-    implementation("com.google.android.gms:play-services-location:19.0.0")
     implementation(Libraries.OSS_LICENSE)
     implementation(Libraries.JWT_DECODE)
 

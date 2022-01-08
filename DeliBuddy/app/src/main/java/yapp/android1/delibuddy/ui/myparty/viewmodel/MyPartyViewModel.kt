@@ -1,52 +1,47 @@
-package yapp.android1.delibuddy.ui.mypage
+package yapp.android1.delibuddy.ui.myparty.viewmodel
 
-import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
-import yapp.android1.delibuddy.DeliBuddyApplication
 import yapp.android1.delibuddy.base.BaseViewModel
 import yapp.android1.delibuddy.base.RetryAction
-import yapp.android1.delibuddy.model.Address
 import yapp.android1.delibuddy.model.Event
-import yapp.android1.delibuddy.model.User
+import yapp.android1.delibuddy.model.PartyInformation
 import yapp.android1.domain.NetworkResult
 import yapp.android1.domain.entity.NetworkError
-import yapp.android1.domain.interactor.usecase.GetMyInfoUseCase
+import yapp.android1.domain.interactor.usecase.GetMyPartiesUseCase
 import javax.inject.Inject
 
 @HiltViewModel
-class MyPageViewModel @Inject constructor(
-    private val getMyInfoUseCase: GetMyInfoUseCase,
-) : BaseViewModel<MyPageViewModel.MyPageEvent>() {
+class MyPartyViewModel @Inject constructor(
+    private val getMyPartiesUseCase: GetMyPartiesUseCase
+) : BaseViewModel<Event>() {
 
-    private val _myInfo = MutableStateFlow<User?>(null)
-    val myInfo: MutableStateFlow<User?> = _myInfo
+    private val _myParties = MutableStateFlow<List<PartyInformation>>(emptyList())
+    val myParties: StateFlow<List<PartyInformation>>
+        get() = _myParties
 
-    private val _currentAddress = MutableStateFlow<Address?>(null)
-    val currentAddress: StateFlow<Address?> = _currentAddress
-
-    sealed class MyPageEvent : Event
-
-    init {
-        fetchData()
+    sealed class MyPartyEvent : Event {
+        object GetMyPartiesUseCase : MyPartyEvent()
     }
 
-    private fun fetchData() {
-        viewModelScope.launch {
-            when (val result = getMyInfoUseCase.invoke()) {
-                is NetworkResult.Success -> {
-                    _myInfo.value = User.mapToUser(result.data)
-                    _currentAddress.value = DeliBuddyApplication.prefs.getCurrentUserAddress()
-                }
+    override suspend fun handleEvent(event: Event) {
+        when (event) {
+            is MyPartyEvent.GetMyPartiesUseCase -> getMyParties()
+        }
+    }
 
-                is NetworkResult.Error -> handleError(result) {}
+    private suspend fun getMyParties() {
+        when (val result = getMyPartiesUseCase.invoke(Unit)) {
+            is NetworkResult.Success -> {
+                val parties = result.data.map { PartyInformation.toPartyInformation(it) }
+                _myParties.emit(parties)
+            }
+            is NetworkResult.Error -> {
             }
         }
     }
 
-    override suspend fun handleEvent(event: MyPageEvent) {}
     override suspend fun handleError(result: NetworkResult.Error, retryAction: RetryAction?) {
         when (result.errorType) {
             is NetworkError.Unknown -> {
