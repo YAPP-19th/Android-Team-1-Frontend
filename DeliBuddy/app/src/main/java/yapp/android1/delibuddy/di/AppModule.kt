@@ -4,6 +4,8 @@ import android.content.Context
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ActivityComponent
+import dagger.hilt.android.qualifiers.ActivityContext
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
@@ -21,6 +23,7 @@ import yapp.android1.domain.repository.PartyRepository
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
+
     @Provides
     fun provideCoroutineDispatcher(): DispatcherProvider {
         return object : DispatcherProvider {
@@ -34,21 +37,34 @@ object AppModule {
     }
 
     @Provides
-    fun provideKakaoLoginModule(
-        @ApplicationContext context: Context,
-    ): KakaoLoginModule {
-        return KakaoLoginModule(context)
-    }
-
-    @Provides
     fun provideAuthManagementModule(
     ): AuthManagementModule {
         return AuthManagementModule()
     }
 
     @Provides
+    fun providePartyRepository(
+        partyApi: PartyApi,
+        deliBuddyNetworkErrorHandler: DeliBuddyNetworkErrorHandler,
+    ): PartyRepository {
+        return PartyRepositoryImpl(partyApi, deliBuddyNetworkErrorHandler)
+    }
+}
+
+@Module
+@InstallIn(ActivityComponent::class)
+object ActivityModule {
+
+    @Provides
+    fun provideKakaoLoginModule(
+        @ActivityContext context: Context,
+    ): KakaoLoginModule {
+        return KakaoLoginModule(context)
+    }
+
+    @Provides
     fun provideUserLoginModule(
-        @ApplicationContext context: Context,
+        @ActivityContext context: Context,
         kakaoLoginModule: KakaoLoginModule,
         authManagementModule: AuthManagementModule
     ): UserAuthManager {
@@ -60,11 +76,4 @@ object AppModule {
         )
     }
 
-    @Provides
-    fun providePartyRepository(
-        partyApi: PartyApi,
-        deliBuddyNetworkErrorHandler: DeliBuddyNetworkErrorHandler,
-    ): PartyRepository {
-        return PartyRepositoryImpl(partyApi, deliBuddyNetworkErrorHandler)
-    }
 }
