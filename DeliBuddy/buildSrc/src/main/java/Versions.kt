@@ -38,6 +38,7 @@ object Versions {
     const val JWT_DECODE = "2.0.1"
     const val NAVER_MAP = "3.12.0"
     const val KAKAO_LOGIN = "2.8.3"
+    const val BALLOON   = "1.4.1"
 
     /* [ UnitTest ] */
     const val JUNIT = "4.13.2"

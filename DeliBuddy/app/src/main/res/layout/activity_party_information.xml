@@ -116,10 +116,22 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
-                        app:layout_constraintBottom_toBottomOf="@+id/iv_party_owner_profile"
                         app:layout_constraintStart_toEndOf="@+id/iv_party_owner_profile"
                         app:layout_constraintTop_toTopOf="@+id/iv_party_owner_profile"
                         tools:text="홍길동" />
+
+                    <TextView
+                        android:id="@+id/tv_party_owner_parties_count"
+                        style="@style/RobotoRegular12"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:bufferType="spannable"
+                        android:letterSpacing="-0.02"
+                        android:textColor="@color/text_grey"
+                        app:layout_constraintStart_toStartOf="@+id/tv_party_owner_name"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_party_owner_name"
+                        tools:text="버디와 함께한 식사 24번" />
 
                     <TextView
                         android:id="@+id/tv_status_change"

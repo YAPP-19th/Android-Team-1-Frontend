@@ -1,10 +1,12 @@
 package yapp.android1.delibuddy.ui.createparty
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import yapp.android1.delibuddy.DeliBuddyApplication
@@ -14,12 +16,16 @@ import yapp.android1.delibuddy.model.Address
 import yapp.android1.delibuddy.model.Category
 import yapp.android1.delibuddy.model.Event
 import yapp.android1.delibuddy.model.PartyInformation
+import yapp.android1.delibuddy.ui.partyInformation.EDIT_PARTYINFO
 import yapp.android1.delibuddy.util.MutableEventFlow
+import yapp.android1.delibuddy.util.asEventFlow
 import yapp.android1.domain.NetworkResult
 import yapp.android1.domain.entity.NetworkError
 import yapp.android1.domain.entity.PartyCreationRequestEntity
+import yapp.android1.domain.entity.PartyEditRequestEntity
 import yapp.android1.domain.interactor.usecase.CategoryListUseCase
 import yapp.android1.domain.interactor.usecase.CreatePartyUseCase
+import yapp.android1.domain.interactor.usecase.EditPartyUseCase
 import javax.inject.Inject
 
 sealed class CreatePartyEvent : Event {
@@ -39,32 +45,41 @@ sealed class CreatePartyEvent : Event {
     class CreatePartyClick(
         val newParty: PartyCreationRequestEntity
     ) : CreatePartyEvent()
+    class EditParty(val editedParty: PartyEditRequestEntity) : CreatePartyEvent()
 }
 
 @HiltViewModel
 class CreatePartyViewModel @Inject constructor(
+    private val savedStateHandle: SavedStateHandle,
     private val categoryListUseCase: CategoryListUseCase,
     private val createPartyUseCase: CreatePartyUseCase,
+    private val editPartyUseCase: EditPartyUseCase
 ) : BaseViewModel<CreatePartyEvent>() {
     private var job: Job? = null
 
     private val _currentAddress = MutableStateFlow<Address?>(null)
-    val currentAddress: StateFlow<Address?> = _currentAddress
+    val currentAddress = _currentAddress.asStateFlow()
 
     private val _canCreateParty = MutableStateFlow<Boolean>(false)
-    val canCreateParty: MutableStateFlow<Boolean> = _canCreateParty
+    val canCreateParty = _canCreateParty.asStateFlow()
 
     private val _invalidElement = MutableStateFlow<PartyElement>(PartyElement.NONE)
-    val invalidElement: MutableStateFlow<PartyElement> = _invalidElement
+    val invalidElement = _invalidElement.asStateFlow()
 
     private val _categoryList = MutableStateFlow<List<Category>>(listOf())
-    val categoryList: MutableStateFlow<List<Category>> = _categoryList
+    val categoryList = _categoryList.asStateFlow()
 
     private val _currentCategoryIndex = MutableStateFlow<Int>(0)
-    val currentCategoryIndex: MutableStateFlow<Int> = _currentCategoryIndex
+    val currentCategoryIndex = _currentCategoryIndex.asStateFlow()
 
     private val _isSuccessToCreateParty = MutableEventFlow<Boolean>()
-    val isSuccessToCreateParty: MutableEventFlow<Boolean> = _isSuccessToCreateParty
+    val isSuccessToCreateParty = _isSuccessToCreateParty.asEventFlow()
+
+    private val _editingPartyInformation = MutableStateFlow<PartyInformation?>(null)
+    val editingPartyInformation = _editingPartyInformation.asStateFlow()
+
+    private val _isSuccessToEditParty = MutableEventFlow<Boolean>()
+    val isSuccessToEditParty = _isSuccessToEditParty.asEventFlow()
 
     private var createPartyFlags: MutableMap<PartyElement, Boolean> = mutableMapOf(
         PartyElement.TITLE to false,
@@ -77,8 +92,17 @@ class CreatePartyViewModel @Inject constructor(
     )
 
     init {
-        initCurrentAddress()
-        getCategoryListFromServer()
+        if(isPartyInfoEdit()) {
+            _editingPartyInformation.value = savedStateHandle.get<PartyInformation>(EDIT_PARTYINFO)
+            initCurrentAddress()
+        } else {
+            initCurrentAddress()
+            getCategoryListFromServer()
+        }
+    }
+
+    private fun isPartyInfoEdit(): Boolean {
+        return savedStateHandle.get<PartyInformation>(EDIT_PARTYINFO) != null
     }
 
     private fun initCurrentAddress() {
@@ -97,9 +121,7 @@ class CreatePartyViewModel @Inject constructor(
                     Timber.w("categoryList: ${_categoryList.value}")
                 }
 
-                is NetworkResult.Error -> handleError(result) {
-
-                }
+                is NetworkResult.Error -> handleError(result, null)
             }
         }
     }
@@ -112,6 +134,7 @@ class CreatePartyViewModel @Inject constructor(
             is CreatePartyEvent.CheckFlags -> checkCanCreateParty()
             is CreatePartyEvent.CreatePartyClick -> checkAndCreate(event.newParty)
             is CreatePartyEvent.SelectedCategory -> selectCategory(event.index)
+            is CreatePartyEvent.EditParty -> editParty(event.editedParty)
         }
     }
 
@@ -165,6 +188,28 @@ class CreatePartyViewModel @Inject constructor(
                 is NetworkResult.Error -> handleError(result) {
 
                 }
+            }
+        }
+    }
+
+    private suspend fun editParty(editedParty: PartyEditRequestEntity) {
+        val params = EditPartyUseCase.Params(
+            partyId = _editingPartyInformation.value!!.id,
+            requestEntity = editedParty
+        )
+        when(val result = editPartyUseCase.invoke(params)) {
+            is NetworkResult.Success -> {
+                val isSuccess = result.data
+
+                if(isSuccess) {
+                    _isSuccessToEditParty.emit(true)
+                } else {
+                    _isSuccessToEditParty.emit(false)
+                }
+            }
+
+            is NetworkResult.Error -> {
+                _isSuccessToEditParty.emit(false)
             }
         }
     }

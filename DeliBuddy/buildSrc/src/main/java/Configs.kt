@@ -4,7 +4,7 @@ object Configs {
     const val KOTLIN_KAPT               = "kotlin-kapt"
 
     //Android Config
-    const val COMPILE_SDK               = 30
+    const val COMPILE_SDK               = 31
 
     //Android Default Config
     const val APPLICATION_ID            = "yapp.android1.delibuddy"

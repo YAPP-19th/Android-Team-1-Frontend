@@ -110,6 +110,7 @@ dependencies {
     implementation(AndroidX.LIFECYCLE_RUNTIME_KTX)
 
     implementation(Google.HILT_ANDROID)
+    implementation("com.google.android.gms:play-services-oss-licenses:17.0.0")
     kapt(Google.HILT_ANDROID_COMPILER)
     kapt(Google.HILT_COMPILER)
     implementation(Google.MATERIAL)
@@ -133,6 +134,8 @@ dependencies {
 
     implementation(Libraries.NAVER_MAP)
     implementation(Libraries.KAKAO_LOGIN)
+    implementation ("com.kakao.sdk:v2-link:2.8.4")
+    implementation(Libraries.BALLOON)
 
     testImplementation(UnitTest.JUNIT)
 
