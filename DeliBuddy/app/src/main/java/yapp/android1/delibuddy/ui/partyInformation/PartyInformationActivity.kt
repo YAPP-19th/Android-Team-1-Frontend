@@ -91,13 +91,9 @@ class PartyInformationActivity : AppCompatActivity() {
         repeatOnStarted {
             viewModel.hasJoined.collect { hasJoined ->
                 if(hasJoined) {
-                    binding.btnJoinParty.text = "참가중"
-                    binding.btnJoinParty.backgroundTintList = ContextCompat.getColorStateList(this@PartyInformationActivity, R.color.sub_grey)
-                    binding.btnJoinParty.setTextColor(ContextCompat.getColor(this@PartyInformationActivity, R.color.text_black))
+                    setEnableJoinButton()
                 } else {
-                    binding.btnJoinParty.text = "파티 참가"
-                    binding.btnJoinParty.backgroundTintList = ContextCompat.getColorStateList(this@PartyInformationActivity, R.color.main_orange)
-                    binding.btnJoinParty.setTextColor(ContextCompat.getColor(this@PartyInformationActivity, R.color.white))
+                    setDisableJoinButton()
                 }
             }
         }
@@ -167,6 +163,18 @@ class PartyInformationActivity : AppCompatActivity() {
         clTargetCommentContainer.hide()
     }
 
+    private fun setEnableJoinButton() = with(binding) {
+        btnJoinParty.text = "참가중"
+        btnJoinParty.backgroundTintList = ContextCompat.getColorStateList(this@PartyInformationActivity, R.color.sub_purple)
+        btnJoinParty.setTextColor(ContextCompat.getColor(this@PartyInformationActivity, R.color.white))
+    }
+
+    private fun setDisableJoinButton() = with(binding) {
+        binding.btnJoinParty.text = "파티 참가"
+        binding.btnJoinParty.backgroundTintList = ContextCompat.getColorStateList(this@PartyInformationActivity, R.color.main_orange)
+        binding.btnJoinParty.setTextColor(ContextCompat.getColor(this@PartyInformationActivity, R.color.white))
+    }
+
     private fun settingPartyInformationViews(party: PartyInformation) = with(binding) {
         // [Header]
         tvPartyLocation.text = "${party.placeName} \n${party.placeNameDetail}"
@@ -176,6 +184,12 @@ class PartyInformationActivity : AppCompatActivity() {
         tvOrderTime.text     = party.orderTime + " 주문 예정"
         val span = tvOrderTime.text as Spannable
         span.setSpan(ForegroundColorSpan(getColor(R.color.text_grey)), tvOrderTime.text.lastIndex - 4, tvOrderTime.text.lastIndex + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+        if(party.isIn) {
+            setEnableJoinButton()
+        } else {
+            setDisableJoinButton()
+        }
 
         Glide.with(this@PartyInformationActivity)
             .load(party.category.iconUrl)
