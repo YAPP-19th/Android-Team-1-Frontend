@@ -25,7 +25,7 @@ import yapp.android1.delibuddy.util.extensions.repeatOnStarted
 @AndroidEntryPoint
 class CommentTabFragment : BaseFragment<FragmentCommentTabBinding>(FragmentCommentTabBinding::inflate) {
 
-    private val viewModel = activityViewModels<PartyInformationViewModel>()
+    private val viewModel by activityViewModels<PartyInformationViewModel>()
 
     private lateinit var commentAdapter: CommentAdapter
 
@@ -52,27 +52,26 @@ class CommentTabFragment : BaseFragment<FragmentCommentTabBinding>(FragmentComme
     }
 
     private fun collectComments() {
-
         repeatOnStarted {
-            viewModel.value.isOwner.collect { isOwner->
+            viewModel.isOwner.collect { isOwner->
                 commentAdapter.isOwner = isOwner
             }
         }
 
         repeatOnStarted {
-            viewModel.value.comments.collect { comments ->
+            viewModel.comments.collect { comments ->
                 commentAdapter.submitList(comments.value)
             }
         }
 
         repeatOnStarted {
-            viewModel.value.showToast.collect {
+            viewModel.showToast.collect {
                 Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
             }
         }
 
         repeatOnStarted {
-            viewModel.value.event.collect { event ->
+            viewModel.event.collect { event ->
                 handleEvent(event)
             }
         }
@@ -86,8 +85,9 @@ class CommentTabFragment : BaseFragment<FragmentCommentTabBinding>(FragmentComme
 
     private fun handleCommentEvent(event: CommentEvent) {
         when(event) {
-            is CommentEvent.OnWriteCommentClicked -> viewModel.value.occurEvent(OnCommentWriteTextViewClicked(event.comment as Comment))
-            is CommentEvent.OnRemoveCommentClicked -> viewModel.value.occurEvent(DeleteComment(event.comment.id))
+            is CommentEvent.OnWriteCommentClicked  -> viewModel.occurEvent(OnCommentWriteTextViewClicked(event.comment as Comment))
+            is CommentEvent.OnRemoveCommentClicked -> viewModel.occurEvent(DeleteComment(event.comment.id))
         }
     }
+
 }

@@ -55,10 +55,10 @@ class CommentAdapter(
 
     override fun getItemViewType(position: Int): Int {
         return when(currentList[position]){
-            is Comment -> PARENT
+            is Comment      -> PARENT
             is ChildComment -> CHILD
             is EmptyComment -> EMPTY
-            else -> throw IllegalArgumentException("올바르지 않은 CommentType입니다.")
+            else            -> throw IllegalArgumentException("올바르지 않은 CommentType입니다.")
         }
     }
 

@@ -73,3 +73,18 @@ class EditPartyUseCase @Inject constructor(
         val requestEntity: PartyEditRequestEntity
     )
 }
+
+class BanFromPartyUseCase @Inject constructor(
+    private val partyRepository: PartyRepository
+) : BaseUseCase<NetworkResult<Boolean>, BanFromPartyUseCase.Params>() {
+
+    override suspend fun run(params: Params): NetworkResult<Boolean> {
+        return partyRepository.banFromParty(params.partyId, params.requestEntity)
+    }
+
+    data class Params(
+        val partyId: Int,
+        val requestEntity: PartyBanRequestEntity
+    )
+
+}

@@ -20,10 +20,8 @@ internal class PartyInformationContract : ActivityResultContract<PartyInformatio
 
     override fun parseResult(resultCode: Int, intent: Intent?): PartyInformationViewModel.PartyInformationAction {
         return when(resultCode) {
-            Activity.RESULT_OK -> {
-                //val editedPartyInformation = intent?.getSerializableExtra(EDIT_PARTYINFO_RESULT) as PartyInformation
-                PartyInformationViewModel.PartyInformationAction.PartyEditSuccess
-            }
+            Activity.RESULT_OK -> PartyInformationViewModel.PartyInformationAction.PartyEditSuccess
+
             else -> PartyInformationViewModel.PartyInformationAction.PartyEditFailed
         }
     }

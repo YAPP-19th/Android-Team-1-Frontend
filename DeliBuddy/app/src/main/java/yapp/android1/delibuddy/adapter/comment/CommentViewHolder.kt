@@ -24,8 +24,8 @@ class ParentCommentViewHolder(
 
     fun onBind(comment: Comment, listener: CommentEventListener, isOwner: Boolean) = with(binding) {
         tvWriterNickname.text = comment.writer?.nickName
-        tvBody.text = comment.body
-        tvTimeAgo.text = comment.createdAt
+        tvBody.text           = comment.body
+        tvTimeAgo.text        = comment.createdAt
 
         Glide.with(itemView)
             .load(comment.writer?.profileImage)
@@ -66,8 +66,8 @@ class ChildCommentViewHolder(
 
     fun onBind(comment: ChildComment, listener: CommentEventListener, isOwner: Boolean) = with(binding) {
         tvWriterNickname.text = comment.writer?.nickName
-        tvBody.text = comment.body
-        tvTimeAgo.text = comment.createdAt
+        tvBody.text           = comment.body
+        tvTimeAgo.text        = comment.createdAt
         ivOptions.setOnClickListener {
             listener.invoke(CommentEvent.OnRemoveCommentClicked(comment))
         }

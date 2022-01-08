@@ -86,7 +86,13 @@ object DomainModule {
     }
 
     @Provides
+    fun provideBanFromPartyUseCase(partyRepository: PartyRepository): BanFromPartyUseCase {
+        return BanFromPartyUseCase(partyRepository)
+    }
+
+    @Provides
     fun provideGetMyPartiesUseCase(partyRepository: PartyRepository): GetMyPartiesUseCase {
         return GetMyPartiesUseCase(partyRepository)
     }
 }
+
