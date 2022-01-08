@@ -3,6 +3,7 @@ package yapp.android1.delibuddy.ui.partyInformation
 import android.animation.Animator
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
@@ -54,25 +55,23 @@ class PartyInformationActivity : AppCompatActivity() {
 
     private val sharedPreferencesManager by lazy { SharedPreferencesManager(this) }
 
-    private val partyEditContract =
-        registerForActivityResult(PartyInformationContract()) { resultAction ->
-            viewModel.occurEvent(resultAction)
-        }
+    private val partyEditContract = registerForActivityResult(PartyInformationContract()) { resultAction ->
+        viewModel.occurEvent(resultAction)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPartyInformationBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        initializePos()
         initializeView()
         initializeViewPager()
         initializeCollapsing()
-        receiverIntent()
+        receiveIntent()
         collectData()
     }
 
-    private fun receiverIntent() {
+    private fun receiveIntent() {
         val intentData = intent.getSerializableExtra("party") as Party
         viewModel.occurEvent(OnIntent(intentData, sharedPreferencesManager.getUserId()))
     }
@@ -99,62 +98,28 @@ class PartyInformationActivity : AppCompatActivity() {
 
     private fun handleEvent(event: PartyInformationEvent) {
         when (event) {
-            is PartyInformationEvent.OnPartyJoinSuccess -> {
-                openOpenKakaoTalk(event.openKakaoTalkUrl)
-            }
-
-            is PartyInformationEvent.OnPartyJoinFailed -> {
-                Toast.makeText(this, "파티 인원이 다 찼습니다.", Toast.LENGTH_SHORT).show()
-            }
-
-            is PartyInformationEvent.OnCreateCommentSuccess -> {
+            is PartyInformationEvent.OnPartyJoinSuccess       -> { openOpenKakaoTalk(event.openKakaoTalkUrl) }
+            is PartyInformationEvent.OnPartyJoinFailed        -> { showToast("파티 인원이 다 찼습니다") }
+            is PartyInformationEvent.OnCreateCommentSuccess   -> {
                 binding.etInputComment.setText("")
-                Toast.makeText(this, "댓글이 정상적으로 등록되었습니다", Toast.LENGTH_SHORT).show()
-
+                showToast("댓글이 정상적으로 등록되었습니다")
                 binding.etInputComment.hideKeyboard()
                 hideTargetComment()
             }
-
-            is PartyInformationEvent.OnCreateCommentFailed -> {
-                Toast.makeText(this, "댓글 작성에 실패했습니다 다시 시도해 주세요", Toast.LENGTH_SHORT).show()
-            }
-
-            is PartyInformationEvent.ShowTargetParentComment -> {
-                showTargetComment(event.parentComment)
-            }
-
-            is PartyInformationEvent.HideTargetParentComment -> {
-                hideTargetComment()
-            }
-
-            is PartyInformationEvent.PartyDeleteSuccess -> {
-                finish()
-            }
-
-            is PartyInformationEvent.PartyDeleteFailed -> {
-                Toast.makeText(this, "파티 삭제에 실패했습니다. 잠시 후 다시 시도해 주세요.", Toast.LENGTH_SHORT).show()
-            }
-
-            is PartyInformationEvent.CommentDeleteSuccess -> {
-                Toast.makeText(this, "댓글이 성공적으로 삭제됐습니다.", Toast.LENGTH_SHORT).show()
-            }
-
-            is PartyInformationEvent.CommentDeleteFailed -> {
-                Toast.makeText(this, "댓글 삭제에 실패했습니다. 잠시 후 다시 시도해 주세요.", Toast.LENGTH_SHORT).show()
-            }
-
+            is PartyInformationEvent.OnCreateCommentFailed    -> { showToast("댓글 작성에 실패했습니다 다시 시도해 주세요") }
+            is PartyInformationEvent.ShowTargetParentComment  -> { showTargetComment(event.parentComment) }
+            is PartyInformationEvent.HideTargetParentComment  -> { hideTargetComment() }
+            is PartyInformationEvent.PartyDeleteSuccess       -> { finish() }
+            is PartyInformationEvent.PartyDeleteFailed        -> { showToast("파티 삭제에 실패했습니다. 잠시 후 다시 시도해 주세요") }
+            is PartyInformationEvent.CommentDeleteSuccess     -> { showToast("댓글이 성공적으로 삭제됐습니다") }
+            is PartyInformationEvent.CommentDeleteFailed      -> { showToast("댓글 삭제에 실패했습니다. 잠시 후 다시 시도해 주세요") }
             else -> Unit
         }
     }
 
-    private fun initializePos() {
-        binding.root.translationY = binding.clTargetCommentContainer.measuredHeight.toFloat()
-    }
-
-    @SuppressLint("ClickableViewAccessibility")
     private fun showTargetComment(parentComment: Comment) = with(binding) {
         tvParentCommentWriter.text = parentComment.writer?.nickName + " 님에게 답장"
-        tvParentCommentBody.text = parentComment.body
+        tvParentCommentBody.text   = parentComment.body
         showTargetCommentAnimation()
 
         etInputComment.showKeyboard()
@@ -162,7 +127,7 @@ class PartyInformationActivity : AppCompatActivity() {
 
     private fun hideTargetComment() = with(binding) {
         tvParentCommentWriter.text = ""
-        tvParentCommentBody.text = ""
+        tvParentCommentBody.text   = ""
         hideTargetCommentAnimation()
     }
 
@@ -217,14 +182,14 @@ class PartyInformationActivity : AppCompatActivity() {
     }
 
     private fun setDisableJoinButton() = with(binding) {
-        binding.btnJoinParty.text = "파티 참가"
+        btnJoinParty.text = "파티 참가"
     }
 
     private fun settingPartyInformationViews(party: PartyInformation) = with(binding) {
         // [Header]
         tvPartyLocation.text = "${party.placeName} \n${party.placeNameDetail}"
-        tvPartyTitle.text = party.title
-        tvPartyContent.text = party.body
+        tvPartyTitle.text    = party.title
+        tvPartyContent.text  = party.body
 
         tvOrderTime.text = party.orderTime + " 주문 예정"
         val span = tvOrderTime.text as Spannable
@@ -258,17 +223,17 @@ class PartyInformationActivity : AppCompatActivity() {
             }
         }
 
-        tvStatus.text = party.status.value
+        tvStatus.text       = party.status.value
         tvStatusChange.text = party.status.value
 
         // [ Toolbar ]
-        toolbarContainer.tvTitle.text = party.title
+        toolbarContainer.tvTitle.text    = party.title
         toolbarContainer.tvLocation.text = "${party.placeName} ${party.placeNameDetail}"
 
         // [Party Owner]
         tvPartyOwnerName.text = party.leader.nickName
 
-        tvPartyOwnerPartiesCount.text = "버디와 함께한 식사 ${party.leader.partiesCnt}번"
+        tvPartyOwnerPartiesCount.text    = "버디와 함께한 식사 ${party.leader.partiesCnt}번"
         val tvPartyOwnerPartiesCountSpan = tvPartyOwnerPartiesCount.text as Spannable
         tvPartyOwnerPartiesCountSpan.setSpan(
             StyleSpan(Typeface.BOLD),
@@ -307,11 +272,10 @@ class PartyInformationActivity : AppCompatActivity() {
         }
 
         btnCreateComment.setOnClickListener {
-            if (etInputComment.text.toString() != "") {
+            if (etInputComment.text.toString().trim() != "") {
                 viewModel.occurEvent(PartyInformationAction.WriteComment(etInputComment.text.toString()))
             } else {
-                Toast.makeText(this@PartyInformationActivity, "댓글 내용을 입력해주세요", Toast.LENGTH_SHORT)
-                    .show()
+                showToast("댓글 내용을 입력해주세요")
             }
         }
 
@@ -320,7 +284,7 @@ class PartyInformationActivity : AppCompatActivity() {
         }
 
         toolbarContainer.btnMoreOptions.setOnClickListener { optionsButton ->
-            val editButton = optionsMenuBalloon.getContentView().findViewById<ConstraintLayout>(R.id.btn_edit)
+            val editButton   = optionsMenuBalloon.getContentView().findViewById<ConstraintLayout>(R.id.btn_edit)
             val removeButton = optionsMenuBalloon.getContentView().findViewById<ConstraintLayout>(R.id.btn_remove)
 
             editButton.setOnClickListener {
@@ -398,6 +362,10 @@ class PartyInformationActivity : AppCompatActivity() {
 
     private fun openOpenKakaoTalk(url: String) {
         startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+    }
+
+    private fun Context.showToast(body: String, duration: Int = Toast.LENGTH_SHORT) {
+        Toast.makeText(this, body, duration).show()
     }
 
 }
