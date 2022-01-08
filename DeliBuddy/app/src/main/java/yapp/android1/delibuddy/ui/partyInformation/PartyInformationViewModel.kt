@@ -60,7 +60,7 @@ class PartyInformationViewModel @Inject constructor(
     }
 
     sealed class PartyInformationEvent : Event {
-        object OnPartyJoinSuccess : PartyInformationEvent()
+        class OnPartyJoinSuccess(val openKakaoTalkUrl: String) : PartyInformationEvent()
         object OnPartyJoinFailed : PartyInformationEvent()
         object OnCreateCommentSuccess : PartyInformationEvent()
         object OnCreateCommentFailed : PartyInformationEvent()
@@ -93,6 +93,9 @@ class PartyInformationViewModel @Inject constructor(
             is PartyInformationAction.OnJointPartyClicked -> {
                 if (_party.value.isIn == false) {
                     joinParty()
+                    _event.emit(PartyInformationEvent.OnPartyJoinSuccess(_party.value.openKakaoUrl!!))
+                } else {
+                    _event.emit(PartyInformationEvent.OnPartyJoinSuccess(_party.value.openKakaoUrl!!))
                 }
             }
 
@@ -222,7 +225,7 @@ class PartyInformationViewModel @Inject constructor(
             is NetworkResult.Success -> {
                 if (result.data == true) {
                     fetchPartyInformation(_party.value.id)
-                    _event.emit(PartyInformationEvent.OnPartyJoinSuccess)
+                    _event.emit(PartyInformationEvent.OnPartyJoinSuccess(_party.value.openKakaoUrl!!))
                 } else {
                     _event.emit(PartyInformationEvent.OnPartyJoinFailed)
                 }

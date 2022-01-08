@@ -13,13 +13,18 @@ import android.text.Spanned
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import android.util.Log
+import android.view.GestureDetector
+import android.view.MotionEvent
 import android.view.View
+import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.activity.result.registerForActivityResult
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.ItemTouchHelper
 import com.bumptech.glide.Glide
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -107,7 +112,7 @@ class PartyInformationActivity : AppCompatActivity() {
     private fun handleEvent(event: PartyInformationEvent) {
         when(event) {
             is PartyInformationEvent.OnPartyJoinSuccess -> {
-                Toast.makeText(this, "파티 참가 성공", Toast.LENGTH_SHORT).show()
+                openOpenKakaoTalk(event.openKakaoTalkUrl)
             }
 
             is PartyInformationEvent.OnPartyJoinFailed -> {
@@ -152,6 +157,10 @@ class PartyInformationActivity : AppCompatActivity() {
         tvParentCommentWriter.text = parentComment.writer?.nickName + " 님에게 답장"
         tvParentCommentBody.text = parentComment.body
         clTargetCommentContainer.show()
+
+        val ani = AnimationUtils.loadAnimation(this@PartyInformationActivity, R.anim.up_to_down)
+
+        clTargetCommentContainer.startAnimation(ani)
 
         etInputComment.showKeyboard()
     }
@@ -229,6 +238,14 @@ class PartyInformationActivity : AppCompatActivity() {
     }
 
     private fun initializeView() = with(binding) {
+        root.rootView.setOnClickListener {
+            println("df")
+        }
+
+        window.decorView.setOnClickListener {
+
+        }
+
         toolbarContainer.btnBack.setOnClickListener {
             onBackPressed()
         }
@@ -241,10 +258,7 @@ class PartyInformationActivity : AppCompatActivity() {
         }
 
         btnJoinParty.setOnClickListener {
-            //viewModel.occurEvent(PartyInformationAction.OnJointPartyClicked)
-            //makeKakaoMessage()
-
-            openKakaoLink()
+            viewModel.occurEvent(PartyInformationAction.OnJointPartyClicked)
         }
 
         btnCreateComment.setOnClickListener {
@@ -325,60 +339,8 @@ class PartyInformationActivity : AppCompatActivity() {
         }.attach()
     }
 
-    private fun openKakaoLink() {
-        val browseLink = Intent(Intent.ACTION_VIEW, Uri.parse("https://open.kakao.com/o/gPA7PgTd"))
-        startActivity(browseLink)
-    }
-
-    private fun makeKakaoMessage() {
-        val text = TextTemplate(
-            text = """
-                ${viewModel.party.value.openKakaoUrl} 에 참가하세
-            """.trimIndent(),
-            link = Link(
-                webUrl = "https://open.kakao.com/o/gPA7PgTd",
-                mobileWebUrl = "https://open.kakao.com/o/gPA7PgTd"
-            )
-        )
-
-        val TAG = "[TAG]"
-
-        if (LinkClient.instance.isKakaoLinkAvailable(this)) {
-            // 카카오톡으로 카카오링크 공유 가능
-            LinkClient.instance.defaultTemplate(this, text) { linkResult, error ->
-                if (error != null) {
-                    Log.e(TAG, "카카오링크 보내기 실패", error)
-                }
-                else if (linkResult != null) {
-                    Log.d(TAG, "카카오링크 보내기 성공 ${linkResult.intent}")
-                    startActivity(linkResult.intent)
-
-                    // 카카오링크 보내기에 성공했지만 아래 경고 메시지가 존재할 경우 일부 컨텐츠가 정상 동작하지 않을 수 있습니다.
-                    Log.w(TAG, "Warning Msg: ${linkResult.warningMsg}")
-                    Log.w(TAG, "Argument Msg: ${linkResult.argumentMsg}")
-                }
-            }
-        } else {
-            // 카카오톡 미설치: 웹 공유 사용 권장
-            // 웹 공유 예시 코드
-            val sharerUrl = WebSharerClient.instance.defaultTemplateUri(text)
-
-            // CustomTabs으로 웹 브라우저 열기
-
-            // 1. CustomTabs으로 Chrome 브라우저 열기
-            try {
-                KakaoCustomTabsClient.openWithDefault(this, sharerUrl)
-            } catch(e: UnsupportedOperationException) {
-                // Chrome 브라우저가 없을 때 예외처리
-            }
-
-            // 2. CustomTabs으로 디바이스 기본 브라우저 열기
-            try {
-                KakaoCustomTabsClient.open(this, sharerUrl)
-            } catch (e: ActivityNotFoundException) {
-                // 인터넷 브라우저가 없을 때 예외처리
-            }
-        }
+    private fun openOpenKakaoTalk(url: String) {
+        startActivity(Intent(Intent.ACTION_VIEW,  Uri.parse(url)))
     }
 
 }
