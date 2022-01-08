@@ -4,6 +4,7 @@ import android.animation.Animator
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
@@ -25,6 +26,8 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.google.android.material.appbar.AppBarLayout
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.dialog.MaterialDialogs
 import com.google.android.material.tabs.TabLayoutMediator
 import com.skydoves.balloon.*
 import dagger.hilt.android.AndroidEntryPoint
@@ -296,7 +299,12 @@ class PartyInformationActivity : AppCompatActivity() {
 
             removeButton.setOnClickListener {
                 optionsMenuBalloon.dismiss()
-                viewModel.occurEvent(PartyInformationAction.OnDeletePartyMenuClicked)
+                showCustomDialog(
+                    title          = "경고",
+                    message        = "정말 해당 파티를 삭제하시겠습니까?",
+                    positiveMethod = { viewModel.occurEvent(PartyInformationAction.OnDeletePartyMenuClicked) },
+                    negativeMethod = null
+                )
             }
 
             optionsMenuBalloon.showAlignBottom(optionsButton)
@@ -364,10 +372,6 @@ class PartyInformationActivity : AppCompatActivity() {
 
     private fun openOpenKakaoTalk(url: String) {
         startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
-    }
-
-    private fun Context.showToast(body: String, duration: Int = Toast.LENGTH_SHORT) {
-        Toast.makeText(this, body, duration).show()
     }
 
 }

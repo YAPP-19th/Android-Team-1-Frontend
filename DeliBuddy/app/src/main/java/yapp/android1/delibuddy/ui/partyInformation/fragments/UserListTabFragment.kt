@@ -18,6 +18,7 @@ import yapp.android1.delibuddy.databinding.FragmentUserListTabBinding
 import yapp.android1.delibuddy.ui.partyInformation.PartyInformationViewModel
 import yapp.android1.delibuddy.ui.partyInformation.PartyInformationViewModel.PartyInformationAction.*
 import yapp.android1.delibuddy.util.extensions.repeatOnStarted
+import yapp.android1.delibuddy.util.extensions.showCustomDialog
 
 @AndroidEntryPoint
 class UserListTabFragment : BaseFragment<FragmentUserListTabBinding>(FragmentUserListTabBinding::inflate) {
@@ -74,7 +75,12 @@ class UserListTabFragment : BaseFragment<FragmentUserListTabBinding>(FragmentUse
         rvUser.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
         userAdapter.setBanButtonListener { user ->
-            viewModel.occurEvent(BanUserFromParty(user))
+            requireContext().showCustomDialog(
+                title          = "경고",
+                message        = "정말 추방하시겠습니까?",
+                positiveMethod = { viewModel.occurEvent(BanUserFromParty(user)) },
+                negativeMethod = null
+            )
         }
     }
 }
