@@ -100,12 +100,7 @@ class PartyInformationActivity : AppCompatActivity() {
         when (event) {
             is PartyInformationEvent.OnPartyJoinSuccess       -> { openOpenKakaoTalk(event.openKakaoTalkUrl) }
             is PartyInformationEvent.OnPartyJoinFailed        -> { showToast("파티 인원이 다 찼습니다") }
-            is PartyInformationEvent.OnCreateCommentSuccess   -> {
-                binding.etInputComment.setText("")
-                showToast("댓글이 정상적으로 등록되었습니다")
-                binding.etInputComment.hideKeyboard()
-                hideTargetComment()
-            }
+            is PartyInformationEvent.OnCreateCommentSuccess   -> { handleWriteCommentSuccess() }
             is PartyInformationEvent.OnCreateCommentFailed    -> { showToast("댓글 작성에 실패했습니다 다시 시도해 주세요") }
             is PartyInformationEvent.ShowTargetParentComment  -> { showTargetComment(event.parentComment) }
             is PartyInformationEvent.HideTargetParentComment  -> { hideTargetComment() }
@@ -115,6 +110,13 @@ class PartyInformationActivity : AppCompatActivity() {
             is PartyInformationEvent.CommentDeleteFailed      -> { showToast("댓글 삭제에 실패했습니다. 잠시 후 다시 시도해 주세요") }
             else -> Unit
         }
+    }
+
+    private fun handleWriteCommentSuccess() = with(binding) {
+        etInputComment.setText("")
+        showToast("댓글이 정상적으로 등록되었습니다")
+        etInputComment.hideKeyboard()
+        hideTargetComment()
     }
 
     private fun showTargetComment(parentComment: Comment) = with(binding) {
