@@ -85,4 +85,8 @@ object DomainModule {
         return EditPartyUseCase(partyRepository)
     }
 
+    @Provides
+    fun provideGetMyPartiesUseCase(partyRepository: PartyRepository): GetMyPartiesUseCase {
+        return GetMyPartiesUseCase(partyRepository)
+    }
 }

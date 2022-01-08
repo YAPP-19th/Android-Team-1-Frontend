@@ -57,4 +57,7 @@ interface PartyApi : DeliBuddyApi {
     suspend fun getPartyInformation(
         @Path("id") id: Int
     ): PartyInformationModel
+
+    @GET("api/v1/parties/me")
+    suspend fun getMyParties(): List<PartyInformationModel>
 }
