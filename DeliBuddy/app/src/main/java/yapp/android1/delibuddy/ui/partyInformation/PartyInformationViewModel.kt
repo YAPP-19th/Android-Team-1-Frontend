@@ -53,6 +53,7 @@ class PartyInformationViewModel @Inject constructor(
         class DeleteComment(val commentId: Int) : PartyInformationAction()
         class WriteComment(val body: String) : PartyInformationAction()
         class OnCommentWriteTextViewClicked(val parentComment: Comment) : PartyInformationAction()
+        object DeleteTargetComment : PartyInformationAction()
         object OnTouchBackground : PartyInformationAction()
         object OnDeletePartyMenuClicked : PartyInformationAction()
         object PartyEditSuccess : PartyInformationAction()
@@ -112,6 +113,10 @@ class PartyInformationViewModel @Inject constructor(
 
             is PartyInformationAction.DeleteComment -> {
                 deleteComment(action.commentId)
+            }
+
+            is PartyInformationAction.DeleteTargetComment -> {
+                _targetParentComment.value = null
             }
 
             is PartyInformationAction.OnCommentWriteTextViewClicked -> {
