@@ -32,9 +32,6 @@ class PartyInformationViewModel @Inject constructor(
     private val _event = MutableEventFlow<PartyInformationEvent>()
     val event = _event.asEventFlow()
 
-    private val _hasJoined = MutableStateFlow<Boolean>(false)
-    val hasJoined = _hasJoined.asStateFlow()
-
     private val _isOwner = MutableStateFlow<Boolean>(false)
     val isOwner = _isOwner.asStateFlow()
 
@@ -94,8 +91,7 @@ class PartyInformationViewModel @Inject constructor(
             }
 
             is PartyInformationAction.OnJointPartyClicked -> {
-                if (_hasJoined.value == false) {
-                    _hasJoined.value = true
+                if (_party.value.isIn == false) {
                     joinParty()
                 }
             }
@@ -225,9 +221,9 @@ class PartyInformationViewModel @Inject constructor(
         when (val result = jointPartyUseCase.invoke(_party.value.id)) {
             is NetworkResult.Success -> {
                 if (result.data == true) {
+                    fetchPartyInformation(_party.value.id)
                     _event.emit(PartyInformationEvent.OnPartyJoinSuccess)
                 } else {
-                    _hasJoined.value = false
                     _event.emit(PartyInformationEvent.OnPartyJoinFailed)
                 }
             }

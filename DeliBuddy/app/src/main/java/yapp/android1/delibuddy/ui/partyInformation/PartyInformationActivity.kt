@@ -88,16 +88,6 @@ class PartyInformationActivity : AppCompatActivity() {
             }
         }
 
-        repeatOnStarted {
-            viewModel.hasJoined.collect { hasJoined ->
-                if(hasJoined) {
-                    setEnableJoinButton()
-                } else {
-                    setDisableJoinButton()
-                }
-            }
-        }
-
         lifecycleScope.launch {
             viewModel.event.collect { event ->
                 handleEvent(event)
@@ -165,14 +155,10 @@ class PartyInformationActivity : AppCompatActivity() {
 
     private fun setEnableJoinButton() = with(binding) {
         btnJoinParty.text = "참가중"
-        btnJoinParty.backgroundTintList = ContextCompat.getColorStateList(this@PartyInformationActivity, R.color.sub_purple)
-        btnJoinParty.setTextColor(ContextCompat.getColor(this@PartyInformationActivity, R.color.white))
     }
 
     private fun setDisableJoinButton() = with(binding) {
         binding.btnJoinParty.text = "파티 참가"
-        binding.btnJoinParty.backgroundTintList = ContextCompat.getColorStateList(this@PartyInformationActivity, R.color.main_orange)
-        binding.btnJoinParty.setTextColor(ContextCompat.getColor(this@PartyInformationActivity, R.color.white))
     }
 
     private fun settingPartyInformationViews(party: PartyInformation) = with(binding) {
