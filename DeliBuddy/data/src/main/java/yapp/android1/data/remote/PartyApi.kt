@@ -33,9 +33,9 @@ interface PartyApi : DeliBuddyApi {
 
     @POST("api/v1/parties/{id}/ban")
     suspend fun banFromParty(
-        @Path("id") id: String,
+        @Path("id") id: Int,
         @Body partyBanRequestModel: PartyBanRequestModel,
-    ): Unit
+    ): PostResponseModel
 
     @POST("api/v1/parties/{id}/join")
     suspend fun joinParty(

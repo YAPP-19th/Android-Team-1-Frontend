@@ -9,19 +9,27 @@ import yapp.android1.delibuddy.util.extensions.show
 
 
 class UserViewHolder(private val binding: ItemUserBinding) : RecyclerView.ViewHolder(binding.root) {
-    fun onBind(user: PartyInformation.User, isOwner: Boolean, leader: PartyInformation.Leader) = with(binding) {
+    fun onBind(
+        user: PartyInformation.User,
+        isOwner: Boolean,
+        leader: PartyInformation.Leader,
+        listener: ((PartyInformation.User) -> Unit)?
+    ) = with(binding) {
         binding.tvUsername.text = user.nickName
 
         if(isOwner) {
-            ivIconOwner.show()
-            btnKickOut.show()
+            btnBan.show()
+            btnBan.setOnClickListener {
+                listener?.invoke(user)
+            }
 
             if(leader.id == user.id) {
-                btnKickOut.hide()
+                ivIconOwner.show()
+                btnBan.hide()
             }
         } else {
             ivIconOwner.hide()
-            btnKickOut.hide()
+            btnBan.hide()
         }
 
         Glide.with(itemView)

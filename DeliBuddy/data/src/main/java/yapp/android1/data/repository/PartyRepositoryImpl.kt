@@ -74,14 +74,18 @@ class PartyRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun banFromParty(id: String, request: PartyBanRequestEntity): NetworkResult<Unit> {
-        return try {
-            val response = api.banFromParty(id, PartyBanRequestModel.fromPartyBanRequest(request))
-            NetworkResult.Success(response)
-        } catch (e: Exception) {
-            val errorType = deliBuddyNetworkErrorHandler.getError(exception = e)
-            return NetworkResult.Error(errorType)
-        }
+    override suspend fun banFromParty(id: Int, request: PartyBanRequestEntity): NetworkResult<Boolean> {
+        return runCatching {
+            api.banFromParty(id, PartyBanRequestModel.fromPartyBanRequest(request))
+        }.fold(
+            onSuccess = { model ->
+                NetworkResult.Success(model.okay)
+            },
+            onFailure = { throwable ->
+                val errorType = deliBuddyNetworkErrorHandler.getError(exception = throwable)
+                NetworkResult.Error(errorType)
+            }
+        )
     }
 
     override suspend fun joinParty(id: Int): NetworkResult<Boolean> {

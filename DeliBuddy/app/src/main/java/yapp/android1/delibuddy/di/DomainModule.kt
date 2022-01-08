@@ -85,4 +85,8 @@ object DomainModule {
         return EditPartyUseCase(partyRepository)
     }
 
+    @Provides
+    fun provideBanFromPartyUseCase(partyRepository: PartyRepository): BanFromPartyUseCase {
+        return BanFromPartyUseCase(partyRepository)
+    }
 }

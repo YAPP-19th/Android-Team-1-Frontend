@@ -15,6 +15,7 @@ import yapp.android1.delibuddy.util.asEventFlow
 import yapp.android1.domain.NetworkResult
 import yapp.android1.domain.entity.CommentCreationRequestEntity
 import yapp.android1.domain.entity.NetworkError
+import yapp.android1.domain.entity.PartyBanRequestEntity
 import yapp.android1.domain.interactor.usecase.*
 import javax.inject.Inject
 
@@ -26,7 +27,8 @@ class PartyInformationViewModel @Inject constructor(
     private val changeStatusUseCase: ChangeStatusUseCase,
     private val createCommentUseCase: CreateCommentUseCase,
     private val deletePartyUseCase: DeletePartyUseCase,
-    private val deleteCommentUseCase: DeleteCommentUseCase
+    private val deleteCommentUseCase: DeleteCommentUseCase,
+    private val banFromPartyUseCase: BanFromPartyUseCase
 ) : BaseViewModel<PartyInformationAction>() {
 
     private val _event = MutableEventFlow<PartyInformationEvent>()
@@ -58,6 +60,8 @@ class PartyInformationViewModel @Inject constructor(
         object OnDeletePartyMenuClicked : PartyInformationAction()
         object PartyEditSuccess : PartyInformationAction()
         object PartyEditFailed : PartyInformationAction()
+
+        class BanUserFromParty(val targetUser: PartyInformation.User) : PartyInformationAction()
     }
 
     sealed class PartyInformationEvent : Event {
@@ -71,6 +75,8 @@ class PartyInformationViewModel @Inject constructor(
         object PartyDeleteFailed : PartyInformationEvent()
         object CommentDeleteSuccess : PartyInformationEvent()
         object CommentDeleteFailed : PartyInformationEvent()
+        object UserBanSuccess : PartyInformationEvent()
+        object UserBanFailed : PartyInformationEvent()
     }
 
     override suspend fun handleEvent(action: PartyInformationAction) {
@@ -135,6 +141,10 @@ class PartyInformationViewModel @Inject constructor(
 
             is PartyInformationAction.PartyEditSuccess -> {
                 fetchPartyInformation(_party.value.id)
+            }
+
+            is PartyInformationAction.BanUserFromParty -> {
+                banFromParty(action.targetUser)
             }
 
         }
@@ -284,6 +294,29 @@ class PartyInformationViewModel @Inject constructor(
             }
             is NetworkResult.Error -> {
                 handleError(result, null)
+            }
+        }
+    }
+
+    private suspend fun banFromParty(user: PartyInformation.User) {
+        val params = BanFromPartyUseCase.Params(
+            partyId = _party.value.id,
+            requestEntity = PartyBanRequestEntity(targetId = user.id)
+        )
+
+        when(val result = banFromPartyUseCase(params)) {
+            is NetworkResult.Success -> {
+                val isSuccess = result.data
+
+                if(isSuccess) {
+                    fetchPartyInformation(_party.value.id)
+                    _event.emit(PartyInformationEvent.UserBanSuccess)
+                } else {
+                    _event.emit(PartyInformationEvent.UserBanFailed)
+                }
+            }
+            is NetworkResult.Error ->{
+                _event.emit(PartyInformationEvent.UserBanFailed)
             }
         }
     }

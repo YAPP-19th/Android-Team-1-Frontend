@@ -22,6 +22,8 @@ internal class UserAdapter : ListAdapter<PartyInformation.User, UserViewHolder>(
             notifyDataSetChanged()
         }
 
+    private var listener: ((PartyInformation.User) -> Unit)? = null
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding = ItemUserBinding.inflate(layoutInflater, parent, false)
@@ -30,8 +32,11 @@ internal class UserAdapter : ListAdapter<PartyInformation.User, UserViewHolder>(
     }
 
     override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
-        val isFirstUser = position == 0
-        holder.onBind(getItem(position), isOwner, leader)
+        holder.onBind(getItem(position), isOwner, leader, listener)
+    }
+
+    fun setBanButtonListener(listener: (PartyInformation.User) -> Unit) {
+        this.listener = listener
     }
 
 }
