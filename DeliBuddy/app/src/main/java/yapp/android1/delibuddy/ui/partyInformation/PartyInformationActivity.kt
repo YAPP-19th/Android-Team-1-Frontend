@@ -39,8 +39,8 @@ import yapp.android1.delibuddy.databinding.ActivityPartyInformationBinding
 import yapp.android1.delibuddy.model.Comment
 import yapp.android1.delibuddy.model.Party
 import yapp.android1.delibuddy.model.PartyInformation
+import yapp.android1.delibuddy.ui.myparty.PARTY_INFORMATION
 import yapp.android1.delibuddy.ui.partyInformation.PartyInformationViewModel.PartyInformationAction
-import yapp.android1.delibuddy.ui.partyInformation.PartyInformationViewModel.PartyInformationAction.OnIntent
 import yapp.android1.delibuddy.ui.partyInformation.PartyInformationViewModel.PartyInformationEvent
 import yapp.android1.delibuddy.ui.partyInformation.model.PartyStatus
 import yapp.android1.delibuddy.ui.partyInformation.view.*
@@ -75,8 +75,27 @@ class PartyInformationActivity : AppCompatActivity() {
     }
 
     private fun receiveIntent() {
-        val intentData = intent.getSerializableExtra("party") as Party
-        viewModel.occurEvent(OnIntent(intentData, sharedPreferencesManager.getUserId()))
+        when {
+            intent.getSerializableExtra("party") as? Party != null -> {
+                val partyData = intent.getSerializableExtra("party") as Party
+                viewModel.occurEvent(
+                    PartyInformationAction.OnPartyIntent(
+                        data          = partyData,
+                        currentUserId = sharedPreferencesManager.getUserId()
+                    )
+                )
+            }
+
+            intent.getSerializableExtra(PARTY_INFORMATION) as? PartyInformation != null -> {
+                val partyInformation = intent.getSerializableExtra(PARTY_INFORMATION) as PartyInformation
+                viewModel.occurEvent(
+                    PartyInformationAction.OnPartyInformationIntent(
+                        data          = partyInformation,
+                        currentUserId = sharedPreferencesManager.getUserId()
+                    )
+                )
+            }
+        }
     }
 
     private fun collectData() {
