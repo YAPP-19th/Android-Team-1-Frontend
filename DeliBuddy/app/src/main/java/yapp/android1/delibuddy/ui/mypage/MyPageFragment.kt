@@ -1,5 +1,6 @@
 package yapp.android1.delibuddy.ui.mypage
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.SpannableStringBuilder
 import android.view.View
@@ -13,6 +14,7 @@ import kotlinx.coroutines.flow.collect
 import yapp.android1.delibuddy.R
 import yapp.android1.delibuddy.base.BaseFragment
 import yapp.android1.delibuddy.databinding.FragmentMypageBinding
+import yapp.android1.delibuddy.ui.terms.TermsActivity
 import yapp.android1.delibuddy.util.extensions.repeatOnStarted
 import yapp.android1.delibuddy.util.intentTo
 
@@ -29,6 +31,12 @@ class MyPageFragment : BaseFragment<FragmentMypageBinding>(
     }
 
     private fun initViews() {
+        binding.tvServicePolicyInfo.setOnClickListener {
+            val intent = Intent(requireContext(), TermsActivity::class.java)
+            intent.putExtra(TermsActivity.EXTRA_TERMS, TermsActivity.FILE_TERMS_OF_SERVICE)
+            startActivity(intent)
+        }
+
         binding.tvLicense.setOnClickListener {
             requireContext().intentTo(OssLicensesMenuActivity::class.java)
         }
