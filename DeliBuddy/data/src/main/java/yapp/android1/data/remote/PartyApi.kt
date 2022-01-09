@@ -44,8 +44,8 @@ interface PartyApi : DeliBuddyApi {
 
     @POST("api/v1/parties/{id}/leave")
     suspend fun leaveParty(
-        @Path("id") id: String,
-    ): Unit
+        @Path("id") id: Int,
+    ): PostResponseModel
 
     @PUT("api/v1/parties/{id}/status")
     suspend fun changeStatus(
