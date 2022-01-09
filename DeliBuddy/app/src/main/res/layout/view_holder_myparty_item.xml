@@ -97,7 +97,7 @@
                 android:textColor="@color/white"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="@id/party_title"
-                app:layout_constraintEnd_toStartOf="@id/iv_more_icon"
+                app:layout_constraintEnd_toStartOf="parent"
                 app:layout_constraintStart_toEndOf="@id/party_title"
                 app:layout_constraintTop_toTopOf="@id/party_title" />
 
