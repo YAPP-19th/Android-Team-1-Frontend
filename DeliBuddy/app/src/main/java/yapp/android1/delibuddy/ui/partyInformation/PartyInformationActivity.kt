@@ -3,8 +3,6 @@ package yapp.android1.delibuddy.ui.partyInformation
 import android.animation.Animator
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
-import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
@@ -16,9 +14,7 @@ import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import android.view.MotionEvent
 import android.view.View
-import android.view.animation.AnimationUtils
 import android.view.animation.BounceInterpolator
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -26,8 +22,6 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.google.android.material.appbar.AppBarLayout
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.dialog.MaterialDialogs
 import com.google.android.material.tabs.TabLayoutMediator
 import com.skydoves.balloon.*
 import dagger.hilt.android.AndroidEntryPoint
@@ -40,8 +34,10 @@ import yapp.android1.delibuddy.model.Comment
 import yapp.android1.delibuddy.model.Party
 import yapp.android1.delibuddy.model.PartyInformation
 import yapp.android1.delibuddy.ui.myparty.PARTY_INFORMATION
-import yapp.android1.delibuddy.ui.partyInformation.PartyInformationViewModel.PartyInformationAction
-import yapp.android1.delibuddy.ui.partyInformation.PartyInformationViewModel.PartyInformationEvent
+import yapp.android1.delibuddy.ui.partyInformation.PartyInformationViewModel.Action
+import yapp.android1.delibuddy.ui.partyInformation.PartyInformationViewModel.Action.*
+import yapp.android1.delibuddy.ui.partyInformation.PartyInformationViewModel.Callback.CommentCallback
+import yapp.android1.delibuddy.ui.partyInformation.PartyInformationViewModel.Callback.PartyCallback
 import yapp.android1.delibuddy.ui.partyInformation.model.PartyStatus
 import yapp.android1.delibuddy.ui.partyInformation.view.*
 import yapp.android1.delibuddy.util.extensions.*
@@ -79,7 +75,7 @@ class PartyInformationActivity : AppCompatActivity() {
             intent.getSerializableExtra("party") as? Party != null -> {
                 val partyData = intent.getSerializableExtra("party") as Party
                 viewModel.occurEvent(
-                    PartyInformationAction.OnPartyIntent(
+                    IntentAction.OnPartyIntent(
                         data          = partyData,
                         currentUserId = sharedPreferencesManager.getUserId()
                     )
@@ -89,7 +85,7 @@ class PartyInformationActivity : AppCompatActivity() {
             intent.getSerializableExtra(PARTY_INFORMATION) as? PartyInformation != null -> {
                 val partyInformation = intent.getSerializableExtra(PARTY_INFORMATION) as PartyInformation
                 viewModel.occurEvent(
-                    PartyInformationAction.OnPartyInformationIntent(
+                    IntentAction.OnPartyInformationIntent(
                         data          = partyInformation,
                         currentUserId = sharedPreferencesManager.getUserId()
                     )
@@ -118,18 +114,18 @@ class PartyInformationActivity : AppCompatActivity() {
         }
     }
 
-    private fun handleEvent(event: PartyInformationEvent) {
+    private fun handleEvent(event: PartyInformationViewModel.Callback) {
         when (event) {
-            is PartyInformationEvent.OnPartyJoinSuccess       -> { openOpenKakaoTalk(event.openKakaoTalkUrl) }
-            is PartyInformationEvent.OnPartyJoinFailed        -> { showToast("파티 인원이 다 찼습니다") }
-            is PartyInformationEvent.OnCreateCommentSuccess   -> { handleWriteCommentSuccess() }
-            is PartyInformationEvent.OnCreateCommentFailed    -> { showToast("댓글 작성에 실패했습니다 다시 시도해 주세요") }
-            is PartyInformationEvent.ShowTargetParentComment  -> { showTargetComment(event.parentComment) }
-            is PartyInformationEvent.HideTargetParentComment  -> { hideTargetComment() }
-            is PartyInformationEvent.PartyDeleteSuccess       -> { finish() }
-            is PartyInformationEvent.PartyDeleteFailed        -> { showToast("파티 삭제에 실패했습니다. 잠시 후 다시 시도해 주세요") }
-            is PartyInformationEvent.CommentDeleteSuccess     -> { showToast("댓글이 성공적으로 삭제됐습니다") }
-            is PartyInformationEvent.CommentDeleteFailed      -> { showToast("댓글 삭제에 실패했습니다. 잠시 후 다시 시도해 주세요") }
+            is PartyCallback.OnPartyJoinSuccess         -> { openOpenKakaoTalk(event.openKakaoTalkUrl) }
+            is PartyCallback.OnPartyJoinFailed          -> { showToast("파티 인원이 다 찼습니다") }
+            is PartyCallback.PartyDeleteSuccess         -> { finish() }
+            is PartyCallback.PartyDeleteFailed          -> { showToast("파티 삭제에 실패했습니다. 잠시 후 다시 시도해 주세요") }
+            is CommentCallback.OnCreateCommentSuccess   -> { handleWriteCommentSuccess() }
+            is CommentCallback.OnCreateCommentFailed    -> { showToast("댓글 작성에 실패했습니다 다시 시도해 주세요") }
+            is CommentCallback.ShowTargetParentComment  -> { showTargetComment(event.parentComment) }
+            is CommentCallback.HideTargetParentComment  -> { hideTargetComment() }
+            is CommentCallback.CommentDeleteSuccess     -> { showToast("댓글이 성공적으로 삭제됐습니다") }
+            is CommentCallback.CommentDeleteFailed      -> { showToast("댓글 삭제에 실패했습니다. 잠시 후 다시 시도해 주세요") }
             else -> Unit
         }
     }
@@ -189,7 +185,7 @@ class PartyInformationActivity : AppCompatActivity() {
 
             addListener(object : Animator.AnimatorListener {
                 override fun onAnimationStart(animation: Animator?) {
-                    viewModel.occurEvent(PartyInformationAction.DeleteTargetComment)
+                    viewModel.occurEvent(CommentAction.DeleteTargetComment)
                 }
 
                 override fun onAnimationEnd(animation: Animator?) = Unit
@@ -279,7 +275,6 @@ class PartyInformationActivity : AppCompatActivity() {
 
     @SuppressLint("ClickableViewAccessibility")
     private fun initializeView() = with(binding) {
-
         toolbarContainer.btnBack.setOnClickListener {
             onBackPressed()
         }
@@ -292,12 +287,12 @@ class PartyInformationActivity : AppCompatActivity() {
         }
 
         btnJoinParty.setOnClickListener {
-            viewModel.occurEvent(PartyInformationAction.OnJointPartyClicked)
+            viewModel.occurEvent(PartyAction.OnJointPartyClicked)
         }
 
         btnCreateComment.setOnClickListener {
             if (etInputComment.text.toString().trim() != "") {
-                viewModel.occurEvent(PartyInformationAction.WriteComment(etInputComment.text.toString()))
+                viewModel.occurEvent(CommentAction.WriteComment(etInputComment.text.toString()))
             } else {
                 showToast("댓글 내용을 입력해주세요")
             }
@@ -321,7 +316,7 @@ class PartyInformationActivity : AppCompatActivity() {
                 showCustomDialog(
                     title          = "경고",
                     message        = "정말 해당 파티를 삭제하시겠습니까?",
-                    positiveMethod = { viewModel.occurEvent(PartyInformationAction.OnDeletePartyMenuClicked) },
+                    positiveMethod = { viewModel.occurEvent(PartyAction.OnDeletePartyMenuClicked) },
                     negativeMethod = null
                 )
             }
