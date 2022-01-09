@@ -63,6 +63,9 @@ class CreatePartyViewModel @Inject constructor(
     private val _canCreateParty = MutableStateFlow<Boolean>(false)
     val canCreateParty = _canCreateParty.asStateFlow()
 
+    private val _canEditParty = MutableStateFlow<Boolean>(false)
+    val canEditParty = _canEditParty.asStateFlow()
+
     private val _invalidElement = MutableStateFlow<PartyElement>(PartyElement.NONE)
     val invalidElement = _invalidElement.asStateFlow()
 
@@ -81,6 +84,8 @@ class CreatePartyViewModel @Inject constructor(
     private val _isSuccessToEditParty = MutableEventFlow<Boolean>()
     val isSuccessToEditParty = _isSuccessToEditParty.asEventFlow()
 
+    private var isEditState = false
+
     private var createPartyFlags: MutableMap<PartyElement, Boolean> = mutableMapOf(
         PartyElement.TITLE to false,
         PartyElement.CATEGORY to false,
@@ -91,8 +96,15 @@ class CreatePartyViewModel @Inject constructor(
         PartyElement.BODY to false
     )
 
+    private val editPartyFlags: MutableMap<PartyElement, Boolean> = mutableMapOf(
+        PartyElement.TITLE to false,
+        PartyElement.ADDRESS to false,
+        PartyElement.BODY to false
+    )
+
     init {
         if(isPartyInfoEdit()) {
+            isEditState = true
             _editingPartyInformation.value = savedStateHandle.get<PartyInformation>(EDIT_PARTYINFO)
             initCurrentAddress()
         } else {
@@ -134,7 +146,7 @@ class CreatePartyViewModel @Inject constructor(
             is CreatePartyEvent.CheckFlags -> checkCanCreateParty()
             is CreatePartyEvent.CreatePartyClick -> checkAndCreate(event.newParty)
             is CreatePartyEvent.SelectedCategory -> selectCategory(event.index)
-            is CreatePartyEvent.EditParty -> editParty(event.editedParty)
+            is CreatePartyEvent.EditParty -> checkAndEdit(event.editedParty)
         }
     }
 
@@ -147,8 +159,13 @@ class CreatePartyViewModel @Inject constructor(
     }
 
     private fun changeFlag(partyElement: PartyElement, isValid: Boolean) {
-        createPartyFlags[partyElement] = isValid
-        checkCanCreateParty()
+        if(isEditState) {
+            editPartyFlags[partyElement] = isValid
+            checkCanEditParty()
+        } else {
+            createPartyFlags[partyElement] = isValid
+            checkCanCreateParty()
+        }
     }
 
     private fun checkCanCreateParty(): PartyElement {
@@ -159,6 +176,17 @@ class CreatePartyViewModel @Inject constructor(
             }
         }
         _canCreateParty.value = true
+        return PartyElement.NONE
+    }
+
+    private fun checkCanEditParty(): PartyElement {
+        for (partyElement in editPartyFlags.keys) {
+            if(editPartyFlags[partyElement] == false) {
+                _canEditParty.value = false
+                return partyElement
+            }
+        }
+        _canEditParty.value = true
         return PartyElement.NONE
     }
 
@@ -189,6 +217,16 @@ class CreatePartyViewModel @Inject constructor(
 
                 }
             }
+        }
+    }
+
+    private suspend fun checkAndEdit(editedParty: PartyEditRequestEntity) {
+        val needToFixElement = checkCanEditParty()
+
+        if(needToFixElement == PartyElement.NONE) {
+            editParty(editedParty)
+        } else {
+            _invalidElement.value = needToFixElement
         }
     }
 

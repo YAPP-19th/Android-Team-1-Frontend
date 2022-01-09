@@ -349,15 +349,11 @@ class CreatePartyActivity : AppCompatActivity() {
             ) {
                 when (position) {
                     0 -> {
-                        viewModel.occurEvent(
-                            CreatePartyEvent.ChangeFlags(PartyElement.MEMBER, false)
-                        )
+                        viewModel.occurEvent(CreatePartyEvent.ChangeFlags(PartyElement.MEMBER, false))
                         tvPartyMemberError.visibility = View.VISIBLE
                     }
                     else -> {
-                        viewModel.occurEvent(
-                            CreatePartyEvent.ChangeFlags(PartyElement.MEMBER, true)
-                        )
+                        viewModel.occurEvent(CreatePartyEvent.ChangeFlags(PartyElement.MEMBER, true))
                         tvPartyMemberError.visibility = View.GONE
                         selectedMember = position + 1
                     }
@@ -457,6 +453,28 @@ class CreatePartyActivity : AppCompatActivity() {
         }
 
         repeatOnStarted {
+            viewModel.canEditParty.collect { canEdit ->
+                if(canEdit) {
+                    tvEditParty.setTextColor(
+                        ContextCompat.getColor(
+                            this@CreatePartyActivity,
+                            yapp.android1.delibuddy.R.color.main_orange
+                        )
+                    )
+                    tvEditParty.typeface = Typeface.DEFAULT_BOLD
+                } else {
+                    tvEditParty.setTextColor(
+                        ContextCompat.getColor(
+                            this@CreatePartyActivity,
+                            yapp.android1.delibuddy.R.color.text_grey
+                        )
+                    )
+                    tvEditParty.typeface = Typeface.DEFAULT
+                }
+            }
+        }
+
+        repeatOnStarted {
             viewModel.showToast.collect {
                 Toast.makeText(this@CreatePartyActivity, it, Toast.LENGTH_SHORT).show()
             }
@@ -503,6 +521,7 @@ class CreatePartyActivity : AppCompatActivity() {
 
                     etChatUrl.gone()
                     tvEditParty.show()
+                    tvCreatePartyTitle.text = "파티 수정하기"
                     tvCreateParty.gone()
 
                     spinnerCategory.onItemSelectedListener = null
