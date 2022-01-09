@@ -9,7 +9,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import yapp.android1.delibuddy.R
 import yapp.android1.delibuddy.databinding.FragmentStatusBottomSheetDialogBinding
 import yapp.android1.delibuddy.ui.partyInformation.PartyInformationViewModel
-import yapp.android1.delibuddy.ui.partyInformation.PartyInformationViewModel.PartyInformationAction.*
+import yapp.android1.delibuddy.ui.partyInformation.PartyInformationViewModel.Action.*
 import yapp.android1.delibuddy.ui.partyInformation.model.PartyStatus
 
 
@@ -35,15 +35,15 @@ internal class StatusBottomSheetDialog : BottomSheetDialogFragment() {
 
     private fun initViews() = with(binding) {
         tvRecruit.setOnClickListener {
-            viewModel.occurEvent(OnStatusChanged(PartyStatus.RECRUIT))
+            viewModel.occurEvent(PartyAction.OnStatusChanged(PartyStatus.RECRUIT))
             dismiss()
         }
         tvOrder.setOnClickListener {
-            viewModel.occurEvent(OnStatusChanged(PartyStatus.ORDER))
+            viewModel.occurEvent(PartyAction.OnStatusChanged(PartyStatus.ORDER))
             dismiss()
         }
         tvComplete.setOnClickListener {
-            viewModel.occurEvent(OnStatusChanged(PartyStatus.COMPLETED))
+            viewModel.occurEvent(PartyAction.OnStatusChanged(PartyStatus.COMPLETED))
             dismiss()
         }
     }

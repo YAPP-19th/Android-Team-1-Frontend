@@ -4,21 +4,17 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.skydoves.balloon.balloon
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
-import timber.log.Timber
 import yapp.android1.delibuddy.adapter.comment.CommentAdapter
 import yapp.android1.delibuddy.adapter.comment.CommentEvent
 import yapp.android1.delibuddy.base.BaseFragment
 import yapp.android1.delibuddy.databinding.FragmentCommentTabBinding
 import yapp.android1.delibuddy.model.Comment
 import yapp.android1.delibuddy.ui.partyInformation.PartyInformationViewModel
-import yapp.android1.delibuddy.ui.partyInformation.PartyInformationViewModel.PartyInformationAction.*
-import yapp.android1.delibuddy.ui.partyInformation.PartyInformationViewModel.PartyInformationEvent
+import yapp.android1.delibuddy.ui.partyInformation.PartyInformationViewModel.Action.*
 import yapp.android1.delibuddy.ui.partyInformation.view.CommentOptionsBalloonFactory
 import yapp.android1.delibuddy.util.extensions.repeatOnStarted
 
@@ -77,7 +73,7 @@ class CommentTabFragment : BaseFragment<FragmentCommentTabBinding>(FragmentComme
         }
     }
 
-    private fun handleEvent(event: PartyInformationEvent) {
+    private fun handleEvent(event: PartyInformationViewModel.Callback) {
         when(event) {
             else -> Unit
         }
@@ -85,8 +81,8 @@ class CommentTabFragment : BaseFragment<FragmentCommentTabBinding>(FragmentComme
 
     private fun handleCommentEvent(event: CommentEvent) {
         when(event) {
-            is CommentEvent.OnWriteCommentClicked  -> viewModel.occurEvent(OnCommentWriteTextViewClicked(event.comment as Comment))
-            is CommentEvent.OnRemoveCommentClicked -> viewModel.occurEvent(DeleteComment(event.comment.id))
+            is CommentEvent.OnWriteCommentClicked  -> viewModel.occurEvent(CommentAction.WriteReplyCommentClicked(event.comment as Comment))
+            is CommentEvent.OnRemoveCommentClicked -> viewModel.occurEvent(CommentAction.DeleteComment(event.comment.id))
         }
     }
 

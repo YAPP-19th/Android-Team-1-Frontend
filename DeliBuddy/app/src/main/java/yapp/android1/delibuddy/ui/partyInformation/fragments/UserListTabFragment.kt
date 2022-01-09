@@ -1,24 +1,21 @@
 package yapp.android1.delibuddy.ui.partyInformation.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
-import yapp.android1.delibuddy.R
-import yapp.android1.delibuddy.adapter.comment.CommentAdapter
 import yapp.android1.delibuddy.adapter.comment.UserAdapter
 import yapp.android1.delibuddy.base.BaseFragment
 import yapp.android1.delibuddy.databinding.FragmentUserListTabBinding
 import yapp.android1.delibuddy.ui.partyInformation.PartyInformationViewModel
-import yapp.android1.delibuddy.ui.partyInformation.PartyInformationViewModel.PartyInformationAction.*
+import yapp.android1.delibuddy.ui.partyInformation.PartyInformationViewModel.Action.*
+import yapp.android1.delibuddy.ui.partyInformation.PartyInformationViewModel.Callback.UserCallback
 import yapp.android1.delibuddy.util.extensions.repeatOnStarted
 import yapp.android1.delibuddy.util.extensions.showCustomDialog
+import yapp.android1.delibuddy.util.extensions.showToast
 
 @AndroidEntryPoint
 class UserListTabFragment : BaseFragment<FragmentUserListTabBinding>(FragmentUserListTabBinding::inflate) {
@@ -55,14 +52,14 @@ class UserListTabFragment : BaseFragment<FragmentUserListTabBinding>(FragmentUse
         }
     }
 
-    private fun handleEvent(event: PartyInformationViewModel.PartyInformationEvent) {
+    private fun handleEvent(event: PartyInformationViewModel.Callback) {
         when(event) {
-            is PartyInformationViewModel.PartyInformationEvent.UserBanSuccess -> {
-                Toast.makeText(requireContext(), "해당 유저를 내보냈습니다", Toast.LENGTH_SHORT).show()
+            is UserCallback.UserBanSuccess -> {
+                requireContext().showToast("해당 유저를 내보냈습니다")
             }
 
-            is PartyInformationViewModel.PartyInformationEvent.UserBanFailed -> {
-                Toast.makeText(requireContext(), "잠시 후 다시 시도해 보세요", Toast.LENGTH_SHORT).show()
+            is UserCallback.UserBanFailed -> {
+                requireContext().showToast("잠시 후 다시 시도해 보세요")
             }
 
             else -> Unit
@@ -78,7 +75,7 @@ class UserListTabFragment : BaseFragment<FragmentUserListTabBinding>(FragmentUse
             requireContext().showCustomDialog(
                 title          = "경고",
                 message        = "정말 추방하시겠습니까?",
-                positiveMethod = { viewModel.occurEvent(BanUserFromParty(user)) },
+                positiveMethod = { viewModel.occurEvent(UserAction.BanUserFromParty(user)) },
                 negativeMethod = null
             )
         }

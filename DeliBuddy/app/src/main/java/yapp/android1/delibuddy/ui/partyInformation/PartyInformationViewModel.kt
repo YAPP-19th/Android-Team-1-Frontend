@@ -6,7 +6,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import yapp.android1.delibuddy.base.BaseViewModel
 import yapp.android1.delibuddy.base.RetryAction
 import yapp.android1.delibuddy.model.*
-import yapp.android1.delibuddy.ui.partyInformation.PartyInformationViewModel.PartyInformationAction
+import yapp.android1.delibuddy.ui.partyInformation.PartyInformationViewModel.Action
+import yapp.android1.delibuddy.ui.partyInformation.PartyInformationViewModel.Callback.*
 import yapp.android1.delibuddy.ui.partyInformation.model.PartyStatus
 import yapp.android1.delibuddy.util.MutableEventFlow
 import yapp.android1.delibuddy.util.asEventFlow
@@ -27,9 +28,9 @@ class PartyInformationViewModel @Inject constructor(
     private val deletePartyUseCase          : DeletePartyUseCase,
     private val deleteCommentUseCase        : DeleteCommentUseCase,
     private val banFromPartyUseCase         : BanFromPartyUseCase
-) : BaseViewModel<PartyInformationAction>() {
+) : BaseViewModel<Action>() {
 
-    private val _event = MutableEventFlow<PartyInformationEvent>()
+    private val _event = MutableEventFlow<Callback>()
     val event = _event.asEventFlow()
 
     private val _isOwner = MutableStateFlow<Boolean>(false)
@@ -46,63 +47,72 @@ class PartyInformationViewModel @Inject constructor(
 
     private var currentUserId = -1
 
-    sealed class PartyInformationAction : Event {
-        // [Party]
-        class OnPartyIntent(val data: Party, val currentUserId: Int) : PartyInformationAction()
-        class OnPartyInformationIntent(val data: PartyInformation, val currentUserId: Int) : PartyInformationAction()
-        class OnStatusChanged(val status: PartyStatus) : PartyInformationAction()
-        object OnJointPartyClicked : PartyInformationAction()
-        object OnDeletePartyMenuClicked : PartyInformationAction()
-        object PartyEditSuccess : PartyInformationAction()
-        object PartyEditFailed : PartyInformationAction()
+    sealed class Action : Event {
+        sealed class IntentAction : Action() {
+            class OnPartyIntent(val data: Party, val currentUserId: Int) : IntentAction()
+            class OnPartyInformationIntent(val data: PartyInformation, val currentUserId: Int) : IntentAction()
+        }
 
-        // [Comment]
-        class DeleteComment(val commentId: Int) : PartyInformationAction()
-        class WriteComment(val body: String) : PartyInformationAction()
-        class OnCommentWriteTextViewClicked(val parentComment: Comment) : PartyInformationAction()
-        object DeleteTargetComment : PartyInformationAction()
+        sealed class PartyAction : Action() {
+            class OnStatusChanged(val status: PartyStatus) : PartyAction()
+            object OnJointPartyClicked : PartyAction()
+            object OnDeletePartyMenuClicked : PartyAction()
+            object PartyEditSuccess : PartyAction()
+            object PartyEditFailed : PartyAction()
+        }
 
-        // [User]
-        class BanUserFromParty(val targetUser: PartyInformation.User) : PartyInformationAction()
+        sealed class CommentAction : Action() {
+            class DeleteComment(val commentId: Int) : CommentAction()
+            class WriteComment(val body: String) : CommentAction()
+            class WriteReplyCommentClicked(val parentComment: Comment) : CommentAction()
+            object DeleteTargetComment : CommentAction()
+        }
+
+        sealed class UserAction : Action() {
+            class BanUserFromParty(val targetUser: PartyInformation.User) : UserAction()
+        }
     }
 
-    sealed class PartyInformationEvent : Event {
-        // [Party]
-        class OnPartyJoinSuccess(val openKakaoTalkUrl: String) : PartyInformationEvent()
-        object OnPartyJoinFailed : PartyInformationEvent()
-        object PartyDeleteSuccess : PartyInformationEvent()
-        object PartyDeleteFailed : PartyInformationEvent()
+    sealed class Callback : Event {
+        sealed class PartyCallback : Callback() {
+            class OnPartyJoinSuccess(val openKakaoTalkUrl: String) : PartyCallback()
+            object OnPartyJoinFailed : PartyCallback()
+            object PartyDeleteSuccess : PartyCallback()
+            object PartyDeleteFailed : PartyCallback()
+        }
 
-        // [Comment]
-        object OnCreateCommentSuccess : PartyInformationEvent()
-        object OnCreateCommentFailed : PartyInformationEvent()
-        class ShowTargetParentComment(val parentComment: Comment) : PartyInformationEvent()
-        object HideTargetParentComment : PartyInformationEvent()
-        object CommentDeleteSuccess : PartyInformationEvent()
-        object CommentDeleteFailed : PartyInformationEvent()
+        sealed class CommentCallback : Callback() {
+            object OnCreateCommentSuccess : CommentCallback()
+            object OnCreateCommentFailed : CommentCallback()
+            class ShowTargetParentComment(val parentComment: Comment) : CommentCallback()
+            object HideTargetParentComment : CommentCallback()
+            object CommentDeleteSuccess : CommentCallback()
+            object CommentDeleteFailed : CommentCallback()
+        }
 
-        // [User]
-        object UserBanSuccess : PartyInformationEvent()
-        object UserBanFailed : PartyInformationEvent()
+        sealed class UserCallback : Callback() {
+            object UserBanSuccess : UserCallback()
+            object UserBanFailed : UserCallback()
+        }
     }
 
-    override suspend fun handleEvent(action: PartyInformationAction) {
+    override suspend fun handleEvent(action: Action) {
         when (action) {
-            is PartyInformationAction.OnPartyIntent -> {
+            is Action.IntentAction.OnPartyIntent -> {
                 currentUserId = action.currentUserId
                 setPartyWithoutLeader(action.data)
                 fetchPartyInformation(_party.value.id)
                 fetchPartyComments(_party.value.id)
             }
 
-            is PartyInformationAction.OnPartyInformationIntent -> {
+            is Action.IntentAction.OnPartyInformationIntent -> {
                 currentUserId = action.currentUserId
                 _party.value  = action.data
                 fetchPartyInformation(_party.value.id)
                 fetchPartyComments(_party.value.id)
             }
 
-            is PartyInformationAction.OnStatusChanged -> {
+            is Action.PartyAction.OnStatusChanged -> {
                 val currentStatus = party.value.status.value
                 val changedStatus = action.status.value
 
@@ -111,16 +121,20 @@ class PartyInformationViewModel @Inject constructor(
                 }
             }
 
-            is PartyInformationAction.OnJointPartyClicked -> {
+            is Action.PartyAction.OnJointPartyClicked -> {
                 if (_party.value.isIn == false) {
                     joinParty()
-                    _event.emit(PartyInformationEvent.OnPartyJoinSuccess(_party.value.openKakaoUrl!!))
+                    _event.emit(PartyCallback.OnPartyJoinSuccess(_party.value.openKakaoUrl!!))
                 } else {
-                    _event.emit(PartyInformationEvent.OnPartyJoinSuccess(_party.value.openKakaoUrl!!))
+                    _event.emit(PartyCallback.OnPartyJoinSuccess(_party.value.openKakaoUrl!!))
                 }
             }
 
-            is PartyInformationAction.WriteComment -> {
+            is Action.PartyAction.OnDeletePartyMenuClicked -> { deleteParty() }
+
+            is Action.PartyAction.PartyEditSuccess -> { fetchPartyInformation(_party.value.id) }
+
+            is Action.CommentAction.WriteComment -> {
                 if (isWritingChildComment()) {
                     createComment(
                         body     = action.body,
@@ -131,31 +145,16 @@ class PartyInformationViewModel @Inject constructor(
                 }
             }
 
-            is PartyInformationAction.DeleteComment -> {
-                deleteComment(action.commentId)
-            }
+            is Action.CommentAction.DeleteComment -> { deleteComment(action.commentId) }
 
-            is PartyInformationAction.DeleteTargetComment -> {
-                _targetParentComment.value = null
-            }
+            is Action.CommentAction.DeleteTargetComment -> { _targetParentComment.value = null }
 
-            is PartyInformationAction.OnCommentWriteTextViewClicked -> {
+            is Action.CommentAction.WriteReplyCommentClicked -> {
                 _targetParentComment.value = action.parentComment
-                _event.emit(PartyInformationEvent.ShowTargetParentComment(action.parentComment))
+                _event.emit(CommentCallback.ShowTargetParentComment(action.parentComment))
             }
 
-            is PartyInformationAction.OnDeletePartyMenuClicked -> {
-                deleteParty()
-            }
-
-            is PartyInformationAction.PartyEditSuccess -> {
-                fetchPartyInformation(_party.value.id)
-            }
-
-            is PartyInformationAction.BanUserFromParty -> {
-                banFromParty(action.targetUser)
-            }
-
+            is Action.UserAction.BanUserFromParty -> { banFromParty(action.targetUser) }
         }
     }
 
@@ -193,7 +192,7 @@ class PartyInformationViewModel @Inject constructor(
             is NetworkResult.Success -> {
                 fetchPartyComments(_party.value.id)
                 _targetParentComment.value = null
-                _event.emit(PartyInformationEvent.OnCreateCommentSuccess)
+                _event.emit(CommentCallback.OnCreateCommentSuccess)
             }
             is NetworkResult.Error -> {
                 handleError(result, null)
@@ -206,14 +205,14 @@ class PartyInformationViewModel @Inject constructor(
             is NetworkResult.Success -> {
                 if (result.data == true) {
                     fetchPartyComments(_party.value.id)
-                    _event.emit(PartyInformationEvent.CommentDeleteSuccess)
+                    _event.emit(CommentCallback.CommentDeleteSuccess)
                 } else {
-                    _event.emit(PartyInformationEvent.CommentDeleteFailed)
+                    _event.emit(CommentCallback.CommentDeleteFailed)
                 }
             }
 
             is NetworkResult.Error -> {
-                _event.emit(PartyInformationEvent.CommentDeleteFailed)
+                _event.emit(CommentCallback.CommentDeleteFailed)
             }
         }
     }
@@ -247,9 +246,9 @@ class PartyInformationViewModel @Inject constructor(
             is NetworkResult.Success -> {
                 if (result.data == true) {
                     fetchPartyInformation(_party.value.id)
-                    _event.emit(PartyInformationEvent.OnPartyJoinSuccess(_party.value.openKakaoUrl!!))
+                    _event.emit(PartyCallback.OnPartyJoinSuccess(_party.value.openKakaoUrl!!))
                 } else {
-                    _event.emit(PartyInformationEvent.OnPartyJoinFailed)
+                    _event.emit(PartyCallback.OnPartyJoinFailed)
                 }
             }
             is NetworkResult.Error -> {
@@ -262,13 +261,13 @@ class PartyInformationViewModel @Inject constructor(
         when (val result = deletePartyUseCase.invoke(_party.value.id)) {
             is NetworkResult.Success -> {
                 if (result.data == true) {
-                    _event.emit(PartyInformationEvent.PartyDeleteSuccess)
+                    _event.emit(PartyCallback.PartyDeleteSuccess)
                 } else {
-                    _event.emit(PartyInformationEvent.PartyDeleteFailed)
+                    _event.emit(PartyCallback.PartyDeleteFailed)
                 }
             }
             is NetworkResult.Error -> {
-                _event.emit(PartyInformationEvent.PartyDeleteFailed)
+                _event.emit(PartyCallback.PartyDeleteFailed)
             }
         }
     }
@@ -317,13 +316,13 @@ class PartyInformationViewModel @Inject constructor(
 
                 if (isSuccess) {
                     fetchPartyInformation(_party.value.id)
-                    _event.emit(PartyInformationEvent.UserBanSuccess)
+                    _event.emit(UserCallback.UserBanSuccess)
                 } else {
-                    _event.emit(PartyInformationEvent.UserBanFailed)
+                    _event.emit(UserCallback.UserBanFailed)
                 }
             }
             is NetworkResult.Error -> {
-                _event.emit(PartyInformationEvent.UserBanFailed)
+                _event.emit(UserCallback.UserBanFailed)
             }
         }
     }
