@@ -109,6 +109,10 @@ dependencies {
     implementation(AndroidX.LIFECYCLE_EXTENSIONS)
     implementation(AndroidX.LIFECYCLE_RUNTIME_KTX)
 
+    implementation(AndroidX.NAVIGATION_FRAGMENT_KTX)
+    implementation(AndroidX.NAVIGATION_UI_KTX)
+    implementation(AndroidX.NAVIGATION_DYNAMIC_FEATURES_FRAGMENT)
+
     implementation(Google.HILT_ANDROID)
     kapt(Google.HILT_ANDROID_COMPILER)
     kapt(Google.HILT_COMPILER)

@@ -18,6 +18,7 @@ object Versions {
     const val LIFECYCLE_KTX         = "2.3.1"
     const val LIFECYCLE_RUNTIME_KTX = "2.4.0-alpha03"
     const val LIFECYCLE_EXTENSION   = "2.2.0"
+    const val NAVIGATION = "2.3.5"
 
     /* [ Google ] */
     const val HILT                = "2.40"

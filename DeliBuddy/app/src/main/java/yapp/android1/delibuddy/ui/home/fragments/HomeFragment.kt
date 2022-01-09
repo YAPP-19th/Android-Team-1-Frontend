@@ -76,13 +76,14 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         initViews()
         initObserve()
     }
 
     override fun onResume() {
         super.onResume()
-        Timber.d("onResume")
+
         getCurrentAddressPartiesInCircle()
     }
 

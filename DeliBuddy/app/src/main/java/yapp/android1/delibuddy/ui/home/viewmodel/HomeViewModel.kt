@@ -16,7 +16,7 @@ class HomeViewModel : BaseViewModel<Event>() {
     val isAppTermiate: EventFlow<Boolean> = _isAppTerminate
 
     sealed class HomeEvent : Event {
-        class JudgeAppTerminate() : HomeEvent()
+        object JudgeAppTerminate : HomeEvent()
     }
 
     override suspend fun handleEvent(event: Event) {
