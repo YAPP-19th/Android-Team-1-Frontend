@@ -16,6 +16,7 @@ import yapp.android1.delibuddy.ui.partyInformation.model.PartyStatus
 class MyPartyAdapter(
     private val onIntentClick: (ViewHolderMypartyItemBinding, PartyInformation) -> Unit,
     private val onMoreOptionsClick: (ViewHolderMypartyItemBinding, PartyInformation) -> Unit,
+    private val userId: Int,
 ) :
     ListAdapter<PartyInformation, MyPartyAdapter.ViewHolder>(
         MyPartyDiffCallback()
@@ -72,6 +73,9 @@ class MyPartyAdapter(
                 partyScheduledTime.text = partyInformation.orderTime
 
                 setUiBasedStatus(partyInformation.status)
+
+                ivMoreIcon.visibility =
+                    if (partyInformation.leader.id == userId) View.GONE else View.VISIBLE
             }
         }
 

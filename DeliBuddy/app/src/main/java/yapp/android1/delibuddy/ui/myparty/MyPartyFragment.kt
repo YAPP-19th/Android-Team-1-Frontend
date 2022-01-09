@@ -21,6 +21,8 @@ import yapp.android1.delibuddy.ui.partyInformation.PartyInformationActivity
 import yapp.android1.delibuddy.ui.partyInformation.view.MyPartyOptionsMenuBalloonFactory
 import yapp.android1.delibuddy.util.extensions.repeatOnStarted
 import yapp.android1.delibuddy.util.extensions.showCustomDialog
+import yapp.android1.delibuddy.util.user.UserAuthManager
+import javax.inject.Inject
 
 const val PARTY_INFORMATION = "partyInformation"
 
@@ -30,6 +32,9 @@ class MyPartyFragment : BaseFragment<FragmentMypartyBinding>(
 ) {
     private val optionsMenuBalloon by balloon<MyPartyOptionsMenuBalloonFactory>()
 
+    @Inject
+    lateinit var userAuthManager: UserAuthManager
+
     private val myPartyAdapter by lazy {
         MyPartyAdapter(
             { binding, partyInformation ->
@@ -37,7 +42,8 @@ class MyPartyFragment : BaseFragment<FragmentMypartyBinding>(
             },
             { binding, partyInformation ->
                 adapterOnMoreOptionsClick(binding, partyInformation)
-            }
+            },
+            userAuthManager.getDeliBuddyUserId()
         )
     }
 
