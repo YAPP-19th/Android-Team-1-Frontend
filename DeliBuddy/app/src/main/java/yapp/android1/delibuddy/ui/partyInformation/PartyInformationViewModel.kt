@@ -48,7 +48,8 @@ class PartyInformationViewModel @Inject constructor(
 
     sealed class PartyInformationAction : Event {
         // [Party]
-        class OnIntent(val data: Party, val currentUserId: Int) : PartyInformationAction()
+        class OnPartyIntent(val data: Party, val currentUserId: Int) : PartyInformationAction()
+        class OnPartyInformationIntent(val data: PartyInformation, val currentUserId: Int) : PartyInformationAction()
         class OnStatusChanged(val status: PartyStatus) : PartyInformationAction()
         object OnJointPartyClicked : PartyInformationAction()
         object OnDeletePartyMenuClicked : PartyInformationAction()
@@ -87,9 +88,16 @@ class PartyInformationViewModel @Inject constructor(
 
     override suspend fun handleEvent(action: PartyInformationAction) {
         when (action) {
-            is PartyInformationAction.OnIntent -> {
+            is PartyInformationAction.OnPartyIntent -> {
                 currentUserId = action.currentUserId
                 setPartyWithoutLeader(action.data)
+                fetchPartyInformation(_party.value.id)
+                fetchPartyComments(_party.value.id)
+            }
+
+            is PartyInformationAction.OnPartyInformationIntent -> {
+                currentUserId = action.currentUserId
+                _party.value  = action.data
                 fetchPartyInformation(_party.value.id)
                 fetchPartyComments(_party.value.id)
             }
