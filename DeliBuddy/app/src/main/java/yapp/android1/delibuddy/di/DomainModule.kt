@@ -69,4 +69,30 @@ object DomainModule {
     fun provideCreateCommentUseCase(commentRepository: CommentRepository): CreateCommentUseCase {
         return CreateCommentUseCase(commentRepository)
     }
+
+    @Provides
+    fun provideDeletePartyUseCase(partyRepository: PartyRepository): DeletePartyUseCase {
+        return DeletePartyUseCase(partyRepository)
+    }
+
+    @Provides
+    fun provideDeleteCommentUseCase(commentRepository: CommentRepository): DeleteCommentUseCase {
+        return DeleteCommentUseCase(commentRepository)
+    }
+
+    @Provides
+    fun provideEditPartyUseCase(partyRepository: PartyRepository): EditPartyUseCase {
+        return EditPartyUseCase(partyRepository)
+    }
+
+    @Provides
+    fun provideBanFromPartyUseCase(partyRepository: PartyRepository): BanFromPartyUseCase {
+        return BanFromPartyUseCase(partyRepository)
+    }
+
+    @Provides
+    fun provideGetMyPartiesUseCase(partyRepository: PartyRepository): GetMyPartiesUseCase {
+        return GetMyPartiesUseCase(partyRepository)
+    }
 }
+

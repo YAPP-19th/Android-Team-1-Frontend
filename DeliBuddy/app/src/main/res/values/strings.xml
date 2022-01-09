@@ -20,7 +20,7 @@
     <string name="navigation_myparty_title">내가 참여 중인 파티</string>
 
     <string name="navigation_mypage_title">마이페이지</string>
-    <string name="navigation_mypage_service">서비스 약관</string>
+    <string name="navigation_mypage_service">서비스 이용 약관</string>
     <string name="navigation_mypage_license">라이센스</string>
     <string name="navigation_mypage_banner_title">버디와 함께 한 식사 횟수</string>
     <string name="navigation_mypage_count">%d번</string>

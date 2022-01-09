@@ -21,36 +21,36 @@ data class Party(
 ) : Serializable {
     companion object {
         val EMPTY = Party(
-            allStatuses = emptyList(),
-            body = "",
-            category = Category.EMPTY,
-            coordinate = "",
+            allStatuses      = emptyList(),
+            body             = "",
+            category         = Category.EMPTY,
+            coordinate       = "",
             currentUserCount = -1,
-            id = -1,
-            openKakaoUrl = "",
-            orderTime = "",
-            placeName = "",
-            placeNameDetail = "",
-            status = "",
-            targetUserCount = -1,
-            title = ""
+            id               = -1,
+            openKakaoUrl     = "",
+            orderTime        = "",
+            placeName        = "",
+            placeNameDetail  = "",
+            status           = "",
+            targetUserCount  = -1,
+            title            = ""
         )
 
         fun toParty(partyEntity: PartyEntity): Party {
             return Party(
-                allStatuses = partyEntity.allStatuses,
-                body = partyEntity.body,
-                category = Category.mapToCategory(partyEntity.category),
-                coordinate = partyEntity.coordinate,
+                allStatuses      = partyEntity.allStatuses,
+                body             = partyEntity.body,
+                category         = Category.mapToCategory(partyEntity.category),
+                coordinate       = partyEntity.coordinate,
                 currentUserCount = partyEntity.currentUserCount,
-                id = partyEntity.id,
-                openKakaoUrl = partyEntity.openKakaoUrl,
-                orderTime = parseDate(partyEntity.orderTime),
-                placeName = partyEntity.placeName,
-                placeNameDetail = partyEntity.placeNameDetail,
-                status = partyEntity.status,
-                targetUserCount = partyEntity.targetUserCount,
-                title = partyEntity.title
+                id               = partyEntity.id,
+                openKakaoUrl     = partyEntity.openKakaoUrl,
+                orderTime        = parseDate(partyEntity.orderTime),
+                placeName        = partyEntity.placeName,
+                placeNameDetail  = partyEntity.placeNameDetail,
+                status           = partyEntity.status,
+                targetUserCount  = partyEntity.targetUserCount,
+                title            = partyEntity.title
             )
         }
     }

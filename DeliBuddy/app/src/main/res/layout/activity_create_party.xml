@@ -40,6 +40,19 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/tv_edit_party"
+        style="@style/RobotoRegular14"
+        android:layout_width="wrap_content"
+        android:layout_height="54dp"
+        android:gravity="center_vertical"
+        android:padding="20dp"
+        android:visibility="gone"
+        android:text="수정"
+        android:textColor="@color/text_grey"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -117,6 +130,7 @@
                 android:visibility="gone"/>
 
             <ImageView
+                android:id="@+id/spinner_category_dropdown"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
@@ -166,6 +180,7 @@
                 app:layout_constraintTop_toBottomOf="@id/tv_party_category_error" />
 
             <TextView
+                android:id="@+id/tv_party_time_dummy"
                 style="@style/RobotoRegular14"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
@@ -213,6 +228,7 @@
                 app:layout_constraintTop_toBottomOf="@id/tv_party_time_error" />
 
             <ImageView
+                android:id="@+id/spinner_member_dropdown"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"

@@ -12,7 +12,10 @@ class PartyRepositoryImpl @Inject constructor(
     private val api: PartyApi,
     private val deliBuddyNetworkErrorHandler: DeliBuddyNetworkErrorHandler,
 ) : PartyRepository {
-    override suspend fun getPartiesInCircle(point: String, distance: Int): NetworkResult<List<PartyEntity>> {
+    override suspend fun getPartiesInCircle(
+        point: String,
+        distance: Int
+    ): NetworkResult<List<PartyEntity>> {
         return try {
             val response = api.getPartiesInCircle(point, distance)
             NetworkResult.Success(
@@ -38,7 +41,8 @@ class PartyRepositoryImpl @Inject constructor(
 
     override suspend fun createParty(request: PartyCreationRequestEntity): NetworkResult<PartyInformationEntity> {
         return try {
-            val response = api.createParty(PartyCreationRequestModel.fromPartyCreationRequest(request))
+            val response =
+                api.createParty(PartyCreationRequestModel.fromPartyCreationRequest(request))
             NetworkResult.Success(PartyInformationModel.toPartyInformationEntity(response))
         } catch (e: Exception) {
             val errorType = deliBuddyNetworkErrorHandler.getError(exception = e)
@@ -46,34 +50,49 @@ class PartyRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun editParty(id: String): NetworkResult<Unit> {
-        return try {
-            val response = api.editParty(id)
-            NetworkResult.Success(response)
-        } catch (e: Exception) {
-            val errorType = deliBuddyNetworkErrorHandler.getError(exception = e)
-            return NetworkResult.Error(errorType)
-        }
+    override suspend fun editParty(
+        id: Int,
+        request: PartyEditRequestEntity
+    ): NetworkResult<Boolean> {
+        return runCatching {
+            api.editParty(id, partyEditRequestModel = PartyEditRequestModel.fromEntity(request))
+        }.fold(
+            onSuccess = { model ->
+                NetworkResult.Success(model.okay)
+            },
+            onFailure = { throwable ->
+                val errorType = deliBuddyNetworkErrorHandler.getError(exception = throwable)
+                NetworkResult.Error(errorType)
+            }
+        )
     }
 
-    override suspend fun deleteParty(id: String): NetworkResult<Unit> {
-        return try {
-            val response = api.deleteParty(id)
-            NetworkResult.Success(response)
-        } catch (e: Exception) {
-            val errorType = deliBuddyNetworkErrorHandler.getError(exception = e)
-            return NetworkResult.Error(errorType)
-        }
+    override suspend fun deleteParty(id: Int): NetworkResult<Boolean> {
+        return runCatching {
+            api.deleteParty(id)
+        }.fold(
+            onSuccess = { model ->
+                NetworkResult.Success(model.okay)
+            },
+            onFailure = { throwable ->
+                val errorType = deliBuddyNetworkErrorHandler.getError(exception = throwable)
+                NetworkResult.Error(errorType)
+            }
+        )
     }
 
-    override suspend fun banFromParty(id: String, request: PartyBanRequestEntity): NetworkResult<Unit> {
-        return try {
-            val response = api.banFromParty(id, PartyBanRequestModel.fromPartyBanRequest(request))
-            NetworkResult.Success(response)
-        } catch (e: Exception) {
-            val errorType = deliBuddyNetworkErrorHandler.getError(exception = e)
-            return NetworkResult.Error(errorType)
-        }
+    override suspend fun banFromParty(id: Int, request: PartyBanRequestEntity): NetworkResult<Boolean> {
+        return runCatching {
+            api.banFromParty(id, PartyBanRequestModel.fromPartyBanRequest(request))
+        }.fold(
+            onSuccess = { model ->
+                NetworkResult.Success(model.okay)
+            },
+            onFailure = { throwable ->
+                val errorType = deliBuddyNetworkErrorHandler.getError(exception = throwable)
+                NetworkResult.Error(errorType)
+            }
+        )
     }
 
     override suspend fun joinParty(id: Int): NetworkResult<Boolean> {
@@ -123,6 +142,24 @@ class PartyRepositoryImpl @Inject constructor(
             },
             onFailure = { throwable ->
                 val errorType = deliBuddyNetworkErrorHandler.getError(exception = throwable)
+                NetworkResult.Error(errorType)
+            }
+        )
+    }
+
+    override suspend fun getMyParties(): NetworkResult<List<PartyInformationEntity>> {
+        return kotlin.runCatching {
+            api.getMyParties()
+        }.mapCatching { modelList ->
+            modelList.map {
+                PartyInformationModel.toPartyInformationEntity(it)
+            }
+        }.fold(
+            onSuccess = { entity ->
+                NetworkResult.Success(entity)
+            },
+            onFailure = { throwable ->
+                val errorType = deliBuddyNetworkErrorHandler.getError(throwable)
                 NetworkResult.Error(errorType)
             }
         )

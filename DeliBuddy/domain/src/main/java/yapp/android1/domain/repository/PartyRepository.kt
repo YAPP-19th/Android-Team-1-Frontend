@@ -8,10 +8,11 @@ interface PartyRepository {
     suspend fun getPartiesInGeom(): NetworkResult<Unit>
     suspend fun createParty(request: PartyCreationRequestEntity): NetworkResult<PartyInformationEntity>
     suspend fun getPartyInformation(id: Int): NetworkResult<PartyInformationEntity>
-    suspend fun editParty(id: String): NetworkResult<Unit>
-    suspend fun deleteParty(id: String): NetworkResult<Unit>
-    suspend fun banFromParty(id: String, request: PartyBanRequestEntity): NetworkResult<Unit>
+    suspend fun editParty(id: Int, request: PartyEditRequestEntity): NetworkResult<Boolean>
+    suspend fun deleteParty(id: Int): NetworkResult<Boolean>
+    suspend fun banFromParty(id: Int, request: PartyBanRequestEntity): NetworkResult<Boolean>
     suspend fun joinParty(id: Int): NetworkResult<Boolean>
     suspend fun leaveParty(id: String): NetworkResult<Unit>
     suspend fun changeStatus(id: Int, request: StatusChangeRequestEntity): NetworkResult<Boolean>
+    suspend fun getMyParties(): NetworkResult<List<PartyInformationEntity>>
 }

@@ -33,13 +33,17 @@ class CommentRepositoryImpl @Inject constructor(
     }
 
     override suspend fun deleteComment(commentId: Int): NetworkResult<Boolean> {
-        try {
-            val deleteResult = api.deleteComment(commentId)
-            return NetworkResult.Success(deleteResult)
-        } catch (t: Throwable) {
-            val errorType = networkErrorHandler.getError(t)
-            return NetworkResult.Error(errorType)
-        }
+        return runCatching {
+            api.deleteComment(commentId)
+        }.fold(
+            onSuccess = { deleteResult ->
+                NetworkResult.Success(deleteResult.okay)
+            },
+            onFailure = { throwable ->
+                val errorType = networkErrorHandler.getError(throwable)
+                NetworkResult.Error(errorType)
+            }
+        )
     }
 
     override suspend fun createComment(commentCreationRequest: CommentCreationRequestEntity): NetworkResult<CommentEntity> {
