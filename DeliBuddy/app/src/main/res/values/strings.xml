@@ -38,4 +38,8 @@
 
     <string name="home_back_button_once_toast">한 번 더 누르면 종료됩니다.</string>
     <string name="home_back_button_twice_toast">앱이 종료됩니다.</string>
+
+    <string name="address_change_success">주소 변경에 성공하였습니다.</string>
+    <string name="address_change_fail">주소 변경에 실패하였습니다.\n다시 시도해 주세요.</string>
+    <string name="address_call_fail">주소를 불러오는 데 실패했습니다.\n주소를 다시 설정해주세요.</string>
 </resources>

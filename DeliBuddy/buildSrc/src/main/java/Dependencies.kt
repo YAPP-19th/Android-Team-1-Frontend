@@ -19,6 +19,10 @@ object AndroidX {
     const val LIFECYCLE_VIEWMODEL_KTX    = "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.LIFECYCLE_KTX}"
     const val LIFECYCLE_EXTENSIONS       = "androidx.lifecycle:lifecycle-extensions:${Versions.LIFECYCLE_EXTENSION}"
     const val LIFECYCLE_RUNTIME_KTX      = "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.LIFECYCLE_RUNTIME_KTX}"
+
+    const val NAVIGATION_FRAGMENT_KTX    = "androidx.navigation:navigation-fragment-ktx:${Versions.NAVIGATION}"
+    const val NAVIGATION_UI_KTX          = "androidx.navigation:navigation-ui-ktx:${Versions.NAVIGATION}"
+    const val NAVIGATION_DYNAMIC_FEATURES_FRAGMENT    = "androidx.navigation:navigation-dynamic-features-fragment:${Versions.NAVIGATION}"
 }
 
 object Google {

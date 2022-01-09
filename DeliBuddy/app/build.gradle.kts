@@ -109,6 +109,10 @@ dependencies {
     implementation(AndroidX.LIFECYCLE_EXTENSIONS)
     implementation(AndroidX.LIFECYCLE_RUNTIME_KTX)
 
+    implementation(AndroidX.NAVIGATION_FRAGMENT_KTX)
+    implementation(AndroidX.NAVIGATION_UI_KTX)
+    implementation(AndroidX.NAVIGATION_DYNAMIC_FEATURES_FRAGMENT)
+
     implementation(Google.HILT_ANDROID)
     implementation("com.google.android.gms:play-services-oss-licenses:17.0.0")
     kapt(Google.HILT_ANDROID_COMPILER)
@@ -129,7 +133,6 @@ dependencies {
     implementation(Libraries.LOTTIE)
     implementation(Libraries.GLIDE)
     kapt(Libraries.GLIDE_COMPILER)
-    implementation(Libraries.OSS_LICENSE)
     implementation(Libraries.JWT_DECODE)
 
     implementation(Libraries.NAVER_MAP)
