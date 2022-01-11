@@ -152,6 +152,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
                     getCurrentAddress()
                 } else {
                     binding.tvUserAddress.text = it.addressName
+                    getCurrentAddressPartiesInCircle()
                 }
             }
         }
