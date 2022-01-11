@@ -1,8 +1,10 @@
 package yapp.android1.delibuddy.ui.partyInformation
 
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import yapp.android1.delibuddy.base.BaseViewModel
 import yapp.android1.delibuddy.base.RetryAction
 import yapp.android1.delibuddy.model.*
@@ -51,6 +53,7 @@ class PartyInformationViewModel @Inject constructor(
         sealed class IntentAction : Action() {
             class OnPartyIntent(val data: Party, val currentUserId: Int) : IntentAction()
             class OnPartyInformationIntent(val data: PartyInformation, val currentUserId: Int) : IntentAction()
+            class OnPartyIdIntent(val partyId: Int, val currentUserId: Int) : IntentAction()
         }
 
         sealed class PartyAction : Action() {
@@ -112,6 +115,12 @@ class PartyInformationViewModel @Inject constructor(
                 fetchPartyComments(_party.value.id)
             }
 
+            is Action.IntentAction.OnPartyIdIntent -> {
+                currentUserId = action.currentUserId
+                fetchPartyInformation(action.partyId)
+                fetchPartyComments(action.partyId)
+            }
+
             is Action.PartyAction.OnStatusChanged -> {
                 val currentStatus = party.value.status.value
                 val changedStatus = action.status.value
@@ -122,7 +131,7 @@ class PartyInformationViewModel @Inject constructor(
             }
 
             is Action.PartyAction.OnJointPartyClicked -> {
-                if (_party.value.isIn == false) {
+                if (!_party.value.isIn) {
                     joinParty()
                     _event.emit(PartyCallback.OnPartyJoinSuccess(_party.value.openKakaoUrl!!))
                 } else {
@@ -203,7 +212,7 @@ class PartyInformationViewModel @Inject constructor(
     private suspend fun deleteComment(commentId: Int) {
         when (val result = deleteCommentUseCase.invoke(commentId)) {
             is NetworkResult.Success -> {
-                if (result.data == true) {
+                if (result.data) {
                     fetchPartyComments(_party.value.id)
                     _event.emit(CommentCallback.CommentDeleteSuccess)
                 } else {
@@ -217,17 +226,17 @@ class PartyInformationViewModel @Inject constructor(
         }
     }
 
-    private suspend fun changePartyStatus(partyId: Int, changedStatus: String) {
+    private fun changePartyStatus(partyId: Int, changedStatus: String) = viewModelScope.launch {
         val result = changeStatusUseCase.invoke(
             params = ChangeStatusUseCase.Params(
-                partyId       = partyId,
+                partyId = partyId,
                 changedStatus = changedStatus
             )
         )
 
         when (result) {
             is NetworkResult.Success -> {
-                if (result.data == true) {
+                if (result.data) {
                     _party.value = _party.value.copy(
                         status = PartyStatus.of(changedStatus)
                     )
@@ -239,12 +248,13 @@ class PartyInformationViewModel @Inject constructor(
                 handleError(result, null)
             }
         }
+
     }
 
     private suspend fun joinParty() {
         when (val result = jointPartyUseCase.invoke(_party.value.id)) {
             is NetworkResult.Success -> {
-                if (result.data == true) {
+                if (result.data) {
                     fetchPartyInformation(_party.value.id)
                     _event.emit(PartyCallback.OnPartyJoinSuccess(_party.value.openKakaoUrl!!))
                 } else {
@@ -260,7 +270,7 @@ class PartyInformationViewModel @Inject constructor(
     private suspend fun deleteParty() {
         when (val result = deletePartyUseCase.invoke(_party.value.id)) {
             is NetworkResult.Success -> {
-                if (result.data == true) {
+                if (result.data) {
                     _event.emit(PartyCallback.PartyDeleteSuccess)
                 } else {
                     _event.emit(PartyCallback.PartyDeleteFailed)

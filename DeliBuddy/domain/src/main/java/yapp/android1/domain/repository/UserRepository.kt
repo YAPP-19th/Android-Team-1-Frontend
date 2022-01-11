@@ -5,5 +5,5 @@ import yapp.android1.domain.entity.UserEntity
 
 interface UserRepository {
     suspend fun getMyInfo(): NetworkResult<UserEntity>
-    suspend fun setFcmToken(token: String): NetworkResult<Unit>
+    suspend fun setFcmToken(token: String): NetworkResult<Boolean>
 }

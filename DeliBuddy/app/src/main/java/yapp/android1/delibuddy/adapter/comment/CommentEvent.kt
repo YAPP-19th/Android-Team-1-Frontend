@@ -1,6 +1,5 @@
 package yapp.android1.delibuddy.adapter.comment
 
-import yapp.android1.delibuddy.model.Comment
 import yapp.android1.delibuddy.model.CommentType
 import yapp.android1.delibuddy.model.Event
 

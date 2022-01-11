@@ -71,6 +71,11 @@ object DomainModule {
     }
 
     @Provides
+    fun provideFcmUseCase(userRepository: UserRepository): FcmTokenUseCase {
+        return FcmTokenUseCase(userRepository)
+    }
+
+    @Provides
     fun provideDeletePartyUseCase(partyRepository: PartyRepository): DeletePartyUseCase {
         return DeletePartyUseCase(partyRepository)
     }

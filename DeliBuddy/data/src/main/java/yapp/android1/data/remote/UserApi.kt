@@ -1,7 +1,9 @@
 package yapp.android1.data.remote
 
+import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import yapp.android1.data.entity.PostResponseModel
 import yapp.android1.data.entity.UserModel
 
 interface UserApi : DeliBuddyApi {
@@ -9,5 +11,7 @@ interface UserApi : DeliBuddyApi {
     suspend fun getMyInfo(): UserModel
 
     @POST("api/v1/users/me/fcm_token")
-    suspend fun setFcmToken()
+    suspend fun setFcmToken(
+        @Body fcmToken: String
+    ): PostResponseModel
 }
