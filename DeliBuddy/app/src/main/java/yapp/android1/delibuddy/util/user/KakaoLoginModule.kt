@@ -3,9 +3,11 @@ package yapp.android1.delibuddy.util.user
 import android.content.Context
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.user.UserApiClient
+import dagger.hilt.android.qualifiers.ActivityContext
+import javax.inject.Inject
 
-class KakaoLoginModule(
-    private val context: Context
+class KakaoLoginModule @Inject constructor(
+    @ActivityContext private val context: Context
 ) {
     private var loginCallback: ((
         isLoginSuccess: Boolean,

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="yapp.android1.delibuddy.ui.home.fragments.HomeFragment"
+        android:label="HomeFragment" />
+    <fragment
+        android:id="@+id/myPartyFragment"
+        android:name="yapp.android1.delibuddy.ui.myparty.MyPartyFragment"
+        android:label="MyPartyFragment" />
+    <fragment
+        android:id="@+id/alarmFragment"
+        android:name="yapp.android1.delibuddy.ui.alarm.AlarmFragment"
+        android:label="AlarmFragment" />
+    <fragment
+        android:id="@+id/myPageFragment"
+        android:name="yapp.android1.delibuddy.ui.mypage.MyPageFragment"
+        android:label="MyPageFragment" />
+</navigation>

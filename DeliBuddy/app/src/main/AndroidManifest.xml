@@ -24,8 +24,19 @@
             android:exported="false" />
         <activity
             android:name=".ui.partyInformation.PartyInformationActivity"
-            android:exported="false"
-            android:windowSoftInputMode="stateAlwaysVisible|stateAlwaysHidden" />
+            android:windowSoftInputMode="adjustResize"
+            android:exported="true" >
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <!-- "kakao{YOUR_NATIVE_APP_KEY}://kakaolink" 형식의 앱 실행 스킴을 설정하는데 사용 -->
+                <data android:host="kakaolink"
+                    android:scheme="kakao3bf4dfe97052c36d665dafac21a80d36" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".ui.splash.SplashActivity"
             android:exported="true"
@@ -71,13 +82,5 @@
         <activity
             android:name=".ui.terms.TermsActivity"
             android:exported="true" />
-
-        <service
-            android:name=".service.DelibuddyFCMService"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-            </intent-filter>
-        </service>
     </application>
 </manifest>

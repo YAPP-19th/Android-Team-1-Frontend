@@ -19,6 +19,10 @@ object AndroidX {
     const val LIFECYCLE_VIEWMODEL_KTX    = "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.LIFECYCLE_KTX}"
     const val LIFECYCLE_EXTENSIONS       = "androidx.lifecycle:lifecycle-extensions:${Versions.LIFECYCLE_EXTENSION}"
     const val LIFECYCLE_RUNTIME_KTX      = "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.LIFECYCLE_RUNTIME_KTX}"
+
+    const val NAVIGATION_FRAGMENT_KTX    = "androidx.navigation:navigation-fragment-ktx:${Versions.NAVIGATION}"
+    const val NAVIGATION_UI_KTX          = "androidx.navigation:navigation-ui-ktx:${Versions.NAVIGATION}"
+    const val NAVIGATION_DYNAMIC_FEATURES_FRAGMENT    = "androidx.navigation:navigation-dynamic-features-fragment:${Versions.NAVIGATION}"
 }
 
 object Google {
@@ -52,8 +56,11 @@ object Libraries {
     
     const val NAVER_MAP                  = "com.naver.maps:map-sdk:${Versions.NAVER_MAP}"
     const val KAKAO_LOGIN                = "com.kakao.sdk:v2-user:${Versions.KAKAO_LOGIN}"
-
+    const val KAKAO_LINK                 = "com.kakao.sdk:v2-link:${Versions.KAKAO_LINK}"
+  
     const val OSS_LICENSE                = "com.google.android.gms:play-services-oss-licenses:${Versions.OSS_LICENSE}"
+  
+    const val BALLOON                    = "com.github.skydoves:balloon:${Versions.BALLOON}"
 }
 
 object UnitTest {

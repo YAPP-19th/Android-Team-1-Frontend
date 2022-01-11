@@ -109,7 +109,12 @@ dependencies {
     implementation(AndroidX.LIFECYCLE_EXTENSIONS)
     implementation(AndroidX.LIFECYCLE_RUNTIME_KTX)
 
+    implementation(AndroidX.NAVIGATION_FRAGMENT_KTX)
+    implementation(AndroidX.NAVIGATION_UI_KTX)
+    implementation(AndroidX.NAVIGATION_DYNAMIC_FEATURES_FRAGMENT)
+
     implementation(Google.HILT_ANDROID)
+    implementation("com.google.android.gms:play-services-oss-licenses:17.0.0")
     kapt(Google.HILT_ANDROID_COMPILER)
     kapt(Google.HILT_COMPILER)
     implementation(Google.MATERIAL)
@@ -132,6 +137,8 @@ dependencies {
 
     implementation(Libraries.NAVER_MAP)
     implementation(Libraries.KAKAO_LOGIN)
+    implementation(Libraries.KAKAO_LINK)
+    implementation(Libraries.BALLOON)
 
     testImplementation(UnitTest.JUNIT)
 

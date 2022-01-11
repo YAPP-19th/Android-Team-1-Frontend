@@ -22,9 +22,16 @@ import kotlinx.coroutines.flow.collect
 import timber.log.Timber
 import yapp.android1.delibuddy.databinding.ActivityCreatePartyBinding
 import yapp.android1.delibuddy.model.Address
+import yapp.android1.delibuddy.model.Party
+import yapp.android1.delibuddy.model.PartyInformation
 import yapp.android1.delibuddy.ui.address.AddressActivity
+import yapp.android1.delibuddy.ui.partyInformation.EDIT_PARTYINFO
+import yapp.android1.delibuddy.util.extensions.gone
+import yapp.android1.delibuddy.util.extensions.hide
 import yapp.android1.delibuddy.util.extensions.repeatOnStarted
+import yapp.android1.delibuddy.util.extensions.show
 import yapp.android1.domain.entity.PartyCreationRequestEntity
+import yapp.android1.domain.entity.PartyEditRequestEntity
 
 @AndroidEntryPoint
 class CreatePartyActivity : AppCompatActivity() {
@@ -63,6 +70,11 @@ class CreatePartyActivity : AppCompatActivity() {
         initObserve()
     }
 
+    private fun onIntent() {
+        val intentData = intent.getSerializableExtra(EDIT_PARTYINFO) as PartyInformation
+
+    }
+
     override fun onResume() {
         super.onResume()
         binding.spinnerCategory.setSelection(viewModel.currentCategoryIndex.value, false)
@@ -85,6 +97,10 @@ class CreatePartyActivity : AppCompatActivity() {
     private fun initView() = with(binding) {
         tvCreateParty.setOnClickListener {
             createParty()
+        }
+
+        tvEditParty.setOnClickListener {
+            editParty()
         }
 
         tvPartyDate.text =
@@ -333,15 +349,11 @@ class CreatePartyActivity : AppCompatActivity() {
             ) {
                 when (position) {
                     0 -> {
-                        viewModel.occurEvent(
-                            CreatePartyEvent.ChangeFlags(PartyElement.MEMBER, false)
-                        )
+                        viewModel.occurEvent(CreatePartyEvent.ChangeFlags(PartyElement.MEMBER, false))
                         tvPartyMemberError.visibility = View.VISIBLE
                     }
                     else -> {
-                        viewModel.occurEvent(
-                            CreatePartyEvent.ChangeFlags(PartyElement.MEMBER, true)
-                        )
+                        viewModel.occurEvent(CreatePartyEvent.ChangeFlags(PartyElement.MEMBER, true))
                         tvPartyMemberError.visibility = View.GONE
                         selectedMember = position + 1
                     }
@@ -373,6 +385,19 @@ class CreatePartyActivity : AppCompatActivity() {
             title = etPartyTitle.text.toString()
         )
         viewModel.occurEvent(CreatePartyEvent.CreatePartyClick(newParty))
+    }
+
+    private fun editParty() = with(binding) {
+        val partyAddress = viewModel.currentAddress.value!!
+        val coordString = "POINT (${partyAddress.lng} ${partyAddress.lat})"
+
+        val changedPartyInfo = PartyEditRequestEntity(
+            body = etPartyBody.text.toString(),
+            coordinate = coordString,
+            title = etPartyTitle.text.toString()
+        )
+
+        viewModel.occurEvent(CreatePartyEvent.EditParty(changedPartyInfo))
     }
 
     private fun initObserve() = with(binding) {
@@ -428,6 +453,28 @@ class CreatePartyActivity : AppCompatActivity() {
         }
 
         repeatOnStarted {
+            viewModel.canEditParty.collect { canEdit ->
+                if(canEdit) {
+                    tvEditParty.setTextColor(
+                        ContextCompat.getColor(
+                            this@CreatePartyActivity,
+                            yapp.android1.delibuddy.R.color.main_orange
+                        )
+                    )
+                    tvEditParty.typeface = Typeface.DEFAULT_BOLD
+                } else {
+                    tvEditParty.setTextColor(
+                        ContextCompat.getColor(
+                            this@CreatePartyActivity,
+                            yapp.android1.delibuddy.R.color.text_grey
+                        )
+                    )
+                    tvEditParty.typeface = Typeface.DEFAULT
+                }
+            }
+        }
+
+        repeatOnStarted {
             viewModel.showToast.collect {
                 Toast.makeText(this@CreatePartyActivity, it, Toast.LENGTH_SHORT).show()
             }
@@ -460,6 +507,42 @@ class CreatePartyActivity : AppCompatActivity() {
                 if (isSuccessToCreateParty) finish()
             }
         }
+
+        repeatOnStarted {
+            viewModel.editingPartyInformation.collect { partyInformation ->
+                if(partyInformation != null) {
+                    spinnerCategory.gone()
+                    spinnerCategoryDropdown.gone()
+                    spinnerMember.gone()
+                    spinnerMemberDropdown.gone()
+                    tvPartyDate.gone()
+                    tvPartyTime.gone()
+                    tvPartyTimeDummy.gone()
+
+                    etChatUrl.gone()
+                    tvEditParty.show()
+                    tvCreatePartyTitle.text = "파티 수정하기"
+                    tvCreateParty.gone()
+
+                    spinnerCategory.onItemSelectedListener = null
+
+                    etPartyTitle.setText(partyInformation.title)
+                    etPartyBody.setText(partyInformation.body)
+                }
+            }
+        }
+
+        repeatOnStarted {
+            viewModel.isSuccessToEditParty.collect { isSuccess ->
+                if(isSuccess) {
+                    setResult(RESULT_OK)
+                    finish()
+                } else {
+                    Toast.makeText(this@CreatePartyActivity, "수정에 실패했습니다 잠시 후 다시 시도해 주세요", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
     }
+
 }
 

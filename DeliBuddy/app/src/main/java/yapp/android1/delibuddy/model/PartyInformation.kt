@@ -20,7 +20,9 @@ data class PartyInformation(
     val status: PartyStatus,
     val targetUserCount: Int,
     val title: String,
-    val leader: Leader
+    val isIn: Boolean,
+    val leader: Leader,
+    val users: List<User>
 ) : Serializable {
 
     data class Leader(
@@ -28,60 +30,83 @@ data class PartyInformation(
         val nickName: String,
         val partiesCnt: Int,
         val profileImage: String
-    ) {
+    ) : Serializable {
         companion object {
             val EMPTY = Leader(
-                id = -1,
-                nickName = "",
-                partiesCnt = 0,
+                id           = -1,
+                nickName     = "",
+                partiesCnt   = 0,
                 profileImage = ""
             )
 
             fun toLeader(entity: PartyInformationEntity.LeaderEntity): Leader {
                 return Leader(
-                    id = entity.id,
-                    nickName = entity.nickName,
-                    partiesCnt = entity.partiesCnt,
+                    id           = entity.id,
+                    nickName     = entity.nickName,
+                    partiesCnt   = entity.partiesCnt,
                     profileImage = entity.profileImage
                 )
             }
         }
     }
 
+    data class User(
+        val id: Int,
+        val nickName: String,
+        val partiesCnt: Int,
+        val profileImage: String
+    ) : Serializable {
+        companion object {
+            fun toUser(entity: PartyInformationEntity.UserEntity): User {
+                return User(
+                    id           = entity.id,
+                    nickName     = entity.nickName,
+                    partiesCnt   = entity.partiesCnt,
+                    profileImage = entity.profileImage
+                )
+            }
+        }
+
+    }
+
     companion object {
         val EMPTY = PartyInformation(
-            allStatuses = emptyList(),
-            body = "",
-            category = Category.EMPTY,
-            coordinate = "",
+            allStatuses      = emptyList(),
+            body             = "",
+            category         = Category.EMPTY,
+            coordinate       = "",
             currentUserCount = -1,
-            id = -1,
-            openKakaoUrl = "",
-            orderTime = "",
-            placeName = "",
-            placeNameDetail = "",
-            status = PartyStatus.RECRUIT,
-            targetUserCount = -1,
-            title = "",
-            leader = Leader.EMPTY
+            id               = -1,
+            openKakaoUrl     = "",
+            orderTime        = "",
+            placeName        = "",
+            placeNameDetail  = "",
+            status           = PartyStatus.RECRUIT,
+            targetUserCount  = -1,
+            title            = "",
+            isIn             = false,
+            leader           = Leader.EMPTY,
+            users            = emptyList()
         )
 
         fun toPartyInformation(partyEntity: PartyInformationEntity): PartyInformation {
             return PartyInformation(
-                allStatuses = partyEntity.allStatuses,
-                body = partyEntity.body,
-                category = Category.mapToCategory(partyEntity.category),
-                coordinate = partyEntity.coordinate,
+                allStatuses      = partyEntity.allStatuses,
+                body             = partyEntity.body,
+                category         = Category.mapToCategory(partyEntity.category),
+                coordinate       = partyEntity.coordinate,
                 currentUserCount = partyEntity.currentUserCount,
-                id = partyEntity.id,
-                openKakaoUrl = partyEntity.openKakaoUrl,
-                orderTime = parseDate(partyEntity.orderTime),
-                placeName = partyEntity.placeName,
-                placeNameDetail = partyEntity.placeNameDetail,
-                status = PartyStatus.of(partyEntity.status),
-                targetUserCount = partyEntity.targetUserCount,
-                title = partyEntity.title,
-                leader = Leader.toLeader(partyEntity.leader)
+                id               = partyEntity.id,
+                openKakaoUrl     = partyEntity.openKakaoUrl,
+                orderTime        = parseDate(partyEntity.orderTime),
+                placeName        = partyEntity.placeName,
+                placeNameDetail  = partyEntity.placeNameDetail,
+                status           = PartyStatus.of(partyEntity.status),
+                targetUserCount  = partyEntity.targetUserCount,
+                title            = partyEntity.title,
+                isIn             = partyEntity.isIn,
+                leader           = Leader.toLeader(partyEntity.leader),
+                users            = partyEntity.users.map { User.toUser(it) }
             )
         }
     }

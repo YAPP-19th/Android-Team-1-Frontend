@@ -14,9 +14,18 @@ data class PartyInformationEntity(
     val status: String,
     val targetUserCount: Int,
     val title: String,
+    val isIn: Boolean,
     val leader: LeaderEntity,
+    val users: List<UserEntity>
 ) {
     data class LeaderEntity(
+        val id: Int,
+        val nickName: String,
+        val partiesCnt: Int,
+        val profileImage: String
+    )
+
+    data class UserEntity(
         val id: Int,
         val nickName: String,
         val partiesCnt: Int,

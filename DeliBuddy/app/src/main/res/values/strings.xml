@@ -20,7 +20,7 @@
     <string name="navigation_myparty_title">내가 참여 중인 파티</string>
 
     <string name="navigation_mypage_title">마이페이지</string>
-    <string name="navigation_mypage_service">서비스 약관</string>
+    <string name="navigation_mypage_service">서비스 이용 약관</string>
     <string name="navigation_mypage_license">라이센스</string>
     <string name="navigation_mypage_banner_title">버디와 함께 한 식사 횟수</string>
     <string name="navigation_mypage_count">%d번</string>
@@ -38,4 +38,8 @@
 
     <string name="home_back_button_once_toast">한 번 더 누르면 종료됩니다.</string>
     <string name="home_back_button_twice_toast">앱이 종료됩니다.</string>
+
+    <string name="address_change_success">주소 변경에 성공하였습니다.</string>
+    <string name="address_change_fail">주소 변경에 실패하였습니다.\n다시 시도해 주세요.</string>
+    <string name="address_call_fail">주소를 불러오는 데 실패했습니다.\n주소를 다시 설정해주세요.</string>
 </resources>
