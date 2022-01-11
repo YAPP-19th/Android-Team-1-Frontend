@@ -9,6 +9,7 @@ object AndroidX {
     const val CONSTRAINT_LAYOUT          = "androidx.constraintlayout:constraintlayout:${Versions.CONSTRAINT_LAYOUT}"
     const val LEGACY_SUPPORT             = "androidx.legacy:legacy-support-v4:${Versions.LEGACY_SUPPORT}"
     const val VIEW_DATA_BINDING          = "com.android.databinding:viewbinding:${Versions.VIEW_DATA_BINDING}"
+    const val DATA_BINDING_RUNTIME       = "androidx.databinding:databinding-runtime:${Versions.VIEW_DATA_BINDING}"
     const val RECYCLERVIEW               = "androidx.recyclerview:recyclerview:${Versions.RECYCLERVIEW}"
 
     const val CORE_KTX                   = "androidx.core:core-ktx:${Versions.CORE_KTX}"
@@ -18,6 +19,10 @@ object AndroidX {
     const val LIFECYCLE_VIEWMODEL_KTX    = "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.LIFECYCLE_KTX}"
     const val LIFECYCLE_EXTENSIONS       = "androidx.lifecycle:lifecycle-extensions:${Versions.LIFECYCLE_EXTENSION}"
     const val LIFECYCLE_RUNTIME_KTX      = "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.LIFECYCLE_RUNTIME_KTX}"
+
+    const val NAVIGATION_FRAGMENT_KTX    = "androidx.navigation:navigation-fragment-ktx:${Versions.NAVIGATION}"
+    const val NAVIGATION_UI_KTX          = "androidx.navigation:navigation-ui-ktx:${Versions.NAVIGATION}"
+    const val NAVIGATION_DYNAMIC_FEATURES_FRAGMENT    = "androidx.navigation:navigation-dynamic-features-fragment:${Versions.NAVIGATION}"
 }
 
 object Google {
@@ -28,7 +33,10 @@ object Google {
     const val MATERIAL                   = "com.google.android.material:material:${Versions.MATERIAL}"
     const val GSON                       = "com.google.code.gson:gson:${Versions.GSON}"
     const val FIREBASE_BOM               = "com.google.firebase:firebase-bom:${Versions.FIREBASE_BOM}"
-    const val FIREBASE_ANALYTICS         = "com.google.firebase:firebase-analytics"
+    const val FIREBASE_ANALYTICS         = "com.google.firebase:firebase-analytics-ktx"
+    const val FIREBASE_MESSAGING         = "com.google.firebase:firebase-messaging-ktx"
+    const val LOCATION                   = "com.google.android.gms:play-services-location:${Versions.LOCATION}"
+    const val OSS_LICENCE                = "com.google.android.gms:play-services-oss-licenses:${Versions.OSS_LICENSE}"
 }
 
 object Libraries {
@@ -43,11 +51,14 @@ object Libraries {
     const val TIMBER                     = "com.jakewharton.timber:timber:${Versions.TIMBER}"
 
     const val LOTTIE                     = "com.airbnb.android:lottie:${Versions.LOTTIE}"
+
+    const val JWT_DECODE                 = "com.auth0.android:jwtdecode:${Versions.JWT_DECODE}"
     
     const val NAVER_MAP                  = "com.naver.maps:map-sdk:${Versions.NAVER_MAP}"
-
-    const val TED_PERMISSION             = "io.github.ParkSangGwon:tedpermission-normal:${Versions.TED_PERMISSION}"
-    const val TED_PERMISSION_COROUTINE   = "io.github.ParkSangGwon:tedpermission-coroutine:${Versions.TED_PERMISSION}"
+    const val KAKAO_LOGIN                = "com.kakao.sdk:v2-user:${Versions.KAKAO_LOGIN}"
+    const val KAKAO_LINK                 = "com.kakao.sdk:v2-link:${Versions.KAKAO_LINK}"
+  
+    const val BALLOON                    = "com.github.skydoves:balloon:${Versions.BALLOON}"
 }
 
 object UnitTest {

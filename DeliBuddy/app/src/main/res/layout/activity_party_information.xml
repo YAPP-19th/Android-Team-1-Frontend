@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:clickable="true"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:layout_height="match_parent">
+
+    <!-- Body -->
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_join_party">
+
+            <View
+                android:id="@+id/divider_second"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/divider_grey"
+                app:layout_constraintEnd_toEndOf="@+id/tl_community"
+                app:layout_constraintStart_toStartOf="@+id/tl_community"
+                app:layout_constraintTop_toBottomOf="@+id/tl_community" />
+
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/vp_community"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:paddingVertical="12dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider_second"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tl_community"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tabIndicatorFullWidth="false"
+                app:tabIndicatorHeight="2dp"
+                app:tabMode="scrollable"
+                app:tabPaddingEnd="0dp"
+                app:tabPaddingStart="0dp"
+                app:tabTextAppearance="@style/TabItemTheme">
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="댓글" />
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="파티인원" />
+
+            </com.google.android.material.tabs.TabLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- APPBAR -->
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_background"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#FFE3D8">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="32dp"
+                    android:background="@drawable/shape_top_rounded_layout"
+                    android:paddingTop="32dp"
+                    android:paddingBottom="36dp"
+                    app:layout_constraintTop_toBottomOf="@+id/btn_join_party">
+
+                    <ImageView
+                        android:id="@+id/iv_party_owner_profile"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_marginStart="20dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:src="@drawable/icon_user_profile_blue" />
+
+                    <TextView
+                        android:id="@+id/tv_party_owner_name"
+                        style="@style/RobotoBold14"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        app:layout_constraintStart_toEndOf="@+id/iv_party_owner_profile"
+                        app:layout_constraintTop_toTopOf="@+id/iv_party_owner_profile"
+                        tools:text="홍길동" />
+
+                    <TextView
+                        android:id="@+id/tv_party_owner_parties_count"
+                        style="@style/RobotoRegular12"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:bufferType="spannable"
+                        android:letterSpacing="-0.02"
+                        android:textColor="@color/text_grey"
+                        app:layout_constraintStart_toStartOf="@+id/tv_party_owner_name"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_party_owner_name"
+                        tools:text="버디와 함께한 식사 24번" />
+
+                    <TextView
+                        android:id="@+id/tv_status_change"
+                        style="@style/RobotoRegular14"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="20dp"
+                        android:drawableEnd="@drawable/icon_dropdown"
+                        android:drawablePadding="5dp"
+                        android:visibility="invisible"
+                        app:layout_constraintBottom_toBottomOf="@+id/iv_party_owner_profile"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/iv_party_owner_profile"
+                        tools:text="미주문" />
+
+                    <TextView
+                        android:id="@+id/tv_status"
+                        style="@style/RobotoRegular14"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="20dp"
+                        android:background="@drawable/shape_status_background"
+                        android:backgroundTint="@color/sub_yellow"
+                        android:drawablePadding="5dp"
+                        android:paddingHorizontal="5dp"
+                        android:paddingVertical="4dp"
+                        android:textColor="@color/white"
+                        app:layout_constraintBottom_toBottomOf="@+id/iv_party_owner_profile"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/iv_party_owner_profile"
+                        tools:text="미주문" />
+
+                    <TextView
+                        android:id="@+id/tv_party_content"
+                        style="@style/RobotoRegular14"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_marginHorizontal="20dp"
+                        android:layout_marginTop="20dp"
+                        android:letterSpacing="-0.02"
+                        android:maxLines="10"
+                        app:layout_constraintTop_toBottomOf="@+id/divider_first"
+                        tools:layout_editor_absoluteX="20dp"
+                        tools:text="유로코 피자 4인팟 구해\n메뉴는 채팅에서 같이 정해" />
+
+                    <View
+                        android:id="@+id/divider_first"
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:layout_marginHorizontal="20dp"
+                        android:layout_marginTop="24dp"
+                        android:background="@color/divider_grey"
+                        app:layout_constraintTop_toBottomOf="@+id/iv_party_owner_profile"
+                        tools:layout_editor_absoluteX="20dp" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                <ImageView
+                    android:id="@+id/iv_location_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="58dp"
+                    android:src="@drawable/icon_location"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/iv_party_food_type"
+                    android:layout_width="160dp"
+                    android:layout_height="160dp"
+                    android:layout_marginEnd="4dp"
+                    android:transitionName="icon_food"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/tv_party_location"
+                    tools:src="@drawable/big_food_icon_pizza" />
+
+                <TextView
+                    android:id="@+id/tv_party_location"
+                    style="@style/RobotoRegular14"
+                    android:layout_width="180dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="-2dp"
+                    android:letterSpacing="-0.02"
+                    android:lineSpacingExtra="-2dp"
+                    android:maxLines="2"
+                    android:textColor="@color/black"
+                    android:transitionName="tv_location"
+                    app:layout_constraintStart_toEndOf="@+id/iv_location_icon"
+                    app:layout_constraintTop_toTopOf="@+id/iv_location_icon"
+                    tools:text="성복역 1번 출구\ndfsdf" />
+
+                <TextView
+                    android:id="@+id/tv_order_time"
+                    style="@style/RobotoRegular14"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:bufferType="spannable"
+                    android:letterSpacing="-0.02"
+                    android:maxLines="2"
+                    android:textColor="@color/black"
+                    android:transitionName="tv_time"
+                    app:layout_constraintStart_toStartOf="@+id/tv_party_title"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_party_title"
+                    tools:text="10월 5일 10시 40분 주문 예정" />
+
+                <TextView
+                    android:id="@+id/btn_join_party"
+                    style="@style/RobotoBold14"
+                    android:layout_width="130dp"
+                    android:layout_height="32dp"
+                    android:layout_marginTop="24dp"
+                    android:background="@drawable/shape_rounded_button"
+                    android:gravity="center"
+                    android:text="파티 참가"
+                    android:textColor="@color/white"
+                    app:layout_constraintStart_toStartOf="@+id/tv_order_time"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_order_time" />
+
+
+                <TextView
+                    android:id="@+id/tv_party_title"
+                    style="@style/RobotoBold20"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:ellipsize="end"
+                    android:lineSpacingExtra="-4dp"
+                    android:maxLines="2"
+                    android:textColor="@color/black"
+                    android:transitionName="tv_title"
+                    app:layout_constraintStart_toStartOf="@+id/iv_location_icon"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_party_location"
+                    tools:text="유로코 피자 4인 너 오면 바로 고 빨리 좀 오세요 제발" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@android:color/transparent"
+                app:contentInsetStart="0dp"
+                app:layout_collapseMode="pin">
+
+                <include
+                    android:id="@+id/toolbar_container"
+                    layout="@layout/view_custom_toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:layout_collapseMode="pin" />
+
+            </com.google.android.material.appbar.MaterialToolbar>
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_gravity="bottom"
+        android:layout_height="120dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_target_comment_container"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:layout_gravity="bottom"
+            android:layout_marginHorizontal="20dp"
+            android:background="@drawable/shape_rounded_grey_edittext"
+            android:paddingHorizontal="12dp"
+            android:layout_marginBottom="12dp"
+            android:visibility="visible">
+
+            <ImageView
+                android:id="@+id/iv_icon_reply"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:src="@drawable/icon_reply"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_parent_comment_writer"
+                style="@style/RobotoRegular10"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="김선달 님에게 답장"
+                android:textColor="#686868"
+                app:layout_constraintBottom_toTopOf="@+id/tv_parent_comment_body"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/iv_icon_reply"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="packed" />
+
+            <TextView
+                android:id="@+id/tv_parent_comment_body"
+                style="@style/RobotoRegular10"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="저 참여해도 되나요??"
+                android:textColor="#B8B8B8"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/tv_parent_comment_writer"
+                app:layout_constraintTop_toBottomOf="@+id/tv_parent_comment_writer" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!-- Input Comment -->
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_input_comment_container"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="@color/white"
+            android:elevation="20dp"
+            android:layout_gravity="bottom"
+            android:outlineSpotShadowColor="@color/shadow_grey"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <EditText
+                android:id="@+id/et_input_comment"
+                style="@style/RobotoRegular14"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginHorizontal="20dp"
+                android:background="@drawable/shape_rounded_grey_edittext"
+                android:paddingStart="12dp"
+                android:paddingEnd="40dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="저도 참여하고 싶은데" />
+
+            <ImageView
+                android:id="@+id/btn_create_comment"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/icon_send_comment"
+                app:layout_constraintBottom_toBottomOf="@+id/et_input_comment"
+                app:layout_constraintEnd_toEndOf="@+id/et_input_comment"
+                app:layout_constraintTop_toTopOf="@+id/et_input_comment" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </FrameLayout>
+
+
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

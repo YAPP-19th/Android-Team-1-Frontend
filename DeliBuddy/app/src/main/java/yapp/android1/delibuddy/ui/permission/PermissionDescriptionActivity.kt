@@ -4,12 +4,14 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import dagger.hilt.android.AndroidEntryPoint
 import yapp.android1.delibuddy.databinding.ActivityPermissionDescriptionBinding
+import yapp.android1.delibuddy.ui.createparty.CreatePartyActivity
 import yapp.android1.delibuddy.ui.dialog.PermissionDialogFragment
-import yapp.android1.delibuddy.ui.home.HomeActivity
+import yapp.android1.delibuddy.ui.login.LoginActivity
 import yapp.android1.delibuddy.util.intentTo
 import yapp.android1.delibuddy.util.permission.PermissionManager
 import yapp.android1.delibuddy.util.permission.PermissionState
 import yapp.android1.delibuddy.util.permission.PermissionType
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class PermissionDescriptionActivity : AppCompatActivity() {
@@ -31,21 +33,21 @@ class PermissionDescriptionActivity : AppCompatActivity() {
                 PermissionType.LOCATION
             ) {
                 when (it) {
-                    PermissionState.GRANTED -> intentMain()
+                    PermissionState.GRANTED -> intentLogin()
                     PermissionState.DENIED -> showPermissionDeniedDialog()
                 }
             }
         }
     }
 
-    private fun intentMain() {
-        intentTo(HomeActivity::class.java)
+    private fun intentLogin() {
+        intentTo(LoginActivity::class.java)
     }
 
     private fun showPermissionDeniedDialog() {
         val permissionDialog = PermissionDialogFragment(this).apply {
             negativeCallback = {
-                finish()
+                intentLogin()
             }
         }
         permissionDialog.show(this.supportFragmentManager, null)

@@ -29,13 +29,6 @@ object PermissionManager {
     ) {
         PermissionActivity.callback = permissionCallback
 
-        val bundle = Bundle()
-        bundle.putParcelable(
-            "bundle", PermissionBundle(
-                isRequestPermission = isRequestPermission,
-                permissions = getPermissionsFlag(type)
-            )
-        )
         val intent = Intent(context, PermissionActivity::class.java)
         intent.putExtra("bundle", PermissionBundle(
             isRequestPermission = isRequestPermission,

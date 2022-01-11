@@ -11,16 +11,41 @@
     <color name="main_orange">#F15641</color>
     <color name="sub_yellow">#F5CD3D</color>
     <color name="sub_purple">#7F1DC1</color>
+
     <color name="light_grey_background">#E5E5E5</color>
     <color name="main_background">#FDFDFD</color>
+    <color name="input_line_background">#F0F0F0</color>
 
-    <color name="divider_grey">#E5E5E5</color>
+    <color name="sub_grey">#B8B8B8</color>
 
     <color name="splash_background_start">#F57C6C</color>
     <color name="splash_background_end">#E73B23</color>
-    
+
+    <color name="address_coral">#FFDBD7</color>
+    <color name="divider_grey">#EDEDED</color>
+    <color name="block_space_grey">#F0F0F0</color>
+    <color name="shadow_grey">#0F202020</color>
+
+    <color name="kakao_yellow">#FEE339</color>
+
+    <color name="chicken_background">#FFEEDE</color>
+    <color name="chinese_background"></color>
+    <color name="pizza_background">#FFE3D8</color>
+    <color name="burger_background">#FAF3CE</color>
+    <color name="korean_background">#FFEEDE</color>
+    <color name="snack_background">#F5DADC</color>
+    <color name="desert_background">#EDE4DA</color>
+    <color name="bread_background">#FCDDBA</color>
+    <color name="japanese_background">#DBDCF3</color>
+    <color name="seafood_background">#EDEDED</color>
+    <color name="western_background">#D1F4CA</color>
+
+    <color name="mypage_banner_background">#FBF5F4</color>
+    <color name="text_burgundy">#56170F</color>
+
+    <color name="text_orange">#F15641</color>
+    <color name="text_light_grey">#D1D1D1</color>
     <color name="text_grey">#686868</color>
     <color name="text_black">#000000</color>
 
-    <color name="cv_shadow_grey">#0F202020</color>
 </resources>

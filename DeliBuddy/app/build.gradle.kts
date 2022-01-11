@@ -1,13 +1,14 @@
 import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 
 plugins {
-    id(Configs.APPLICATION)
-    id(Configs.KOTLIN_ANDROID)
-    id(Configs.KOTLIN_KAPT)
-    id(Configs.KOTLIN_PARCELIZE)
-    id(Configs.HILT_ANDROID_PLUGIN)
-    id(Configs.FIREBASE_DISTRIBUTION)
-    id(Configs.GOOGLE_SERVICE)
+    id("com.android.application")
+    id("kotlin-android")
+    id("dagger.hilt.android.plugin")
+    id("kotlin-kapt")
+    id("kotlin-parcelize")
+    id("com.google.firebase.appdistribution")
+    id("com.google.gms.google-services")
+    id("com.google.android.gms.oss-licenses-plugin")
 }
 
 val appDistributionApkPath: String = System.getenv("BITRISE_SIGNED_APK_PATH") ?: "EMPTY"
@@ -17,31 +18,37 @@ android {
 
     defaultConfig {
         applicationId = Configs.APPLICATION_ID
-        minSdk        = Configs.MIN_SDK
-        targetSdk     = Configs.TARGET_SDK
-        versionCode   = Configs.VERSION_CODE
-        versionName   = Configs.VERSION_NAME
+        minSdk = Configs.MIN_SDK
+        targetSdk = Configs.TARGET_SDK
+        versionCode = Configs.VERSION_CODE
+        versionName = Configs.VERSION_NAME
 
+        buildConfigField("String", "KAKAO_LOCAL_API_KEY", getApiKey("KAKAO_LOCAL_API_KEY"))
         buildConfigField("String", "NAVER_MAP_APIKEY_ID", getApiKey("NAVER_MAP_APIKEY_ID"))
         buildConfigField("String", "NAVER_MAP_APIKEY_SECRET", getApiKey("NAVER_MAP_APIKEY_SECRET"))
         manifestPlaceholders["NAVER_MAP_APIKEY_ID"] = getApiKey("NAVER_MAP_APIKEY_ID")
+
+        buildConfigField("String", "KAKAO_LOGIN_API_KEY", getApiKey("KAKAO_LOGIN_API_KEY"))
+        manifestPlaceholders["KAKAO_NATIVE_APP_KEY"] = getApiKey("KAKAO_NATIVE_APP_KEY")
+
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildFeatures {
         viewBinding = true
+        dataBinding = true
     }
 
     buildTypes {
         getByName(Configs.DEBUG) {
             isMinifyEnabled = false
-            isDebuggable    = true
+            isDebuggable = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
 
         getByName(Configs.RELEASE) {
-            isMinifyEnabled = true
-            isDebuggable    = false
+            isMinifyEnabled = false
+            isDebuggable = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
 
             firebaseAppDistribution {
@@ -53,8 +60,8 @@ android {
         }
 
         create(Configs.QA) {
-            isMinifyEnabled = true
-            isDebuggable    = false
+            isMinifyEnabled = false
+            isDebuggable = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
 
             firebaseAppDistribution {
@@ -90,6 +97,7 @@ dependencies {
     implementation(AndroidX.APP_COMPAT)
     implementation(AndroidX.CONSTRAINT_LAYOUT)
     implementation(AndroidX.LEGACY_SUPPORT)
+    implementation(AndroidX.DATA_BINDING_RUNTIME)
     implementation(AndroidX.VIEW_DATA_BINDING)
     implementation(AndroidX.RECYCLERVIEW)
 
@@ -101,12 +109,20 @@ dependencies {
     implementation(AndroidX.LIFECYCLE_EXTENSIONS)
     implementation(AndroidX.LIFECYCLE_RUNTIME_KTX)
 
+    implementation(AndroidX.NAVIGATION_FRAGMENT_KTX)
+    implementation(AndroidX.NAVIGATION_UI_KTX)
+    implementation(AndroidX.NAVIGATION_DYNAMIC_FEATURES_FRAGMENT)
+
     implementation(Google.HILT_ANDROID)
     kapt(Google.HILT_ANDROID_COMPILER)
     kapt(Google.HILT_COMPILER)
     implementation(Google.MATERIAL)
     implementation(Google.GSON)
-    implementation(Google.FIREBASE_BOM)
+    implementation(platform(Google.FIREBASE_BOM))
+    implementation(Google.FIREBASE_ANALYTICS)
+    implementation(Google.FIREBASE_MESSAGING)
+    implementation(Google.LOCATION)
+    implementation(Google.OSS_LICENCE)
 
     implementation(Libraries.RETROFIT)
     implementation(Libraries.RETROFIT_CONVERTER_GSON)
@@ -116,10 +132,12 @@ dependencies {
     implementation(Libraries.LOTTIE)
     implementation(Libraries.GLIDE)
     kapt(Libraries.GLIDE_COMPILER)
-    implementation(Libraries.TED_PERMISSION)
-    implementation(Libraries.TED_PERMISSION_COROUTINE)
+    implementation(Libraries.JWT_DECODE)
 
-    implementation (Libraries.NAVER_MAP)
+    implementation(Libraries.NAVER_MAP)
+    implementation(Libraries.KAKAO_LOGIN)
+    implementation(Libraries.KAKAO_LINK)
+    implementation(Libraries.BALLOON)
 
     testImplementation(UnitTest.JUNIT)
 
