@@ -55,6 +55,7 @@ class SplashActivity : AppCompatActivity() {
         binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        Timber.w("splash")
         getFCMToken()
 
         val route = intent.getStringExtra("route")
@@ -71,14 +72,14 @@ class SplashActivity : AppCompatActivity() {
         val uri = Uri.parse(route)
         Timber.w("uri path: ${uri.host}")
         when (uri.host) {
-            "comment" -> {
-                val partyId = uri.getQueryParameter("partyId")?.toInt() ?: -1
-                val commentId = uri.getQueryParameter("commentId")?.toInt() ?: -1
+            URI_PATH_COMMENT -> {
+                val partyId = uri.getQueryParameter(KEY_PARTY_ID)?.toInt() ?: -1
+                val commentId = uri.getQueryParameter(KEY_COMMENT_ID)?.toInt() ?: -1
 
                 if (partyId > -1 && commentId > -1) {
                     val intent = Intent(this, PartyInformationActivity::class.java)
-                    intent.putExtra("partyId", partyId)
-                    intent.putExtra("commentId", commentId)
+                    intent.putExtra(KEY_PARTY_ID, partyId)
+                    intent.putExtra(KEY_COMMENT_ID, commentId)
                     startActivity(intent)
                     finish()
                 } else {
@@ -86,11 +87,11 @@ class SplashActivity : AppCompatActivity() {
                 }
             }
 
-            "party" -> {
-                val partyId = uri.getQueryParameter("partyId")?.toInt() ?: -1
+            URI_PATH_PARTY -> {
+                val partyId = uri.getQueryParameter(KEY_PARTY_ID)?.toInt() ?: -1
                 if (partyId > -1) {
                     val intent = Intent(this, PartyInformationActivity::class.java)
-                    intent.putExtra("partyId", partyId)
+                    intent.putExtra(KEY_PARTY_ID, partyId)
                     startActivity(intent)
                     finish()
                 } else {
@@ -200,5 +201,12 @@ class SplashActivity : AppCompatActivity() {
     override fun onDestroy() {
         intentJob?.cancel()
         super.onDestroy()
+    }
+
+    companion object {
+        const val URI_PATH_PARTY = "party"
+        const val URI_PATH_COMMENT = "comment"
+        const val KEY_PARTY_ID = "partyId"
+        const val KEY_COMMENT_ID = "commentId"
     }
 }

@@ -35,9 +35,6 @@ class PartyInformationViewModel @Inject constructor(
     private val _event = MutableEventFlow<Callback>()
     val event = _event.asEventFlow()
 
-    private val _hasJoined = MutableStateFlow<Boolean>(false)
-    val hasJoined = _hasJoined.asStateFlow()
-
     private val _isOwner = MutableStateFlow<Boolean>(false)
     val isOwner = _isOwner.asStateFlow()
 
@@ -56,6 +53,7 @@ class PartyInformationViewModel @Inject constructor(
         sealed class IntentAction : Action() {
             class OnPartyIntent(val data: Party, val currentUserId: Int) : IntentAction()
             class OnPartyInformationIntent(val data: PartyInformation, val currentUserId: Int) : IntentAction()
+            class OnPartyIdIntent(val partyId: Int, val currentUserId: Int) : IntentAction()
         }
 
         sealed class PartyAction : Action() {
@@ -117,6 +115,12 @@ class PartyInformationViewModel @Inject constructor(
                 fetchPartyComments(_party.value.id)
             }
 
+            is Action.IntentAction.OnPartyIdIntent -> {
+                currentUserId = action.currentUserId
+                fetchPartyInformation(action.partyId)
+                fetchPartyComments(action.partyId)
+            }
+
             is Action.PartyAction.OnStatusChanged -> {
                 val currentStatus = party.value.status.value
                 val changedStatus = action.status.value
@@ -127,7 +131,7 @@ class PartyInformationViewModel @Inject constructor(
             }
 
             is Action.PartyAction.OnJointPartyClicked -> {
-                if (_party.value.isIn == false) {
+                if (!_party.value.isIn) {
                     joinParty()
                     _event.emit(PartyCallback.OnPartyJoinSuccess(_party.value.openKakaoUrl!!))
                 } else {
@@ -205,6 +209,23 @@ class PartyInformationViewModel @Inject constructor(
         }
     }
 
+    private suspend fun deleteComment(commentId: Int) {
+        when (val result = deleteCommentUseCase.invoke(commentId)) {
+            is NetworkResult.Success -> {
+                if (result.data) {
+                    fetchPartyComments(_party.value.id)
+                    _event.emit(CommentCallback.CommentDeleteSuccess)
+                } else {
+                    _event.emit(CommentCallback.CommentDeleteFailed)
+                }
+            }
+
+            is NetworkResult.Error -> {
+                _event.emit(CommentCallback.CommentDeleteFailed)
+            }
+        }
+    }
+
     private fun changePartyStatus(partyId: Int, changedStatus: String) = viewModelScope.launch {
         val result = changeStatusUseCase.invoke(
             params = ChangeStatusUseCase.Params(
@@ -215,7 +236,7 @@ class PartyInformationViewModel @Inject constructor(
 
         when (result) {
             is NetworkResult.Success -> {
-                if (result.data == true) {
+                if (result.data) {
                     _party.value = _party.value.copy(
                         status = PartyStatus.of(changedStatus)
                     )
@@ -249,7 +270,7 @@ class PartyInformationViewModel @Inject constructor(
     private suspend fun deleteParty() {
         when (val result = deletePartyUseCase.invoke(_party.value.id)) {
             is NetworkResult.Success -> {
-                if (result.data == true) {
+                if (result.data) {
                     _event.emit(PartyCallback.PartyDeleteSuccess)
                 } else {
                     _event.emit(PartyCallback.PartyDeleteFailed)

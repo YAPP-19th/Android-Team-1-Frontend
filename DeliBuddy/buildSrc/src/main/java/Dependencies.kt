@@ -58,8 +58,6 @@ object Libraries {
     const val KAKAO_LOGIN                = "com.kakao.sdk:v2-user:${Versions.KAKAO_LOGIN}"
     const val KAKAO_LINK                 = "com.kakao.sdk:v2-link:${Versions.KAKAO_LINK}"
   
-    const val OSS_LICENSE                = "com.google.android.gms:play-services-oss-licenses:${Versions.OSS_LICENSE}"
-  
     const val BALLOON                    = "com.github.skydoves:balloon:${Versions.BALLOON}"
 }
 

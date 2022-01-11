@@ -3,9 +3,9 @@ import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 plugins {
     id("com.android.application")
     id("kotlin-android")
+    id("dagger.hilt.android.plugin")
     id("kotlin-kapt")
     id("kotlin-parcelize")
-    id("dagger.hilt.android.plugin")
     id("com.google.firebase.appdistribution")
     id("com.google.gms.google-services")
     id("com.google.android.gms.oss-licenses-plugin")
@@ -114,7 +114,6 @@ dependencies {
     implementation(AndroidX.NAVIGATION_DYNAMIC_FEATURES_FRAGMENT)
 
     implementation(Google.HILT_ANDROID)
-    implementation("com.google.android.gms:play-services-oss-licenses:17.0.0")
     kapt(Google.HILT_ANDROID_COMPILER)
     kapt(Google.HILT_COMPILER)
     implementation(Google.MATERIAL)

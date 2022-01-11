@@ -41,7 +41,12 @@ class DelibuddyFCMService : FirebaseMessagingService() {
                     putExtra("route", route)
                 }
             }
-            val pendingIntent: PendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+            val pendingIntent = PendingIntent.getActivity(
+                this,
+                0,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT
+            )
 
 
             val builder = NotificationCompat.Builder(this, Channel.COMMENT.channelId)

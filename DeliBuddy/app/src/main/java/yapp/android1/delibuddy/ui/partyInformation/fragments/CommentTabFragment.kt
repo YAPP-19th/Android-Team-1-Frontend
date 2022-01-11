@@ -15,12 +15,14 @@ import yapp.android1.delibuddy.base.BaseFragment
 import yapp.android1.delibuddy.databinding.FragmentCommentTabBinding
 import yapp.android1.delibuddy.model.Comment
 import yapp.android1.delibuddy.ui.partyInformation.PartyInformationViewModel
-import yapp.android1.delibuddy.ui.partyInformation.PartyInformationViewModel.Action.*
+import yapp.android1.delibuddy.ui.partyInformation.PartyInformationViewModel.Action.CommentAction
 import yapp.android1.delibuddy.ui.partyInformation.view.CommentOptionsBalloonFactory
+import yapp.android1.delibuddy.ui.splash.SplashActivity
 import yapp.android1.delibuddy.util.extensions.repeatOnStarted
 
 @AndroidEntryPoint
-class CommentTabFragment : BaseFragment<FragmentCommentTabBinding>(FragmentCommentTabBinding::inflate) {
+class CommentTabFragment :
+    BaseFragment<FragmentCommentTabBinding>(FragmentCommentTabBinding::inflate) {
 
     private val viewModel by activityViewModels<PartyInformationViewModel>()
 
@@ -41,7 +43,8 @@ class CommentTabFragment : BaseFragment<FragmentCommentTabBinding>(FragmentComme
 
         rvComment.adapter = commentAdapter
         rvComment.setHasFixedSize(true)
-        rvComment.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        rvComment.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
         commentAdapter.setCommentEventListener { commentEvent ->
             handleCommentEvent(commentEvent)
@@ -50,7 +53,7 @@ class CommentTabFragment : BaseFragment<FragmentCommentTabBinding>(FragmentComme
 
     private fun collectComments() {
         repeatOnStarted {
-            viewModel.isOwner.collect { isOwner->
+            viewModel.isOwner.collect { isOwner ->
                 commentAdapter.isOwner = isOwner
             }
         }
@@ -58,6 +61,21 @@ class CommentTabFragment : BaseFragment<FragmentCommentTabBinding>(FragmentComme
         repeatOnStarted {
             viewModel.comments.collect { comments ->
                 commentAdapter.submitList(comments.value)
+
+                val commentId =
+                    requireActivity().intent.getIntExtra(SplashActivity.KEY_COMMENT_ID, -1)
+                Timber.w("commentId: $commentId")
+                if (commentId > -1) {
+                    if (!comments.value.isNullOrEmpty()) {
+                        comments.value!!.find { comment ->
+                            comment.id == commentId
+                        }?.let { matchedComment ->
+                            Timber.w("matchedComment: $matchedComment")
+                            Timber.w("scroll id: ${comments.value!!.indexOf(matchedComment)}")
+                            binding.rvComment.scrollToPosition(comments.value!!.indexOf(matchedComment))
+                        }
+                    }
+                }
             }
         }
 
@@ -75,15 +93,23 @@ class CommentTabFragment : BaseFragment<FragmentCommentTabBinding>(FragmentComme
     }
 
     private fun handleEvent(event: PartyInformationViewModel.Callback) {
-        when(event) {
+        when (event) {
             else -> Unit
         }
     }
 
     private fun handleCommentEvent(event: CommentEvent) {
-        when(event) {
-            is CommentEvent.OnWriteCommentClicked  -> viewModel.occurEvent(CommentAction.WriteReplyCommentClicked(event.comment as Comment))
-            is CommentEvent.OnRemoveCommentClicked -> viewModel.occurEvent(CommentAction.DeleteComment(event.comment.id))
+        when (event) {
+            is CommentEvent.OnWriteCommentClicked -> viewModel.occurEvent(
+                CommentAction.WriteReplyCommentClicked(
+                    event.comment as Comment
+                )
+            )
+            is CommentEvent.OnRemoveCommentClicked -> viewModel.occurEvent(
+                CommentAction.DeleteComment(
+                    event.comment.id
+                )
+            )
         }
     }
 }
