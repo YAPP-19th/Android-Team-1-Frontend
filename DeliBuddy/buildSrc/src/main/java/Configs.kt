@@ -10,8 +10,8 @@ object Configs {
     const val APPLICATION_ID            = "yapp.android1.delibuddy"
     const val MIN_SDK                   = 24
     const val TARGET_SDK                = 30
-    const val VERSION_CODE              = 1
-    const val VERSION_NAME              = "1.0.0"
+    const val VERSION_CODE              = 4
+    const val VERSION_NAME              = "1.0.2"
 
     //BuildType
     const val RELEASE                   = "release"
