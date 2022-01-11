@@ -7,27 +7,37 @@ import yapp.android1.delibuddy.base.BaseViewModel
 import yapp.android1.delibuddy.base.RetryAction
 import yapp.android1.delibuddy.model.Event
 import yapp.android1.delibuddy.model.PartyInformation
+import yapp.android1.delibuddy.util.EventFlow
+import yapp.android1.delibuddy.util.MutableEventFlow
 import yapp.android1.domain.NetworkResult
 import yapp.android1.domain.entity.NetworkError
 import yapp.android1.domain.interactor.usecase.GetMyPartiesUseCase
+import yapp.android1.domain.interactor.usecase.LeavePartyUseCase
 import javax.inject.Inject
 
 @HiltViewModel
 class MyPartyViewModel @Inject constructor(
-    private val getMyPartiesUseCase: GetMyPartiesUseCase
+    private val getMyPartiesUseCase: GetMyPartiesUseCase,
+    private val leavePartyUseCase: LeavePartyUseCase,
 ) : BaseViewModel<Event>() {
 
     private val _myParties = MutableStateFlow<List<PartyInformation>>(emptyList())
     val myParties: StateFlow<List<PartyInformation>>
         get() = _myParties
 
+    private val _leaveParty = MutableEventFlow<Boolean>()
+    val leaveParty: EventFlow<Boolean>
+        get() = _leaveParty
+
     sealed class MyPartyEvent : Event {
-        object GetMyPartiesUseCase : MyPartyEvent()
+        object OnGetMyParties : MyPartyEvent()
+        class OnLeavePartyMenuClicked(val id: Int) : MyPartyEvent()
     }
 
     override suspend fun handleEvent(event: Event) {
         when (event) {
-            is MyPartyEvent.GetMyPartiesUseCase -> getMyParties()
+            is MyPartyEvent.OnGetMyParties -> getMyParties()
+            is MyPartyEvent.OnLeavePartyMenuClicked -> leaveParty(event.id)
         }
     }
 
@@ -37,10 +47,21 @@ class MyPartyViewModel @Inject constructor(
                 val parties = result.data.map { PartyInformation.toPartyInformation(it) }
                 _myParties.emit(parties)
             }
-            is NetworkResult.Error -> {
-            }
+            is NetworkResult.Error -> handleError(result) {}
         }
     }
+
+    private suspend fun leaveParty(id: Int) {
+        when (val result = leavePartyUseCase.invoke(id)) {
+            is NetworkResult.Success -> {
+                val okay = result.data
+                _leaveParty.emit(okay)
+                showToast("파티를 성공적으로 나왔습니다.")
+            }
+            is NetworkResult.Error -> handleError(result) {}
+        }
+    }
+
 
     override suspend fun handleError(result: NetworkResult.Error, retryAction: RetryAction?) {
         when (result.errorType) {

@@ -13,7 +13,11 @@ import yapp.android1.delibuddy.databinding.ViewHolderMypartyItemBinding
 import yapp.android1.delibuddy.model.PartyInformation
 import yapp.android1.delibuddy.ui.partyInformation.model.PartyStatus
 
-class MyPartyAdapter(private val onClick: (ViewHolderMypartyItemBinding, PartyInformation) -> Unit) :
+class MyPartyAdapter(
+    private val onIntentClick: (ViewHolderMypartyItemBinding, PartyInformation) -> Unit,
+    private val onMoreOptionsClick: (ViewHolderMypartyItemBinding, PartyInformation) -> Unit,
+    private val userId: Int,
+) :
     ListAdapter<PartyInformation, MyPartyAdapter.ViewHolder>(
         MyPartyDiffCallback()
     ) {
@@ -40,9 +44,15 @@ class MyPartyAdapter(private val onClick: (ViewHolderMypartyItemBinding, PartyIn
         private var currentPartyInformation: PartyInformation? = null
 
         init {
-            binding.root.setOnClickListener {
+            binding.itemMyparty.setOnClickListener {
                 currentPartyInformation?.let {
-                    onClick(binding, it)
+                    onIntentClick(binding, it)
+                }
+            }
+
+            binding.ivMoreIcon.setOnClickListener {
+                currentPartyInformation?.let {
+                    onMoreOptionsClick(binding, it)
                 }
             }
         }
@@ -63,6 +73,9 @@ class MyPartyAdapter(private val onClick: (ViewHolderMypartyItemBinding, PartyIn
                 partyScheduledTime.text = partyInformation.orderTime
 
                 setUiBasedStatus(partyInformation.status)
+
+                ivMoreIcon.visibility =
+                    if (partyInformation.leader.id == userId) View.GONE else View.VISIBLE
             }
         }
 

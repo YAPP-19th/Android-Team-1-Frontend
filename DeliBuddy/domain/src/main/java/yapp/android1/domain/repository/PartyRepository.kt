@@ -12,7 +12,7 @@ interface PartyRepository {
     suspend fun deleteParty(id: Int): NetworkResult<Boolean>
     suspend fun banFromParty(id: Int, request: PartyBanRequestEntity): NetworkResult<Boolean>
     suspend fun joinParty(id: Int): NetworkResult<Boolean>
-    suspend fun leaveParty(id: String): NetworkResult<Unit>
+    suspend fun leaveParty(id: Int): NetworkResult<Boolean>
     suspend fun changeStatus(id: Int, request: StatusChangeRequestEntity): NetworkResult<Boolean>
     suspend fun getMyParties(): NetworkResult<List<PartyInformationEntity>>
 }

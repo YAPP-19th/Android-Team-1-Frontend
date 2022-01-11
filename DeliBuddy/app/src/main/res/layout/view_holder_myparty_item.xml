@@ -16,6 +16,7 @@
         app:cardElevation="4dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/item_myparty"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -122,16 +123,24 @@
                 app:layout_constraintStart_toEndOf="@id/party_scheduled_time"
                 app:layout_constraintTop_toTopOf="@id/party_scheduled_time" />
 
-            <!--            <androidx.appcompat.widget.AppCompatImageView-->
-            <!--                android:id="@+id/iv_more_icon"-->
-            <!--                android:layout_width="wrap_content"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:layout_marginEnd="18dp"-->
-            <!--                android:background="@drawable/icon_options"-->
-            <!--                app:layout_constraintTop_toTopOf="@+id/linearLayout"-->
-            <!--                app:layout_constraintEnd_toEndOf="parent" />-->
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/cardview_dark_background"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/iv_more_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:padding="18dp"
+            android:src="@drawable/icon_options" />
 
     </androidx.cardview.widget.CardView>
 

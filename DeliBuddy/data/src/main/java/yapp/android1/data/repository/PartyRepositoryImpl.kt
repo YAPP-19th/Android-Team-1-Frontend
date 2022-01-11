@@ -109,10 +109,10 @@ class PartyRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun leaveParty(id: String): NetworkResult<Unit> {
+    override suspend fun leaveParty(id: Int): NetworkResult<Boolean> {
         return try {
             val response = api.leaveParty(id)
-            NetworkResult.Success(response)
+            NetworkResult.Success(response.okay)
         } catch (e: Exception) {
             val errorType = deliBuddyNetworkErrorHandler.getError(exception = e)
             return NetworkResult.Error(errorType)

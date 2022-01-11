@@ -8,7 +8,8 @@ import javax.inject.Inject
 
 
 typealias PartyId = Int
-class FetchPartyInformationUseCase @Inject constructor (
+
+class FetchPartyInformationUseCase @Inject constructor(
     private val partyRepository: PartyRepository
 ) : BaseUseCase<NetworkResult<PartyInformationEntity>, PartyId>() {
 
@@ -43,7 +44,10 @@ class ChangeStatusUseCase @Inject constructor(
 ) : BaseUseCase<NetworkResult<Boolean>, ChangeStatusUseCase.Params>() {
 
     override suspend fun run(params: Params): NetworkResult<Boolean> {
-        return partyRepository.changeStatus(params.partyId, StatusChangeRequestEntity.fromStringToEntity(params.changedStatus))
+        return partyRepository.changeStatus(
+            params.partyId,
+            StatusChangeRequestEntity.fromStringToEntity(params.changedStatus)
+        )
     }
 
     data class Params(
@@ -86,5 +90,12 @@ class BanFromPartyUseCase @Inject constructor(
         val partyId: Int,
         val requestEntity: PartyBanRequestEntity
     )
+}
 
+class LeavePartyUseCase @Inject constructor(
+    private val partyRepository: PartyRepository
+) : BaseUseCase<NetworkResult<Boolean>, PartyId>() {
+    override suspend fun run(params: PartyId): NetworkResult<Boolean> {
+        return partyRepository.leaveParty(params)
+    }
 }
