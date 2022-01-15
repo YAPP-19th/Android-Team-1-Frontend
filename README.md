@@ -5,11 +5,9 @@
 ## ⚒️ Library & Tool
 
 **[Language]**
-
 - Kotlin
 
 **[Tool]**
-
 - Figma
 - GitAction (CI)
 - Bitrise(with Firebase AppDistribution)
@@ -33,7 +31,12 @@
 
 ## 🦴 Structure
 
-- `app`    : Application, DI, UI, ViewModel
+- `app` : Application, DI, UI, ViewModel
 - `domain` : UseCase, Mapper
-- `data`   : Repository, Remote, Mapper
+- `data` : Repository, Remote, Mapper
+
+## 📷 스크린샷
+
+![2](https://user-images.githubusercontent.com/53253298/149619161-02f31beb-09c4-4afd-8b3c-543714ef6b9d.png)
+
 
