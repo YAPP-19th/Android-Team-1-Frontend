@@ -10,11 +10,28 @@ import com.skydoves.balloon.BalloonSizeSpec
 import yapp.android1.delibuddy.R
 
 
-internal class OptionsMenuBalloonFactory : Balloon.Factory() {
+internal class OptionsMenuBalloonForOwnerFactory : Balloon.Factory() {
 
     override fun create(context: Context, lifecycle: LifecycleOwner?): Balloon {
         return Balloon.Builder(context)
             .setLayout(R.layout.view_party_options_menu)
+            .setWidth(BalloonSizeSpec.WRAP)
+            .setHeight(BalloonSizeSpec.WRAP)
+            .setIsVisibleArrow(false)
+            .setCornerRadius(10f)
+            .setMarginRight(20)
+            .setBalloonAnimation(BalloonAnimation.ELASTIC)
+            .setLifecycleOwner(lifecycle)
+            .build()
+    }
+
+}
+
+internal class OptionsMenuBalloonForUserFactory : Balloon.Factory() {
+
+    override fun create(context: Context, lifecycle: LifecycleOwner?): Balloon {
+        return Balloon.Builder(context)
+            .setLayout(R.layout.view_party_options_menu_for_user)
             .setWidth(BalloonSizeSpec.WRAP)
             .setHeight(BalloonSizeSpec.WRAP)
             .setIsVisibleArrow(false)

@@ -28,6 +28,7 @@ class PartyInformationViewModel @Inject constructor(
     private val changeStatusUseCase         : ChangeStatusUseCase,
     private val createCommentUseCase        : CreateCommentUseCase,
     private val deletePartyUseCase          : DeletePartyUseCase,
+    private val leavePartyUseCase           : LeavePartyUseCase,
     private val deleteCommentUseCase        : DeleteCommentUseCase,
     private val banFromPartyUseCase         : BanFromPartyUseCase
 ) : BaseViewModel<Action>() {
@@ -62,6 +63,7 @@ class PartyInformationViewModel @Inject constructor(
             class OnStatusChanged(val status: PartyStatus) : PartyAction()
             object OnJointPartyClicked : PartyAction()
             object OnDeletePartyMenuClicked : PartyAction()
+            object OnLeavePartyMenuClicked : PartyAction()
             object PartyEditSuccess : PartyAction()
             object PartyEditFailed : PartyAction()
         }
@@ -84,6 +86,8 @@ class PartyInformationViewModel @Inject constructor(
             object OnPartyJoinFailed : PartyCallback()
             object PartyDeleteSuccess : PartyCallback()
             object PartyDeleteFailed : PartyCallback()
+            object PartyLeaveSuccess : PartyCallback()
+            object PartyLeaveFailed : PartyCallback()
         }
 
         sealed class CommentCallback : Callback() {
@@ -142,6 +146,8 @@ class PartyInformationViewModel @Inject constructor(
             }
 
             is Action.PartyAction.OnDeletePartyMenuClicked -> { deleteParty() }
+
+            is Action.PartyAction.OnLeavePartyMenuClicked -> { leaveParty() }
 
             is Action.PartyAction.PartyEditSuccess -> { fetchPartyInformation(_party.value.id) }
 
@@ -285,6 +291,21 @@ class PartyInformationViewModel @Inject constructor(
             }
             is NetworkResult.Error -> {
                 _event.emit(PartyCallback.PartyDeleteFailed)
+            }
+        }
+    }
+
+    private suspend fun leaveParty() {
+        when (val result = leavePartyUseCase.invoke(_party.value.id)) {
+            is NetworkResult.Success -> {
+                if (result.data) {
+                    _event.emit(PartyCallback.PartyLeaveSuccess)
+                } else {
+                    _event.emit(PartyCallback.PartyLeaveFailed)
+                }
+            }
+            is NetworkResult.Error -> {
+                _event.emit(PartyCallback.PartyLeaveFailed)
             }
         }
     }

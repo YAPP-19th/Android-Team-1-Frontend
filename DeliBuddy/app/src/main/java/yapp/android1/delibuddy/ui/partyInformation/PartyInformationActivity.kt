@@ -27,7 +27,6 @@ import com.skydoves.balloon.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import yapp.android1.delibuddy.R
 import yapp.android1.delibuddy.adapter.CommunityViewPagerAdapter
 import yapp.android1.delibuddy.databinding.ActivityPartyInformationBinding
@@ -41,6 +40,7 @@ import yapp.android1.delibuddy.ui.partyInformation.PartyInformationViewModel.Cal
 import yapp.android1.delibuddy.ui.partyInformation.model.PartyStatus
 import yapp.android1.delibuddy.ui.partyInformation.view.*
 import yapp.android1.delibuddy.ui.splash.SplashActivity
+import yapp.android1.delibuddy.util.Constants.NOT_FOUND
 import yapp.android1.delibuddy.util.extensions.*
 import yapp.android1.delibuddy.util.sharedpreferences.SharedPreferencesManager
 
@@ -51,7 +51,8 @@ class PartyInformationActivity : AppCompatActivity() {
 
     private val viewModel by viewModels<PartyInformationViewModel>()
 
-    private val optionsMenuBalloon by balloon<OptionsMenuBalloonFactory>()
+    private val optionsMenuBalloonForOwner by balloon<OptionsMenuBalloonForOwnerFactory>()
+    private val optionsMenuBalloonForUser by balloon<OptionsMenuBalloonForUserFactory>()
 
     private val sharedPreferencesManager by lazy { SharedPreferencesManager(this) }
 
@@ -78,7 +79,7 @@ class PartyInformationActivity : AppCompatActivity() {
                 val partyData = intent.getSerializableExtra("party") as Party
                 viewModel.occurEvent(
                     IntentAction.OnPartyIntent(
-                        data = partyData,
+                        data          = partyData,
                         currentUserId = sharedPreferencesManager.getUserId()
                     )
                 )
@@ -89,7 +90,7 @@ class PartyInformationActivity : AppCompatActivity() {
                     intent.getSerializableExtra(PARTY_INFORMATION) as PartyInformation
                 viewModel.occurEvent(
                     IntentAction.OnPartyInformationIntent(
-                        data = partyInformation,
+                        data          = partyInformation,
                         currentUserId = sharedPreferencesManager.getUserId()
                     )
                 )
@@ -97,11 +98,11 @@ class PartyInformationActivity : AppCompatActivity() {
 
             else -> {
                 val partyId = intent.getIntExtra(SplashActivity.KEY_PARTY_ID, -1)
-                if (partyId != -1) {
+                if (partyId != NOT_FOUND) {
                     viewModel.occurEvent(
                         IntentAction.OnPartyIdIntent(
-                            partyId,
-                            sharedPreferencesManager.getUserId()
+                            partyId       = partyId,
+                            currentUserId = sharedPreferencesManager.getUserId()
                         )
                     )
                 }
@@ -131,36 +132,18 @@ class PartyInformationActivity : AppCompatActivity() {
 
     private fun handleEvent(event: PartyInformationViewModel.Callback) {
         when (event) {
-            is PartyCallback.OnPartyJoinSuccess -> {
-                openOpenKakaoTalk(event.openKakaoTalkUrl)
-            }
-            is PartyCallback.OnPartyJoinFailed -> {
-                showToast("파티 인원이 다 찼습니다")
-            }
-            is PartyCallback.PartyDeleteSuccess -> {
-                finish()
-            }
-            is PartyCallback.PartyDeleteFailed -> {
-                showToast("파티 삭제에 실패했습니다. 잠시 후 다시 시도해 주세요")
-            }
-            is CommentCallback.OnCreateCommentSuccess -> {
-                handleWriteCommentSuccess()
-            }
-            is CommentCallback.OnCreateCommentFailed -> {
-                showToast("댓글 작성에 실패했습니다 다시 시도해 주세요")
-            }
-            is CommentCallback.ShowTargetParentComment -> {
-                showTargetComment(event.parentComment)
-            }
-            is CommentCallback.HideTargetParentComment -> {
-                hideTargetComment()
-            }
-            is CommentCallback.CommentDeleteSuccess -> {
-                showToast("댓글이 성공적으로 삭제됐습니다")
-            }
-            is CommentCallback.CommentDeleteFailed -> {
-                showToast("댓글 삭제에 실패했습니다. 잠시 후 다시 시도해 주세요")
-            }
+            is PartyCallback.OnPartyJoinSuccess         -> { openOpenKakaoTalk(event.openKakaoTalkUrl) }
+            is PartyCallback.OnPartyJoinFailed          -> { showToast("파티 인원이 다 찼습니다") }
+            is PartyCallback.PartyDeleteSuccess         -> { finish() }
+            is PartyCallback.PartyDeleteFailed          -> { showToast("파티 삭제에 실패했습니다. 잠시 후 다시 시도해 주세요") }
+            is PartyCallback.PartyLeaveSuccess          -> { finish() }
+            is PartyCallback.PartyLeaveFailed           -> { showToast("파티 떠나기에 실패했습니다. 잠시 후 다시 시도해 주세요") }
+            is CommentCallback.OnCreateCommentSuccess   -> { handleWriteCommentSuccess() }
+            is CommentCallback.OnCreateCommentFailed    -> { showToast("댓글 작성에 실패했습니다 다시 시도해 주세요") }
+            is CommentCallback.ShowTargetParentComment  -> { showTargetComment(event.parentComment) }
+            is CommentCallback.HideTargetParentComment  -> { hideTargetComment() }
+            is CommentCallback.CommentDeleteSuccess     -> { showToast("댓글이 성공적으로 삭제됐습니다") }
+            is CommentCallback.CommentDeleteFailed      -> { showToast("댓글 삭제에 실패했습니다. 잠시 후 다시 시도해 주세요") }
             else -> Unit
         }
     }
@@ -182,7 +165,7 @@ class PartyInformationActivity : AppCompatActivity() {
 
     private fun hideTargetComment() = with(binding) {
         tvParentCommentWriter.text = ""
-        tvParentCommentBody.text = ""
+        tvParentCommentBody.text   = ""
         hideTargetCommentAnimation()
     }
 
@@ -278,17 +261,17 @@ class PartyInformationActivity : AppCompatActivity() {
             }
         }
 
-        tvStatus.text = party.status.value
+        tvStatus.text       = party.status.value
         tvStatusChange.text = party.status.value
 
         // [ Toolbar ]
-        toolbarContainer.tvTitle.text = party.title
+        toolbarContainer.tvTitle.text    = party.title
         toolbarContainer.tvLocation.text = "${party.placeName} ${party.placeNameDetail}"
 
         // [Party Owner]
         tvPartyOwnerName.text = party.leader.nickName
 
-        tvPartyOwnerPartiesCount.text = "버디와 함께한 식사 ${party.leader.partiesCnt}번"
+        tvPartyOwnerPartiesCount.text    = "버디와 함께한 식사 ${party.leader.partiesCnt}번"
         val tvPartyOwnerPartiesCountSpan = tvPartyOwnerPartiesCount.text as Spannable
         tvPartyOwnerPartiesCountSpan.setSpan(
             StyleSpan(Typeface.BOLD),
@@ -337,30 +320,6 @@ class PartyInformationActivity : AppCompatActivity() {
             it.showKeyboard()
         }
 
-        toolbarContainer.btnMoreOptions.setOnClickListener { optionsButton ->
-            val editButton =
-                optionsMenuBalloon.getContentView().findViewById<ConstraintLayout>(R.id.btn_edit)
-            val removeButton =
-                optionsMenuBalloon.getContentView().findViewById<ConstraintLayout>(R.id.btn_remove)
-
-            editButton.setOnClickListener {
-                optionsMenuBalloon.dismiss()
-                partyEditContract.launch(viewModel.party.value)
-            }
-
-            removeButton.setOnClickListener {
-                optionsMenuBalloon.dismiss()
-                showCustomDialog(
-                    title = "경고",
-                    message = "정말 해당 파티를 삭제하시겠습니까?",
-                    positiveMethod = { viewModel.occurEvent(PartyAction.OnDeletePartyMenuClicked) },
-                    negativeMethod = null
-                )
-            }
-
-            optionsMenuBalloon.showAlignBottom(optionsButton)
-        }
-
         clTargetCommentContainer.setOnTouchListener { view, motionEvent ->
             when (motionEvent.action) {
                 MotionEvent.ACTION_DOWN -> {
@@ -375,18 +334,59 @@ class PartyInformationActivity : AppCompatActivity() {
 
     private fun switchViewState(isOwner: Boolean) = with(binding) {
         if (!isOwner) {
-            toolbarContainer.btnMoreOptions.hide()
             tvStatus.show()
             tvStatusChange.hide()
+            setUserOptionsButtonListener()
         } else {
-            toolbarContainer.btnMoreOptions.show()
             tvStatus.hide()
             tvStatusChange.show()
+            setOwnerOptionsButtonListener()
+        }
+    }
+
+    private fun setOwnerOptionsButtonListener() = with(binding) {
+        toolbarContainer.btnMoreOptions.setOnClickListener { optionsButton ->
+            val editButton   = optionsMenuBalloonForOwner.getContentView().findViewById<ConstraintLayout>(R.id.btn_edit)
+            val removeButton = optionsMenuBalloonForOwner.getContentView().findViewById<ConstraintLayout>(R.id.btn_remove)
+
+            editButton.setOnClickListener {
+                optionsMenuBalloonForOwner.dismiss()
+                partyEditContract.launch(viewModel.party.value)
+            }
+
+            removeButton.setOnClickListener {
+                optionsMenuBalloonForOwner.dismiss()
+                showCustomDialog(
+                    title          = "경고",
+                    message        = "정말 해당 파티를 삭제하시겠습니까?",
+                    positiveMethod = { viewModel.occurEvent(PartyAction.OnDeletePartyMenuClicked) },
+                    negativeMethod = null
+                )
+            }
+
+            optionsMenuBalloonForOwner.showAlignBottom(optionsButton)
+        }
+    }
+
+    private fun setUserOptionsButtonListener() = with(binding) {
+        toolbarContainer.btnMoreOptions.setOnClickListener { optionsButton ->
+            val leaveButton = optionsMenuBalloonForUser.getContentView().findViewById<ConstraintLayout>(R.id.btn_leave)
+
+            leaveButton.setOnClickListener {
+                optionsMenuBalloonForUser.dismiss()
+                showCustomDialog(
+                    title          = "경고",
+                    message        = "정말 해당 파티를 떠나시겠습니까?",
+                    positiveMethod = { viewModel.occurEvent(PartyAction.OnLeavePartyMenuClicked) },
+                    negativeMethod = null
+                )
+            }
+
+            optionsMenuBalloonForUser.showAlignBottom(optionsButton)
         }
     }
 
     private fun initializeCollapsing() = with(binding) {
-
         appbar.addOnOffsetChangedListener(object : AppBarStateChangeListener() {
             override fun onStateChanged(appBarLayout: AppBarLayout, state: State) {
                 when (state) {
