@@ -43,8 +43,7 @@ class CommentTabFragment :
 
         rvComment.adapter = commentAdapter
         rvComment.setHasFixedSize(true)
-        rvComment.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        rvComment.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
         commentAdapter.setCommentEventListener { commentEvent ->
             handleCommentEvent(commentEvent)
@@ -62,18 +61,14 @@ class CommentTabFragment :
             viewModel.comments.collect { comments ->
                 commentAdapter.submitList(comments.value)
 
-                val commentId =
-                    requireActivity().intent.getIntExtra(SplashActivity.KEY_COMMENT_ID, -1)
+                val commentId = requireActivity().intent.getIntExtra(SplashActivity.KEY_COMMENT_ID, -1)
                 Timber.w("commentId: $commentId")
                 if (commentId > -1) {
                     if (!comments.value.isNullOrEmpty()) {
-                        comments.value!!.find { comment ->
-                            comment.id == commentId
-                        }?.let { matchedComment ->
-                            Timber.w("matchedComment: $matchedComment")
-                            Timber.w("scroll id: ${comments.value!!.indexOf(matchedComment)}")
+                        comments.value!!.find { comment -> comment.id == commentId }
+                            ?.let { matchedComment ->
                             binding.rvComment.scrollToPosition(comments.value!!.indexOf(matchedComment))
-                        }
+                            }
                     }
                 }
             }

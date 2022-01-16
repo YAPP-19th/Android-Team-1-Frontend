@@ -73,7 +73,6 @@ class PartyInformationActivity : AppCompatActivity() {
     }
 
     private fun receiveIntent() {
-        Timber.w("receive")
         when {
             intent.getSerializableExtra("party") as? Party != null -> {
                 val partyData = intent.getSerializableExtra("party") as Party
@@ -98,7 +97,6 @@ class PartyInformationActivity : AppCompatActivity() {
 
             else -> {
                 val partyId = intent.getIntExtra(SplashActivity.KEY_PARTY_ID, -1)
-                Timber.w("partyId: $partyId")
                 if (partyId != -1) {
                     viewModel.occurEvent(
                         IntentAction.OnPartyIdIntent(
