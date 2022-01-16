@@ -49,6 +49,8 @@ class PartyInformationViewModel @Inject constructor(
 
     private var currentUserId = -1
 
+    private var isCommentWritable = true
+
     sealed class Action : Event {
         sealed class IntentAction : Action() {
             class OnPartyIntent(val data: Party, val currentUserId: Int) : IntentAction()
@@ -144,13 +146,16 @@ class PartyInformationViewModel @Inject constructor(
             is Action.PartyAction.PartyEditSuccess -> { fetchPartyInformation(_party.value.id) }
 
             is Action.CommentAction.WriteComment -> {
-                if (isWritingChildComment()) {
-                    createComment(
-                        body     = action.body,
-                        parentId = (_targetParentComment.value as Comment).id
-                    )
-                } else {
-                    createComment(body = action.body)
+                if(isCommentWritable) {
+                    isCommentWritable = false
+                    if (isWritingChildComment()) {
+                        createComment(
+                            body     = action.body,
+                            parentId = (_targetParentComment.value as Comment).id
+                        )
+                    } else {
+                        createComment(body = action.body)
+                    }
                 }
             }
 
@@ -202,9 +207,11 @@ class PartyInformationViewModel @Inject constructor(
                 fetchPartyComments(_party.value.id)
                 _targetParentComment.value = null
                 _event.emit(CommentCallback.OnCreateCommentSuccess)
+                isCommentWritable = true
             }
             is NetworkResult.Error -> {
                 handleError(result, null)
+                isCommentWritable = true
             }
         }
     }
