@@ -28,6 +28,7 @@ class PartyInformationViewModel @Inject constructor(
     private val changeStatusUseCase         : ChangeStatusUseCase,
     private val createCommentUseCase        : CreateCommentUseCase,
     private val deletePartyUseCase          : DeletePartyUseCase,
+    private val leavePartyUseCase           : LeavePartyUseCase,
     private val deleteCommentUseCase        : DeleteCommentUseCase,
     private val banFromPartyUseCase         : BanFromPartyUseCase
 ) : BaseViewModel<Action>() {
@@ -49,6 +50,8 @@ class PartyInformationViewModel @Inject constructor(
 
     private var currentUserId = -1
 
+    private var isCommentWritable = true
+
     sealed class Action : Event {
         sealed class IntentAction : Action() {
             class OnPartyIntent(val data: Party, val currentUserId: Int) : IntentAction()
@@ -60,6 +63,7 @@ class PartyInformationViewModel @Inject constructor(
             class OnStatusChanged(val status: PartyStatus) : PartyAction()
             object OnJointPartyClicked : PartyAction()
             object OnDeletePartyMenuClicked : PartyAction()
+            object OnLeavePartyMenuClicked : PartyAction()
             object PartyEditSuccess : PartyAction()
             object PartyEditFailed : PartyAction()
         }
@@ -82,6 +86,8 @@ class PartyInformationViewModel @Inject constructor(
             object OnPartyJoinFailed : PartyCallback()
             object PartyDeleteSuccess : PartyCallback()
             object PartyDeleteFailed : PartyCallback()
+            object PartyLeaveSuccess : PartyCallback()
+            object PartyLeaveFailed : PartyCallback()
         }
 
         sealed class CommentCallback : Callback() {
@@ -141,16 +147,21 @@ class PartyInformationViewModel @Inject constructor(
 
             is Action.PartyAction.OnDeletePartyMenuClicked -> { deleteParty() }
 
+            is Action.PartyAction.OnLeavePartyMenuClicked -> { leaveParty() }
+
             is Action.PartyAction.PartyEditSuccess -> { fetchPartyInformation(_party.value.id) }
 
             is Action.CommentAction.WriteComment -> {
-                if (isWritingChildComment()) {
-                    createComment(
-                        body     = action.body,
-                        parentId = (_targetParentComment.value as Comment).id
-                    )
-                } else {
-                    createComment(body = action.body)
+                if(isCommentWritable) {
+                    isCommentWritable = false
+                    if (isWritingChildComment()) {
+                        createComment(
+                            body     = action.body,
+                            parentId = (_targetParentComment.value as Comment).id
+                        )
+                    } else {
+                        createComment(body = action.body)
+                    }
                 }
             }
 
@@ -202,9 +213,11 @@ class PartyInformationViewModel @Inject constructor(
                 fetchPartyComments(_party.value.id)
                 _targetParentComment.value = null
                 _event.emit(CommentCallback.OnCreateCommentSuccess)
+                isCommentWritable = true
             }
             is NetworkResult.Error -> {
                 handleError(result, null)
+                isCommentWritable = true
             }
         }
     }
@@ -278,6 +291,21 @@ class PartyInformationViewModel @Inject constructor(
             }
             is NetworkResult.Error -> {
                 _event.emit(PartyCallback.PartyDeleteFailed)
+            }
+        }
+    }
+
+    private suspend fun leaveParty() {
+        when (val result = leavePartyUseCase.invoke(_party.value.id)) {
+            is NetworkResult.Success -> {
+                if (result.data) {
+                    _event.emit(PartyCallback.PartyLeaveSuccess)
+                } else {
+                    _event.emit(PartyCallback.PartyLeaveFailed)
+                }
+            }
+            is NetworkResult.Error -> {
+                _event.emit(PartyCallback.PartyLeaveFailed)
             }
         }
     }
