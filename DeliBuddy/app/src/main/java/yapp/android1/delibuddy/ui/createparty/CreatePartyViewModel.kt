@@ -5,10 +5,8 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import yapp.android1.delibuddy.DeliBuddyApplication
 import yapp.android1.delibuddy.base.BaseViewModel
 import yapp.android1.delibuddy.base.RetryAction
@@ -130,7 +128,6 @@ class CreatePartyViewModel @Inject constructor(
                         Category.mapToCategory(it)
                     }
                     _categoryList.value = categoryList
-                    Timber.w("categoryList: ${_categoryList.value}")
                 }
 
                 is NetworkResult.Error -> handleError(result, null)
@@ -194,7 +191,6 @@ class CreatePartyViewModel @Inject constructor(
         val i = checkCanCreateParty()
 
         if (i == PartyElement.NONE) {
-            Timber.w("new party: ${newParty.toString()}")
             createParty(newParty)
         } else {
             _invalidElement.value = i
@@ -207,8 +203,6 @@ class CreatePartyViewModel @Inject constructor(
         job = viewModelScope.launch {
             when (val result = createPartyUseCase.invoke(newParty)) {
                 is NetworkResult.Success -> {
-                    val resultParty = PartyInformation.toPartyInformation(result.data)
-                    Timber.w("resultParty: ${resultParty.title}")
                     showToast("파티글 생성에 성공하였습니다")
                     _isSuccessToCreateParty.emit(true)
                 }
