@@ -13,7 +13,7 @@ class HomeViewModel : BaseViewModel<Event>() {
     private val TIME_INTERVAL = 2000
 
     private val _isAppTerminate = MutableEventFlow<Boolean>()
-    val isAppTermiate: EventFlow<Boolean> = _isAppTerminate
+    val isAppTerminate: EventFlow<Boolean> = _isAppTerminate
 
     sealed class HomeEvent : Event {
         object JudgeAppTerminate : HomeEvent()
@@ -26,7 +26,7 @@ class HomeViewModel : BaseViewModel<Event>() {
     }
 
     private suspend fun judgeAppTerminate() {
-        var currentTime = System.currentTimeMillis()
+        val currentTime = System.currentTimeMillis()
 
         if (backKeyPressedTime == null || currentTime > backKeyPressedTime!! + TIME_INTERVAL) {
             backKeyPressedTime = currentTime
