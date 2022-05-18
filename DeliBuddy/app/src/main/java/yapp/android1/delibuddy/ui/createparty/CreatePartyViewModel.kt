@@ -5,10 +5,8 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import yapp.android1.delibuddy.DeliBuddyApplication
 import yapp.android1.delibuddy.base.BaseViewModel
 import yapp.android1.delibuddy.base.RetryAction
@@ -103,7 +101,7 @@ class CreatePartyViewModel @Inject constructor(
     )
 
     init {
-        if(isPartyInfoEdit()) {
+        if(isEditMode()) {
             isEditState = true
             _editingPartyInformation.value = savedStateHandle.get<PartyInformation>(EDIT_PARTYINFO)
             initCurrentAddress()
@@ -113,7 +111,7 @@ class CreatePartyViewModel @Inject constructor(
         }
     }
 
-    private fun isPartyInfoEdit(): Boolean {
+    private fun isEditMode(): Boolean {
         return savedStateHandle.get<PartyInformation>(EDIT_PARTYINFO) != null
     }
 
@@ -130,7 +128,6 @@ class CreatePartyViewModel @Inject constructor(
                         Category.mapToCategory(it)
                     }
                     _categoryList.value = categoryList
-                    Timber.w("categoryList: ${_categoryList.value}")
                 }
 
                 is NetworkResult.Error -> handleError(result, null)
@@ -143,7 +140,7 @@ class CreatePartyViewModel @Inject constructor(
             is CreatePartyEvent.ClearAddress -> clearAddress()
             is CreatePartyEvent.SelectedAddress -> changeCurrentAddress(event.address)
             is CreatePartyEvent.ChangeFlags -> changeFlag(event.partyElement, event.isValid)
-            is CreatePartyEvent.CheckFlags -> checkCanCreateParty()
+            is CreatePartyEvent.CheckFlags -> findInvalidElement()
             is CreatePartyEvent.CreatePartyClick -> checkAndCreate(event.newParty)
             is CreatePartyEvent.SelectedCategory -> selectCategory(event.index)
             is CreatePartyEvent.EditParty -> checkAndEdit(event.editedParty)
@@ -164,11 +161,11 @@ class CreatePartyViewModel @Inject constructor(
             checkCanEditParty()
         } else {
             createPartyFlags[partyElement] = isValid
-            checkCanCreateParty()
+            findInvalidElement()
         }
     }
 
-    private fun checkCanCreateParty(): PartyElement {
+    private fun findInvalidElement(): PartyElement {
         for (partyElement in createPartyFlags.keys) {
             if (createPartyFlags[partyElement] == false) {
                 _canCreateParty.value = false
@@ -191,13 +188,12 @@ class CreatePartyViewModel @Inject constructor(
     }
 
     private suspend fun checkAndCreate(newParty: PartyCreationRequestEntity) {
-        val i = checkCanCreateParty()
+        val invalidElement = findInvalidElement()
 
-        if (i == PartyElement.NONE) {
-            Timber.w("new party: ${newParty.toString()}")
+        if (invalidElement == PartyElement.NONE) {
             createParty(newParty)
         } else {
-            _invalidElement.value = i
+            _invalidElement.value = invalidElement
             showToast("파티글 생성에 실패하였습니다")
         }
     }
@@ -207,8 +203,6 @@ class CreatePartyViewModel @Inject constructor(
         job = viewModelScope.launch {
             when (val result = createPartyUseCase.invoke(newParty)) {
                 is NetworkResult.Success -> {
-                    val resultParty = PartyInformation.toPartyInformation(result.data)
-                    Timber.w("resultParty: ${resultParty.title}")
                     showToast("파티글 생성에 성공하였습니다")
                     _isSuccessToCreateParty.emit(true)
                 }

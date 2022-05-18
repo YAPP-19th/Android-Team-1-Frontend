@@ -39,14 +39,14 @@ class CreatePartyActivity : AppCompatActivity() {
     private val viewModel: CreatePartyViewModel by viewModels()
 
     private val targetTime = Calendar.getInstance()
-    private val targetTimes = arrayOf<Int>(0, 0, 0, 0, 0)
-    private val selectedTimes = arrayOf<Int>(0, 0, 0, 0, 0)
+    private val targetTimes = arrayOf(0, 0, 0, 0, 0)
+    private val selectedTimes = arrayOf(0, 0, 0, 0, 0)
     private var dateFormat = SimpleDateFormat("yyyy-MM-dd hh:mm:ss")
 
     private var selectedMember = 0
     private var selectedCategoryId = 0
 
-    private val MAX_TITLE = 10
+    private val MAX_TITLE = 25
     private val MAX_BODY = 255
 
     private val getResult = registerForActivityResult(
@@ -68,11 +68,6 @@ class CreatePartyActivity : AppCompatActivity() {
         initTime()
         initView()
         initObserve()
-    }
-
-    private fun onIntent() {
-        val intentData = intent.getSerializableExtra(EDIT_PARTYINFO) as PartyInformation
-
     }
 
     override fun onResume() {
@@ -292,8 +287,7 @@ class CreatePartyActivity : AppCompatActivity() {
     }
 
     private fun initCategorySpinnerAfterGetListFromServer() = with(binding) {
-        // val categories = arrayOf("음식 카테고리", "한식", "일식", "양식", "중식")
-        val categories = listOf<String>("음식 카테고리") + viewModel.categoryList.value.map { it.name }
+        val categories = listOf("음식 카테고리") + viewModel.categoryList.value.map { it.name }
         val categorySpinnerAdapter = ArrayAdapter(
             this@CreatePartyActivity,
             android.R.layout.simple_spinner_dropdown_item,
@@ -543,6 +537,5 @@ class CreatePartyActivity : AppCompatActivity() {
             }
         }
     }
-
 }
 

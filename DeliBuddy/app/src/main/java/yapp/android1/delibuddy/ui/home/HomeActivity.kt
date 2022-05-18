@@ -39,7 +39,7 @@ class HomeActivity : AppCompatActivity() {
 
     private fun initObserve() {
         repeatOnStarted {
-            homeViewModel.isAppTermiate.collect { isAppTerminate ->
+            homeViewModel.isAppTerminate.collect { isAppTerminate ->
                 if (isAppTerminate) {
                     finishAffinity()
                 } else {
