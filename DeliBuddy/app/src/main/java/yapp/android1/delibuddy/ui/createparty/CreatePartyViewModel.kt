@@ -101,7 +101,7 @@ class CreatePartyViewModel @Inject constructor(
     )
 
     init {
-        if(isPartyInfoEdit()) {
+        if(isEditMode()) {
             isEditState = true
             _editingPartyInformation.value = savedStateHandle.get<PartyInformation>(EDIT_PARTYINFO)
             initCurrentAddress()
@@ -111,7 +111,7 @@ class CreatePartyViewModel @Inject constructor(
         }
     }
 
-    private fun isPartyInfoEdit(): Boolean {
+    private fun isEditMode(): Boolean {
         return savedStateHandle.get<PartyInformation>(EDIT_PARTYINFO) != null
     }
 
@@ -140,7 +140,7 @@ class CreatePartyViewModel @Inject constructor(
             is CreatePartyEvent.ClearAddress -> clearAddress()
             is CreatePartyEvent.SelectedAddress -> changeCurrentAddress(event.address)
             is CreatePartyEvent.ChangeFlags -> changeFlag(event.partyElement, event.isValid)
-            is CreatePartyEvent.CheckFlags -> checkCanCreateParty()
+            is CreatePartyEvent.CheckFlags -> findInvalidElement()
             is CreatePartyEvent.CreatePartyClick -> checkAndCreate(event.newParty)
             is CreatePartyEvent.SelectedCategory -> selectCategory(event.index)
             is CreatePartyEvent.EditParty -> checkAndEdit(event.editedParty)
@@ -161,11 +161,11 @@ class CreatePartyViewModel @Inject constructor(
             checkCanEditParty()
         } else {
             createPartyFlags[partyElement] = isValid
-            checkCanCreateParty()
+            findInvalidElement()
         }
     }
 
-    private fun checkCanCreateParty(): PartyElement {
+    private fun findInvalidElement(): PartyElement {
         for (partyElement in createPartyFlags.keys) {
             if (createPartyFlags[partyElement] == false) {
                 _canCreateParty.value = false
@@ -188,12 +188,12 @@ class CreatePartyViewModel @Inject constructor(
     }
 
     private suspend fun checkAndCreate(newParty: PartyCreationRequestEntity) {
-        val i = checkCanCreateParty()
+        val invalidElement = findInvalidElement()
 
-        if (i == PartyElement.NONE) {
+        if (invalidElement == PartyElement.NONE) {
             createParty(newParty)
         } else {
-            _invalidElement.value = i
+            _invalidElement.value = invalidElement
             showToast("파티글 생성에 실패하였습니다")
         }
     }
