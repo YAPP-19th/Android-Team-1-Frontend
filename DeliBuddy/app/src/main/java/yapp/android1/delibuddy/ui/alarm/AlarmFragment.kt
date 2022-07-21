@@ -21,6 +21,6 @@ class AlarmFragment : BaseFragment<FragmentAlarmBinding>(
     }
 
     private fun initViews() {
-        binding.recyclerView.adapter = alarmAdapter
+//        binding.recyclerView.adapter = alarmAdapter
     }
 }
